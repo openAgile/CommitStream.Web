@@ -18,10 +18,10 @@ $.getJSON(url).done(function(events) {
     commits: commits
   };
   if (commits.length > 0) {
-    $.get("http://localhost/content/githubCommit-template.html").done(function(source) {
+    $.get("http://v1commitstream.azurewebsites.net/assetDetailCommits.html").done(function(source) {
       var template = Handlebars.compile(source);
       var content = template(data);
-      $("#${csID}").html(content);
+      $(CommitStreamPanelID).html(content);
     });
   }
 });
