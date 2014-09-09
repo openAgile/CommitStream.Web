@@ -1,8 +1,8 @@
-<div style="padding-left: 5px;">
+<div style="padding-left: 5px; padding-top:5px;">
 	<h2>CommitStream Commits</h2>
-		{{#each commits}}
-		<hr />
+	{{#each commits}}
+	<hr />
   	<p>{{timeFormatted}}, {{author}} {{action}} <a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a></p>
-  	<p ><span class="message">{{message}}</span></p>
+  	<p><span class="message">{{message}}</span></p>
   	{{/each}}
 </div>
