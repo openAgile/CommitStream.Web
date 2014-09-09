@@ -21,7 +21,7 @@ $.getJSON(url).done(function(events) {
     $.get("http://v1commitstream.azurewebsites.net/assetDetailCommits.html").done(function(source) {
       var template = Handlebars.compile(source);
       var content = template(data);
-      $(CommitStreamPanelID).html(content);
+      $(CommitStreamPanel).html(content);
     });
   }
 });
