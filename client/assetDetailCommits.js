@@ -17,10 +17,13 @@ function assetDetailCommits(eventStoreQueryUrl, templateUrl, selector) {
       commits: commits
     };
     if (commits.length > 0) {
-      $.get(templateUrl).done(function(source) {
-        var template = Handlebars.compile(source);
-        var content = template(data);
-        $(selector).html(content);
+      $.getScript("http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js", 
+        function(data, status, jqxhr) {
+        $.get(templateUrl).done(function(source) {
+          var template = Handlebars.compile(source);
+          var content = template(data);
+          $(selector).html(content);
+        });
       });
     }
   });
