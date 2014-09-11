@@ -1,13 +1,13 @@
 define(['moment'], function(moment) {
-	var eventStoreQueryBaseUrl = 'http://jgough.corp.versionone.net:2113/streams/asset-',
-			eventStoryQueryParameters = '/head/backward/5?embed=content',
-			templateUrl = 'http://v1commitstream.azurewebsites.net/assetDetailCommits.html';
+	var apiBaseUrl 	= 'http://jgough.corp.versionone.net:2113/streams/asset-',
+			apiParams	 	= '/head/backward/5?embed=content',
+			templateUrl	= 'http://v1commitstream.azurewebsites.net/assetDetailCommits.html';
 			
 	return function(selector, assetNumber) {
     var commits = [];
-    var eventStoryQueryUrl = eventStoryQueryBaseUrl + assetNumber + eventStoryQueryParameters;
+    var apiUrl = apiBaseUrl + assetNumber + apiParams;
     
-    $.getJSON(eventStoreQueryUrl).done(function(events) {
+    $.getJSON(apiUrl).done(function(events) {
       $.each(events.entries, function(index, value) {
         var e = value.content.data;
         var c = {
