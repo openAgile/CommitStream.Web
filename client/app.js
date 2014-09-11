@@ -1,5 +1,6 @@
 (function() {
-    var protocol = window.location.protocol + "//";
+    //var protocol = window.location.protocol + "//";
+    var protocol = "//";
     require.config({
         paths: {
           moment: protocol + 'cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min',
