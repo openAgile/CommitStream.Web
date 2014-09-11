@@ -11,9 +11,4 @@
             }
         }
     });
-    
-    require(['moment'], function (moment) {
-      console.log("Got dependencies:");
-      console.log(moment);
-    });
 })();
