@@ -1,9 +1,9 @@
 define(['moment'], function(moment) {
-  var eventStoreQueryBaseUrl = 'http://jgough.corp.versionone.net:2113/streams/asset-',
-      eventStoryQueryParameters = '/head/backward/5?embed=content',
+	var eventStoreQueryBaseUrl = 'http://jgough.corp.versionone.net:2113/streams/asset-',
+			eventStoryQueryParameters = '/head/backward/5?embed=content',
 			templateUrl = 'http://v1commitstream.azurewebsites.net/assetDetailCommits.html';
 			
-  return function(selector, assetNumber) {
+	return function(selector, assetNumber) {
     var commits = [];
     var eventStoryQueryUrl = eventStoryQueryBaseUrl + assetNumber + eventStoryQueryParameters;
     
@@ -32,4 +32,4 @@ define(['moment'], function(moment) {
       }
     });
   }
-);
+});
