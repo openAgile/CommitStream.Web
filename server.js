@@ -10,7 +10,7 @@ app.get('/version', function(req, res) {
 app.use(cors());
 
 app.use(function(req, res, next) {
-    res.setHeader("X-API-Docs", "https://github.com/eventstore/eventstore/wiki");
+    res.setHeader("X-CommitStream-API-Docs", "https://github.com/eventstore/eventstore/wiki");
     return next();
 });
 
