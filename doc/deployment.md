@@ -1,8 +1,11 @@
-There are 8 potential deployment configuration families for CommitStream:
+# Deployment scenarios
 
-* On Demand V1 + Cloud CS + Cloud VCS -- GitHub for now
+There are 8 potential deployment configuration families for CommitStream. The one we are focusing now is:
 
-etc:
+**On Demand V1 + Cloud CS + Cloud VCS -- GitHub**
+
+Other types are:
+
 * On Demand V1 + Cloud CS + Local (VCS)
 * On Premise V1 + Cloud CS + Cloud VCS
 * On Premise V1 + Cloud CS + Local VCS
@@ -26,12 +29,14 @@ At a high level, here's what the VersionOne Core application must do to work wit
 
 ## Goals and options for toggling feature in VersionOne instance
 
-Goals:
+###Goals###
 
 * Minimize work that Ops has to do
-* Be able to "push" toggle from our side or allow customer to signup remotely, either in-app or on the CS web site, and then the feature appears
+* Minimize amount of code baked into Core builds
+ * Correlate: Strive for Continuous Delivery
+* Allow customer to signup via their own instance, perhaps only after we have enabled them to see the option via our own remote action. See details below in the Hybrid approach.
 
-Options:
+###Implementation options###
 
 ## Full Continuous Delivery (CD)
 
@@ -44,14 +49,15 @@ Options:
    * Ideally, there is very little inside this DLL other than wiring into already-defined extension mechanisms for weaving CS UI into well-known extension points within the UI surface
   * If no, then remove the CS DLL from the server
   
-## Admin-medidated CD  
+## Admin-mediated CD  
 
-* Bake into Core a configuration page that allows an admin to enable CommitStream and configure (and perhaps other integrations)
-* The bulk of this page could itself be fetched from a remote host instead of being primarily a compiled DLL. It would almost be an app-catalog lite inside the app.
-* When selected to enable CS, then most of the flow described above remains the same
+* Bake into Core an Integrations configuration page that allows an admin to enable CommitStream and configure it (and perhaps other integrations later)
+ * The bulk of this page could itself be fetched from a remote host instead of being primarily a compiled DLL. It would almost be an app-catalog lite inside the app.
+* When selected to enable CS, then most of the flow described above remains the same regarding getting the latest version of CS. 
 
 ## Hybrid approach
 
 * Add functionality to Core for the Admin page, but also add a poller that lets VersionOne decide which customers get to see the page. This allows us to give control to the Admin for the actual configuration experience, but allows us to be selective with which customers we allow to try it.
+ * Eventually, this poller could get removed unless we wanted to keep it in in order to disable CS or other integrations when customers fail to pay or the service is having issues -- However in the latter case, the service should provide information to the user within the application in place of where data from the service would normally go.
 
 
