@@ -2,17 +2,17 @@
 
 There are 8 potential deployment configuration families for CommitStream. The one we are focusing now is:
 
-**On Demand V1 + Cloud CS + Cloud VCS -- GitHub**
+**On Demand V1 + Cloud CS + Cloud VCS (specfically, GitHub)**
 
 Other types are:
 
-* On Demand V1 + Cloud CS + Local (VCS)
+* On Demand V1 + Cloud CS + On Premise VCS
 * On Premise V1 + Cloud CS + Cloud VCS
-* On Premise V1 + Cloud CS + Local VCS
+* On Premise V1 + Cloud CS + On Premise VCS
+* On Demand V1 + On Premise CS + On Premise VCS
+* On Premise V1 + On Premise CS + On Premise VCS
 * On Premise V1 + On Premise CS + Cloud VCS
-* On Premise V1 + On Premise CS + Local VCS
 * On Demand V1 + On Premise CS + Cloud VCS
-* On Demand V1 + On Premise CS + Local VCS
 
 With proper design, all of these could work, but we should select one for first implementation, and think through the implications for the others such that we do not box ourselves into a corner while implementing the first.
 
