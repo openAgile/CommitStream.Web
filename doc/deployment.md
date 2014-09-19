@@ -6,17 +6,21 @@ There are 8 potential deployment configuration families for CommitStream. The on
 
 Other types are:
 
-* On Demand V1 + Cloud CS + On Premise VCS
+* On Demand V1 + Cloud CS + On Premise VCS (specfically, Subversion)
 * On Premise V1 + Cloud CS + Cloud VCS
 * On Premise V1 + Cloud CS + On Premise VCS
-* On Demand V1 + On Premise CS + On Premise VCS
 * On Premise V1 + On Premise CS + On Premise VCS
 * On Premise V1 + On Premise CS + Cloud VCS
+* On Demand V1 + On Premise CS + On Premise VCS
 * On Demand V1 + On Premise CS + Cloud VCS
 
 With proper design, all of these could work, but we should select one for first implementation, and think through the implications for the others such that we do not box ourselves into a corner while implementing the first.
 
-# Toggling CommitStream integration for a VersionOne instance
+# Release CommitStream Features
+
+If we separate the idea of release from deployment, then release is about revealing CommitStream features to customers while deployment is about getting code changes into production. This means the concerns for release are different from deployment. For example, we want to reveal CommitStream to specific early access customers but we want to make code deployment simple (not have a different deployment process for those early access customers). Abstractly, we need a "feature flag" that can be enabled for on-demand instances to reveal the CommitStream capabilities. Conversely, for the majority of customers who do not have the feature flag enabled, we need to make sure there is virtually no production or user impact, such as tell-tale UI elements or performance degredation.
+
+## Toggling CommitStream integration for a VersionOne instance
 
 **Note:** that there is a similar project, https://github.com/versionone/remote-features, which could possibly be used for part of what we need to do, but I don't think handles the server-side poll to an independent service as described below.
 
@@ -27,16 +31,34 @@ At a high level, here's what the VersionOne Core application must do to work wit
   * When commits found, then render HTML for the side-panel button such that when clicked it displays the commit info in the content area of the panel
  * When no, then ensure that no additional HTTP calls on the client get made related to CommitStream until the feature gets enabled
 
-## Goals and options for toggling feature in VersionOne instance
+## Goals for Enabling Release Activities
 
-###Goals###
+* Let deployment be an Ops concern, separate from release activities. Minimize, even eliminate, work for Ops in release activities.
+* Let release be a business concern, as manifest by Product Management decisions. Put control of release into Product Manager's control.
 
-* Minimize work that Ops has to do
-* Minimize amount of code baked into Core builds
- * Correlate: Strive for Continuous Delivery
-* Allow customer to signup via their own instance, perhaps only after we have enabled them to see the option via our own remote action. See details below in the Hybrid approach.
+# Deploy CommitStream Components
 
-###Implementation options###
+Deployment is about getting code changes into production.
+
+## Goals for Enabling Deployment Activities
+
+* With release activities separated from deployment, we should strive for continuous delivery.
+* Make the process visible. Everyone can see that code changes are being made, that changes are checked with tests, and that code is successfully deployed into production.
+* Minimize work that Ops has to do for deployment of CommitStream features.
+* Minimize amount of code baked into Core builds. Coupling to the deployment of Core will make it slower to get changes into production.
+
+# Monitor CommitStream
+
+Monitoring is about knowing what is happening in production.
+
+## Goals for Enabling Monitoring
+
+* Ops knows how to respond to incidents.
+* Ops works with Dev to indentify and eliminate the underlying problems.
+* The business (PM) knows how CommitStream is being used and can use the data to improve CommitStream.
+* The business (PM) knows who wants to have early access to CommitStream.
+
+# Implementation options
 
 ## Full Continuous Delivery (CD)
 
@@ -59,5 +81,3 @@ At a high level, here's what the VersionOne Core application must do to work wit
 
 * Add functionality to Core for the Admin page, but also add a poller that lets VersionOne decide which customers get to see the page. This allows us to give control to the Admin for the actual configuration experience, but allows us to be selective with which customers we allow to try it.
  * Eventually, this poller could get removed unless we wanted to keep it in in order to disable CS or other integrations when customers fail to pay or the service is having issues -- However in the latter case, the service should provide information to the user within the application in place of where data from the service would normally go.
-
-
