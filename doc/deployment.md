@@ -86,4 +86,4 @@ Monitoring is about knowing what is happening in production.
 ## Improvement Ideas and TODO's
 
 * In order to  streamline working with jenkins build we can make a copy of the CommitStream-core-developing
-(http://ci-server/job/CommitStream-core-developing) that mocks the full process but actually takes the latest build without compiling and building. this would allow  running jenkins in a tes/debug mode and cut down on wait time when testing builds
+(http://ci-server/job/CommitStream-core-developing) that mocks the full process but actually takes the latest build without compiling and building. this would allow  running jenkins in a test/debug mode and cut down on wait time when testing builds
