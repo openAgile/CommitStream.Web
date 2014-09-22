@@ -1,4 +1,5 @@
-define(['moment'], function(moment) {
+define(['moment', 'handlebars'], function(moment, handlebars) {
+    var myHandlebars = handlebars.default;
     var apiBaseUrl = 'http://v1eventstore.cloudapp.net:2113/streams/asset-',
         apiParams = '/head/backward/5?embed=content',
         templateUrl = 'http://v1commitstream.azurewebsites.net/assetDetailCommits.html';
@@ -25,7 +26,7 @@ define(['moment'], function(moment) {
             };
             if (commits.length > 0) {
                 $.get(templateUrl).done(function(source) {
-                    var template = Handlebars.compile(source);
+                    var template = myHandlebars.compile(source);
                     var content = template(data);
                     $(selector).html(content);
                 });
