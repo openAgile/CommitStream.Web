@@ -81,3 +81,9 @@ Monitoring is about knowing what is happening in production.
 
 * Add functionality to Core for the Admin page, but also add a poller that lets VersionOne decide which customers get to see the page. This allows us to give control to the Admin for the actual configuration experience, but allows us to be selective with which customers we allow to try it.
  * Eventually, this poller could get removed unless we wanted to keep it in in order to disable CS or other integrations when customers fail to pay or the service is having issues -- However in the latter case, the service should provide information to the user within the application in place of where data from the service would normally go.
+
+ 
+## Improvement Ideas and TODO's
+
+* In order to  streamline working with jenkins build we can make a copy of the CommitStream-core-developing
+(http://ci-server/job/CommitStream-core-developing) that mocks the full process but actually takes the latest build without compiling and building. this would allow  running jenkins in a tes/debug mode and cut down on wait time when testing builds
