@@ -62,14 +62,14 @@ Monitoring is about knowing what is happening in production.
 
 ## Full Continuous Delivery (CD)
 
-* Bake into Core a simple poller that reaches out to a CommitStream cloud instance and asks, effectively, "Is CommitStream enabled for this instance?" 
- * When not currently enabled
-  * If yes, then pull down the latest CS DLL which takes care of integrating itself into the side-panel (and anywhere else) via System.ComponentModel.Compisition magic (MEF)
-  * If no, poll again on next incoming HTTP request if-and-only-if N minutes have elapsed since the previous poll.
- * When currently enabled
-  * If yes, POTENTIALLY: then query for a newer version of the CS DLL and update it in-place if a newer version exists.
-   * Ideally, there is very little inside this DLL other than wiring into already-defined extension mechanisms for weaving CS UI into well-known extension points within the UI surface
-  * If no, then remove the CS DLL from the server
+* Bake into Core a simple poller that reaches out to a CommitStream cloud instance and asks, effectively, "Should CommitStream enabled for this instance?" 
+  * When CS is not currently enabled and the answer is:
+    * Yes: then pull down the latest CS DLL which takes care of integrating itself into the side-panel (and anywhere else) via System.ComponentModel.Compisition magic (MEF)
+    * No: then poll again on next incoming HTTP request if-and-only-if N minutes have elapsed since the previous poll.
+  * When CS is currently enabled and the answer is:
+    * Yes: Then (potentially??) query for a newer version of the CS DLL and update it in-place if a newer version exists.
+      * Ideally, there is very little inside this DLL other than wiring into already-defined extension mechanisms for weaving CS UI into well-known extension points within the UI surface
+    * No: Then remove the CS DLL from the server
   
 ## Admin-mediated CD  
 
