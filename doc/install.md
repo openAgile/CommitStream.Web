@@ -23,9 +23,31 @@ want to start seeing those correlated with those assets inside VersionOne's asse
 # Install EventStore
 * Download a 3.0+ build of EventStore from http://geteventstore.com/downloads/ and install it on a server
   * Running example: http://v1eventstore.cloudapp.net:2113
-    * Login info: if it's not running, you'll need to SSH to the box and start EventStore, here's how:
-      * TODO: document this part
-    * Note: as mentioned above, this is the location that the CommitStream-core-developing VersionOne build contains
+  * Unzip eventstore into c:\eventstore
+  * Download EventStoreWinServiceWrapper from https://github.com/mastoj/EventStoreWinServiceWrapper/tree/master/releases
+  * Unzip into EventStoreWinServiceWrapper
+  * Modify EventStoreWinServiceWrapper.exe.config so it looks like this:
+
+ ```
+ <?xml version="1.0" encoding="utf-8" ?>
+ <configuration>
+  <configSections>
+    <section name="eventStore" type="EventStoreWinServiceWrapper.EventStoreServiceConfiguration,   EventStoreWinServiceWrapper, Version=1.0.0.0, Culture=neutral" />
+   </configSections>
+   <eventStore executable="C:\eventstore\EventStore.ClusterNode.exe">
+     <instance name="Dev" dbPath="c:\eventstore\data"    addresses="http://127.0.0.1:2113/,http://{yourdns}:2113/" logPath="c:\eventstore\logs" externalip="{yourAzureInternalIp}" internalip=""/>
+ </eventStore>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+  </startup>
+</configuration>
+ ```
+ * Run the install.ps1 script from the EventStoreWinServiceWrapper. From that point you should have a windows service running event store.
+ * Open the neccesary ports so eventStore can be accessed from the outside. Powershell commands:
+```
+New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
+```
 
 # Import commits and create EventStore projections
 * Clone the GitHub commit import script from https://github.com/kunzimariano/EventStore-Demo
