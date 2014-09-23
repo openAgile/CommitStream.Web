@@ -1,9 +1,9 @@
 (function() {
     var protocol = "//";
     // Put a commitStream object in the global space    
-    if (CommitStream === undefined) {
-        CommitStream = {};
-        CommitStream.commitsDisplay = function(commitStreamDomId, assetNumber) {
+    if (!window.CommitStream) {
+        window.CommitStream = {};
+        window.CommitStream.commitsDisplay = function(commitStreamDomId, assetNumber) {
             $.getScript(protocol + "cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js", function(data, status, jqxhr) {
                 require.config({
                     paths: {
@@ -23,7 +23,7 @@
             });
         };
     } else {
-        CommitStream.commitsDisplay = function(commitStreamDomId, assetNumber) {
+        window.CommitStream.commitsDisplay = function(commitStreamDomId, assetNumber) {
         	require(['assetDetailCommits'], function(assetDetailCommits) {
                 assetDetailCommits(commitStreamDomId, assetNumber);
             });
