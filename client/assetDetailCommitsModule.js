@@ -1,6 +1,6 @@
 define(['moment', 'handlebars'], function(moment, handlebars) {
     var myHandlebars = handlebars.default;
-    var apiBaseUrl = 'http://v1eventstore.cloudapp.net:2113/streams/asset-',
+    var apiBaseUrl = 'http://weventstore.cloudapp.net:2113/streams/asset-',
         apiParams = '/head/backward/5?embed=content',
         templateUrl = 'http://v1commitstream.azurewebsites.net/assetDetailCommits.html';
 
