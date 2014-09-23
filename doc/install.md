@@ -15,14 +15,14 @@ want to start seeing those correlated with those assets inside VersionOne's asse
           * Moment.js
           * Handlebars
           * assetDetailCommitsModule from http://v1commitstream.azurewebsites.net/assetDetailCommitsModule.js
-            * This points to our running Azure-hosted EventStore service at http://v1eventstore.cloudapp.net:2113
+            * This points to our running Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113
         * This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
         * This page will initially be unlinked from the top-level menu system, but Ian will tell customers about it.
         * Only customers who Ian has added to a whitelist will be able to access this page
 
 # Install EventStore
 * Download a 3.0+ build of EventStore from http://geteventstore.com/downloads/ and install it on a server
-  * Running example: http://v1eventstore.cloudapp.net:2113
+  * Running example: http://weventstore.cloudapp.net:2113
   * Unzip eventstore into c:\eventstore
   * Download EventStoreWinServiceWrapper from https://github.com/mastoj/EventStoreWinServiceWrapper/tree/master/releases
   * Unzip into EventStoreWinServiceWrapper
