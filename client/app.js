@@ -24,6 +24,18 @@
         };
     } else {
         window.CommitStream.commitsDisplay = function(commitStreamDomId, assetNumber) {
+            require.config({
+                paths: {
+                    moment: protocol + 'cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min',
+                    assetDetailCommits: protocol + 'v1commitstream.azurewebsites.net/assetDetailCommits',
+                    handlebars: protocol + 'cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min'
+                },
+                config: {
+                    moment: {
+                        noGlobal: true
+                    }
+                }
+            });
             require(['assetDetailCommits'], function(assetDetailCommits) {
                 assetDetailCommits(commitStreamDomId, assetNumber);
             });
