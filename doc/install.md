@@ -45,8 +45,8 @@ want to start seeing those correlated with those assets inside VersionOne's asse
  * Run the install.ps1 script from the EventStoreWinServiceWrapper. From that point you should have a windows service running event store.
  * Open the neccesary ports so eventStore can be accessed from the outside. Powershell commands:
 ```
-New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
+	New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
+	New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
 ```
 
 # Import commits and create EventStore projections
@@ -54,7 +54,7 @@ New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPo
 * Modify these lines to point to the correct EventStore instance: https://github.com/kunzimariano/EventStore-Demo/blob/master/Import-FullCommits.ps1#L5-L7
 * Follow the instructions in the readme to execute the import
 * Now, to create the required projections in EventStore, do this:
-* TODO
+* TODO: Make this part of CommitStream.Web so it doesn't live in the vacuum. It could be a rest call that takes the repo url as a parameter.
 
 # Open VersionOne and see commits!
 * You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
