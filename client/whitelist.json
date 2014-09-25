@@ -1,8 +1,8 @@
 {
  "allow": [
-   "http://v1commitstream.cloudapp.net/VersionOne"
+   "http://v1commitstream.cloudapp.net/VersionOne",
+   "http://localhost/VersionOne.Web"
  ],
  "deny": [
-   "http://localhost/VersionOne.Web"     
  ]
 }
