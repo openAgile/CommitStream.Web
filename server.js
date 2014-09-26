@@ -1,11 +1,16 @@
 var express = require('express'),
     app = express(),
     cors = require('cors'),
-    port = process.env.PORT || 80;
+    port = process.env.PORT || 6565;
 
 app.get('/version', function(req, res) {
     res.json({version:"0.0.0"});
 });
+
+var api = require("./api");
+
+//Map the routes
+api.init(app);
 
 app.use(cors());
 
