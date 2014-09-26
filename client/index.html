@@ -6,7 +6,7 @@
 $(function() {
   $.getScript('http://v1commitstream.azurewebsites.net/app.js',
     function(data, status, jqxhr) {
-      var assetNumber = location.search || 'S-47665';
+      var assetNumber = location.search.substring(1) || 'S-47665';
       CommitStream.commitsDisplay('#commits', assetNumber);
     });
 });   
