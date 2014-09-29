@@ -13,13 +13,13 @@ want to start seeing those correlated with those assets inside VersionOne's asse
     * You can swap the `//v1commitstream.azurewebsites.net/app.js` for wherever you deployed the Node.js server from this repo
     * The default location does this:
       * Loads `http://v1commitstream.azurewebsites.net/app.js`, which pulls in these dependencies asynchronously via require.js:
-      * Moment.js
-      * Handlebars
-      * assetDetailCommits module from http://v1commitstream.azurewebsites.net/assetDetailCommits.js
-        * This in turn loads from our Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113, but you can change that to whereover your EventStore is hosted.
+        * Moment.js
+        * Handlebars
+        * assetDetailCommits module from http://v1commitstream.azurewebsites.net/assetDetailCommits.js
+          * This in turn loads from our Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113, but you can change that to whereover your EventStore is hosted.
 * This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
 * This page will initially be unlinked from the top-level menu system, but we will tell customers about it.
-  * Only customers who we add to the whitelist at `../client/whitelist.json` will be able to access this page
+  * Only customers who we add to the whitelist at [../client/whitelist.json](../client/whitelist.json) will be able to access this page
 
 # Install EventStore
 * Download a 3.0+ build of EventStore from http://geteventstore.com/downloads/ and install it on a server
