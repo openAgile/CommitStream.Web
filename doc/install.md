@@ -9,16 +9,17 @@ want to start seeing those correlated with those assets inside VersionOne's asse
 # Install VersionOne with CommitStream loader build
 * Install a VersionOne build from ci-server/job/CommitStream-core-developing/
   * Running example: https://v1commitstream.cloudapp.net/VersionOne
-    * TODO: Add config setting that tells VersionOne where to find the CommitStream integration JavaScript. 
-      * Notes: 
-        * Currently, it's hard-coded to look here: http://v1commitstream.azurewebsites.net/app.js?_=1411487691068, which pulls in these dependencies asynchronously via require.js:
-          * Moment.js
-          * Handlebars
-          * assetDetailCommitsModule from http://v1commitstream.azurewebsites.net/assetDetailCommitsModule.js
-            * This points to our running Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113
-        * This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
-        * This page will initially be unlinked from the top-level menu system, but Ian will tell customers about it.
-        * Only customers who Ian has added to a whitelist will be able to access this page
+    * Add a a `user.config` file to the installation folder with: `<appSettings><add key="CommitStreamAppUrl" value="//v1commitstream.azurewebsites.net/app.js" /></appSettings>`. V1ers, you can see https://github.com/versionone/Core/blob/developing/Common/_user.config for an example.
+    * You can swap the `//v1commitstream.azurewebsites.net/app.js` for wherever you deployed the Node.js server from this repo
+    * The default location does this:
+      * Loads `http://v1commitstream.azurewebsites.net/app.js`, which pulls in these dependencies asynchronously via require.js:
+      * Moment.js
+      * Handlebars
+      * assetDetailCommits module from http://v1commitstream.azurewebsites.net/assetDetailCommits.js
+        * This in turn loads from our Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113, but you can change that to whereover your EventStore is hosted.
+* This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
+* This page will initially be unlinked from the top-level menu system, but we will tell customers about it.
+  * Only customers who we add to the whitelist at `../client/whitelist.json` will be able to access this page
 
 # Install EventStore
 * Download a 3.0+ build of EventStore from http://geteventstore.com/downloads/ and install it on a server
