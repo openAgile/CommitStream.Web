@@ -8,7 +8,9 @@ See https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/da
     <th>Resource</th><th>Description</th><th>Type</th><th>URL(s)</th><th>Notes</th>
   </tr>
   <tr>
-    <td>v1CommitStream</td><td>Public web site and API host for CommitStream</td><td>Web Site</td><td>http://v1commitstream.azurewebsites.net</td><td></td>
+    <td>v1CommitStream</td><td>Public web site and API host for CommitStream</td><td>Web Site</td><td>http://v1commitstream.azurewebsites.net</td><td>Browse to test page like:
+    http://v1commitstream.azurewebsites.net or http://v1commitstream.azurewebsites.net?S-01001
+    </td>
   </tr>
   <tr>
     <td>v1CommitStream-staging</td><td>Staging web site for v1commitstream</td><td>Web Site</td><td>http://v1commitstream-staging.azurewebsites.net</td><td>Currently deployed from S-48324_MultiRepository feature branch</td>
