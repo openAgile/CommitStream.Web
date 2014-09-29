@@ -11,7 +11,7 @@ See https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/da
     <td>v1CommitStream</td><td>Public web site and API host for CommitStream</td><td>Cloud Service</td><td>http://v1commitstream.azurewebsites.net</td><td>Not sure why this is a Cloud Service and not just a Web Site</td>
   </tr>
   <tr>
-    <td>WEventStore</td><td>EventStore 3.0 under Windows web service</td><td>Cloud Service</td><td>WEventstore.cloudapp.net:2113</td><td></td>
+    <td>WEventStore</td><td>EventStore 3.0 under Windows web service</td><td>Cloud Service</td><td>http://WEventstore.cloudapp.net:2113</td><td></td>
   </tr>
   <tr>
     <td>WEventStore</td><td>EventStore 3.0 VM</td><td>Virtual Machine</td><td></td><td></td>
