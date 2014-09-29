@@ -20,3 +20,12 @@ See https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/da
     <td>WEventStore</td><td>EventStore 3.0 VM</td><td>Virtual Machine</td><td></td><td></td>
   </tr>  
 </table>
+
+
+# PROD account Azure resources
+
+The dashboard for PROD is currently https://manage.windowsazure.com/@VersionOne.onmicrosoft.com#Workspaces/All/dashboard. 
+
+(That appears to be just one character different from the DEV account. Tom, is this correct?)
+
+No current resources in use under PROD.
