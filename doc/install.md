@@ -23,6 +23,12 @@ This is a work in progress. As this evolves, we update this narrative.
 > Given you have a GitHub repository that has commits matching the VersionOne asset mention pattern, like S-12345, D-00312, etc, and you want to start seeing those correlated with those assets inside VersionOne's asset detail view, then:
 
 * As Administrator, open Powershell
+* go to the root folder of this project
+* Type `cd src\sandbox`
+* Type `get-help Install-V1.ps1 -full` or simply modify the script to suit your needs
+* Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being server by the NodeJS server. TODO: add port option for NodeJS, since IIS needs 80
+
+# Technical notes
 * Go to the root folder of this project
 * Type `cd src\sandbox`
 * Type `get-help Install-V1.ps1 -full` or simply modify the script to suit your needs
@@ -107,4 +113,14 @@ The `app.js` JavaScript module that gets loaded into VersionOne pulls in the fol
 
 # Open VersionOne and see commits!
 * You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
+	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@partitioner.txt" "http://127.0.0.1:2113/projections/continuous?name=partitionate-with-or-without-mention&emit=yes&checkpoints=yes&enabled=yes"
+	
+	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@asset.txt" "http://127.0.0.1:2113/projections/continuous?name=by-asset&emit=yes&checkpoints=yes&enabled=yes"
+	```
+* TODO: Make this part of CommitStream.Web so it doesn't live in the vacuum. It could be a rest call that takes the repo url as a parameter.
+
+# Open VersionOne and see commits!
+* You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
+* Note: yes the commits are hard-coded, and we are fixing that now.
+* Note: yes the commits are hard-coded, and we are fixing that now.
 * Note: yes the commits are hard-coded, and we are fixing that now.
