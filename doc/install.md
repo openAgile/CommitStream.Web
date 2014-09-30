@@ -28,7 +28,7 @@ This is a work in progress. As this evolves, we update this narrative.
 * Type `get-help Install-V1.ps1 -full` or simply modify the script to suit your needs
 * Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being server by the NodeJS server. TODO: add port option for NodeJS, since IIS needs 80
 
-# Technical notes
+# Technical notes 
 
 The `app.js` JavaScript module that gets loaded into VersionOne pulls in the following dependencies using require.js: 
   * Moment.js
