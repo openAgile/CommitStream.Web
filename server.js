@@ -20,7 +20,10 @@ app.use(function(req, res, next) {
 });
 
 app.get('/config.json', function(req, res) {
-	res.json(config);
+	var clientConfig = {
+		assetDetailTemplateUrl : config.assetDetailTemplateUrl
+	};
+	res.json(clientConfig);
 });
 
 app.use(express.static(__dirname + '/client'));
