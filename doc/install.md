@@ -39,7 +39,22 @@ The `app.js` JavaScript module that gets loaded into VersionOne pulls in the fol
 * This page will initially be unlinked from the top-level menu system, but we will tell customers about it.
   * Only customers who we add to the whitelist at [../client/whitelist.json](../client/whitelist.json) will be able to access this page
 
-# Install EventStore
+# BETA Install EventStore
+
+* As Administrator, run this from Powershell:
+
+```powershell
+choco install eventstore -source https://www.myget.org/F/versionone/
+nssm install eventstore "C:\Program Files\eventstore\EventStore.ClusterNode.exe" "--run-projections=ALL"
+nssm start eventstore
+```
+
+This will:
+* Install EventStore
+* Configure it as a service with the [Non-Sucking Service Manager](http://nssm.cc/) to start automatically on server start
+* Start it immediately
+
+# CURRENT Install EventStore
 * Download a 3.0+ build of EventStore from http://geteventstore.com/downloads/ and install it on a server
   * Running example: http://weventstore.cloudapp.net:2113
   * Unzip eventstore into c:\eventstore
