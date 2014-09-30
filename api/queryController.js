@@ -28,7 +28,7 @@
 			var options = {
 				host: config.eventStoreHost,
 				port: config.eventStorePort,
-				path: '/streams/asset-' + req.query.assetNumber + '/head/backward/5?embed=content',
+				path: '/streams/asset-' + req.query.workitem + '/head/backward/5?embed=content',
 				headers: { 'Accept': 'application/json' }
 			};
 			helpers.getHttpResources(options, function(err, response) {
