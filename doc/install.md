@@ -29,6 +29,12 @@ This is a work in progress. As this evolves, we update this narrative.
 * Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being server by the NodeJS server. TODO: add port option for NodeJS, since IIS needs 80
 
 # Technical notes
+* Go to the root folder of this project
+* Type `cd src\sandbox`
+* Type `get-help Install-V1.ps1 -full` or simply modify the script to suit your needs
+* Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being server by the NodeJS server. TODO: add port option for NodeJS, since IIS needs 80
+
+# Technical notes 
 
 The `app.js` JavaScript module that gets loaded into VersionOne pulls in the following dependencies using require.js: 
   * Moment.js
@@ -54,7 +60,7 @@ The `app.js` JavaScript module that gets loaded into VersionOne pulls in the fol
     <section name="eventStore" type="EventStoreWinServiceWrapper.EventStoreServiceConfiguration,   EventStoreWinServiceWrapper, Version=1.0.0.0, Culture=neutral" />
    </configSections>
    <eventStore executable="C:\eventstore\EventStore.ClusterNode.exe">
-     <instance name="Dev" dbPath="c:\eventstore\data"    addresses="http://127.0.0.1:2113/,http://{yourdns}:2113/" logPath="c:\eventstore\logs" externalip="{yourAzureInternalIp}" internalip=""/>
+     <instance name="Dev" dbPath="c:\eventstore\data"    addresses="http://127.0.0.1:2113/,http://{yourdns}:2113/" logPath="c:\eventstore\logs" externalip="{yourAzureInternalIp}" internalip="" runProjections="ALL"/>
  </eventStore>
   <startup>
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
@@ -73,6 +79,36 @@ The `app.js` JavaScript module that gets loaded into VersionOne pulls in the fol
 * Modify these lines to point to the correct EventStore instance: https://github.com/kunzimariano/EventStore-Demo/blob/master/Import-FullCommits.ps1#L5-L7
 * Follow the instructions in the readme to execute the import
 * Now, to create the required projections in EventStore, do this:
+	* Create a text file named partitioner.txt and paste this in the content:
+	```
+	fromStream('github-events')
+	.whenAny(function(state, ev) {
+		var re = new RegExp("[A-Z]{1,2}-[0-9]+", "");
+		var matches = ev.data.commit.message.match(re);
+		if(matches && 0 < matches.length){
+			linkTo('mention-with', ev);
+		}
+		else {
+			linkTo('mention-without', ev);
+		}
+	});
+
+	```
+	* Create another text file named asset.txt and paste this in the content: 
+	```
+	fromStream('mention-with')
+	.whenAny(function(state, ev) {
+		var re = new RegExp("[A-Z]{1,2}-[0-9]+", "");
+		var matches = ev.data.commit.message.match(re);
+		linkTo('asset-' + matches[0], ev);
+	});
+	```
+	* Now for this you need to have [curl](http://curl.haxx.se/download.html) installed and run this to command:
+	```
+	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@partitioner.txt" "http://127.0.0.1:2113/projections/continuous?name=partitionate-with-or-without-mention&emit=yes&checkpoints=yes&enabled=yes"
+	
+	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@asset.txt" "http://127.0.0.1:2113/projections/continuous?name=by-asset&emit=yes&checkpoints=yes&enabled=yes"
+	```
 * TODO: Make this part of CommitStream.Web so it doesn't live in the vacuum. It could be a rest call that takes the repo url as a parameter.
 
 # Open VersionOne and see commits!
