@@ -1,7 +1,7 @@
 //importController
 (function (importController) {
-
 	var helpers = require ("./helpers");
+	var config = require ("../config");
 
 	importController.init = function (app) {
 		app.get("/api/continuingImporting", function (req, res) {
@@ -9,8 +9,8 @@
 			var urlRepo = "/repos/" + req.query.owner + "/" + req.query.repo;			
 
 			var options = {
-			  host: 'weventstore.cloudapp.net',
-			  port:  '2113',
+			  host: config.eventStoreHost,
+			  port: config.eventStorePort,
 			  path: '/streams/github-events/head?embed=content',
 			  headers: { 'Accept': 'application/json' }
 			};
