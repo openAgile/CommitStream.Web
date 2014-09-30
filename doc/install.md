@@ -2,20 +2,34 @@
 
 This is a work in progress. As this evolves, we update this narrative.
 
-# Scenario
-> Given you have a GitHub repository that has commits matching the VersionOne asset mention pattern, like S-12345, D-00312, etc, and you
-want to start seeing those correlated with those assets inside VersionOne's asset detail view, then:
+# Required software
 
-# Install VersionOne with CommitStream loader build
-* Install a VersionOne build from ci-server/job/CommitStream-core-developing/
-  * Running example: https://v1commitstream.cloudapp.net/VersionOne
-    * Add a a `user.config` file to the installation folder with: `<appSettings><add key="CommitStreamAppUrl" value="//v1commitstream.azurewebsites.net/app.js" /></appSettings>`. V1ers, you can see https://github.com/versionone/Core/blob/developing/Common/_user.config for an example.
-    * You can swap the `//v1commitstream.azurewebsites.net/app.js` for wherever you deployed the Node.js server from this repo
-    * The default location does this:
-      * Loads `http://v1commitstream.azurewebsites.net/app.js`, which pulls in these dependencies asynchronously via require.js:
-        * Moment.js
-        * Handlebars
-        * assetDetailCommits module from http://v1commitstream.azurewebsites.net/assetDetailCommits.js
+* You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
+* NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
+
+# How to run the Node JS server
+
+* As Administrator, open Powershell or Git Bash
+* TODO: add config step for changing the PORT
+* Type `npm start` from the root of this repository
+* Navigate to http://localhost:PORT/ to see the example page
+
+# How to install and run a build of VersionOne that integrates CommitStream info into the Asset Detail view
+
+## Background
+> Given you have a GitHub repository that has commits matching the VersionOne asset mention pattern, like S-12345, D-00312, etc, and you want to start seeing those correlated with those assets inside VersionOne's asset detail view, then:
+
+* As Administrator, open Powershell
+* Type `cd src\sandbox`
+* Type `get-help Install-V1.ps1 -full` or simply modify the script to suit your needs
+* Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being server by the NodeJS server. TODO: add port option for NodeJS, since IIS needs 80
+
+# Technical notes
+
+The `app.js` JavaScript module that gets loaded into VersionOne pulls in the following dependencies using require.js: 
+  * Moment.js
+  * Handlebars
+  * assetDetailCommits module from <nodeServerUrl>/assetDetailCommits.js
           * This in turn loads from our Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113, but you can change that to whereover your EventStore is hosted.
 * This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
 * This page will initially be unlinked from the top-level menu system, but we will tell customers about it.
