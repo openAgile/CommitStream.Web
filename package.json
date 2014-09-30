@@ -8,7 +8,8 @@
     "body-parser": "^1.6.3",
     "cors": "^2.4.1",
     "express": "^4.8.3",
-    "request": "^2.40.0"
+    "request": "^2.40.0",
+    "nconf": "^0.6.9"
   },
   "devDependencies": {},
   "scripts": {

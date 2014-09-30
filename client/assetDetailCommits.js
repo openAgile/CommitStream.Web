@@ -1,12 +1,11 @@
-define(['moment', 'handlebars'], function(moment, handlebars) {
+define(['text!config.json', 'moment', 'handlebars'], function(config, moment, handlebars) {
+    config = JSON.parse(config);
     var myHandlebars = handlebars.default;
-    var apiBaseUrl = 'http://weventstore.cloudapp.net:2113/streams/asset-',
-        apiParams = '/head/backward/5?embed=content',
-        templateUrl = 'http://v1commitstream.azurewebsites.net/assetDetailCommits.html';
-
     return function(selector, assetNumber) {
         var commits = [];
-        var apiUrl = apiBaseUrl + assetNumber + apiParams;
+        var apiUrl = config.eventStoreAssetStreamUrl
+            + assetNumber
+            + config.eventStoreAssetQueryParams;
 
         $.getJSON(apiUrl).done(function(events) {
             $.each(events.entries, function(index, value) {
@@ -25,7 +24,7 @@ define(['moment', 'handlebars'], function(moment, handlebars) {
                 commits: commits
             };
             if (commits.length > 0) {
-                $.get(templateUrl).done(function(source) {
+                $.get(config.assetDetailTemplateUrl).done(function(source) {
                     var template = myHandlebars.compile(source);
                     var content = template(data);
                     $(selector).html(content);

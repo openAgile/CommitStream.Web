@@ -1,7 +1,7 @@
 var express = require('express'),
     app = express(),
     cors = require('cors'),
-    port = process.env.PORT || 6565;
+    config = require('./config');
 
 app.get('/version', function(req, res) {
     res.json({version:"0.0.0"});
@@ -19,8 +19,12 @@ app.use(function(req, res, next) {
     return next();
 });
 
+app.get('/config.json', function(req, res) {
+	res.json(config);
+});
+
 app.use(express.static(__dirname + '/client'));
 
-app.listen(port, function () {
-    console.log('CommitStream Web Server listening on port ' + port);
+app.listen(config.port, function () {
+    console.log('CommitStream Web Server listening on port ' + config.port);
 });
