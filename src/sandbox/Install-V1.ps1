@@ -1,6 +1,21 @@
+<# 
+.SYNOPSIS 
+    Installs VersionOne with CommitStream.
+.LINK 
+    https://github.com/openAgile/CommitStream.Web
+.EXAMPLE 
+    .\Install-V1.ps1 
+.EXAMPLE 
+    .\Install-V1.ps1 "http://localhost/VersionOne"
+.PARAMETER instanceUrl
+   Specifies where to post an example story to once installation is finished
+.PARAMETER commitStreamAppUrl
+   Specifies where the app.js file gets served from the Node.js server present in the https://github.com/openAgile/CommitStream.Web repository. This actually serves the CommitStream side-panel content for the VersionOne application.
+.PARAMETER storySeedStart
+   Specifies the Story Number that the first new story created will have. This is useful if you want to test with prepopulated data or data copied from a production environment.
+#> 
 param(
 	$instanceUrl='http://v1commitstream.cloudapp.net/VersionOne',
-	$userConfigPath='c:\inetpub\wwwroot\VersionOne\user.config',
 	$commitStreamAppUrl='//v1commitstream.azurewebsites.net/app.js',
 	$storySeedStart='47665'
 )
@@ -8,7 +23,7 @@ param(
 cuninst CommitStreamVersionOne
 cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
 sqlcmd -Q "use VersionOne; DBCC CHECKIDENT(NumberSource_Story, RESEED, $storySeedStart)"
-sc $userConfigPath '<appSettings><add key="CommitStreamAppUrl" value="$commitStreamAppUrl" /></appSettings>'
+sc 'c:\inetpub\wwwroot\VersionOne\user.config' '<appSettings><add key="CommitStreamAppUrl" value="$commitStreamAppUrl" /></appSettings>'
 iisreset
 
 iwr `
