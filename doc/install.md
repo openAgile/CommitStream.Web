@@ -23,6 +23,7 @@ This is a work in progress. As this evolves, we update this narrative.
 > Given you have a GitHub repository that has commits matching the VersionOne asset mention pattern, like S-12345, D-00312, etc, and you want to start seeing those correlated with those assets inside VersionOne's asset detail view, then:
 
 * As Administrator, open Powershell
+* go to the root folder of this project
 * Type `cd src\sandbox`
 * Type `get-help Install-V1.ps1 -full` or simply modify the script to suit your needs
 * Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being server by the NodeJS server. TODO: add port option for NodeJS, since IIS needs 80
