@@ -43,7 +43,7 @@ $ npm start
 
 > node server.js
 
-CommitStream Web Server listening on port 8090
+CommitStream Web Server listening on port 6565
 Looking for projections...
 OK created projection by-asset
 {
