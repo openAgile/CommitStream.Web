@@ -16,7 +16,7 @@ This is a work in progress. As this evolves, we update this narrative.
 choco install eventstore -source https://www.myget.org/F/versionone/
 nssm install eventstore "C:\Program Files\eventstore\EventStore.ClusterNode.exe" "--run-projections=ALL"
 nssm start eventstore
-```*
+```
 * The above commands will:
   * Install EventStore
   * Configure it as a service with the [Non-Sucking Service Manager](http://nssm.cc/) to start automatically on server start
@@ -27,7 +27,7 @@ nssm start eventstore
 * Modify the `Import-FullCommits.ps1` if you want to change:
   * The address for EventStore if you did not install it on the current machine
   * The GitHub repository from which you want to import commits. By default it imports public commits from this repository.
-* Type `.\Import-FullCommits.ps1` `&lt;accesstokenhere&gt;`
+* Type `.\Import-FullCommits.ps1 &lt;accesstokenhere&gt;`
 * Type `cd src/app` to get to navigate to the application code root
 * Type `npm install` to install the required node dependencies
 * By default, the server will listen on port `80`. To change this, if your VersionOne instance is already running on this port, you can type:
@@ -35,6 +35,7 @@ nssm start eventstore
   * `$Env:PORT=6565` in Powershell
 * Type `npm start` from the root of this repository
 * The app will configure EventStore with new projections. You should see output like:
+
 ```
 $ npm start
 
