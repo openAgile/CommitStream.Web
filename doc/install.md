@@ -27,7 +27,7 @@ nssm start eventstore
 * Modify the `Import-FullCommits.ps1` if you want to change:
   * The address for EventStore if you did not install it on the current machine
   * The GitHub repository from which you want to import commits. By default it imports public commits from this repository.
-* Type `.\Import-FullCommits.ps1 &lt;accesstokenhere&gt;`
+* Type `.\Import-FullCommits.ps1 access-token-here`
 * Type `cd src/app` to get to navigate to the application code root
 * Type `npm install` to install the required node dependencies
 * By default, the server will listen on port `80`. To change this, if your VersionOne instance is already running on this port, you can type:
