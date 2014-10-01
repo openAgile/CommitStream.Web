@@ -115,9 +115,9 @@ This will:
 	```
 	* Now for this you need to have [curl](http://curl.haxx.se/download.html) installed and run this to command:
 	```
-	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@partitioner.txt" "http://127.0.0.1:2113/projections/continuous?name=partitionate-with-or-without-mention&emit=yes&checkpoints=yes&enabled=yes"
+	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8' --user admin:changeit --data "@partitioner.txt" "http://127.0.0.1:2113/projections/continuous?name=partitionate-with-or-without-mention&emit=yes&checkpoints=yes&enabled=yes"
 	
-	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@asset.txt" "http://127.0.0.1:2113/projections/continuous?name=by-asset&emit=yes&checkpoints=yes&enabled=yes"
+	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8' --user admin:changeit --data "@asset.txt" "http://127.0.0.1:2113/projections/continuous?name=by-asset&emit=yes&checkpoints=yes&enabled=yes"
 	```
 * TODO: Make this part of CommitStream.Web so it doesn't live in the vacuum. It could be a rest call that takes the repo url as a parameter.
 
