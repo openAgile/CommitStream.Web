@@ -85,8 +85,8 @@ This will:
 ```
 
 # Import commits and create EventStore projections
-* Clone the GitHub commit import script from https://github.com/kunzimariano/EventStore-Demo
-* Modify these lines to point to the correct EventStore instance: https://github.com/kunzimariano/EventStore-Demo/blob/master/Import-FullCommits.ps1#L5-L7
+* Clone the GitHub commit import script from https://github.com/openAgile/EventStore-Demo
+* Modify these lines to point to the correct EventStore instance: https://github.com/openAgile/EventStore-Demo/blob/master/Import-FullCommits.ps1#L5-L7
 * Follow the instructions in the readme to execute the import
 * Now, to create the required projections in EventStore, do this:
 	* Create a text file named partitioner.txt and paste this in the content:
