@@ -56,7 +56,7 @@ OK created projection partitionate-with-or-without-mention
   "name": "partitionate-with-or-without-mention"
 }
 ```
-* Navigate to http://localhost:6565/ to see the example page and commits you just imported!
+* Navigate to [http://localhost:6565/](http://localhost:6565/) to see the example page and commits you just imported!
 
 # How to install and run a build of VersionOne that integrates CommitStream info into the Asset Detail view
 
@@ -76,7 +76,7 @@ The `app.js` JavaScript module that gets loaded into VersionOne pulls in the fol
   * Moment.js
   * Handlebars
   * assetDetailCommits module from <nodeServerUrl>/assetDetailCommits.js
-    * This in turn loads from our Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113, but you can change that to whereover your EventStore is hosted.
+    * This in turn loads from our Azure-hosted EventStore service at [http://weventstore.cloudapp.net:2113](http://weventstore.cloudapp.net:2113), but you can change that to whereover your EventStore is hosted.
 * This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
 * This page will initially be unlinked from the top-level menu system, but we will tell customers about it.
   * Only customers who we add to the whitelist at [../client/whitelist.json](../client/whitelist.json) will be able to access this page
