@@ -9,8 +9,9 @@ This is a work in progress. As this evolves, we update this narrative.
 
 # How to run the Node JS server
 
+* Clone this repository if you have not already done so
 * As Administrator, open Powershell or Git Bash
-* Type `npm install` to install the required node dependencies
+* From the root folder of the cloned repostitory, type `npm install` to install the required node dependencies
 * By default, the server will listen on port `80`. To change this, if your VersionOne instance is already running on this port, you can type:
   * `export PORT=8080` in Bash
   * `$Env:PORT=8080` in Powershell
