@@ -7,27 +7,67 @@ This is a work in progress. As this evolves, we update this narrative.
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
 * NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
 
-# How to run the Node JS server
+# How to run just the CommitStream application (no dependency on the VersionOne application)
 
 * Clone this repository if you have not already done so
-* As Administrator, open Powershell or Git Bash
-* From the root folder of the cloned repostitory, type `npm install` to install the required node dependencies
+* As Administrator, open Powershell
+* From any folder, install EventStore by typing:
+```powershell
+choco install eventstore -source https://www.myget.org/F/versionone/
+nssm install eventstore "C:\Program Files\eventstore\EventStore.ClusterNode.exe" "--run-projections=ALL"
+nssm start eventstore
+```*
+* The above commands will:
+  * Install EventStore
+  * Configure it as a service with the [Non-Sucking Service Manager](http://nssm.cc/) to start automatically on server start
+  * Start it immediately
+* In GitHub, create a new **Personal access token** for yourself by going to https://github.com/settings/applications. Copy it to your clipboard!
+* Navigate to the `CommitStream.Web` folder (or wherever you cloned this repo to)
+* Type `cd src/test`
+* Modify the `Import-FullCommits.ps1` if you want to change:
+  * The address for EventStore if you did not install it on the current machine
+  * The GitHub repository from which you want to import commits. By default it imports public commits from this repository.
+* Type `.\Import-FullCommits.ps1` `&lt;accesstokenhere&gt;`
+* Type `cd src/app` to get to navigate to the application code root
+* Type `npm install` to install the required node dependencies
 * By default, the server will listen on port `80`. To change this, if your VersionOne instance is already running on this port, you can type:
-  * `export PORT=8080` in Bash
-  * `$Env:PORT=8080` in Powershell
+  * `export PORT=6565` in Bash
+  * `$Env:PORT=6565` in Powershell
 * Type `npm start` from the root of this repository
-* Navigate to http://localhost:PORT/ to see the example page
+* The app will configure EventStore with new projections. You should see output like:
+```
+$ npm start
+
+> openAgile.CommitStream@0.0.1 start c:\Projects\github\CommitStream.Web\src\app
+
+> node server.js
+
+CommitStream Web Server listening on port 8090
+Looking for projections...
+OK created projection by-asset
+{
+  "msgTypeId": 237,
+  "name": "by-asset"
+}
+OK created projection partitionate-with-or-without-mention
+{
+  "msgTypeId": 237,
+  "name": "partitionate-with-or-without-mention"
+}
+```
+* Navigate to http://localhost:6565/ to see the example page and commits you just imported!
 
 # How to install and run a build of VersionOne that integrates CommitStream info into the Asset Detail view
 
 ## Background
+
 > Given you have a GitHub repository that has commits matching the VersionOne asset mention pattern, like S-12345, D-00312, etc, and you want to start seeing those correlated with those assets inside VersionOne's asset detail view, then:
 
 * As Administrator, open Powershell
 * Go to the root folder of this project
 * Type `cd src\sandbox`
 * Type `get-help Install-V1.ps1 -full` or simply modify the script to suit your needs
-* Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being server by the NodeJS server. TODO: add port option for NodeJS, since IIS needs 80
+* Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being served by the NodeJS server you installed above.
 
 # Technical notes 
 
@@ -35,92 +75,20 @@ The `app.js` JavaScript module that gets loaded into VersionOne pulls in the fol
   * Moment.js
   * Handlebars
   * assetDetailCommits module from <nodeServerUrl>/assetDetailCommits.js
-          * This in turn loads from our Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113, but you can change that to whereover your EventStore is hosted.
+    * This in turn loads from our Azure-hosted EventStore service at http://weventstore.cloudapp.net:2113, but you can change that to whereover your EventStore is hosted.
 * This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
 * This page will initially be unlinked from the top-level menu system, but we will tell customers about it.
   * Only customers who we add to the whitelist at [../client/whitelist.json](../client/whitelist.json) will be able to access this page
 
-# BETA Install EventStore
+# Open VersionOne and see commits!
 
-* As Administrator, run this from Powershell:
+* You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
+
+# Troubleshooting
+
+If you wish to expose the instance to other machines on a network, you may need to open some firewall ports for EventStore. These powershell commands will do that for you:
 
 ```powershell
-choco install eventstore -source https://www.myget.org/F/versionone/
-nssm install eventstore "C:\Program Files\eventstore\EventStore.ClusterNode.exe" "--run-projections=ALL"
-nssm start eventstore
+New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
 ```
-
-This will:
-* Install EventStore
-* Configure it as a service with the [Non-Sucking Service Manager](http://nssm.cc/) to start automatically on server start
-* Start it immediately
-
-# CURRENT Install EventStore
-* Download a 3.0+ build of EventStore from http://geteventstore.com/downloads/ and install it on a server
-  * Running example: http://weventstore.cloudapp.net:2113
-  * Unzip eventstore into c:\eventstore
-  * Download EventStoreWinServiceWrapper from https://github.com/mastoj/EventStoreWinServiceWrapper/tree/master/releases
-  * Unzip into EventStoreWinServiceWrapper
-  * Modify EventStoreWinServiceWrapper.exe.config so it looks like this:
-
- ```
- <?xml version="1.0" encoding="utf-8" ?>
- <configuration>
-  <configSections>
-    <section name="eventStore" type="EventStoreWinServiceWrapper.EventStoreServiceConfiguration,   EventStoreWinServiceWrapper, Version=1.0.0.0, Culture=neutral" />
-   </configSections>
-   <eventStore executable="C:\eventstore\EventStore.ClusterNode.exe">
-     <instance name="Dev" dbPath="c:\eventstore\data"    addresses="http://127.0.0.1:2113/,http://{yourdns}:2113/" logPath="c:\eventstore\logs" externalip="{yourAzureInternalIp}" internalip="" runProjections="ALL"/>
- </eventStore>
-  <startup>
-    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-  </startup>
-</configuration>
- ```
- * Run the install.ps1 script from the EventStoreWinServiceWrapper. From that point you should have a windows service running event store.
- * Open the neccesary ports so eventStore can be accessed from the outside. Powershell commands:
-```
-	New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
-	New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
-```
-
-# Import commits and create EventStore projections
-* Clone the GitHub commit import script from https://github.com/kunzimariano/EventStore-Demo
-* Modify these lines to point to the correct EventStore instance: https://github.com/kunzimariano/EventStore-Demo/blob/master/Import-FullCommits.ps1#L5-L7
-* Follow the instructions in the readme to execute the import
-* Now, to create the required projections in EventStore, do this:
-	* Create a text file named partitioner.txt and paste this in the content:
-	```
-	fromStream('github-events')
-	.whenAny(function(state, ev) {
-		var re = new RegExp("[A-Z]{1,2}-[0-9]+", "");
-		var matches = ev.data.commit.message.match(re);
-		if(matches && 0 < matches.length){
-			linkTo('mention-with', ev);
-		}
-		else {
-			linkTo('mention-without', ev);
-		}
-	});
-
-	```
-	* Create another text file named asset.txt and paste this in the content: 
-	```
-	fromStream('mention-with')
-	.whenAny(function(state, ev) {
-		var re = new RegExp("[A-Z]{1,2}-[0-9]+", "");
-		var matches = ev.data.commit.message.match(re);
-		linkTo('asset-' + matches[0], ev);
-	});
-	```
-	* Now for this you need to have [curl](http://curl.haxx.se/download.html) installed and run this to command:
-	```
-	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@partitioner.txt" "http://127.0.0.1:2113/projections/continuous?name=partitionate-with-or-without-mention&emit=yes&checkpoints=yes&enabled=yes"
-	
-	curl -H 'Accept: application/json; Content-Type:application/json;charset=utf-8; Content-Length:8'--user admin:changeit --data "@asset.txt" "http://127.0.0.1:2113/projections/continuous?name=by-asset&emit=yes&checkpoints=yes&enabled=yes"
-	```
-* TODO: Make this part of CommitStream.Web so it doesn't live in the vacuum. It could be a rest call that takes the repo url as a parameter.
-
-# Open VersionOne and see commits!
-* You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
-* Note: yes the commits are hard-coded, and we are fixing that now.
