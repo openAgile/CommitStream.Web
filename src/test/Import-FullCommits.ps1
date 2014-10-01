@@ -2,7 +2,7 @@ param($accessToken)
 
 . .\helpers.ps1
 
-$repoUrl = "https://api.github.com/repos/kunzimariano/CommitService.DemoRepo"
+$repoUrl = "https://api.github.com/repos/openAgile/CommitStream.Web"
 $eventStore = 'http://127.0.0.1:2113'
 $eventStore += '/streams/github-events'
 
