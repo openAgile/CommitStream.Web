@@ -45,7 +45,7 @@
             var accessToken = req.query.accessToken;
             var repo = req.query.repo;
             
-            var repoUrl = "/repos/" + owner + "/" + repo + '/commits?per_page=100&page=1&access_token=' + accessToken;
+            var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?per_page=100&page=1&access_token=' + accessToken;
             
             var events = [];            
             makeRequest(repoUrl, events);
@@ -55,7 +55,7 @@
         
         function makeRequest(url, events) {
             var optionsHttps = {
-                url: 'https://api.github.com' + url,
+                url: url,
                 headers: {
                     "User-Agent": "CommitStream.Web"
                 }
@@ -66,7 +66,7 @@
                 var repoUrl = getNextLink(response.headers);
                 
                 if (repoUrl) {
-                    makeRequest(repoUrl);
+                    makeRequest(repoUrl, events);
                 } else {
                     pushToEventStore(events);
                 }
@@ -77,7 +77,6 @@
         function pileEvents(body, events) {
             var commits = JSON.parse(body);
             commits.forEach(function (item) {
-                //var guid = uuid();
                 var e = {
                     eventId: uuid(),
                     eventType: 'github-event',
@@ -117,8 +116,8 @@
             var result = null;
             if (headers.hasOwnProperty('link')) {
                 headers.link.split(',').forEach(function (item) {
-                    var part = item.split(';');
-                    if (part[1] == 'rel="next"') {
+                    var parts = item.split(';');
+                    if (parts[1].trim() == 'rel="next"') {
                         result = parts[0].replace('<', '').replace('>', '');
                     }
                 });
