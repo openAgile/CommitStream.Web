@@ -44,7 +44,8 @@
           'Accept': 'application/json',
           'Content-Type': 'application/json;charset=utf-8',
           'Content-Length': script.length
-        }
+        },
+        body: script
       };
       request.post(options, function(err, response, body) {
         if (err) { 
