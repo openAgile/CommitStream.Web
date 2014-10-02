@@ -3,6 +3,7 @@
     var config = require("../config");
     var request = require('request');
     var es = require('./helpers/eventStore');
+    var bodyParser = require('body-parser');
     
     importController.init = function (app) {
         
@@ -46,10 +47,10 @@
 
         });
         
-        app.get("/api/historicalImport", function (req, res) {
-            var owner = req.query.owner;
-            var accessToken = req.query.accessToken;
-            var repo = req.query.repo;
+        app.post("/api/historicalImport", bodyParser.json(), function (req, res) {
+            var owner = req.body.owner;
+            var accessToken = req.body.accessToken;
+            var repo = req.body.repo;
             
             var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?per_page=100&page=1&access_token=' + accessToken;
 
