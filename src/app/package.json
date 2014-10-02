@@ -10,8 +10,9 @@
     "express": "^4.8.3",
     "request": "^2.40.0",
     "nconf": "^0.6.9",
-    "moment" : "^2.8.3",
-    "underscore" : "^1.7.0"
+    "moment": "^2.8.3",
+    "underscore": "^1.7.0",
+    "request": "^2.44.0"
   },
   "devDependencies": {},
   "scripts": {

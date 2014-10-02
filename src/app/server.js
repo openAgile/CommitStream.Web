@@ -8,6 +8,7 @@ app.get('/version', function(req, res) {
 });
 
 var api = require("./api");
+require('./bootstrapper').boot(config);
 
 //Map the routes
 api.init(app);
