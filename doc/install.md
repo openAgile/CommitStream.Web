@@ -21,13 +21,15 @@ nssm start eventstore
   * Install EventStore
   * Configure it as a service with the [Non-Sucking Service Manager](http://nssm.cc/) to start automatically on server start
   * Start it immediately
-* In GitHub, create a new **Personal access token** for yourself by going to https://github.com/settings/applications. Copy it to your clipboard!
+* To see that EventStore is correctly installed, go to [http://localhost:2113](http://localhost:2113) and login with **admin** and **changeit**
+* In GitHub, create a new **Personal access token** for yourself by going to https://github.com/settings/applications. Copy it to your clipboard. You'll need to use it below where it says **[insert-access-token-here]**!
 * Navigate to the `CommitStream.Web` folder (or wherever you cloned this repo to)
 * Type `cd src/test`
 * Modify the `Import-FullCommits.ps1` if you want to change:
   * The address for EventStore if you did not install it on the current machine
   * The GitHub repository from which you want to import commits. By default it imports public commits from this repository.
-* Type `.\Import-FullCommits.ps1 access-token-here`
+* Type `Get-ExecutionPolicy` and if the result is not **Unrestricted**, then type `Set-ExecutionPolicy unrestricted`
+* Type `.\Import-FullCommits.ps1 [insert-access-token-here]`
 * Type `cd src/app` to get to navigate to the application code root
 * Type `npm install` to install the required node dependencies
 * By default, the server will listen on port `80`. To change this, if your VersionOne instance is already running on this port, you can type:
