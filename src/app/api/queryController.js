@@ -1,28 +1,8 @@
 (function (controller) {
-	var helpers = require("./helpers"),
-		config = require("../config"),
-		moment = require("moment"),
-		_ = require("underscore");
-
-	function githubCommitEventsTranslateFromEventStore(entries) {
-		var commits = _.map(entries, function(entry) {
-			var e = entry.content.data;
-			return {
-				commitDate: e.commit.committer.date,
-				timeFormatted: moment(e.commit.committer.date).fromNow(),
-				author: e.commit.committer.name,
-				sha1Partial: e.sha.substring(0, 6),
-				action: "committed",
-				message: e.commit.message,
-				commitHref: e.html_url
-		    };
-	    });
-	    var response = {
-	        commits: commits
-	    };
-	    return response;
-	}
-
+	var helpers = require('./helpers'),
+		config = require('../config'),
+		gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse');
+		
 	controller.init = function (app) {
 		/**
 		 * @api {get} /api/query Request commits
@@ -50,7 +30,7 @@
 			};
 			helpers.getHttpResources(options, function(err, response) {
 				res.set("Content-Type","application/json");
-				var commits = githubCommitEventsTranslateFromEventStore(response.entries);
+				var commits = gitHubEventsToApiResponse(response.entries);
 				res.send(commits);
 			});
 		});
