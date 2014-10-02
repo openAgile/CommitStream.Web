@@ -14,9 +14,16 @@
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "traceur": "^0.0.66",
+    "jest-cli": "^0.1.18"
+  },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest"
+  },
+  "jest": {
+    "unmockedModulePathPatterns": ["underscore", "moment"]
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"

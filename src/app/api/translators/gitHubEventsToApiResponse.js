@@ -15,6 +15,8 @@
 				commitHref: e.html_url
 			};
 		});
+		console.log("commits:");
+		console.log(commits);
 		var response = {
 			commits: commits
 		};
