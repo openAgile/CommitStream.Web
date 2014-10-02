@@ -1,9 +1,7 @@
 //importController
 (function (importController) {
-    var helpers = require("./helpers");
     var config = require("../config");
     var request = require('request');
-    var uuid = require('uuid-v4');
     
     importController.init = function (app) {
         
@@ -32,9 +30,10 @@
                 }
                 if (response.statusCode == 200) {
                     var date = JSON.parse(body).commit.committer.date;
-                    var repoUrl =  "https://api.github.com/repos/" + owner + "/" + repo + '/commits?since=' + date + '&per_page=100&page=1&access_token=' + accessToken;                    
-                    var events = [];
-                    makeRequest(repoUrl, events, pushToEventStorePartial);
+                    var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?since=' + date + '&per_page=100&page=1&access_token=' + accessToken;
+                    var github = require("./helpers/github");
+                    github.getAllCommits(repoUrl, pushToEventStorePartial);
+                    
                     res.end('Your repository is in queue to be updated.');
                 }
             });           
@@ -47,45 +46,14 @@
             var repo = req.query.repo;
             
             var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?per_page=100&page=1&access_token=' + accessToken;
-            
-            var events = [];            
-            makeRequest(repoUrl, events, pushToEventStore);
+
+            var github = require("./helpers/github");
+            github.getAllCommits(repoUrl, pushToEventStore);
             
             res.end('Your repository is in queue to be added to CommitStream.');
         });
         
-        function makeRequest(url, events, callback) {
-            var optionsHttps = {
-                url: url,
-                headers: {
-                    "User-Agent": "CommitStream.Web"
-                }
-            };
-
-            request(optionsHttps, function (error, response, body) {
-                pileEvents(body, events);
-                var repoUrl = getNextLink(response.headers);
-                
-                if (repoUrl) {
-                    makeRequest(repoUrl, events);
-                } else {
-                    callback(events);
-                }
-            });
-            
-        };
         
-        function pileEvents(body, events) {
-            var commits = JSON.parse(body);
-            commits.forEach(function (item) {
-                var e = {
-                    eventId: uuid(),
-                    eventType: 'github-event',
-                    data: item
-                };
-                events.unshift(e);
-            });
-        }
         
         function pushToEventStore(events) {
             var content = JSON.stringify(events);
@@ -111,19 +79,6 @@
             });
 
 
-        }
-
-        function getNextLink(headers) {
-            var result = null;
-            if (headers.hasOwnProperty('link')) {
-                headers.link.split(',').forEach(function (item) {
-                    var parts = item.split(';');
-                    if (parts[1].trim() == 'rel="next"') {
-                        result = parts[0].replace('<', '').replace('>', '');
-                    }
-                });
-            }
-            return result;
         }
 
         function pushToEventStorePartial(events) {
