@@ -28,6 +28,7 @@ nssm start eventstore
 * Modify the `Import-FullCommits.ps1` if you want to change:
   * The address for EventStore if you did not install it on the current machine
   * The GitHub repository from which you want to import commits. By default it imports public commits from this repository.
+* Type `Get-ExecutionPolicy` and if the result is not **Unrestricted**, then type `Set-ExecutionPolicy unrestricted`
 * Type `.\Import-FullCommits.ps1 [insert-access-token-here]`
 * Type `cd src/app` to get to navigate to the application code root
 * Type `npm install` to install the required node dependencies
