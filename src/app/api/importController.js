@@ -9,34 +9,35 @@
         
         app.get("/api/continuingImporting", function (req, res) {
             
-            var urlRepo = "/repos/" + req.query.owner + "/" + req.query.repo;
+            var owner = req.query.owner;
+            var accessToken = req.query.accessToken;
+            var repo = req.query.repo;
+            
+            var eventStoreUrl = config.eventStoreProtocol + 
+            '://' + config.eventStoreHost + 
+            ':' + config.eventStorePort + 
+            '/streams/repo-' + owner + '-' + repo + '/head?embed=content';
             
             var options = {
-                host: config.eventStoreHost,
-                port: config.eventStorePort,
-                path: '/streams/github-events/head?embed=content',
+                url: eventStoreUrl,            
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json'                   
                 }
             };
             
-            helpers.getHttpResources(options, function (err, response) {
-                var date = response.commit.committer.date;
-                var commistUrl = urlRepo + "/commits?since=" + date;
-                var optionsHttps = {
-                    host: 'api.github.com',
-                    path: commistUrl,
-                    headers: {
-                        "User-Agent": "test"
-                    }
-                };
-                
-                helpers.getHttpsResources(optionsHttps, function (err, response) {
-                    res.set("Content-Type", "application/json");
-                    res.send(response);
-                });
-
-            });
+            request.get(options, function (error, response, body) {
+                console.log('Getting the last commit for this repository');
+                if (response.statusCode == 404) {
+                    res.end('Stream not found, You need to do a full import');
+                }
+                if (response.statusCode == 200) {
+                    var date = JSON.parse(body).commit.committer.date;
+                    var repoUrl =  "https://api.github.com/repos/" + owner + "/" + repo + '/commits?since=' + date + '&per_page=100&page=1&access_token=' + accessToken;                    
+                    var events = [];
+                    makeRequest(repoUrl, events, pushToEventStorePartial);
+                    res.end('Your repository is in queue to be updated.');
+                }
+            });           
 
         });
         
@@ -48,12 +49,12 @@
             var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?per_page=100&page=1&access_token=' + accessToken;
             
             var events = [];            
-            makeRequest(repoUrl, events);
+            makeRequest(repoUrl, events, pushToEventStore);
             
             res.end('Your repository is in queue to be added to CommitStream.');
         });
         
-        function makeRequest(url, events) {
+        function makeRequest(url, events, callback) {
             var optionsHttps = {
                 url: url,
                 headers: {
@@ -68,7 +69,7 @@
                 if (repoUrl) {
                     makeRequest(repoUrl, events);
                 } else {
-                    pushToEventStore(events);
+                    callback(events);
                 }
             });
             
@@ -123,6 +124,11 @@
                 });
             }
             return result;
+        }
+
+        function pushToEventStorePartial(events) {
+            events.shift();
+            pushToEventStore(events);
         }
 
     };
