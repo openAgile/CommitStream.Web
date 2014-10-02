@@ -11,7 +11,7 @@
 				commitDate: e.commit.committer.date,
 				timeFormatted: moment(e.commit.committer.date).fromNow(),
 				author: e.commit.committer.name,
-				sha1Partial: e.commit.sha.substring(0, 6),
+				sha1Partial: e.sha.substring(0, 6),
 				action: "committed",
 				message: e.commit.message,
 				commitHref: e.html_url
