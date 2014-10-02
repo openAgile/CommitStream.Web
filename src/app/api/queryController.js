@@ -29,7 +29,7 @@
 		 * @apiName query
 		 * @apiGroup Query
 		 *
-		 * @apiParam {workitem} VersionOne workitem identifier
+		 * @apiParam {String} workitem VersionOne workitem identifier
 		 *
 		 * @apiSuccess {String} firstname Firstname of the User.
 		 * @apiSuccess {String} lastname  Lastname of the User.
