@@ -3,6 +3,10 @@
     var uuid = require('uuid-v4');
     
     var events = [];
+    
+    github.init = function () {
+        events = [];
+    }
 
     github.getAllCommits = function (url, callback) {
         var optionsHttps = {
@@ -17,7 +21,7 @@
             var repoUrl = getNextLink(response.headers);
             
             if (repoUrl) {
-                getAllCommits(repoUrl);
+                github.getAllCommits(repoUrl, callback);
             } else {
                 callback(events);
             }

@@ -20,7 +20,7 @@
                     var date = JSON.parse(event).commit.committer.date;
                     var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?since=' + date + '&per_page=100&page=1&access_token=' + accessToken;
                     var github = require("./helpers/github");
-                    
+                    github.init();
                     github.getAllCommits(repoUrl, function (events) {
                         events.shift();
                         var content = JSON.stringify(events);
@@ -39,6 +39,7 @@
             var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?per_page=100&page=1&access_token=' + accessToken;
 
             var github = require("./helpers/github");
+            github.init();
             github.getAllCommits(repoUrl, function(events) {
                 var content = JSON.stringify(events);
                 es.pushEvents(content);
