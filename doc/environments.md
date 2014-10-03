@@ -6,7 +6,7 @@
 
 See [resources.md](resources.md) for the deployment view of the system.
 
-| STATUS        | Environment/Branch    | Description                         | Promoition criteria, info                                                                                                | 
+| STATUS        | Environment/Branch    | Description                         | Promotion criteria, info                                                                                                | 
 | ------------- |-----------------------|-------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
 | ON GOING      | feature branches      | Local on dev machines per story     | After sufficient unit-testsing and exploratory testing with testers / users / hallway usability, merge into [developing] |
 | TODO          | developing/developing | Runs full automated tests on build  | Full-Test-Suite-OnSuccess: promote to [staging]                                                                          |
