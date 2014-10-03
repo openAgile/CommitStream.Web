@@ -26,5 +26,26 @@ var request = require('request');
         });
         
     };
+    eventStore.getLastCommit = function (owner, repo, next) {
+        var eventStoreUrl = config.eventStoreProtocol + 
+            '://' + config.eventStoreHost + 
+            ':' + config.eventStorePort + 
+            '/streams/repo-' + owner + '-' + repo + '/head?embed=content';
+        var options = {
+            url: eventStoreUrl,            
+            headers: {
+                'Accept': 'application/json'
+            }
+        };
+        request.get(options, function (error, response, body) {
+            console.log('Getting the last commit for this repository');
+            if (response.statusCode == 404) {
+                next('Stream not found, You need to do a full import', null);
+            }
+            if (response.statusCode == 200) {
+                next(null, body);
+            }
+        });
+    };
 
 })(module.exports);
