@@ -10,10 +10,10 @@ app.get('/version', function(req, res) {
 var api = require("./api");
 require('./bootstrapper').boot(config);
 
-//Map the routes
-api.init(app);
-
 app.use(cors());
+
+// Map API the routes
+api.init(app);
 
 app.use(function(req, res, next) {
     res.setHeader("X-CommitStream-API-Docs", "https://github.com/eventstore/eventstore/wiki");
