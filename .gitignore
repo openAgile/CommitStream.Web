@@ -1,3 +1,7 @@
+# VS Build Folders
+[Bb]in/
+[Oo]bj/
+
 # Logs
 logs
 *.log
