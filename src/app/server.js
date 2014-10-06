@@ -1,7 +1,8 @@
 var express = require('express'),
     app = express(),
     cors = require('cors'),
-    config = require('./config');
+    config = require('./config'),
+    exphbs = require('express-handlebars');
 
 app.get('/version', function(req, res) {
     res.json({version:"0.0.0"});
@@ -9,6 +10,11 @@ app.get('/version', function(req, res) {
 
 var api = require("./api");
 require('./bootstrapper').boot(config);
+
+// Wire up express-handlebars as the view engine for express.
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
 
 app.use(cors());
 
@@ -18,6 +24,17 @@ api.init(app);
 app.use(function(req, res, next) {
     res.setHeader("X-CommitStream-API-Docs", "https://github.com/eventstore/eventstore/wiki");
     return next();
+});
+
+app.get('/app.js', function(req, res) {
+    res.setHeader('content-type', 'application/javascript');
+    var protocol = req.protocol;
+    var host = req.get('host');
+
+    res.render('app', {
+        apiUrl: protocol + '://' + host + '/api/query?workitem=',
+        templateUrl: protocol + '://' + host + '/assetDetailCommits.html'
+    });
 });
 
 app.get('/config.json', function(req, res) {

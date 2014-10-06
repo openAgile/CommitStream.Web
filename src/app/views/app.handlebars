@@ -16,10 +16,9 @@
     }
 
     function queryCommitStream(commitStreamDomId, workitem, handlebars) {
-        var apiUrl = 'http://localhost:6565/api/query?workitem=' + workitem;
-        $.getJSON(apiUrl).done(function(data) {
+        $.getJSON('{{apiUrl}}' + workitem).done(function(data) {
             if (data.commits.length > 0) {
-                $.get("http://localhost:6565/assetDetailCommits.html").done(function(source) {
+                $.get('{{templateUrl}}').done(function(source) {
                     var template = handlebars.compile(source);
                     var content = template(data);
                     $(commitStreamDomId).html(content);
