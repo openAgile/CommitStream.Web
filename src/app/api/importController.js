@@ -7,7 +7,7 @@
     
     importController.init = function (app) {
         
-        app.post("/api/ccontinueImport", bodyParser.json(), function (req, res) {
+        app.post("/api/importContinue", bodyParser.json(), function (req, res) {
             
             var owner = req.body.owner;
             var accessToken = req.body.accessToken;
@@ -31,7 +31,7 @@
             });           
         });
         
-        app.post("/api/historicalImport", bodyParser.json(), function (req, res) {
+        app.post("/api/importHistory", bodyParser.json(), function (req, res) {
             var owner = req.body.owner;
             var accessToken = req.body.accessToken;
             var repo = req.body.repo;
