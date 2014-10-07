@@ -14,7 +14,21 @@ This is a work in progress. As this evolves, we update this narrative.
 * From any folder, install EventStore by typing:
 ```powershell
 choco install eventstore -source https://www.myget.org/F/versionone/
-nssm install eventstore "C:\Program Files\eventstore\EventStore.ClusterNode.exe" "--run-projections=ALL"
+```
+* Create a YAML file named config.yml here: "C:\Program Files\eventstore\" with this content:
+```
+---
+  Db: C:\Program Files\eventstore\Data
+  Log: C:\Program Files\eventstore\Log
+  ExtIp: 100.74.164.37
+  RunProjections: ALL
+  HttpPrefixes: 
+    - http://127.0.0.1:2113/
+    - http://v1commitstream.cloudapp.net:2113/
+```
+* Run this command to create the service. (**note**: the path to the config file it hasn't to contain blank spaces)
+```
+nssm install eventstore "C:\Program Files\eventstore\EventStore.ClusterNode.exe" --config C:\PROGRA~1\eventstore\config.yml
 nssm start eventstore
 ```
 * The above commands will:
