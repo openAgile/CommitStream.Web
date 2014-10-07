@@ -16,7 +16,7 @@
 #> 
 param(
 	$instanceUrl='http://v1commitstream.cloudapp.net/VersionOne',
-	$commitStreamAppUrl='//v1commitstream.azurewebsites.net/app.js',
+	$commitStreamAppUrl='//v1commitstream-staging.azurewebsites.net/app.js',
 	$storySeedStart='47665'
 )
 
