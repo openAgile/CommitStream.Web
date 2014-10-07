@@ -19,6 +19,7 @@
     <Content Include="iisnode.yaml" />
     <Content Include="projections\by-asset" />
     <Content Include="projections\partitionate-with-or-without-mention" />
+    <Content Include="views\app.handlebars" />
     <Content Include="web.txt" />
     <Content Include="config.production.json" />
     <Content Include="package.json" />
@@ -33,7 +34,6 @@
     <Content Include="client\index.html" />
     <Content Include="client\icon-commit-16x16.png" />
     <Content Include="client\whitelist.json" />
-    <Compile Include="client\app.js" />
     <Compile Include="client\assetDetailCommits.js" />
     <Compile Include="client\text.js" />
     <Compile Include="api\helpers\index.js" />
@@ -43,6 +43,7 @@
     <Folder Include="api\helpers" />
     <Folder Include="client" />
     <Folder Include="projections" />
+    <Folder Include="views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
