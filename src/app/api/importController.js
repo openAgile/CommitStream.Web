@@ -7,7 +7,7 @@
     
     importController.init = function (app) {
         
-        app.post("/api/continuingImporting", bodyParser.json(), function (req, res) {
+        app.post("/api/ccontinueImport", bodyParser.json(), function (req, res) {
             
             var owner = req.body.owner;
             var accessToken = req.body.accessToken;
