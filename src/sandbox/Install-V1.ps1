@@ -23,7 +23,8 @@ param(
 cuninst CommitStreamVersionOne
 cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
 sqlcmd -Q "use VersionOne; DBCC CHECKIDENT(NumberSource_Story, RESEED, $storySeedStart)"
-sc 'c:\inetpub\wwwroot\VersionOne\user.config' '<appSettings><add key="CommitStreamAppUrl" value="$commitStreamAppUrl" /></appSettings>'
+sc "c:\inetpub\wwwroot\VersionOne\user.config" "<appSettings><add key=""CommitStream.Availability"" value=""available"" /><add key=""CommitStream.Toggle"" value=""on"" /><add key=""CommitStream.AppUrl"" value=""$commitStreamAppUrl"" /></appSettings>"
+
 iisreset
 
 iwr `
