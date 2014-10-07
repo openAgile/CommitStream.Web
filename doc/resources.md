@@ -13,7 +13,7 @@ See https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/da
     </td>
   </tr>
   <tr>
-    <td>v1CommitStream-staging</td><td>Staging web site for v1commitstream</td><td>Web Site</td><td>http://v1commitstream-staging.azurewebsites.net</td><td><a href="https://github.com/openAgile/CommitStream.Web/tree/S-48324_MultiRepository">S-48324_MultiRepository</a></td><td></td>
+    <td>v1commitstream-staging</td><td>Staging web site for v1commitstream</td><td>Web Site</td><td>http://v1commitstream-staging.azurewebsites.net</td><td><a href="https://github.com/openAgile/CommitStream.Web/tree/S-48324_MultiRepository">S-48324_MultiRepository</a></td><td></td>
   </tr> 
   <tr>
     <td>v1commitstream.cloudapp.net</td><td>VM hosting:
@@ -32,14 +32,7 @@ See https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/da
     <td></td>
     <td></td>
   </tr>  
-  <tr>
-    <td>WEventStore</td><td>EventStore 3.0 under Windows web service</td><td>Cloud Service</td><td>http://WEventstore.cloudapp.net:2113</td><td></td><td>DEPRECATED</td>
-  </tr>
-  <tr>
-    <td>WEventStore</td><td>EventStore 3.0 VM</td><td>Virtual Machine</td><td></td><td></td><td>DEPREACTED</td>
-  </tr>  
 </table>
-
 
 # PROD account Azure resources
 
