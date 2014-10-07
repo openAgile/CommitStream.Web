@@ -9,11 +9,14 @@ See https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/da
   </tr>
   <tr>
     <td>v1CommitStream</td><td>Public web site and API host for CommitStream</td><td>Web Site</td><td>http://v1commitstream.azurewebsites.net</td><td><a href="https://github.com/openAgile/CommitStream.Web/tree/master">master</a></td><td>Browse to test page like:
-    http://v1commitstream.azurewebsites.net or http://v1commitstream.azurewebsites.net?S-01001
+    http://v1commitstream.azurewebsites.net or http://v1commitstream.azurewebsites.net?S-48324
     </td>
   </tr>
   <tr>
-    <td>v1commitstream-staging</td><td>Staging web site for v1commitstream</td><td>Web Site</td><td>http://v1commitstream-staging.azurewebsites.net</td><td><a href="https://github.com/openAgile/CommitStream.Web/tree/S-48324_MultiRepository">S-48324_MultiRepository</a></td><td></td>
+    <td>v1commitstream-staging</td><td>Staging web site for v1commitstream</td><td>Web Site</td><td>http://v1commitstream-staging.azurewebsites.net</td><td><a href="https://github.com/openAgile/CommitStream.Web/tree/S-48324_MultiRepository">S-48324_MultiRepository</a></td><td>Browse to test page like:
+    http://v1commitstream-staging.azurewebsites.net or http://v1commitstream-staging.azurewebsites.net?S-48324
+    
+    </td>
   </tr> 
   <tr>
     <td>v1commitstream.cloudapp.net</td><td>VM hosting:
