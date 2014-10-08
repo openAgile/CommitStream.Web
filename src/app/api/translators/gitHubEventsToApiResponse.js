@@ -22,7 +22,8 @@
 				action: "committed",
 				message: e.commit.message,
                 commitHref: e.html_url,
-                repo: repo.repoOwner + '/' + repo.repoName
+                repo: repo.repoOwner + '/' + repo.repoName,
+                branch: e.branch    
 			};
 		});
 		console.log("commits:");

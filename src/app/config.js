@@ -23,5 +23,5 @@
     + ':' + config.eventStorePort;
   config.eventStoreAssetStreamUrl = config.eventStoreBaseUrl + '/streams/asset-';
   config.eventStoreAssetQueryParams =  nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
-  config.assetDetailTemplateUrl = nconf.get('assetDetailTemplateUrl') || config.serverBaseUrl + '/assetDetailCommits.html';
+  config.assetDetailTemplateUrl = nconf.get('assetDetailTemplateUrl') || config.serverBaseUrl + ':' + config.port + '/assetDetailCommits.html';
 })(module.exports);
