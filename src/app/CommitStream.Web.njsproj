@@ -23,6 +23,9 @@
     <Content Include="web.txt" />
     <Content Include="config.production.json" />
     <Content Include="package.json" />
+    <Compile Include="api\translators\gitHubEventsToApiResponse.js" />
+    <Compile Include="api\translators\githubTranslator.js" />
+    <Compile Include="api\translators\__tests\gitHubEventsToApiResponse-test.js" />
     <Compile Include="bootstrapper.js" />
     <Compile Include="config.js" />
     <Compile Include="projections\by-github-repository" />
@@ -41,6 +44,8 @@
   <ItemGroup>
     <Folder Include="api" />
     <Folder Include="api\helpers" />
+    <Folder Include="api\translators\" />
+    <Folder Include="api\translators\__tests\" />
     <Folder Include="client" />
     <Folder Include="projections" />
     <Folder Include="views\" />

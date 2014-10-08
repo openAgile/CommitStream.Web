@@ -48,5 +48,12 @@
             res.end('Your repository is in queue to be added to CommitStream.');
         });
 
+        app.post("/api/listenerWebhook", bodyParser.json(), function (req, res) {
+            translator = require('./translators/githubTranslator');
+            var events = translator.translatePush(req.body);
+            es.pushEvents(JSON.stringify(events));
+            res.end('Your push event is in queue to be added to CommitStream.');
+        });
+
     };
 })(module.exports);
