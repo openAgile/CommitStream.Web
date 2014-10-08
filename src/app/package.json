@@ -13,7 +13,8 @@
     "nconf": "^0.6.9",
     "request": "^2.44.0",
     "underscore": "^1.7.0",
-    "uuid-v4": "^0.1.0"
+    "uuid-v4": "^0.1.0",
+    "node-json-db": "^0.3.2"
   },
   "devDependencies": {
     "traceur": "^0.0.66",
