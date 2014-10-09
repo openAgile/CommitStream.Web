@@ -15,6 +15,10 @@
 		margin: 0px;
 	}
 
+	h4 {
+		margin-bottom: 2px;
+	}
+
 	.search {
 		background-color: #54658f;
 		-webkit-border-top-left-radius: 0px;
@@ -69,6 +73,15 @@
 		text-shadow: 1px 1px 0px #4d4b48;
 	}
 
+	.result {
+		background-color: #F9F9F9;
+		padding: 6px;
+		padding-top: 0px;
+		border: 1px solid lightgray;
+		border-radius: 12px;
+		box-shadow: 5px 5px 5px #888888;
+	}
+
 	.submit:hover,.update:hover {
 		background-color: #7a1839;
 	}
@@ -93,31 +106,28 @@ function InstancesController($scope, $http) {
 	$scope.result = null;
 
 	$scope.search = function() {
-		$http.get("api/settings?instance=" + $scope.instance).
-		success(function(data) {
-			if (data) {
+		if (!$scope.searchForm.$valid) return;
+		// TODO: remove temp hack that hard-codes search to VersionOne for demo
+		var instance = $scope.instance;
+		instance = 'VersionOne';
+		$http.get("api/settings?instance=" + instance).
+		success(function(result) {
+			$scope.instanceSearch = $scope.instance;
+			if (result) {
 				$scope.saved = false;
-				var result = {};
-				//result.Availability = data['CommitStream.Availability'] == 'available';
-				result.Availability = data['CommitStream.Availability'];
-				result.AppUrl = data['CommitStream.AppUrl'];
-				result.Toggle = data['CommitStream.Toggle'];
 				$scope.result = result;
 			}
 		});
 	};
 
 	$scope.update = function() {
-		var settings = {
-			"CommitStream.Availability": $scope.result.Availability,
-			"CommitStream.Toggle": $scope.result.Toggle,
-			"CommitStream.AppUrl": $scope.result.AppUrl
-		};
-
-		$http.post("api/settings?instance=" + $scope.instance, settings).
-		success(function(data) {
-			if (data) {
-				if (data == 'saved') {
+		// TODO: remove temp hack that hard-codes search to VersionOne for demo
+		var instance = $scope.instance;
+		instance = 'VersionOne';
+		$http.post("api/settings?instance=" + instance, $scope.result).
+		success(function(response) {
+			if (response) {
+				if (response == 'saved') {
 					$scope.saved = true;
 				}
 			}
@@ -127,30 +137,43 @@ function InstancesController($scope, $http) {
 </script>
 </head>
 <body ng-app>
-	<img src="http://www.versionone.com/assets/img/versionone-agile-made-easier-logo.png" width="244" height="45" alt="VersionOne Extensions" />
+	<img src="logo.png" width="115" height="16" alt="VersionOne" />
 	<hr />	
 	<h2>CommitStream Service Manager</h2>
+	<p>
+		Search for a VersionOne hosted instance to view or update its CommitStream availability and configuration.
+	</p>
 	<div ng-controller="InstancesController">
-		<input type="text" 
-			ng-model="instance" 
-			placeholder="Instance name" />&nbsp;
-			<button class="search" ng-click="search()">Search</button>
-		<div ng-if='result'>
-			<h4>Make available to instance?</h4>
-			<input type='checkbox' ng-model='result.Availability' 
+		<form name="searchForm">
+			<input type="text" 
+				ng-model="instance"
+				name="instance"
+				ng-required="true"
+				placeholder="Instance name" />&nbsp;
+				<span class="error" ng-show="myForm.instance.$error.required">
+      Required!&nbsp;</span>
+				<button class="search" ng-click="search()">Search</button>
+		</form>
+		<br />
+		<div ng-if='result' class='result'>
+			<h4>Instance name:</h4>
+			{{instanceSearch}}
+			<h4>Make CommitStream available to instance?</h4>
+			<input type='checkbox' ng-model="result['CommitStream.Availability']"
 				ng-true-value='available'
 				ng-false-value='unavailable' />
-			<h4>Toggle on within instance?</h4>
-			<input type='checkbox' ng-model='result.Toggle' 
+			<h4>Toggle CommitStream on within instance?</h4>
+			<input type='checkbox' ng-model="result['CommitStream.Toggle']"
 				ng-true-value='on'
 				ng-false-value='off' />
-			<h4>CommitStream instance URL for VersionOne instance to use:</h4>
-			<input type='text' ng-model='result.AppUrl' />
+			<h4>Specify the CommitStream instance URL for the {{instanceSearch}} instance to use:</h4>
+			<input type='text' ng-model="result['CommitStream.AppUrl']" />
 			<br />
 			<br />
 			<button class='update' ng-click='update()'>Update</button>
 			<span ng-if='saved' class='saved'>&nbsp;<b>Settings saved</b></span>
 		</div>
+
 	</div>
 </body>
 </html>
