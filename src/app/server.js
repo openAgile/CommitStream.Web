@@ -44,6 +44,10 @@ app.get('/config.json', function(req, res) {
 	res.json(clientConfig);
 });
 
+app.get('/instances', function(req, res) {
+    res.render('instances');
+});
+
 app.use(express.static(__dirname + '/client'));
 
 app.listen(config.port, function () {
