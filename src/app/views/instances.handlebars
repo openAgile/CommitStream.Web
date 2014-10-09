@@ -1,0 +1,173 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VersionOne CommitStream Service Manager</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+<style>
+	body {
+		font-family: 'Open Sans', sans-serif;
+		margin: 25px;
+	}
+
+	h2 {
+		padding: 0px;
+		margin: 0px;
+	}
+
+	h4 {
+		margin-bottom: 2px;
+	}
+
+	.search {
+		background-color: #54658f;
+		-webkit-border-top-left-radius: 0px;
+		-moz-border-radius-topleft: 0px;
+		border-top-left-radius: 0px;
+		-webkit-border-top-right-radius: 0px;
+		-moz-border-radius-topright: 0px;
+		border-top-right-radius: 0px;
+		-webkit-border-bottom-right-radius: 0px;
+		-moz-border-radius-bottomright: 0px;
+		border-bottom-right-radius: 0px;
+		-webkit-border-bottom-left-radius: 0px;
+		-moz-border-radius-bottomleft: 0px;
+		border-bottom-left-radius: 0px;
+		text-indent: 0;
+		border: 1px solid #54658f;
+		display: inline-block;
+		color: #ffffff;
+		font-family: Arial;
+		font-size: 15px;
+		font-weight: normal;
+		font-style: normal;
+		text-decoration: none;
+		text-align: center;
+		text-shadow: 1px 1px 0px #4d4b48;
+	}
+
+	.update {
+		background-color: #8E073A;
+		-webkit-border-top-left-radius: 0px;
+		-moz-border-radius-topleft: 0px;
+		border-top-left-radius: 0px;
+		-webkit-border-top-right-radius: 0px;
+		-moz-border-radius-topright: 0px;
+		border-top-right-radius: 0px;
+		-webkit-border-bottom-right-radius: 0px;
+		-moz-border-radius-bottomright: 0px;
+		border-bottom-right-radius: 0px;
+		-webkit-border-bottom-left-radius: 0px;
+		-moz-border-radius-bottomleft: 0px;
+		border-bottom-left-radius: 0px;
+		text-indent: 0;
+		border: 1px solid #54658f;
+		display: inline-block;
+		color: #ffffff;
+		font-family: Arial;
+		font-size: 15px;
+		font-weight: normal;
+		font-style: normal;
+		text-decoration: none;
+		text-align: center;
+		text-shadow: 1px 1px 0px #4d4b48;
+	}
+
+	.result {
+		background-color: #F9F9F9;
+		padding: 6px;
+		padding-top: 0px;
+		border: 1px solid lightgray;
+		border-radius: 12px;
+		box-shadow: 5px 5px 5px #888888;
+	}
+
+	.submit:hover,.update:hover {
+		background-color: #7a1839;
+	}
+
+	.saved {
+		color: darkgreen;
+	}
+
+	.submit:active,.update:active {
+		position: relative;
+		top: 1px;
+	}
+
+	input[type='text'] {
+		width: 350px;
+	}
+</style>
+<script src="//code.angularjs.org/1.2.11/angular.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+<script>
+function InstancesController($scope, $http) {
+	$scope.result = null;
+
+	$scope.search = function() {
+		if (!$scope.searchForm.$valid) return;
+		var instance = $scope.instance;
+		$http.get("api/settings?instance=" + instance).
+		success(function(result) {
+			if (result) {
+				$scope.instanceSearch = $scope.instance;
+				$scope.saved = false;
+				$scope.result = result;
+			}
+		});
+	};
+
+	$scope.update = function() {
+		var instance = $scope.instance;
+		$http.post("api/settings?instance=" + instance, $scope.result).
+		success(function(response) {
+			if (response) {
+				if (response == 'saved') {
+					$scope.saved = true;
+				}
+			}
+		});
+	};	
+}
+</script>
+</head>
+<body ng-app>
+	<img src="logo.png" width="115" height="16" alt="VersionOne" />
+	<hr />	
+	<h2>CommitStream Service Manager</h2>
+	<p>
+		Search for a VersionOne hosted instance to view or update its CommitStream availability and configuration.
+	</p>
+	<div ng-controller="InstancesController">
+		<form name="searchForm">
+			<input type="text" 
+				ng-model="instance"
+				name="instance"
+				ng-required="true"
+				placeholder="Instance name" />&nbsp;
+				<span class="error" ng-show="myForm.instance.$error.required">
+      Required!&nbsp;</span>
+				<button class="search" ng-click="search()">Search</button>
+		</form>
+		<br />
+		<div ng-if='result' class='result'>
+			<h4>Instance name:</h4>
+			\{{instanceSearch}}
+			<h4>Make CommitStream available to instance?</h4>
+			<input type='checkbox' ng-model="result['CommitStream.Availability']"
+				ng-true-value='available'
+				ng-false-value='unavailable' />
+			<h4>Toggle CommitStream on within instance?</h4>
+			<input type='checkbox' ng-model="result['CommitStream.Toggle']"
+				ng-true-value='on'
+				ng-false-value='off' />
+			<h4>Specify the CommitStream application URL for the instance to use:</h4>
+			<input type='text' ng-model="result['CommitStream.AppUrl']" />
+			<br />
+			<br />
+			<button class='update' ng-click='update()'>Update</button>
+			<span ng-if='saved' class='saved'>&nbsp;<b>Settings saved</b></span>
+		</div>
+	</div>
+</body>
+</html>
