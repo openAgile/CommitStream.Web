@@ -4,7 +4,7 @@
         bodyParser = require('body-parser'),
         JsonDB = require('node-json-db');
 
-    var db = new JsonDB('instances', true, false);        
+    var db = new JsonDB('instances', true, true);        
 
     var defaultSettings = {
         'CommitStream.Availability': 'unavailable',
