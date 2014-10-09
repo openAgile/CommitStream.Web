@@ -14,16 +14,18 @@
 		var commits = _.map(entries, function(entry) {
             var e = entry.content.data;
             var repo = getRepoOwnerName(e);
-			return {
-				commitDate: e.commit.committer.date,
-				timeFormatted: moment(e.commit.committer.date).fromNow(),
-				author: e.commit.committer.name,
-				sha1Partial: e.sha.substring(0, 6),
-				action: "committed",
-				message: e.commit.message,
+            return {
+                commitDate: e.commit.committer.date,
+                timeFormatted: moment(e.commit.committer.date).fromNow(),
+                author: e.commit.committer.name,
+                sha1Partial: e.sha.substring(0, 6),
+                action: "committed",
+                message: e.commit.message,
                 commitHref: e.html_url,
                 repo: repo.repoOwner + '/' + repo.repoName,
-                branch: e.branch    
+                branch: e.branch,
+                branchHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName + "/tree/" + e.branch,
+                repoHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName
 			};
 		});
 		console.log("commits:");

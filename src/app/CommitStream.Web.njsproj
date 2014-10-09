@@ -36,7 +36,6 @@
     <Content Include="client\assetDetailCommits.html" />
     <Content Include="client\index.html" />
     <Content Include="client\icon-commit-16x16.png" />
-    <Content Include="client\whitelist.json" />
     <Compile Include="client\assetDetailCommits.js" />
     <Compile Include="client\text.js" />
     <Compile Include="api\helpers\index.js" />
