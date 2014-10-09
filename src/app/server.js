@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
     return next();
 });
 
-app.get('/app.js', function(req, res) {
+app.get('/app', function(req, res) {
     res.setHeader('content-type', 'application/javascript');
     var protocol = req.protocol;
     var host = req.get('host');
