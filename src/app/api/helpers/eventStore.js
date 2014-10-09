@@ -21,8 +21,12 @@ var request = require('request');
         };
         
         request.post(options, function (error, response, body) {
-            console.log('Posted to eventstore.');
-            console.log(response.statusCode);
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Posted to eventstore.');
+                console.log(response.statusCode);
+            }
         });
         
     };
