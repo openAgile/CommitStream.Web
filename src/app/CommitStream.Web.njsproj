@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3d927d54-0df7-4618-b51e-4d34f18b093c}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <StartupFile>server.js</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -23,7 +23,9 @@
     <Content Include="web.txt" />
     <Content Include="config.production.json" />
     <Content Include="package.json" />
+    <Compile Include="api\helpers\eventStore.js" />
     <Compile Include="api\translators\gitHubEventsToApiResponse.js" />
+    <Compile Include="api\helpers\github.js" />
     <Compile Include="api\translators\githubTranslator.js" />
     <Compile Include="api\translators\__tests\gitHubEventsToApiResponse-test.js" />
     <Compile Include="bootstrapper.js" />
@@ -36,7 +38,6 @@
     <Content Include="client\assetDetailCommits.html" />
     <Content Include="client\index.html" />
     <Content Include="client\icon-commit-16x16.png" />
-    <Content Include="client\whitelist.json" />
     <Compile Include="client\assetDetailCommits.js" />
     <Compile Include="client\text.js" />
     <Compile Include="api\helpers\index.js" />

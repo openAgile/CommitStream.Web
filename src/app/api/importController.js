@@ -1,59 +1,48 @@
 //importController
 (function (importController) {
-    var config = require("../config");
-    var request = require('request');
     var es = require('./helpers/eventStore');
+    var gh = require('./helpers/github');
     var bodyParser = require('body-parser');
     
     importController.init = function (app) {
-        
-        app.post("/api/importContinue", bodyParser.json(), function (req, res) {
-            
-            var owner = req.body.owner;
-            var accessToken = req.body.accessToken;
-            var repo = req.body.repo;
-            
-            es.getLastCommit(owner, repo, function (err, event) {
-                if (err) {
-                    res.end(err);
-                } else {
-                    var date = JSON.parse(event).commit.committer.date;
-                    var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?since=' + date + '&per_page=100&page=1&access_token=' + accessToken;
-                    var github = require("./helpers/github");
-                    github.init();
-                    github.getAllCommits(repoUrl, function (events) {
-                        events.shift();
-                        var content = JSON.stringify(events);
-                        es.pushEvents(content);
-                    });
-                    res.end('Your repository is in queue to be updated.');
-                }
-            });           
-        });
         
         app.post("/api/importHistory", bodyParser.json(), function (req, res) {
             var owner = req.body.owner;
             var accessToken = req.body.accessToken;
             var repo = req.body.repo;
             
-            var repoUrl = "https://api.github.com/repos/" + owner + "/" + repo + '/commits?per_page=100&page=1&access_token=' + accessToken;
-
-            var github = require("./helpers/github");
-            github.init();
-            github.getAllCommits(repoUrl, function(events) {
-                var content = JSON.stringify(events);
-                es.pushEvents(content);
+            var githubHelper = new gh();
+            githubHelper.getAllCommits({
+                owner: owner,
+                repo: repo,
+                accessToken: accessToken
             });
             
-            res.end('Your repository is in queue to be added to CommitStream.');
+            res.json({ message: 'Your repository is in queue to be added to CommitStream.' });
+            res.end();
         });
-
+        
         app.post("/api/listenerWebhook", bodyParser.json(), function (req, res) {
-            translator = require('./translators/githubTranslator');
-            var events = translator.translatePush(req.body);
-            es.pushEvents(JSON.stringify(events));
-            res.end('Your push event is in queue to be added to CommitStream.');
+            res.set('Content-Type', 'application/json');
+            
+            if (!req.headers.hasOwnProperty('x-github-event')) {
+                res.json({ message: 'Unknown event type.' });
+                res.end();
+            } else if (req.headers['x-github-event'] == 'push') {
+                var translator = require('./translators/githubTranslator');
+                var events = translator.translatePush(req.body);
+                es.pushEvents(JSON.stringify(events));
+                res.json({ message: 'Your push event is in queue to be added to CommitStream.' });
+                res.end();
+            } else if (req.headers['x-github-event'] == 'ping') {
+                res.json({ message: 'Pong.' });
+                res.end();
+            } else {
+                res.json({ message: 'Unknown event type.' });
+                res.end();
+            }
         });
 
     };
+
 })(module.exports);

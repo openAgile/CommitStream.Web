@@ -5,12 +5,14 @@
   "main": "server.js",
   "repository": "https://github.com/openAgile/CommitStream.Web",
   "dependencies": {
+    "async": "^0.9.0",
     "body-parser": "^1.6.3",
     "cors": "^2.4.1",
     "express": "^4.8.3",
     "express-handlebars": "^1.1.0",
     "moment": "^2.8.3",
     "nconf": "^0.6.9",
+    "octonode": "^0.6.9",
     "request": "^2.44.0",
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
@@ -25,7 +27,10 @@
     "test": "jest"
   },
   "jest": {
-    "unmockedModulePathPatterns": ["underscore", "moment"]
+    "unmockedModulePathPatterns": [
+      "underscore",
+      "moment"
+    ]
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"
