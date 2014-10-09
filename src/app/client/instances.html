@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>VersionOne CommitStream</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+<style>
+	body {
+		font-family: 'Open Sans', sans-serif;
+		margin: 25px;
+	}
+
+	h2 {
+		padding: 0px;
+		margin: 0px;
+	}
+
+	.search {
+		background-color: #54658f;
+		-webkit-border-top-left-radius: 0px;
+		-moz-border-radius-topleft: 0px;
+		border-top-left-radius: 0px;
+		-webkit-border-top-right-radius: 0px;
+		-moz-border-radius-topright: 0px;
+		border-top-right-radius: 0px;
+		-webkit-border-bottom-right-radius: 0px;
+		-moz-border-radius-bottomright: 0px;
+		border-bottom-right-radius: 0px;
+		-webkit-border-bottom-left-radius: 0px;
+		-moz-border-radius-bottomleft: 0px;
+		border-bottom-left-radius: 0px;
+		text-indent: 0;
+		border: 1px solid #54658f;
+		display: inline-block;
+		color: #ffffff;
+		font-family: Arial;
+		font-size: 15px;
+		font-weight: normal;
+		font-style: normal;
+		text-decoration: none;
+		text-align: center;
+		text-shadow: 1px 1px 0px #4d4b48;
+	}
+
+	.update {
+		background-color: #8E073A;
+		-webkit-border-top-left-radius: 0px;
+		-moz-border-radius-topleft: 0px;
+		border-top-left-radius: 0px;
+		-webkit-border-top-right-radius: 0px;
+		-moz-border-radius-topright: 0px;
+		border-top-right-radius: 0px;
+		-webkit-border-bottom-right-radius: 0px;
+		-moz-border-radius-bottomright: 0px;
+		border-bottom-right-radius: 0px;
+		-webkit-border-bottom-left-radius: 0px;
+		-moz-border-radius-bottomleft: 0px;
+		border-bottom-left-radius: 0px;
+		text-indent: 0;
+		border: 1px solid #54658f;
+		display: inline-block;
+		color: #ffffff;
+		font-family: Arial;
+		font-size: 15px;
+		font-weight: normal;
+		font-style: normal;
+		text-decoration: none;
+		text-align: center;
+		text-shadow: 1px 1px 0px #4d4b48;
+	}
+
+	.submit:hover,.update:hover {
+		background-color: #7a1839;
+	}
+
+	.saved {
+		color: darkgreen;
+	}
+
+	.submit:active,.update:active {
+		position: relative;
+		top: 1px;
+	}
+
+	input[type='text'] {
+		width: 350px;
+	}
+</style>
+<script src="//code.angularjs.org/1.2.11/angular.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+<script>
+function InstancesController($scope, $http) {
+	$scope.result = null;
+
+	$scope.search = function() {
+		$http.get("api/settings?instance=" + $scope.instance).
+		success(function(data) {
+			if (data) {
+				$scope.saved = false;
+				var result = {};
+				//result.Availability = data['CommitStream.Availability'] == 'available';
+				result.Availability = data['CommitStream.Availability'];
+				result.AppUrl = data['CommitStream.AppUrl'];
+				result.Toggle = data['CommitStream.Toggle'];
+				$scope.result = result;
+			}
+		});
+	};
+
+	$scope.update = function() {
+		var settings = {
+			"CommitStream.Availability": $scope.result.Availability,
+			"CommitStream.Toggle": $scope.result.Toggle,
+			"CommitStream.AppUrl": $scope.result.AppUrl
+		};
+
+		$http.post("api/settings?instance=" + $scope.instance, settings).
+		success(function(data) {
+			if (data) {
+				if (data == 'saved') {
+					$scope.saved = true;
+				}
+			}
+		});
+	};	
+}
+</script>
+</head>
+<body ng-app>
+	<img src="http://www.versionone.com/assets/img/versionone-agile-made-easier-logo.png" width="244" height="45" alt="VersionOne Extensions" />
+	<hr />	
+	<h2>CommitStream Service Manager</h2>
+	<div ng-controller="InstancesController">
+		<input type="text" 
+			ng-model="instance" 
+			placeholder="Instance name" />&nbsp;
+			<button class="search" ng-click="search()">Search</button>
+		<div ng-if='result'>
+			<h4>Make available to instance?</h4>
+			<input type='checkbox' ng-model='result.Availability' 
+				ng-true-value='available'
+				ng-false-value='unavailable' />
+			<h4>Toggle on within instance?</h4>
+			<input type='checkbox' ng-model='result.Toggle' 
+				ng-true-value='on'
+				ng-false-value='off' />
+			<h4>CommitStream instance URL for VersionOne instance to use:</h4>
+			<input type='text' ng-model='result.AppUrl' />
+			<br />
+			<br />
+			<button class='update' ng-click='update()'>Update</button>
+			<span ng-if='saved' class='saved'>&nbsp;<b>Settings saved</b></span>
+		</div>
+	</div>
+</body>
+</html>
