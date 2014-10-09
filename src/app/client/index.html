@@ -4,7 +4,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
 $(function() {
-  $.getScript('app.js',
+  $.getScript('app',
     function(data, status, jqxhr) {
       var assetNumber = location.search.substring(1) || 'S-47665';
       CommitStream.commitsDisplay('#commits', assetNumber);
