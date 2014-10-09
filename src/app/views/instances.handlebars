@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>VersionOne CommitStream</title>
@@ -107,13 +106,13 @@ function InstancesController($scope, $http) {
 
 	$scope.search = function() {
 		if (!$scope.searchForm.$valid) return;
-		// TODO: remove temp hack that hard-codes search to VersionOne for demo
+		// TODO: remove temp hack that hard-codes search to VersionOne for demo		
 		var instance = $scope.instance;
 		instance = 'VersionOne';
 		$http.get("api/settings?instance=" + instance).
 		success(function(result) {
-			$scope.instanceSearch = $scope.instance;
 			if (result) {
+				$scope.instanceSearch = $scope.instance;
 				$scope.saved = false;
 				$scope.result = result;
 			}
@@ -157,7 +156,7 @@ function InstancesController($scope, $http) {
 		<br />
 		<div ng-if='result' class='result'>
 			<h4>Instance name:</h4>
-			{{instanceSearch}}
+			\{{instanceSearch}}
 			<h4>Make CommitStream available to instance?</h4>
 			<input type='checkbox' ng-model="result['CommitStream.Availability']"
 				ng-true-value='available'
@@ -166,14 +165,13 @@ function InstancesController($scope, $http) {
 			<input type='checkbox' ng-model="result['CommitStream.Toggle']"
 				ng-true-value='on'
 				ng-false-value='off' />
-			<h4>Specify the CommitStream instance URL for the {{instanceSearch}} instance to use:</h4>
+			<h4>Specify the CommitStream application URL for the instance to use:</h4>
 			<input type='text' ng-model="result['CommitStream.AppUrl']" />
 			<br />
 			<br />
 			<button class='update' ng-click='update()'>Update</button>
 			<span ng-if='saved' class='saved'>&nbsp;<b>Settings saved</b></span>
 		</div>
-
 	</div>
 </body>
 </html>
