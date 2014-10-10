@@ -27,20 +27,17 @@
             
             if (!req.headers.hasOwnProperty('x-github-event')) {
                 res.json({ message: 'Unknown event type.' });
-                res.end();
             } else if (req.headers['x-github-event'] == 'push') {
                 var translator = require('./translators/githubTranslator');
                 var events = translator.translatePush(req.body);
                 es.pushEvents(JSON.stringify(events));
                 res.json({ message: 'Your push event is in queue to be added to CommitStream.' });
-                res.end();
             } else if (req.headers['x-github-event'] == 'ping') {
                 res.json({ message: 'Pong.' });
-                res.end();
             } else {
                 res.json({ message: 'Unknown event type.' });
-                res.end();
             }
+            res.end();
         });
 
     };
