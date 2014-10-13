@@ -16,7 +16,7 @@ Here's how it works:
 
 # Integration with VersionOne
 
-The first commercial product to integrate CommitStream is [VersionOne](http://www.versionone.com). VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems.
+The first commercial product to integrate CommitStream is [VersionOne](http://www.versionone.com). VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Epic, Feature, Story, Task, Test, and Defect workitems.
 
 ## Value proposition
 
