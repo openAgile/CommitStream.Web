@@ -15,9 +15,11 @@ Here's how it works:
 
 # Integration with VersionOne
 
-The first commercial product to integrate CommitStream is VersionOne. VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems. VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
+The first commercial product to integrate CommitStream is [VersionOne](http://www.versionone.com). VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems. VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
 
-## See it in action
+TODO: diagram or screen shots that depict this flow for VersionOne succinctly
+
+## See it in VersionOne
 
 You can see CommitStream integrated within VersionOne here: 
 
@@ -29,7 +31,10 @@ You can see CommitStream integrated within VersionOne here:
 
 ![CommitStream in VersionOne](https://s3.amazonaws.com/uploads.hipchat.com/12722/130235/RnXR8nbRwcAapyn/upload.png)
 
-TODO: diagram or screen shots that depict this flow for VersionOne succinctly
+## Try it yourself
+
+* All the source code is open source, and you can clone this repository and follow the instructions in [install.md] to get it up and running in your local environment.
+* To chat with the main developers, jump into the [VersionOne openAgile HipCht room](http://www.hipchat.com/gPrJ5JgFd)!
 
 # Background docs
 
