@@ -1,6 +1,6 @@
 # Summary
 
-> Using a version control system is one of the few constants when it comes to developer practices, no matter how large or small the team. By tying into this existing behavior unobtrusively, CommitStream channels timely, relevant, and well-summarized  information directly from developers to managers and executives so they can see progress on a daily basis.
+> Using a version control system is one of the few constants when it comes to developer practices, no matter how large or small the team. CommitStream ties into this widespread behavior unobtrusively and brings relevant, timely, and well-summarized reports  directly to managers and executives. This helps teams see progress, respond to impediments, and react to change on a daily basis.
 
 CommitStream is an open source application that allows software developers, managers, and other stakeholders stay on the same page about what software is changing, why it's changing, and how frequently it's changing. It helps everyone stay focued on what they do best while strengthening an organization's ability to react to change.
 
