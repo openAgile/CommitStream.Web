@@ -20,7 +20,9 @@ The first commercial product to integrate CommitStream is [VersionOne](http://ww
 
 ## Value proposition
 
-For development teams practicing version control, who want to improve Continuous Integration and Continuous Deployment CommitStream is a simple, easy-to-apply web service, that connects version control systems to VersionOne.
+For development teams practicing version control, who want to improve Continuous Integration and Continuous Deployment:
+
+**CommitStream** is a simple, easy-to-apply web service, that connects version control systems to VersionOne.
 
 Our solution enables more people to understand what code is changing and why, which leads to better alignment and faster feedback across the organization,
 
