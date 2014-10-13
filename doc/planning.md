@@ -16,7 +16,18 @@ Here's how it works:
 
 # Integration with VersionOne
 
-The first commercial product to integrate CommitStream is [VersionOne](http://www.versionone.com). VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems. VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
+The first commercial product to integrate CommitStream is [VersionOne](http://www.versionone.com). VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems.
+
+## Value proposition
+
+For development teams practicing version control, who want to improve Continuous Integration and Continuous Deployment CommitStream is a simple, easy-to-apply web service, that connects version control systems to VersionOne.
+
+Our solution enables more people to understand what code is changing and why, which leads to better alignment and faster feedback across the organization,
+
+CommitStream eliminates the need for 1-1 version control integrations with pre-built support for the most popular version control tools
+
+## Details
+VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
 
 TODO: diagram or screen shots that depict this flow for VersionOne succinctly
 
