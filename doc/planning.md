@@ -30,7 +30,7 @@ CommitStream eliminates the need for 1-1 version control integrations with pre-b
 
 Source: [Integrating VCS with VersionOne Presentation](https://github.com/versionone/CommitStream.Archived/blob/master/CommitStream-Spike-Joe-Ira/doc/Integrating_VCS_with_VersionOne.pptx)
 ## Details
-VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
+VersionOne tracks planned work with **mention patterns** that look like S-12345, AT-23441, D-00124, etc. These mean Story, Acceptance Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
 
 TODO: diagram or screen shots that depict this flow for VersionOne succinctly
 
@@ -49,7 +49,7 @@ You can see CommitStream integrated within VersionOne here:
 ## Try it yourself
 
 * All the source code is open source, and you can clone this repository and follow the instructions in [install.md](install.md) to get it up and running in your local environment.
-* To chat with the main developers, jump into the [VersionOne openAgile HipCht room](http://www.hipchat.com/gPrJ5JgFd)!
+* To chat with the main developers, jump into the [VersionOne openAgile HipChat room](http://www.hipchat.com/gPrJ5JgFd)!
 
 # Background docs
 
