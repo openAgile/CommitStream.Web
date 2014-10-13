@@ -1,6 +1,6 @@
 # Summary
 
-> Using a version control system is one of the few constants when it comes to developer practices, no matter how large or small the team. CommitStream ties into this widespread behavior unobtrusively and brings relevant, timely, and well-summarized reports  directly to managers and executives. This helps teams see progress, respond to impediments, and react to change on a daily basis.
+> Using a version control system is the most ubiquitous agile development practice, with 80% of organizations reporting this behavior, according to an SD Times 2011 survey. CommitStream leverages this behavior to deliver relevant, timely, and well-summarized reports directly to managers and executives. This helps teams see progress, respond to impediments, and react to change on a daily basis.
 
 CommitStream is an open source application that allows software developers, managers, and other stakeholders stay on the same page about what software is changing, why it's changing, and how frequently it's changing. It helps everyone stay focued on what they do best while strengthening an organization's ability to react to change.
 
@@ -15,3 +15,14 @@ Here's how it works:
 # Example: VersionOne
 
 The first commercial product to integrate CommitStream is VersionOne. VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems. VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
+
+TODO: diagram or screen shots that depict this flow for VersionOne succinctly
+
+# Background docs
+
+Some of these are internal to VersionOne. If you'd like to see them, just ask us.
+
+* [Ian Buchanan's Version Control Opportunity assessment doc](http://confluence/display/V1Integrations/Version+Control+Opportunity)
+* [Early User Story outline](http://confluence/display/V1Integrations/Commit+Service+User+Stories)
+* [Early functional prototype of CommitStream](http://confluence/display/V1Integrations/Commit+Service+3PM)
+* [Version Control EQPAs](http://confluence/display/V1Integrations/Version+Control+Integration+EQPAs)
