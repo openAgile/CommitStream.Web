@@ -13,7 +13,7 @@ Here's how it works:
 * Fourth, your version control system sends the commit message to CommitStream where it gets parsed and correlated with previous mentions
 * Finally, as a manager or other stakeholder, you view reports from CommitStream that help you see the daily progress 
 
-# Example: VersionOne
+# Integration with VersionOne
 
 The first commercial product to integrate CommitStream is VersionOne. VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems. VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
 
@@ -23,7 +23,14 @@ TODO: diagram or screen shots that depict this flow for VersionOne succinctly
 
 Some of these are internal to VersionOne. If you'd like to see them, just ask us.
 
+## Historical
+
 * [Ian Buchanan's Version Control Opportunity assessment doc](http://confluence/display/V1Integrations/Version+Control+Opportunity)
 * [Early User Story outline](http://confluence/display/V1Integrations/Commit+Service+User+Stories)
 * [Early functional prototype of CommitStream](http://confluence/display/V1Integrations/Commit+Service+3PM)
 * [Version Control EQPAs](http://confluence/display/V1Integrations/Version+Control+Integration+EQPAs)
+
+## More recent
+* [Ian Buchanan's CommitStream presentation](https://github.com/versionone/CommitStream.Archived/blob/master/CommitStream-Spike-Joe-Ira/doc/Integrating_VCS_with_VersionOne.pptx)
+* [Getting Starting with CommitStream mockups](https://github.com/versionone/CommitStream.Archived/blob/master/CommitStream-Spike-Joe-Ira/doc/GettingStartedFlow.pdf)
+* [More documents, diagrams, API sketches, etc](https://github.com/versionone/CommitStream.Archived/tree/master/CommitStream-Spike-Joe-Ira/doc)
