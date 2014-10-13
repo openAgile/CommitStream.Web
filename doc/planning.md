@@ -48,7 +48,11 @@ Some of these are internal to VersionOne. If you'd like to see them, just ask us
 * [Early functional prototype of CommitStream](http://confluence/display/V1Integrations/Commit+Service+3PM)
 * [Version Control EQPAs](http://confluence/display/V1Integrations/Version+Control+Integration+EQPAs)
 
-## More recent
+## Current
+
+* [Next in-VersionOne UX flow sketch: Configure CommitStream to receive commits from my GitHub repositories story](https://docs.google.com/document/d/152dzB0ot_F0JuO4PTzPWkgGf1TlAA7KpZG1h9dsNc5w/edit)
+
+## Other recent
 * [Ian Buchanan's CommitStream presentation](https://github.com/versionone/CommitStream.Archived/blob/master/CommitStream-Spike-Joe-Ira/doc/Integrating_VCS_with_VersionOne.pptx)
 * [Getting Starting with CommitStream mockups](https://github.com/versionone/CommitStream.Archived/blob/master/CommitStream-Spike-Joe-Ira/doc/GettingStartedFlow.pdf)
 * [More documents, diagrams, API sketches, etc](https://github.com/versionone/CommitStream.Archived/tree/master/CommitStream-Spike-Joe-Ira/doc)
