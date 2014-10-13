@@ -17,6 +17,18 @@ Here's how it works:
 
 The first commercial product to integrate CommitStream is VersionOne. VersionOne provides agile project management software that teams use to divide work into a series of iterations, broken down most often by Story, Task, Test, and Defect workitems. VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
 
+## See it in action
+
+You can see CommitStream integrated within VersionOne here: 
+
+[VersionOne running with CommitStream](http://v1commitstream.cloudapp.net/VersionOne/Default.aspx?menu=PrimaryBacklogPage)
+
+* Login in with admin/admin
+* Click the **Hello world!** story to view the Story's details.
+* You should see something like this:
+
+![CommitStream in VersionOne](https://s3.amazonaws.com/uploads.hipchat.com/12722/130235/RnXR8nbRwcAapyn/upload.png)
+
 TODO: diagram or screen shots that depict this flow for VersionOne succinctly
 
 # Background docs
