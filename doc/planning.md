@@ -51,6 +51,7 @@ Some of these are internal to VersionOne. If you'd like to see them, just ask us
 ## Current
 
 * [Next in-VersionOne UX flow sketch: Configure CommitStream to receive commits from my GitHub repositories story](https://docs.google.com/document/d/152dzB0ot_F0JuO4PTzPWkgGf1TlAA7KpZG1h9dsNc5w/edit)
+  * [VersionOne story link](https://www7.v1host.com/V1Production/Account.mvc/LogIn?destination=%2FV1Production%2Fstory.mvc%2FSummary%3FoidToken%3DStory%3A498402)
 
 ## Other recent
 * [Ian Buchanan's CommitStream presentation](https://github.com/versionone/CommitStream.Archived/blob/master/CommitStream-Spike-Joe-Ira/doc/Integrating_VCS_with_VersionOne.pptx)
