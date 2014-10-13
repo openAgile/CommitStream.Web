@@ -28,6 +28,7 @@ Our solution enables more people to understand what code is changing and why, wh
 
 CommitStream eliminates the need for 1-1 version control integrations with pre-built support for the most popular version control tools
 
+Source: [Integrating VCS with VersionOne Presentation](https://github.com/versionone/CommitStream.Archived/blob/master/CommitStream-Spike-Joe-Ira/doc/Integrating_VCS_with_VersionOne.pptx)
 ## Details
 VersionOne tracks planned work with **mention patterns** that look like S-12345, T-23441, D-00124, etc. These mean Story, Test, and Defect. When developers check in code, they simply embed these mentions into their commit messages, and CommitStream takes care of summarizing and reporting correlated and aggregated information about source-code-level activity happening across any number of code repositories. Finally, any team member on a project can view the commit information within the VersionOne software where they normally view details about Stories, Tasks, or Defects.
 
