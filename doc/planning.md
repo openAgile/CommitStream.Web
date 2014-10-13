@@ -8,6 +8,7 @@ CommitStream is an open source application that allows software developers, mana
 Here's how it works:
 
 * First, as a team, you decide what **mention patterns** you will place into your code commit messages to signify important information that CommitStream should summarize automatically
+  * Then, you find a developer on your team who knows just a bit of JavaScript to teach CommitStream to recognize your mention patterns. Stay tuned for more information about this. TODO: provide a How-To create projections document.
 * Second, you tell CommitStream to configure one or more of a variety of version control tools to send commit messages to it
 * Third, as a developer, when you check in code, you simply embed one or more **mention patterns** into the message
 * Fourth, your version control system sends the commit message to CommitStream where it gets parsed and correlated with previous mentions
