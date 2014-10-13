@@ -48,7 +48,7 @@ You can see CommitStream integrated within VersionOne here:
 
 ## Try it yourself
 
-* All the source code is open source, and you can clone this repository and follow the instructions in [install.md] to get it up and running in your local environment.
+* All the source code is open source, and you can clone this repository and follow the instructions in [install.md](install.md) to get it up and running in your local environment.
 * To chat with the main developers, jump into the [VersionOne openAgile HipCht room](http://www.hipchat.com/gPrJ5JgFd)!
 
 # Background docs
