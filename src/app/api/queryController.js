@@ -33,8 +33,8 @@
             
             var client = request.newClient(url);
             client.get('', function (err, response, body) {
+                var commits = gitHubEventsToApiResponse(body.entries);
                 res.set("Content-Type", "application/json");
-                var commits = gitHubEventsToApiResponse(response.body.entries);
                 res.send(commits);
             });
         });
