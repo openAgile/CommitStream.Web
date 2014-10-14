@@ -15,7 +15,7 @@ This is a work in progress. As this evolves, we update this narrative.
 * Type `Get-ExecutionPolicy` and if the result is not **Unrestricted**, then type `Set-ExecutionPolicy unrestricted`
 * Run the install script by typing:
 ```powershell
-.\install.ps1
+.\install.ps1 [insert-access-token-here]
 ```
 ## Verify installation
 
