@@ -9,21 +9,21 @@
     .\Install-V1.ps1 "http://localhost/VersionOne"
 .PARAMETER instanceUrl
    Specifies where to post an example story to once installation is finished
-.PARAMETER commitStreamAppUrl
-   Specifies where the app.js file gets served from the Node.js server present in the https://github.com/openAgile/CommitStream.Web repository. This actually serves the CommitStream side-panel content for the VersionOne application.
+.PARAMETER commitStreamServiceSettingsUrl
+   Specifies the location of the settings API endpoint from which VersionOne will source additional CommitStream AppSettings values. See the settingsController in the the https://github.com/openAgile/CommitStream.Web repository for full details on the expected response format of this endpoint.
 .PARAMETER storySeedStart
    Specifies the Story Number that the first new story created will have. This is useful if you want to test with prepopulated data or data copied from a production environment.
 #> 
 param(
 	$instanceUrl='http://v1commitstream.cloudapp.net/VersionOne',
-	$commitStreamAppUrl='//v1commitstream-staging.azurewebsites.net/app.js',
+	$commitStreamServiceSettingsUrl='http://v1commitstream-staging.azurewebsites.net/api/settings',
 	$storySeedStart='47665'
 )
 
 cuninst CommitStreamVersionOne
 cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
 sqlcmd -Q "use VersionOne; DBCC CHECKIDENT(NumberSource_Story, RESEED, $storySeedStart)"
-sc "c:\inetpub\wwwroot\VersionOne\user.config" "<appSettings><add key=""CommitStream.Availability"" value=""available"" /><add key=""CommitStream.Toggle"" value=""on"" /><add key=""CommitStream.AppUrl"" value=""$commitStreamAppUrl"" /></appSettings>"
+sc "c:\inetpub\wwwroot\VersionOne\user.config" "<appSettings><add key=""CommitStream.ServiceSettingsUrl"" value=""$commitStreamServiceSettingsUrl"" /></appSettings>"
 
 iisreset
 

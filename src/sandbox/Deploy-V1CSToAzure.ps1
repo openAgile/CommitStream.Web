@@ -3,13 +3,7 @@ Param(
     [string]$vm_password,
     [string]$vm_name = 'v1CommitStream',
     [string]$azure_service_name = 'v1CommitStream',
-    [string]$scriptPath = 'Install-V1.ps1' )
-
-cp $Env:WORKSPACE\VersionOne.Setup-Ultimate*exe .
-cp $Env:WORKSPACE\VERSION .
-.\Create-VersionOneChocolateyPackage.ps1
-
-cd $Env:WORKSPACE\src\sandbox
+    [string]$scriptPath = 'Install-V1CSInAzure.ps1')
 
 # TODO: below should become a psake-tool or Azure Tool or something...
 
