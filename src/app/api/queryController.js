@@ -1,10 +1,11 @@
 (function (controller) {
-	var helpers = require('./helpers'),
-		config = require('../config'),
-		gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse');
-		
-	controller.init = function (app) {
-		/**
+    var helpers = require('./helpers'),
+        config = require('../config'),
+        gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
+        request = require('request-json');
+    
+    controller.init = function (app) {
+        /**
 		 * @api {get} /api/query Request commits
 		 * @apiName query
 		 * @apiGroup Query
@@ -22,17 +23,20 @@
 		 * @apiSuccess {String} commitHref Link to an HTML page to view the commit in the source VCS
 		 */		
 		app.get("/api/query", function (req, res) {
-			var options = {
-				host: config.eventStoreHost,
-				port: config.eventStorePort,
-				path: '/streams/asset-' + req.query.workitem + '/head/backward/5?embed=content',
-				headers: { 'Accept': 'application/json' }
-			};
-			helpers.getHttpResources(options, function(err, response) {
-				res.set("Content-Type","application/json");
-				var commits = gitHubEventsToApiResponse(response.entries);
-				res.send(commits);
-			});
-		});
-	};
+            //TODO: move this to the event store module
+            var url = config.eventStoreProtocol + 
+            '://' + config.eventStoreHost + 
+            ':' + config.eventStorePort + 
+            '/streams/asset-' + 
+            req.query.workitem + 
+            '/head/backward/5?embed=content';
+            
+            var client = request.newClient(url);
+            client.get('', function (err, response, body) {
+                res.set("Content-Type", "application/json");
+                var commits = gitHubEventsToApiResponse(response.body.entries);
+                res.send(commits);
+            });
+        });
+    };
 })(module.exports);
