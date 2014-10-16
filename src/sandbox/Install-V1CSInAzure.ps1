@@ -7,6 +7,8 @@
     .\Install-V1.ps1 
 .EXAMPLE 
     .\Install-V1.ps1 "http://localhost/VersionOne"
+.PARAMETER csversion
+   Specifies which version of the CommitStreamVersionOne build to install from MyGetS-
 .PARAMETER instanceUrl
    Specifies where to post an example story to once installation is finished
 .PARAMETER commitStreamServiceSettingsUrl
@@ -23,7 +25,6 @@ param(
 
 cuninst CommitStreamVersionOne
 
-echo "The csversion var: $ENV:csversion"
 
 if ($csversion -eq $null -or $csversion -eq '') {
 	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
