@@ -15,6 +15,7 @@
    Specifies the Story Number that the first new story created will have. This is useful if you want to test with prepopulated data or data copied from a production environment.
 #> 
 param(
+	$csversion=$null,
 	$instanceUrl='http://v1commitstream.cloudapp.net/VersionOne',
 	$commitStreamServiceSettingsUrl='http://v1commitstream-staging.azurewebsites.net/api/settings',
 	$storySeedStart='47665'
@@ -24,10 +25,10 @@ cuninst CommitStreamVersionOne
 
 echo "The csversion var: $ENV:csversion"
 
-if ($ENV:csversion -eq $null) {
+if ($csversion -eq $null -or $csversion -eq '') {
 	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
 } else {
-	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/ -Version $ENV:csversion
+	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/ -Version $csversion
 }
 sqlcmd -Q "use VersionOne; DBCC CHECKIDENT(NumberSource_Story, RESEED, $storySeedStart)"
 sc "c:\inetpub\wwwroot\VersionOne\user.config" "<appSettings><add key=""CommitStream.ServiceSettingsUrl"" value=""$commitStreamServiceSettingsUrl"" /></appSettings>"
