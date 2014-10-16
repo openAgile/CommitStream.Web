@@ -4,9 +4,9 @@
 .LINK 
     https://github.com/openAgile/CommitStream.Web
 .EXAMPLE 
-    .\Install-V1.ps1 
+    .\Install-V1CSInAzure.ps1
 .EXAMPLE 
-    .\Install-V1.ps1 "http://localhost/VersionOne"
+    .\Install-V1CSInAzure.ps1 "http://localhost/VersionOne"
 .PARAMETER csversion
    Specifies which version of the CommitStreamVersionOne build to install from MyGetS-
 .PARAMETER instanceUrl
