@@ -24,6 +24,7 @@
     <Content Include="config.production.json" />
     <Content Include="package.json" />
     <Compile Include="api\helpers\eventStore.js" />
+    <Compile Include="api\test\queryController.tests.js" />
     <Compile Include="api\translators\gitHubEventsToApiResponse.js" />
     <Compile Include="api\helpers\github.js" />
     <Compile Include="api\translators\githubTranslator.js" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <Folder Include="api" />
     <Folder Include="api\helpers" />
+    <Folder Include="api\test\" />
     <Folder Include="api\translators\" />
     <Folder Include="api\translators\__tests\" />
     <Folder Include="client" />

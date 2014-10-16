@@ -1,6 +1,5 @@
 (function (controller) {
-    var helpers = require('./helpers'),
-        config = require('../config'),
+    var config = require('../config'),
         gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
         request = require('request-json');
     

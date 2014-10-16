@@ -10,8 +10,10 @@
     "cors": "^2.4.1",
     "express": "^4.8.3",
     "express-handlebars": "^1.1.0",
+    "mocha": "^1.21.5",
     "moment": "^2.8.3",
     "nconf": "^0.6.9",
+    "nock": "^0.48.0",
     "node-json-db": "^0.3.2",
     "octonode": "^0.6.9",
     "request": "^2.44.0",
@@ -20,18 +22,10 @@
     "uuid-v4": "^0.1.0"
   },
   "devDependencies": {
-    "traceur": "^0.0.66",
-    "jest-cli": "^0.1.18"
+    "traceur": "^0.0.66"
   },
   "scripts": {
-    "start": "node server.js",
-    "test": "jest"
-  },
-  "jest": {
-    "unmockedModulePathPatterns": [
-      "underscore",
-      "moment"
-    ]
+    "start": "node server.js"
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"
