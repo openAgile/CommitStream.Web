@@ -22,6 +22,8 @@ param(
 
 cuninst CommitStreamVersionOne
 
+echo "The csversion var: $ENV:csversion"
+
 if ($ENV:csversion -eq $null) {
 	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
 } else {
