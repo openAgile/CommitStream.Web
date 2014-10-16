@@ -21,7 +21,12 @@ param(
 )
 
 cuninst CommitStreamVersionOne
-cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
+
+if ($ENV:csversion -eq $null) {
+	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/
+} else {
+	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/ -Version $ENV:csversion
+}
 sqlcmd -Q "use VersionOne; DBCC CHECKIDENT(NumberSource_Story, RESEED, $storySeedStart)"
 sc "c:\inetpub\wwwroot\VersionOne\user.config" "<appSettings><add key=""CommitStream.ServiceSettingsUrl"" value=""$commitStreamServiceSettingsUrl"" /></appSettings>"
 
