@@ -1,8 +1,9 @@
 //importController
 (function (importController) {
-    var es = require('./helpers/eventStore');
-    var gh = require('./helpers/github');
-    var bodyParser = require('body-parser');
+    var gh = require('./helpers/github'),
+        bodyParser = require('body-parser'),
+        config = require('../config'),
+        eventStore = require('./helpers/eventStore');
     
     importController.init = function (app) {
         
@@ -24,12 +25,14 @@
         
         app.post("/api/listenerWebhook", bodyParser.json(), function (req, res) {
             res.set('Content-Type', 'application/json');
-            
+            //TODO: all this logic, yikes!
             if (!req.headers.hasOwnProperty('x-github-event')) {
                 res.json({ message: 'Unknown event type.' });
             } else if (req.headers['x-github-event'] == 'push') {
                 var translator = require('./translators/githubTranslator');
                 var events = translator.translatePush(req.body);
+                //TODO: read es credentials from config
+                var es = new eventStore(config.eventStoreBaseUrl, 'admin', 'changeit');
                 es.pushEvents(JSON.stringify(events));
                 res.json({ message: 'Your push event is in queue to be added to CommitStream.' });
             } else if (req.headers['x-github-event'] == 'ping') {

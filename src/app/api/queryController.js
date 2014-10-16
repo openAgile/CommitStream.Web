@@ -1,7 +1,8 @@
 (function (controller) {
     var config = require('../config'),
         gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
-        request = require('request-json');
+        eventStore = require('./helpers/eventStore');
+    
     
     controller.init = function (app) {
         /**
@@ -22,19 +23,12 @@
 		 * @apiSuccess {String} commitHref Link to an HTML page to view the commit in the source VCS
 		 */		
 		app.get("/api/query", function (req, res) {
-            //TODO: move this to the event store module
-            var url = config.eventStoreProtocol + 
-            '://' + config.eventStoreHost + 
-            ':' + config.eventStorePort + 
-            '/streams/asset-' + 
-            req.query.workitem + 
-            '/head/backward/5?embed=content';
-            
-            var client = request.newClient(url);
-            client.get('', function (err, response, body) {
-                var commits = gitHubEventsToApiResponse(body.entries);
+            var es = new eventStore(config.eventStoreBaseUrl, 'admin', 'changeit');
+            es.getLastAssets(req.query.workitem, function (err, entries) {
+                var commits = gitHubEventsToApiResponse(entries);
                 res.set("Content-Type", "application/json");
                 res.send(commits);
+		        
             });
         });
     };
