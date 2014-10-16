@@ -1,6 +1,7 @@
 Param(
     [string]$vm_username,
     [string]$vm_password,
+    [string]$csversion=$null,
     [string]$vm_name = 'v1CommitStream',
     [string]$azure_service_name = 'v1CommitStream',
     [string]$scriptPath = 'Install-V1CSInAzure.ps1')
@@ -36,3 +37,4 @@ Invoke-Command `
 -ConnectionUri $uri.ToString() `
 -Credential $credential `
 -FilePath $scriptPath
+-ArgumentList $csversion
