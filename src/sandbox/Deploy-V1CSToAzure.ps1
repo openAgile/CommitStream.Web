@@ -36,5 +36,5 @@ write-Host "Connecting to $uri"
 Invoke-Command `
 -ConnectionUri $uri.ToString() `
 -Credential $credential `
--FilePath $scriptPath
+-FilePath $scriptPath `
 -ArgumentList $csversion
