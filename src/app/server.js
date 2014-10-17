@@ -38,13 +38,6 @@ app.get('/app', function(req, res) {
     });
 });
 
-app.get('/config.json', function(req, res) {
-	var clientConfig = {
-		assetDetailTemplateUrl : config.assetDetailTemplateUrl
-	};
-	res.json(clientConfig);
-});
-
 app.get('/instances', function(req, res) {
     res.render('instances');
 });
