@@ -2,17 +2,15 @@ For VersionOne developers, these are our internal Jenkins builds for CommitStrea
 
 # [CommitStream VersionOne.Core integration build](http://ci-server/job/CommitStream-core-developing)
 
-* Jenkins job name: CommitStream-core-developing
-* This builds VersionOne from a feature branch that contains code necessary to enable / integrate CommitStream.
+This builds VersionOne from a feature branch that contains code necessary to enable / integration CommitStream.
 
-# [CommitStream + VersionOne.Core package](http://ci-server/job/CommitStream-core-developing-package)
+# [CommitStream + VersionOne.Core integration sandbox build](http://ci-server/job/CommitStream-core-sandbox/)
 
-* Jenkins job name: CommitStream-core-developing-package
-* Uses artifacts from latest successful [CommitStream-core-developing](http://ci-server/job/CommitStream-core-developing) build
+* Uses artifacts from latest successful CommitStream-core-developing
 * Uploads VersionOne Ultimate installer to S3
-* Creates and uploads CommitStreamVersionOne.*version*.nupkg to MyGet
-
-# [CommitStream + VersionOne.Core deploy to Azure](http://ci-server/job/CommitStream-core-deploy-to-azure-sandbox)
-
-* Jenkins job name: CommitStream-core-deploy-to-azure-sandbox
+* Creates and uploads CommitStreamVersionOne to MyGet
 * Installs and configures new version on [http://v1commitstream.cloudapp.net/VersionOne](http://v1commitstream.cloudapp.net/VersionOne)
+
+## TODOs
+
+* [Story: Separate out the Choco package and publish step from the deployment to Azure step](https://www7.v1host.com/V1Production/story.mvc/Summary?oidToken=Story:547479)
