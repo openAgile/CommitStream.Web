@@ -25,9 +25,8 @@ app.get('/instances', function(req, res) {
 app.use(cors());
 app.use(apikey);
 
-
 app.use(function(req, res, next) {
-    res.setHeader("X-CommitStream-API-Docs", "https://github.com/eventstore/eventstore/wiki");
+    res.setHeader("X-CommitStream-API-Docs", "https://github.com/openAgile/CommitStream.Web");
     return next();
 });
 

@@ -20,7 +20,7 @@
             var settings = getDefaultSettings();
             var protocol = req.protocol;
             var host = req.get('host');
-            settings['CommitStream.AppUrl'] = protocol + '://' + host + '/app';
+            settings['CommitStream.AppUrl'] = protocol + '://' + host + '/app?key=' + req.query.key;
 
             var instance = req.query.instance;
             if (!instance) {
