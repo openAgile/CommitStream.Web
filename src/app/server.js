@@ -37,9 +37,10 @@ app.get('/app', function(req, res) {
     res.setHeader('content-type', 'application/javascript');
     var protocol = req.protocol;
     var host = req.get('host');
+    var key = req.query.key;
 
     res.render('app', {
-        apiUrl: protocol + '://' + host + '/api/query?workitem=',
+        apiUrl: protocol + '://' + host + '/api/query?key=' + key + '&workitem=',
         templateUrl: protocol + '://' + host + '/assetDetailCommits.html',
         resourcePath: protocol + '://' + host + '/'
     });
