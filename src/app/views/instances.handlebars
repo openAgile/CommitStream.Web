@@ -113,12 +113,16 @@ function InstancesController($scope, $http) {
 	$scope.search = function() {
 		if (!$scope.searchForm.$valid) return;
 		$http.get(buildUrl()).
-		success(function(result) {
+		success(function(result, status) {
+			alert(status);
 			if (result) {
 				$scope.instanceSearch = $scope.instance;
 				$scope.saved = false;
 				$scope.result = result;
 			}
+		}).
+		error(function(data, status) {
+			alert(data);
 		});
 	};
 
@@ -130,6 +134,9 @@ function InstancesController($scope, $http) {
 					$scope.saved = true;
 				}
 			}
+		}).
+		error(function(data, status) {
+			alert(data);
 		});
 	};	
 }
