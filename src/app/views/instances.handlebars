@@ -113,12 +113,11 @@ function InstancesController($scope, $http) {
 	$scope.search = function() {
 		if (!$scope.searchForm.$valid) return;
 		$http.get(buildUrl()).
-		success(function(result, status) {
-			alert(status);
-			if (result) {
+		success(function(data, status) {
+			if (data) {
 				$scope.instanceSearch = $scope.instance;
 				$scope.saved = false;
-				$scope.result = result;
+				$scope.result = data;
 			}
 		}).
 		error(function(data, status) {
