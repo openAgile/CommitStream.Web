@@ -23,12 +23,11 @@
 		 * @apiSuccess {String} commitHref Link to an HTML page to view the commit in the source VCS
 		 */		
 		app.get("/api/query", function (req, res) {
-            var es = new eventStore(config.eventStoreBaseUrl, 'admin', 'changeit');
+            var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
             es.getLastAssets(req.query.workitem, function (err, entries) {
                 var commits = gitHubEventsToApiResponse(entries);
                 res.set("Content-Type", "application/json");
                 res.send(commits);
-		        
             });
         });
     };

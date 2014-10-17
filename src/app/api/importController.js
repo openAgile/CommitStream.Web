@@ -31,8 +31,7 @@
             } else if (req.headers['x-github-event'] == 'push') {
                 var translator = require('./translators/githubTranslator');
                 var events = translator.translatePush(req.body);
-                //TODO: read es credentials from config
-                var es = new eventStore(config.eventStoreBaseUrl, 'admin', 'changeit');
+                var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
                 es.pushEvents(JSON.stringify(events));
                 res.json({ message: 'Your push event is in queue to be added to CommitStream.' });
             } else if (req.headers['x-github-event'] == 'ping') {

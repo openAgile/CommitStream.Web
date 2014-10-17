@@ -39,7 +39,7 @@ var asyncHelper = {
                     parms.page = 0;
                     console.log('Ready to push ' + events.length + ' events.');
                     //TODO: this shouldn't happen here
-                    var es = new eventStore(config.eventStoreBaseUrl, 'admin', 'changeit');
+                    var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
                     es.pushEvents(JSON.stringify(events));
                     c();
                 }
