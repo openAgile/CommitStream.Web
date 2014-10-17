@@ -1,25 +1,26 @@
-<# 
-.SYNOPSIS 
+<#
+.SYNOPSIS
     Installs VersionOne with CommitStream.
-.LINK 
+.LINK
     https://github.com/openAgile/CommitStream.Web
-.EXAMPLE 
+.EXAMPLE
     .\Install-V1CSInAzure.ps1
-.EXAMPLE 
+.EXAMPLE
     .\Install-V1CSInAzure.ps1 "http://localhost/VersionOne"
 .PARAMETER csversion
    Specifies which version of the CommitStreamVersionOne build to install from MyGetS-
 .PARAMETER instanceUrl
    Specifies where to post an example story to once installation is finished
-.PARAMETER commitStreamServiceSettingsUrl
-   Specifies the location of the settings API endpoint from which VersionOne will source additional CommitStream AppSettings values. See the settingsController in the the https://github.com/openAgile/CommitStream.Web repository for full details on the expected response format of this endpoint.
+.PARAMETER commitStreamAppUrl
+   Specifies the location of the CommitStream app JavaScript code that runs when an Asset Detail lightbox opens and the user clicks the CommitStream icon.
 .PARAMETER storySeedStart
    Specifies the Story Number that the first new story created will have. This is useful if you want to test with prepopulated data or data copied from a production environment.
-#> 
+#>
 param(
 	$csversion=$null,
+	$apiKey='',
 	$instanceUrl='http://v1commitstream.cloudapp.net/VersionOne',
-	$commitStreamServiceSettingsUrl='http://v1commitstream-staging.azurewebsites.net/api/settings',
+	$commitStreamAppUrl='http://v1commitstream-staging.azurewebsites.net/app?key=',
 	$storySeedStart='47665'
 )
 
@@ -32,7 +33,8 @@ if ($csversion -eq $null -or $csversion -eq '') {
 	cinst CommitStreamVersionOne -source https://www.myget.org/F/versionone/ -Version $csversion
 }
 sqlcmd -Q "use VersionOne; DBCC CHECKIDENT(NumberSource_Story, RESEED, $storySeedStart)"
-sc "c:\inetpub\wwwroot\VersionOne\user.config" "<appSettings><add key=""CommitStream.ServiceSettingsUrl"" value=""$commitStreamServiceSettingsUrl"" /></appSettings>"
+sc "c:\inetpub\wwwroot\VersionOne\user.config" "<appSettings><add key=""CommitStream.Availability"" value=""available"" /><add key=""CommitStream.Toggle"" value=""on"" /><add key=""CommitStream.AppUrl"" value=""$commitStreamAppUrl$apiKey"" /></appSettings>"
+
 
 iisreset
 
