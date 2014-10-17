@@ -9,34 +9,36 @@
         });
     }
 
-    function queryCommitStream(commitStreamDomId, workitem, handlebars) {
+    function queryCommitStream(commitStreamDomId, workitem, handlebars, errorHandler) {
         $.getJSON('{{apiUrl}}' + workitem).done(function(data) {
-            if (data.commits.length > 0) {
+            if (!data || !data.commits) {
+                errorHandler();
+            } else {
+                data.noCommits = data.commits.length < 1;
                 data.resourcePath = "{{{resourcePath}}}";
-
                 $.get('{{templateUrl}}').done(function(source) {
                     var template = handlebars.compile(source);
                     var content = template(data);
                     $(commitStreamDomId).html(content);
-                });
+                }).fail(errorHandler);
             }
-        });
+        }).fail(errorHandler);
     }
 
-    function invokeCommitStream(commitStreamDomId, workitem) {
+    function invokeCommitStream(commitStreamDomId, workitem, errorHandler) {
         require(['handlebars'], function(handlebars) {
-            queryCommitStream(commitStreamDomId, workitem, handlebars.default);
-        });
+            queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);
+        }, errorHandler);
     }
 
     // Put a commitStream object in the global space
     if (!window.CommitStream) {
         window.CommitStream = {
-            commitsDisplay : function(commitStreamDomId, workitem) {
+            commitsDisplay : function(commitStreamDomId, workitem, errorHandler) {
                 $.getScript(protocol + "cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js", function(data, status, jqxhr) {
                     configureCommitStreamDependencies();
-                    invokeCommitStream(commitStreamDomId, workitem);
-                });
+                    invokeCommitStream(commitStreamDomId, workitem, errorHandler);
+                }).fail(errorHandler);
             }
         };
     } else {
