@@ -16,12 +16,18 @@ require('./bootstrapper').boot(config);
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
+// NOTE: Do not rearrange the order of these app.* statements becaused they
+// are crucial for the order of operations in the pipeline of middleware
+// functions!
+
 app.use(express.static(__dirname + '/client'));
 
 app.get('/instances', function(req, res) {
     res.render('instances');
 });
 
+// NOTE: See above warning. Why are you even considering moving these?
+// Think thrice.
 app.use(cors());
 app.use(apikey);
 
