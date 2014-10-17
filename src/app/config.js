@@ -14,6 +14,7 @@
     config.port = process.env.PORT;
   }
 
+  config.apiKey = nconf.get('apiKey') || '';
   config.serverBaseUrl = nconf.get('serverBaseUrl') || 'http://localhost:' + config.port;
   config.eventStoreHost = nconf.get('eventStoreHost') || 'localhost';  
   config.eventStorePort = nconf.get('eventStorePort') || '2113';

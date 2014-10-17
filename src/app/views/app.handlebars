@@ -10,13 +10,13 @@
     }
 
     function queryCommitStream(commitStreamDomId, workitem, handlebars, errorHandler) {
-        $.getJSON('{{apiUrl}}' + workitem).done(function(data) {
+        $.getJSON('{{{apiUrl}}}' + workitem).done(function(data) {
             if (!data || !data.commits) {
                 errorHandler();
             } else {
                 data.noCommits = data.commits.length < 1;
                 data.resourcePath = "{{{resourcePath}}}";
-                $.get('{{templateUrl}}').done(function(source) {
+                $.get('{{{templateUrl}}}').done(function(source) {
                     var template = handlebars.compile(source);
                     var content = template(data);
                     $(commitStreamDomId).html(content);
