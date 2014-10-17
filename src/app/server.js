@@ -19,6 +19,7 @@ app.set('view engine', 'handlebars');
 // NOTE: Do not rearrange the order of these app.* statements becaused they
 // are crucial for the order of operations in the pipeline of middleware
 // functions!
+app.use(cors());
 
 app.use(express.static(__dirname + '/client'));
 
@@ -28,7 +29,6 @@ app.get('/instances', function(req, res) {
 
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.
-app.use(cors());
 app.use(apikey);
 
 app.use(function(req, res, next) {
