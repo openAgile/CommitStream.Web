@@ -9,23 +9,45 @@
         });
     }
 
+    var displayErrorInitialized = false;
+    var displayError = function() {};
+
+    function ensureDisplayError(commitStreamDomId) {
+        if (displayErrorInitialized === false) {
+            displayError = function(data, status) {
+                $(displayError.commitStreamDomId).html(
+                    '<div class="stream-title-area"><div class="titlebar"><div class="title-container"><h3>Error Contacting CommitStream</h3>' +
+                    (data.responseText ? data.responseText : data) +
+                    '</div></div></div>');
+            };
+            displayError.commitStreamDomId = commitStreamDomId;
+            displayErrorInitialized = true;
+        } else {
+            displayError.commitStreamDomId = commitStreamDomId;
+        }
+    }
+
     function queryCommitStream(commitStreamDomId, workitem, handlebars) {
         $.getJSON('{{apiUrl}}' + workitem).done(function(data) {
             if (data.commits.length > 0) {
                 data.resourcePath = "{{{resourcePath}}}";
-
                 $.get('{{templateUrl}}').done(function(source) {
                     var template = handlebars.compile(source);
                     var content = template(data);
                     $(commitStreamDomId).html(content);
-                });
+                }).fail(displayError);
             }
-        });
+        }).fail(displayError);
     }
 
     function invokeCommitStream(commitStreamDomId, workitem) {
+        ensureDisplayError(commitStreamDomId);
         require(['handlebars'], function(handlebars) {
             queryCommitStream(commitStreamDomId, workitem, handlebars.default);
+        }, function(err) {
+            console.log('CommitStream failed to load required modules. Full error:');
+            console.log(err);
+            displayError('Could not load required CDN dependencies. See error console for more detail.');
         });
     }
 
@@ -33,10 +55,11 @@
     if (!window.CommitStream) {
         window.CommitStream = {
             commitsDisplay : function(commitStreamDomId, workitem) {
+                ensureDisplayError(commitStreamDomId);
                 $.getScript(protocol + "cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js", function(data, status, jqxhr) {
                     configureCommitStreamDependencies();
                     invokeCommitStream(commitStreamDomId, workitem);
-                });
+                }).fail(displayError);
             }
         };
     } else {
