@@ -33,15 +33,9 @@ app.get('/app', function(req, res) {
 
     res.render('app', {
         apiUrl: protocol + '://' + host + '/api/query?workitem=',
-        templateUrl: protocol + '://' + host + '/assetDetailCommits.html'
+        templateUrl: protocol + '://' + host + '/assetDetailCommits.html',
+        resourcePath: protocol + '://' + host + '/'
     });
-});
-
-app.get('/config.json', function(req, res) {
-	var clientConfig = {
-		assetDetailTemplateUrl : config.assetDetailTemplateUrl
-	};
-	res.json(clientConfig);
 });
 
 app.get('/instances', function(req, res) {
