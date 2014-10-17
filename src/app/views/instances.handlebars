@@ -110,6 +110,10 @@ function InstancesController($scope, $http) {
 		return "api/settings?instance=" + instance + "&key=" + key;
 	}
 
+	function displayError(data) {
+		alert(data);
+	}
+
 	$scope.search = function() {
 		if (!$scope.searchForm.$valid) return;
 		$http.get(buildUrl()).
@@ -120,9 +124,7 @@ function InstancesController($scope, $http) {
 				$scope.result = data;
 			}
 		}).
-		error(function(data, status) {
-			alert(data);
-		});
+		error(displayError);
 	};
 
 	$scope.update = function() {
@@ -134,9 +136,7 @@ function InstancesController($scope, $http) {
 				}
 			}
 		}).
-		error(function(data, status) {
-			alert(data);
-		});
+		error(displayError);
 	};	
 }
 </script>
