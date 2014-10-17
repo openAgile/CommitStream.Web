@@ -26,7 +26,17 @@ app.use(function(req, res, next) {
     return next();
 });
 
+
+function assertApiKeyValid(req, res) {
+    if (!config.apiKey || (!req.query.key || !req.query.key == config.apiKey)) {
+        res.status(403).send('API key parameter missing or invalid');
+        return false;
+    }
+    return true;
+}
+
 app.get('/app', function(req, res) {
+    if (!assertApiKeyValid(req, res)) return;
     res.setHeader('content-type', 'application/javascript');
     var protocol = req.protocol;
     var host = req.get('host');
