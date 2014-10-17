@@ -29,7 +29,10 @@
 
     function queryCommitStream(commitStreamDomId, workitem, handlebars) {
         $.getJSON('{{apiUrl}}' + workitem).done(function(data) {
-            if (data.commits.length > 0) {
+            if (!data || !data.commits) {
+                displayError('The response from CommitStream did contain the expected information.')
+            } else {
+                data.noCommits = data.commits.length < 1;
                 data.resourcePath = "{{{resourcePath}}}";
                 $.get('{{templateUrl}}').done(function(source) {
                     var template = handlebars.compile(source);
