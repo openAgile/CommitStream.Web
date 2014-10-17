@@ -9,28 +9,10 @@
         });
     }
 
-    var displayErrorInitialized = false;
-    var displayError = function() {};
-
-    function ensureDisplayError(commitStreamDomId) {
-        if (displayErrorInitialized === false) {
-            displayError = function(data, status) {
-                $(displayError.commitStreamDomId).html(
-                    '<div class="stream-title-area"><div class="titlebar"><div class="title-container"><h3>Error Contacting CommitStream</h3>' +
-                    (data.responseText ? data.responseText : data) +
-                    '</div></div></div>');
-            };
-            displayError.commitStreamDomId = commitStreamDomId;
-            displayErrorInitialized = true;
-        } else {
-            displayError.commitStreamDomId = commitStreamDomId;
-        }
-    }
-
-    function queryCommitStream(commitStreamDomId, workitem, handlebars) {
+    function queryCommitStream(commitStreamDomId, workitem, handlebars, errorHandler) {
         $.getJSON('{{apiUrl}}' + workitem).done(function(data) {
             if (!data || !data.commits) {
-                displayError('The response from CommitStream did contain the expected information.')
+                errorHandler();
             } else {
                 data.noCommits = data.commits.length < 1;
                 data.resourcePath = "{{{resourcePath}}}";
@@ -38,31 +20,25 @@
                     var template = handlebars.compile(source);
                     var content = template(data);
                     $(commitStreamDomId).html(content);
-                }).fail(displayError);
+                }).fail(errorHandler);
             }
-        }).fail(displayError);
+        }).fail(errorHandler);
     }
 
-    function invokeCommitStream(commitStreamDomId, workitem) {
-        ensureDisplayError(commitStreamDomId);
+    function invokeCommitStream(commitStreamDomId, workitem, errorHandler) {
         require(['handlebars'], function(handlebars) {
-            queryCommitStream(commitStreamDomId, workitem, handlebars.default);
-        }, function(err) {
-            console.log('CommitStream failed to load required modules. Full error:');
-            console.log(err);
-            displayError('Could not load required CDN dependencies. See error console for more detail.');
-        });
+            queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);
+        }, errorHandler);
     }
 
     // Put a commitStream object in the global space
     if (!window.CommitStream) {
         window.CommitStream = {
-            commitsDisplay : function(commitStreamDomId, workitem) {
-                ensureDisplayError(commitStreamDomId);
+            commitsDisplay : function(commitStreamDomId, workitem, errorHandler) {
                 $.getScript(protocol + "cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js", function(data, status, jqxhr) {
                     configureCommitStreamDependencies();
-                    invokeCommitStream(commitStreamDomId, workitem);
-                }).fail(displayError);
+                    invokeCommitStream(commitStreamDomId, workitem, errorHandler);
+                }).fail(errorHandler);
             }
         };
     } else {
