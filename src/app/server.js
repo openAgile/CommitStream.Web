@@ -33,7 +33,8 @@ app.get('/app', function(req, res) {
 
     res.render('app', {
         apiUrl: protocol + '://' + host + '/api/query?workitem=',
-        templateUrl: protocol + '://' + host + '/assetDetailCommits.html'
+        templateUrl: protocol + '://' + host + '/assetDetailCommits.html',
+        resourcePath: protocol + '://' + host + '/'
     });
 });
 
