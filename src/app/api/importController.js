@@ -19,7 +19,7 @@
                 accessToken: accessToken
             });
             
-            res.json({ message: 'Your repository is in queue to be added to CommitStream.' });
+            res.json({ message: 'Your repository has been queued to be imported into CommitStream.' });
             res.end();
         });
         
