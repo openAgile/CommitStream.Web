@@ -1,5 +1,5 @@
 // test/queryController.tests.js
-var assert = require("assert"),
+var assert = require('assert'),
     express = require('express'),
     app = express(),
     request = require('supertest'),
@@ -8,7 +8,7 @@ var assert = require("assert"),
 controller.init(app);
 
 describe('queryController', function () {
-    describe('When I issue a workitem query for an asset that has no associated commits', function () {
+    describe('when I issue a workitem query for an asset that has no associated commits', function () {
         var nock = require('nock');
         //mock requests to event store
         var scope = nock('http://localhost:2113')
@@ -18,7 +18,7 @@ describe('queryController', function () {
         it('returns a 200 OK response with an empty commits array', function (done) {
             //exercise our api
             request(app)
-            .get("/api/query?workitem=123&pageSize=5")
+            .get('/api/query?workitem=123&pageSize=5')
             .end(function (err, res) {
                 assert.equal(err, null);
                 assert.equal(res.statusCode, 200);

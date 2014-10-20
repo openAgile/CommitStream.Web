@@ -1,4 +1,4 @@
-var assert = require("assert"),    
+var assert = require('assert'),    
     gitHubEventsToApiResponse = require('../../../api/translators/gitHubEventsToApiResponse');
 
 var eventsData = {};
@@ -120,7 +120,7 @@ describe('gitHubEventsToApiResponse', function () {
     describe('when 1 event present', function () {
         var events = eventsData.Single;
         var actual = gitHubEventsToApiResponse(events);
-        it('returns a 1 mapped event', function () {
+        it('returns 1 mapped event', function () {
             assert.equal(actual.commits.length, 1);
         });
     });
