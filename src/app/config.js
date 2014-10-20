@@ -18,11 +18,7 @@
   config.serverBaseUrl = nconf.get('serverBaseUrl') || 'http://localhost:' + config.port;
   config.eventStoreUser = nconf.get('eventStoreUser') || 'admin';
   config.eventStorePassword = nconf.get('eventStorePassword') || 'changeit';
-  config.eventStoreHost = nconf.get('eventStoreHost') || 'localhost';  
-  config.eventStorePort = nconf.get('eventStorePort') || '2113';
-  config.eventStoreProtocol = nconf.get('eventStoreProtocol') || 'http';
-  config.eventStoreBaseUrl = config.eventStoreProtocol + '://'
-    + config.eventStoreHost;
+  config.eventStoreBaseUrl = nconf.get('eventStoreBaseUrl') || 'http://localhost:2113';
   config.eventStoreAssetStreamUrl = config.eventStoreBaseUrl + '/streams/asset-';
   config.eventStoreAssetQueryParams = nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
   config.assetDetailTemplateUrl = nconf.get('assetDetailTemplateUrl') || config.serverBaseUrl + ':' + config.port + '/assetDetailCommits.html';

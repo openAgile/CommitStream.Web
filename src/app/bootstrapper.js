@@ -1,16 +1,14 @@
 (function(bootstrapper) {
   bootstrapper.boot = function(config) {
-    var helpers = require ('./api/helpers'),
-        _ = require('underscore'),
+    var _ = require('underscore'),
         request = require('request');
 
     var options = {
-      host: config.eventStoreHost,
-      port: config.eventStorePort,
+      url: config.eventStoreBaseUrl,
       path: '/projections/all-non-transient'
     };
     
-    helpers.getHttpResources(options, function(err, response) {
+    request.get(options, function(err, response) {
       createProjections(response.projections);
     });
 
@@ -35,7 +33,8 @@
         });
       });
     }
-
+    
+    //TODO: move this into eventStore.js
     function createProjection(name, script) {
       var options = {
         url: 'http://admin:changeit@' + config.eventStoreHost + ':' 
