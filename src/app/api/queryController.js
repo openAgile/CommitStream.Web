@@ -24,7 +24,13 @@
 		 */		
 		app.get("/api/query", function (req, res) {
             var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
-            es.getLastAssets(req.query.workitem, function (err, entries) {
+            
+            var options = {
+                workitem: req.query.workitem, 
+                pageSize: req.query.pageSize
+            };
+
+            es.getLastAssets(options, function (err, entries) {
                 var commits = gitHubEventsToApiResponse(entries);
                 res.set("Content-Type", "application/json");
                 res.send(commits);

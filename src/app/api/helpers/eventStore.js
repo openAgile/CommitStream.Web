@@ -57,9 +57,13 @@ eventStore.prototype.getLastCommit = function (owner, repo, callback) {
     });
 };
 
-//TODO: improve this, we surely want the 5 as a parameter
-eventStore.prototype.getLastAssets = function (workitem, callback) {
-    var path = '/streams/asset-' + workitem + '/head/backward/5?embed=content';
+eventStore.prototype.getLastAssets = function (options, callback) {
+    
+    var path = '/streams/asset-' + 
+    options.workitem +
+    '/head/backward/' +
+    options.pageSize +
+    '?embed=content';
     
     var client = reqJson.newClient(this.baseUrl);
     client.get(path, function (err, response, body) {

@@ -18,7 +18,7 @@ describe('queryController', function () {
         it('returns a 200 OK response with an empty commits array', function (done) {
             //exercise our api
             request(app)
-            .get("/api/query?workitem=123")
+            .get("/api/query?workitem=123&pageSize=5")
             .end(function (err, res) {
                 assert.equal(err, null);
                 assert.equal(res.statusCode, 200);
