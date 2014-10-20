@@ -1,10 +1,11 @@
 (function() {
-    var protocol = "//";
+    var handlebarsUrl = '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min',
+        requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js';
 
     function configureCommitStreamDependencies() {
         require.config({
             paths: {
-                handlebars: protocol + 'cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min'
+                handlebars: handlebarsUrl
             }
         });
     }
@@ -17,9 +18,13 @@
                 data.noCommits = data.commits.length < 1;
                 data.resourcePath = "{{{resourcePath}}}";
                 $.get('{{{templateUrl}}}').done(function(source) {
-                    var template = handlebars.compile(source);
-                    var content = template(data);
-                    $(commitStreamDomId).html(content);
+                    try {
+                        var template = handlebars.compile(source);
+                        var content = template(data);
+                        $(commitStreamDomId).html(content);
+                    } catch(ex) {
+                        errorHandler();
+                    }
                 }).fail(errorHandler);
             }
         }).fail(errorHandler);
@@ -35,7 +40,7 @@
     if (!window.CommitStream) {
         window.CommitStream = {
             commitsDisplay : function(commitStreamDomId, workitem, errorHandler) {
-                $.getScript(protocol + "cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js", function(data, status, jqxhr) {
+                $.getScript(requirejsUrl, function(data, status, jqxhr) {
                     configureCommitStreamDependencies();
                     invokeCommitStream(commitStreamDomId, workitem, errorHandler);
                 }).fail(errorHandler);
