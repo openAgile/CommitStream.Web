@@ -3,7 +3,7 @@ var assert = require("assert"),
     express = require('express'),
     app = express(),
     request = require('supertest'),
-    controller = require('../queryController');
+    controller = require('../../api/queryController');
 
 controller.init(app);
 

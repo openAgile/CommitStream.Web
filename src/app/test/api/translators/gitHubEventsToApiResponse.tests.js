@@ -1,5 +1,5 @@
 var assert = require("assert"),    
-    gitHubEventsToApiResponse = require('../gitHubEventsToApiResponse');
+    gitHubEventsToApiResponse = require('../../../api/translators/gitHubEventsToApiResponse');
 
 var eventsData = {};
 
