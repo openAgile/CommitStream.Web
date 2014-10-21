@@ -1,7 +1,8 @@
-﻿var github = require('octonode');
-var es = require('./eventStore');
-var uuid = require('uuid-v4');
-var async = require('async');
+﻿var github = require('octonode'),
+    eventStore = require('./eventStore'),
+    uuid = require('uuid-v4'),
+    async = require('async'),
+    config = require('../../config');
 
 function githubHelper() {
 }
@@ -37,6 +38,8 @@ var asyncHelper = {
                 } else {
                     parms.page = 0;
                     console.log('Ready to push ' + events.length + ' events.');
+                    //TODO: this shouldn't happen here
+                    var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
                     es.pushEvents(JSON.stringify(events));
                     c();
                 }

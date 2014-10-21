@@ -5,17 +5,21 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3d927d54-0df7-4618-b51e-4d34f18b093c}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
     <StartupFile>server.js</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <NodejsPort>6565</NodejsPort>
+    <StartWebBrowser>True</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="test\api\queryController.tests.js" />
+    <Compile Include="test\api\translators\gitHubEventsToApiResponse.tests.js" />
     <Content Include="iisnode.yaml" />
     <Content Include="projections\by-asset" />
     <Content Include="projections\partitionate-with-or-without-mention" />
@@ -27,7 +31,6 @@
     <Compile Include="api\translators\gitHubEventsToApiResponse.js" />
     <Compile Include="api\helpers\github.js" />
     <Compile Include="api\translators\githubTranslator.js" />
-    <Compile Include="api\translators\__tests\gitHubEventsToApiResponse-test.js" />
     <Compile Include="bootstrapper.js" />
     <Compile Include="config.js" />
     <Compile Include="projections\by-github-repository" />
@@ -38,17 +41,16 @@
     <Content Include="client\assetDetailCommits.html" />
     <Content Include="client\index.html" />
     <Content Include="client\icon-commit-16x16.png" />
-    <Compile Include="client\assetDetailCommits.js" />
-    <Compile Include="client\text.js" />
-    <Compile Include="api\helpers\index.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api" />
     <Folder Include="api\helpers" />
     <Folder Include="api\translators\" />
-    <Folder Include="api\translators\__tests\" />
     <Folder Include="client" />
     <Folder Include="projections" />
+    <Folder Include="test\" />
+    <Folder Include="test\api\" />
+    <Folder Include="test\api\translators\" />
     <Folder Include="views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
