@@ -1,22 +1,17 @@
 (function (bootstrapper) {
   bootstrapper.boot = function (config) {
     var _ = require('underscore'),
-        request = require('request'),
-        //TODO: get out of here!
-        rjson = require('request-json'),
         eventStore = require('./api/helpers/eventStore');
     
-    //TODO: do this in eventStore.js
-    var client = rjson.newClient(config.eventStoreBaseUrl);
-    client.get('/projections/all-non-transient', function (err, response, body) {
+    var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
+    
+    es.getProjections(function (error, response, body) {
       createProjections(body.projections);
     });
     
     function createProjections(projectionsFound) {
       var fs = require('fs');
       var dir = './projections/';
-      
-      var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
       
       console.log('Looking for projections...');
       fs.readdir(dir, function (err, files) {

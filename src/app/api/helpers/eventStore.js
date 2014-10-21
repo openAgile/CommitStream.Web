@@ -83,9 +83,9 @@ eventStore.prototype.createProjection = function (name, script) {
       'Content-Type': 'application/json;charset=utf-8',
       'Content-Length': script.length
     },
-    body:script
+    body: script
   };
-
+  
   request.post(options, function (err, response, body) {
     if (err) {
       console.error('ERROR could not create projection ' + name + ':');
@@ -97,6 +97,13 @@ eventStore.prototype.createProjection = function (name, script) {
     }
   });
 
+};
+
+eventStore.prototype.getProjections = function (callback) {
+  var client = reqJson.newClient(this.baseUrl);
+  client.get('/projections/all-non-transient', function (err, response, body) {
+    callback(err, response, body);
+  });
 };
 
 module.exports = eventStore;
