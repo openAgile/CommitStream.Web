@@ -20,7 +20,7 @@ param(
 	$csversion=$null,
 	$apiKey='',
 	$instanceUrl='http://v1commitstream.cloudapp.net/VersionOne',
-	$commitStreamAppUrl='http://v1commitstream-staging.azurewebsites.net/app?key=',
+	$commitStreamAppUrl='https://v1commitstream-staging.azurewebsites.net/app?key=',
 	$storySeedStart='47665'
 )
 
