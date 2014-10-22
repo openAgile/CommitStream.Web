@@ -12,7 +12,7 @@ controller.init(app);
 describe('queryController', function () {
   describe('when I issue a workitem query for an asset that has no associated commits', function () {
     eventStoreStub.getLastAssets = function (args, callback) {
-      callback(null, []);
+      callback(null, undefined);
     };
     
     it('returns a 200 OK response with an empty commits array', function (done) {
