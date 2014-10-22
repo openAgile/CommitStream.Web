@@ -1,7 +1,8 @@
 ﻿
 //TODO: choose one, request is more versatile while request-json is handy
-var request = require('request');
-var reqJson = require('request-json');
+var request = require('request'),
+    reqJson = require('request-json'),
+    assert = require('assert');
 
 function eventStore(baseUrl, userName, password) {
   this.baseUrl = baseUrl;
