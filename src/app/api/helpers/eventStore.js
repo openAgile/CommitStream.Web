@@ -1,5 +1,5 @@
 ﻿
-//TODO: remove completely?
+//TODO: choose one, request is more versatile while request-json is handy
 var request = require('request');
 var reqJson = require('request-json');
 
@@ -11,8 +11,7 @@ function eventStore(baseUrl, userName, password) {
   this.authorization = 'Basic ' + new Buffer(this.username + ':' + this.password).toString('base64');
 }
 
-//TODO: add callback
-eventStore.prototype.pushEvents = function (events) {
+eventStore.prototype.pushEvents = function (events, callback) {
   var eventStoreUrl = this.baseUrl + '/streams/github-events';
   
   var options = {
@@ -27,18 +26,14 @@ eventStore.prototype.pushEvents = function (events) {
   };
   
   request.post(options, function (error, response, body) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Posted to eventstore.');
-      console.log(response.statusCode);
-    }
+    callback(error, response, body);
   });
-        
 };
 
-eventStore.prototype.getLastCommit = function (owner, repo, callback) {
-  var eventStoreUrl = this.baseUrl + '/streams/repo-' + owner + '-' + repo + '/head?embed=content';
+eventStore.prototype.getLastCommit = function (args, callback) {
+  assert.ok(args.owner && args.repo, 'You must specify an owner and a repo.');
+  
+  var eventStoreUrl = this.baseUrl + '/streams/repo-' + args.owner + '-' + args.repo + '/head?embed=content';
   
   var options = {
     url: eventStoreUrl,            
@@ -46,6 +41,7 @@ eventStore.prototype.getLastCommit = function (owner, repo, callback) {
       'Accept': 'application/json'
     }
   };
+  
   request.get(options, function (error, response, body) {
     console.log('Getting the last commit for this repository');
     if (response.statusCode == 404) {
@@ -57,12 +53,13 @@ eventStore.prototype.getLastCommit = function (owner, repo, callback) {
   });
 };
 
-eventStore.prototype.getLastAssets = function (options, callback) {
+eventStore.prototype.getLastAssets = function (args, callback) {
+  assert.ok(args.workitem, 'You must specify a workitem.');
   
   var path = '/streams/asset-' + 
-    options.workitem +
+    args.workitem +
     '/head/backward/' +
-    options.pageSize +
+    args.pageSize +
     '?embed=content';
   
   var client = reqJson.newClient(this.baseUrl);
@@ -72,8 +69,10 @@ eventStore.prototype.getLastAssets = function (options, callback) {
 
 };
 
-eventStore.prototype.createProjection = function (name, script) {
-  var eventStoreUrl = this.baseUrl + '/projections/continuous?emit=yes&checkpoints=yes&enabled=yes&name=' + name;
+eventStore.prototype.createProjection = function (args) {
+  assert.ok(args.name && args.script, 'You must specify a name and a script.');
+  
+  var eventStoreUrl = this.baseUrl + '/projections/continuous?emit=yes&checkpoints=yes&enabled=yes&name=' + args.name;
   
   var options = {
     url: eventStoreUrl,            
@@ -83,7 +82,7 @@ eventStore.prototype.createProjection = function (name, script) {
       'Content-Type': 'application/json;charset=utf-8',
       'Content-Length': script.length
     },
-    body: script
+    body: args.script
   };
   
   request.post(options, function (err, response, body) {
