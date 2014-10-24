@@ -21,7 +21,7 @@
             if (err) throw err;
             else {
               if (!_.findWhere(projectionsFound, { effectiveName: name })) {
-                es.createProjection(name, script);
+                es.createProjection({ name: name, script: script });
               } else {
                 console.log('OK found ' + name);
               }
