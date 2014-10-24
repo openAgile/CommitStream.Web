@@ -32,8 +32,7 @@
       
       es.getLastAssets(options, function (err, entries) {
         var commits = gitHubEventsToApiResponse(entries);
-        res.set("Content-Type", "application/json");
-        res.send(commits);
+        res.jsonp(commits);
       });
     });
   };
