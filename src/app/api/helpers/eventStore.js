@@ -13,6 +13,8 @@ function eventStore(baseUrl, userName, password) {
 }
 
 eventStore.prototype.pushEvents = function (events, callback) {
+  //TODO: review this approach
+  //assert.ok(events, 'You must pass events');
   var eventStoreUrl = this.baseUrl + '/streams/github-events';
   
   var options = {
@@ -20,7 +22,7 @@ eventStore.prototype.pushEvents = function (events, callback) {
     body: events,
     headers: {
       'Accept': 'application/json',
-      'Content-Type': "application/vnd.eventstore.events+json",
+      'Content-Type': 'application/vnd.eventstore.events+json',
       'Content-Length': events.length,
       'Authorization': this.authorization
     }
@@ -32,6 +34,7 @@ eventStore.prototype.pushEvents = function (events, callback) {
 };
 
 eventStore.prototype.getLastCommit = function (args, callback) {
+  //TODO: review this approach
   assert.ok(args.owner && args.repo, 'You must specify an owner and a repo.');
   
   var eventStoreUrl = this.baseUrl + '/streams/repo-' + args.owner + '-' + args.repo + '/head?embed=content';
@@ -46,15 +49,17 @@ eventStore.prototype.getLastCommit = function (args, callback) {
   request.get(options, function (error, response, body) {
     console.log('Getting the last commit for this repository');
     if (response.statusCode == 404) {
-      callback('Stream not found, You need to do a full import', null);
-    }
-    if (response.statusCode == 200) {
-      callback(null, body);
+      callback('Stream not found, You need to do a full import', response, null);
+    } else if (response.statusCode == 200) {
+      callback(null, response, body);
+    } else {
+      callback('There was an error. Http error: ' + response.statusCode, response, null);
     }
   });
 };
 
 eventStore.prototype.getLastAssets = function (args, callback) {
+  //TODO: review this approach
   assert.ok(args.workitem, 'You must specify a workitem.');
   
   var path = '/streams/asset-' + 
