@@ -1,12 +1,22 @@
-<div style="">
-	<h2 style="padding-left:20px;padding-top:15px;">CommitStream Commits</h2>
-	<ul class = "commits.list" style="list-style:none">
-	{{#each commits}}
-	<hr />
-	<li class="li.commit" id="{{sha1Partial}}">
-  	<p class="commit.info" style="padding-left:20px;font-size: .8em;color: #a6a6a6;">{{timeFormatted}}, {{author}} {{action}} <a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a> {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
-  	<p class="commit.message" style="margin-left:18px; margin-top:5px; padding-left:20px;line-height: 1.15em;background-image:url(http://v1commitstream.azurewebsites.net/icon-commit-16x16.png); background-repeat:no-repeat;"><span class="message">{{message}}</span></p>
-  	</li>
-  	{{/each}}
+<div>
+	<div class="stream-title-area">
+		<div class="titlebar">
+			<div class="title-container">
+				<h3>CommitStream Commits</h3>
+			</div>
+		</div>
+	</div>
+	{{#if noCommits}}
+	<p style="color: #dedede;font-size: .95em;margin-top: 0.5em;padding-left:20px;text-align: center;">No commits available...</p>
+	{{else}}
+	<ul class="commits.list" style="list-style:none">
+		{{#each commits}}
+		<hr />
+		<li class="li.commit" id="{{sha1Partial}}">
+	  	<p class="commit.info" style="padding-left:20px;font-size: .8em;color: #a6a6a6;">{{timeFormatted}}, {{author}} {{action}} <a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a> {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
+	  	<p class="commit.message" style="margin-left:18px; margin-top:5px; padding-left:20px;line-height: 1.15em;background-image:url({{../resourcePath}}icon-commit-16x16.png); background-repeat:no-repeat;"><span class="message">{{message}}</span></p>
+	  	</li>
+	  	{{/each}}
   	</ul>
+	{{/if}}
 </div>

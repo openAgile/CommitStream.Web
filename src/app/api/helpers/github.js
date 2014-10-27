@@ -1,66 +1,63 @@
-﻿var github = require('octonode');
-var es = require('./eventStore');
-var uuid = require('uuid-v4');
-var async = require('async');
+﻿//TODO: singleton
+var github = require('octonode'),
+    eventStore = require('./eventStore'),
+    uuid = require('uuid-v4'),
+    config = require('../../config'),
+    assert = require('assert');
 
-function githubHelper() {
-}
+var githubHelper = function () { };
 
-var asyncHelper = {
-    ghrepo: null,
-    getCommits: function (branch, callback) {
-        var events = [];
-        var parms = { sha: branch.name, page: 1, per_page: 100 };
-        var ghrepo = this.ghrepo;
-        
-        async.whilst(
-            function () { return parms.page != 0; },
-            function (c) {
-            ghrepo.commits(parms, function (err, body, headers) {
-                if (body.length != 0) {
-                    body.forEach(function (item) {
-                        //TODO: do this on the translator
-                        item.branch = parms.sha;
-                        var event = {
-                            eventId: uuid(),
-                            eventType: 'github-event',
-                            data: item
-                        };
-                        events.unshift(event);
-                    });
-                }
-                
-                if (body.length == 100) {
-                    parms.page++;
-                    console.log('Going to page ' + parms.page);
-                    c();
-                } else {
-                    parms.page = 0;
-                    console.log('Ready to push ' + events.length + ' events.');
-                    es.pushEvents(JSON.stringify(events));
-                    c();
-                }
-            });
-        },
-        callback
-);
+function Helper(repoClient) {
+  this.events = [];
+  this.parms = { sha: '', page: 1, per_page: 100 };
+  this.ghrepo = repoClient;
+  
+  this.getCommits = function getCommitsRec(args, callback) {
+    var that = this;
+    if (args.context) {
+      that = args.context;
     }
+    that.parms.sha = args.branchName;
+    
+    that.ghrepo.commits(that.parms, function (err, body, headers) {
+      if (body.length != 0) {
+        body.forEach(function (item) {
+          //TODO: do this in the translator
+          item.branch = that.parms.sha;
+          var event = {
+            eventId: uuid(),
+            eventType: 'github-event',
+            data: item
+          };
+          that.events.unshift(event);
+        });
+      }
+      
+      if (body.length == 100) {
+        that.parms.page++;
+        console.log('Going to page ' + that.parms.page);
+        getCommitsRec({ branchName: that.parms.sha, context: that }, callback);
+      }      
+      else {
+        callback(that.events);
+      }
+    });
+  }
 };
 
-githubHelper.prototype.getAllCommits = function (parms) {
-    var client = github.client(parms.accessToken);
-    var ghrepo = client.repo(parms.owner + '/' + parms.repo);
-    asyncHelper.ghrepo = ghrepo;
-    ghrepo.branches(function (e, b, h) {
-        async.map(b, asyncHelper.getCommits.bind(asyncHelper), function (err, result) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(result);
-            }
-                    
-        });
+githubHelper.prototype.getAllCommits = function (args, callback) {
+  assert.ok(args.accessToken && args.owner && args.repo, 'You must specify accesToken, owner and repo');
+  
+  var client = github.client(args.accessToken);
+  var ghrepo = client.repo(args.owner + '/' + args.repo);
+  
+  ghrepo.branches(function (e, b, h) {
+    if (e) throw e;
+    b.forEach(function (entry) {
+      var helper = new Helper(ghrepo);
+      helper.getCommits({ branchName: entry.name }, callback);
     });
+  });
 };
 
 module.exports = githubHelper;

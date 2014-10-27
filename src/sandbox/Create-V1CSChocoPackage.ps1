@@ -1,3 +1,6 @@
+cp $Env:WORKSPACE\VersionOne.Setup-Ultimate*exe .
+cp $Env:WORKSPACE\VERSION .
+
 rm -re -fo VersionOne.ChocolateyPackage
 git clone git@github.com:versionone/VersionOne.ChocolateyPackage.git --branch S-47665_FeaturePackage --single-branch
 

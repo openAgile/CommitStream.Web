@@ -1,7 +1,6 @@
 {
 	"serverBaseUrl" : "http://v1commitstream.azurewebsites.net",
-	"eventStoreHost" : "v1commitstream.cloudapp.net",
-	"eventStorePort" : "2113",
-	"eventStoreProtocol" : "http",
-	"assetDetailTemplateUrl" : "http://v1commitstream.azurewebsites.net/assetDetailCommits.html"
+	"eventStoreBaseUrl" : "http://v1commitstream.cloudapp.net:2113",
+	"assetDetailTemplateUrl" : "http://v1commitstream.azurewebsites.net/assetDetailCommits.html",
+	"protocol" : "https"
 }

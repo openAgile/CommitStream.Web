@@ -18,9 +18,9 @@
 
         app.get('/api/settings', function(req, res) {
             var settings = getDefaultSettings();
-            var protocol = req.protocol;
+            var protocol = config.protocol || req.protocol;
             var host = req.get('host');
-            settings['CommitStream.AppUrl'] = protocol + '://' + host + '/app';
+            settings['CommitStream.AppUrl'] = protocol + '://' + host + '/app?key=' + req.query.key;
 
             var instance = req.query.instance;
             if (!instance) {
@@ -33,7 +33,7 @@
                 res.end(JSON.stringify(settings));
             }
         });
-        
+
         app.post('/api/settings', bodyParser.json(), function(req, res) {
             var instance = req.query.instance;
             if (!instance) {

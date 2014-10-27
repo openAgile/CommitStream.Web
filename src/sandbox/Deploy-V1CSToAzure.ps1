@@ -1,15 +1,11 @@
 Param(
     [string]$vm_username,
     [string]$vm_password,
+    [string]$csversion=$null,
+    [string]$apiKey='',
     [string]$vm_name = 'v1CommitStream',
     [string]$azure_service_name = 'v1CommitStream',
-    [string]$scriptPath = 'Install-V1.ps1' )
-
-cp $Env:WORKSPACE\VersionOne.Setup-Ultimate*exe .
-cp $Env:WORKSPACE\VERSION .
-.\Create-VersionOneChocolateyPackage.ps1
-
-cd $Env:WORKSPACE\src\sandbox
+    [string]$scriptPath = 'Install-V1CSInAzure.ps1')
 
 # TODO: below should become a psake-tool or Azure Tool or something...
 
@@ -41,4 +37,5 @@ write-Host "Connecting to $uri"
 Invoke-Command `
 -ConnectionUri $uri.ToString() `
 -Credential $credential `
--FilePath $scriptPath
+-FilePath $scriptPath `
+-ArgumentList $csversion, $apiKey

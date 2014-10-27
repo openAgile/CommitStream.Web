@@ -104,29 +104,39 @@
 function InstancesController($scope, $http) {
 	$scope.result = null;
 
+	function buildUrl() {
+		var instance = $scope.instance;
+		var key = $scope.key;
+		return "api/settings?instance=" + instance + "&key=" + key;
+	}
+
+	function displayError(data) {
+		alert(data);
+	}
+
 	$scope.search = function() {
 		if (!$scope.searchForm.$valid) return;
-		var instance = $scope.instance;
-		$http.get("api/settings?instance=" + instance).
-		success(function(result) {
-			if (result) {
+		$http.get(buildUrl()).
+		success(function(data, status) {
+			if (data) {
 				$scope.instanceSearch = $scope.instance;
 				$scope.saved = false;
-				$scope.result = result;
+				$scope.result = data;
 			}
-		});
+		}).
+		error(displayError);
 	};
 
 	$scope.update = function() {
-		var instance = $scope.instance;
-		$http.post("api/settings?instance=" + instance, $scope.result).
+		$http.post(buildUrl(), $scope.result).
 		success(function(response) {
 			if (response) {
 				if (response == 'saved') {
 					$scope.saved = true;
 				}
 			}
-		});
+		}).
+		error(displayError);
 	};	
 }
 </script>
@@ -140,6 +150,11 @@ function InstancesController($scope, $http) {
 	</p>
 	<div ng-controller="InstancesController">
 		<form name="searchForm">
+			<input type="text"
+				ng-model="key"
+				ng-required="true"
+				placeholder="API key" />
+			<br />
 			<input type="text" 
 				ng-model="instance"
 				name="instance"
