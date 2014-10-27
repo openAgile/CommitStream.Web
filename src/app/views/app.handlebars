@@ -38,12 +38,7 @@
                 data.resourcePath = "{{{resourcePath}}}";
 
                 if (assetDetailCommitsTmpl === null) {
-                    $.ajax({
-                      url: '{{{templateUrl}}}',
-                      dataType: 'html'
-                    })
-                    //$.get('{{{templateUrl}}}&callback=?')
-                    .done(function(source) {
+                    $.get('{{{templateUrl}}}').done(function(source) {
                         try {
                             assetDetailCommitsTmpl = handlebars.compile(source);
                             render(commitStreamDomId, data, errorHandler);
