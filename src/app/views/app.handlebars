@@ -30,7 +30,7 @@
     }
 
     function queryCommitStream(commitStreamDomId, workitem, handlebars, errorHandler) {
-        $.getJSON('{{{apiUrl}}}' + workitem + '&callback=?').done(function(data) {
+        $.getJSON('{{{apiUrl}}}' + workitem).done(function(data) {
             if (!data || !data.commits) {
                 errorHandler();
             } else {

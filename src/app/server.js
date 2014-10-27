@@ -6,7 +6,7 @@ var express = require('express'),
     exphbs = require('express-handlebars');
 
 app.get('/version', function(req, res) {
-    res.jsonp({version:"0.0.0"});
+    res.json({version:"0.0.0"});
 });
 
 var api = require("./api");
