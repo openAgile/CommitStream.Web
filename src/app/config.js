@@ -21,6 +21,7 @@
   config.eventStorePassword = nconf.get('eventStorePassword') || '';
   config.eventStoreBaseUrl = nconf.get('eventStoreBaseUrl') || 'http://localhost:2113';
   config.eventStoreAssetStreamUrl = config.eventStoreBaseUrl + '/streams/asset-';
+  config.eventStoreAllowSelfSignedCert = nconf.get('eventStoreAllowSelfSignedCert') === 'true';
   config.eventStoreAssetQueryParams = nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
   config.assetDetailTemplateUrl = nconf.get('assetDetailTemplateUrl') || config.serverBaseUrl + ':' + config.port + '/assetDetailCommits.html';
 })(module.exports);

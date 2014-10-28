@@ -1,6 +1,7 @@
 ﻿
 var request = require('request'),
-    assert = require('assert');
+    assert = require('assert'),
+    config = require('../../config');
 
 function eventStore(baseUrl, userName, password) {
   this.baseUrl = baseUrl;
@@ -10,12 +11,20 @@ function eventStore(baseUrl, userName, password) {
   this.authorization = 'Basic ' + new Buffer(this.username + ':' + this.password).toString('base64');
 }
 
+function decoratedOptions(options) {
+  options = options || {};
+  if (config.eventStoreAllowSelfSignedCert) {
+    options.rejectUnauthorized = false;
+  }
+  return options;
+}
+
 eventStore.prototype.pushEvents = function (events, callback) {
   //TODO: review this approach
   //assert.ok(events, 'You must pass events');
   var eventStoreUrl = this.baseUrl + '/streams/github-events';
   
-  var options = {
+  var options = decoratedOptions({
     url: eventStoreUrl,
     body: events,
     headers: {
@@ -23,8 +32,8 @@ eventStore.prototype.pushEvents = function (events, callback) {
       'Content-Type': 'application/vnd.eventstore.events+json',
       'Content-Length': events.length,
       'Authorization': this.authorization
-    }
-  };
+    }    
+  });
   
   request.post(options, function (error, response, body) {
     callback(error, response, body);
@@ -37,13 +46,13 @@ eventStore.prototype.getLastCommit = function (args, callback) {
   
   var eventStoreUrl = this.baseUrl + '/streams/repo-' + args.owner + '-' + args.repo + '/head?embed=content';
   
-  var options = {
+  var options = decoratedOptions({
     url: eventStoreUrl,            
     headers: {
       'Accept': 'application/json',
       'Authorization': this.authorization
     }
-  };
+  });
   
   request.get(options, function (error, response, body) {
     callback(error, response, body);
@@ -61,13 +70,13 @@ eventStore.prototype.getLastAssets = function (args, callback) {
     args.pageSize +
     '?embed=content';
   
-  var options = {
+  var options = decoratedOptions({
     url: eventStoreUrl,            
     headers: {
       'Accept': 'application/json',
       'Authorization': this.authorization
     }
-  };
+  });
   
   request.get(options, function (error, response) {
     var events = [];
@@ -83,7 +92,7 @@ eventStore.prototype.createProjection = function (args, callback) {
   
   var eventStoreUrl = this.baseUrl + '/projections/continuous?emit=yes&checkpoints=yes&enabled=yes&name=' + args.name;
   
-  var options = {
+  var options = decoratedOptions({
     url: eventStoreUrl,            
     headers: {
       'Accept': 'application/json',
@@ -92,7 +101,7 @@ eventStore.prototype.createProjection = function (args, callback) {
       'Content-Length': args.script.length
     },
     body: args.script
-  };
+  });
   
   request.post(options, function (err, response, body) {
     callback(err, response, body);
@@ -102,13 +111,13 @@ eventStore.prototype.createProjection = function (args, callback) {
 eventStore.prototype.getProjections = function (callback) {
   var eventStoreUrl = this.baseUrl + '/projections/all-non-transient';
   
-  var options = {
+  var options = decoratedOptions({
     url: eventStoreUrl,            
     headers: {
       'Accept': 'application/json',
       'Authorization': this.authorization
     }
-  };
+  });
   
   request.get(options, function (err, response) {
     var result = {};
