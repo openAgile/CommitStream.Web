@@ -5,8 +5,8 @@
     
     var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
     
-    es.getProjections(function (error, response, body) {
-      createProjections(body.projections);
+    es.getProjections(function (error, response) {
+      createProjections(response);
     });
     
     function createProjections(projectionsFound) {
@@ -21,7 +21,16 @@
             if (err) throw err;
             else {
               if (!_.findWhere(projectionsFound, { effectiveName: name })) {
-                es.createProjection({ name: name, script: script });
+                es.createProjection({ name: name, script: script }, function (error, response, body) {
+                  if (error) {
+                    console.error('ERROR could not create projection ' + name + ':');
+                    console.error(error);
+                  }
+                  else {
+                    console.log('OK created projection ' + name);
+                    console.log(body);
+                  }
+                });
               } else {
                 console.log('OK found ' + name);
               }
