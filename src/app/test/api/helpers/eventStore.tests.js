@@ -75,26 +75,9 @@ describe('eventStore', function () {
       });
     });
     
-    
-    it('should return an error if the stream does not exists', function (done) {
-      requestStub.get = function (options, callback) {
-        var response = {};
-        response.statusCode = 404;
-        callback(null, response, response.body);
-      };
-      
-      es.getLastCommit({ repo: 'somerepo', owner: 'mememe' }, function (error, response, body) {
-        assert.notEqual(error, null);
-        assert.equal(body, null);
-        done();
-      });
-      
-    });
-    
     it('should return no error and a valid body if the stream exists', function (done) {
       requestStub.get = function (options, callback) {
         var response = {};
-        response.statusCode = 200;
         response.body = '{ "someBody":"somevalue"}';
         callback(null, response, response.body);
       };

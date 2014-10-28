@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="test\api\helpers\eventStore.tests.js" />
     <Compile Include="test\api\queryController.tests.js" />
     <Compile Include="test\api\translators\gitHubEventsToApiResponse.tests.js" />
     <Content Include="iisnode.yaml" />
     <Content Include="projections\by-asset" />
     <Content Include="projections\partitionate-with-or-without-mention" />
     <Content Include="views\app.handlebars" />
-    <Content Include="web.txt" />
     <Content Include="config.production.json" />
     <Content Include="package.json" />
     <Compile Include="api\helpers\eventStore.js" />
@@ -50,6 +50,7 @@
     <Folder Include="projections" />
     <Folder Include="test\" />
     <Folder Include="test\api\" />
+    <Folder Include="test\api\helpers\" />
     <Folder Include="test\api\translators\" />
     <Folder Include="views\" />
   </ItemGroup>

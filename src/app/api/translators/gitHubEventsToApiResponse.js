@@ -28,8 +28,6 @@
                 repoHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName
 			};
 		});
-		//console.log("commits:");
-		//console.log(commits);
 		var response = {
 			commits: commits
 		};
