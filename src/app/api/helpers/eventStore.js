@@ -1,7 +1,5 @@
 ﻿
-//TODO: choose one, request is more versatile while request-json is handy
 var request = require('request'),
-    reqJson = require('request-json'),
     assert = require('assert');
 
 function eventStore(baseUrl, userName, password) {
@@ -42,7 +40,8 @@ eventStore.prototype.getLastCommit = function (args, callback) {
   var options = {
     url: eventStoreUrl,            
     headers: {
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      'Authorization': this.authorization
     }
   };
   
@@ -55,17 +54,28 @@ eventStore.prototype.getLastAssets = function (args, callback) {
   //TODO: review this approach
   assert.ok(args.workitem, 'You must specify a workitem.');
   
-  var path = '/streams/asset-' + 
+  var eventStoreUrl = this.baseUrl + 
+    '/streams/asset-' + 
     args.workitem +
     '/head/backward/' +
     args.pageSize +
     '?embed=content';
   
-  var client = reqJson.newClient(this.baseUrl);
-  client.get(path, function (err, response, body) {
-    callback(err, body.entries);
+  var options = {
+    url: eventStoreUrl,            
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': this.authorization
+    }
+  };
+  
+  request.get(options, function (error, response) {
+    var events = [];
+    if (response.body) {
+      events = JSON.parse(response.body);
+    }
+    callback(error, events.entries || []);
   });
-
 };
 
 eventStore.prototype.createProjection = function (args, callback) {
@@ -90,9 +100,22 @@ eventStore.prototype.createProjection = function (args, callback) {
 };
 
 eventStore.prototype.getProjections = function (callback) {
-  var client = reqJson.newClient(this.baseUrl);
-  client.get('/projections/all-non-transient', function (err, response, body) {
-    callback(err, response, body);
+  var eventStoreUrl = this.baseUrl + '/projections/all-non-transient';
+  
+  var options = {
+    url: eventStoreUrl,            
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': this.authorization
+    }
+  };
+  
+  request.get(options, function (err, response) {
+    var result = {};
+    if (response.body) {
+      result = JSON.parse(response.body);
+    }
+    callback(err, result.projections || []);
   });
 };
 

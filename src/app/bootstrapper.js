@@ -5,8 +5,8 @@
     
     var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
     
-    es.getProjections(function (error, response, body) {
-      createProjections(body.projections);
+    es.getProjections(function (error, response) {
+      createProjections(response);
     });
     
     function createProjections(projectionsFound) {
