@@ -22,8 +22,8 @@ This document describes the manual steps necessary to configure a CommitStream i
    * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. In powershell you can type `[guid]::NewGuid()`.
    * Install Chocolatey TODO: Should this step be removed, I think this would have already been done in the install EventStore step above.
    * Install the Windows Developer kit that has makecert.exe
-   * Run the powershell commands for this
-   * Update the config.yml file for eventstore
+   * Run the powershell commands for this.
+   * Update the config.yml file for eventstore. TODO: Update it with what?
    * Verify that EventStore now operates only over https:// and not http://
 
 ## Create the Azure web site to host the customer instance
