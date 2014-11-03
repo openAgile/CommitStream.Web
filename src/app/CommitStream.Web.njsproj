@@ -21,9 +21,10 @@
     <Compile Include="test\api\helpers\eventStore.tests.js" />
     <Compile Include="test\api\queryController.tests.js" />
     <Compile Include="test\api\translators\gitHubEventsToApiResponse.tests.js" />
+    <Compile Include="test\projections\partitioner-with-or-without-mention.tests.js" />
     <Content Include="iisnode.yaml" />
-    <Content Include="projections\by-asset" />
-    <Content Include="projections\partitionate-with-or-without-mention" />
+    <Content Include="projections\by-asset.js" />
+    <Content Include="projections\partitionate-with-or-without-mention.js" />
     <Content Include="views\app.handlebars" />
     <Content Include="config.production.json" />
     <Content Include="package.json" />
@@ -33,7 +34,7 @@
     <Compile Include="api\translators\githubTranslator.js" />
     <Compile Include="bootstrapper.js" />
     <Compile Include="config.js" />
-    <Compile Include="projections\by-github-repository" />
+    <Compile Include="projections\by-github-repository.js" />
     <Compile Include="server.js" />
     <Compile Include="api\importController.js" />
     <Compile Include="api\index.js" />
@@ -52,6 +53,7 @@
     <Folder Include="test\api\" />
     <Folder Include="test\api\helpers\" />
     <Folder Include="test\api\translators\" />
+    <Folder Include="test\projections\" />
     <Folder Include="views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
