@@ -20,7 +20,7 @@ This document describes the manual steps necessary to configure a CommitStream i
 * Now, we will generate a self-signed certificate to secure EventStore on the machine:
  * TODO: (Perhaps all of this could be automated easily enough)
    * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. In powershell you can type `[guid]::NewGuid()`.
-   * Install Chocolatey
+   * Install Chocolatey TODO: Should this step be removed, I think this would have already been done in the install EventStore step above.
    * Install the Windows Developer kit that has makecert.exe
    * Run the powershell commands for this
    * Update the config.yml file for eventstore
