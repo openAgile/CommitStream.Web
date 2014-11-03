@@ -15,7 +15,7 @@ This document describes the manual steps necessary to configure a CommitStream i
   * Size: `Standard A2 (2 Cores, 3.75 GB)` TODO: is this really big enough?
   * Username, Password fields: **Ask Josh in HipChat, as this might need to be standard for Jenkins jobs**
   * Affinity Group: `East US 2`
-* Once this machine is up and running, login to it with Remote Desktop and then install EventStore using the [automated script documented here](install.md). Note you will execute the script without the GitHub access token since you do not need to import commits from our default repository at this time. TODO
+* Once this machine is up and running, [log into it with Remote Desktop](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-log-on-windows-server/) and then install EventStore using the [automated script documented here](install.md). Note you will execute the script without the GitHub access token since you do not need to import commits from our default repository at this time. TODO
 * Verify that eventstore is up and running as a service by navigating to http://localhost:2113 and logging in with admin / changeit
 * Now, we will generate a self-signed certificate to secure EventStore on the machine:
  * TODO: (Perhaps all of this could be automated easily enough)
