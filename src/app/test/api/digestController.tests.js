@@ -17,6 +17,18 @@ describe('digestController', function () {
               done();
       });
     });
+
+    it('should have a valid uuid as an identifier', function(done) {
+      request(app)
+            .post('/api/digest', 'myfirstdigest')
+            .end(function (err, res) {
+              var digestUrlParts = res.body.digestUrl.split('/');
+              var id = digestUrlParts[digestUrlParts.length - 1];
+              assert.equal(validator.isUUID(id), true);
+              done();
+      });
+    })
+
   });
 });
 
