@@ -21,7 +21,10 @@
     <Compile Include="test\api\helpers\eventStore.tests.js" />
     <Compile Include="test\api\queryController.tests.js" />
     <Compile Include="test\api\translators\gitHubEventsToApiResponse.tests.js" />
+    <Compile Include="test\projections\by-asset.tests.js" />
+    <Compile Include="test\projections\eventStoreEnvironment.js" />
     <Compile Include="test\projections\partitioner-with-or-without-mention.tests.js" />
+    <Compile Include="test\projections\sampleData.json" />
     <Content Include="iisnode.yaml" />
     <Content Include="projections\by-asset.js" />
     <Content Include="projections\partitionate-with-or-without-mention.js" />
