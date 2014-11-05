@@ -1,4 +1,4 @@
-var getRepoUser = function(url) {
+var getRepoUser = function (url) {
     var splittedUrl = url = url.split("/commit")[0].split('/');
     var repoUser = [];
     repoUser.push(splittedUrl.pop());
@@ -6,10 +6,15 @@ var getRepoUser = function(url) {
     return repoUser;
 }
 
-fromStream('github-events')
-.whenAny(function (state, ev) {
-    var repoUser = getRepoUser(ev.data.html_url);
-    {
-        linkTo('repo-' + repoUser[1] + '-' + repoUser[0], ev);
+var callback = function (state, ev) {
+    if (!(ev.data && ev.data.html_url)) {
+        linkTo('repo-error', ev);
+    } else {
+        var repoUser = getRepoUser(ev.data.html_url);
+        {
+            linkTo('repo-' + repoUser[1] + '-' + repoUser[0], ev);
+        }
     }
-});
+};
+fromStream('github-events')
+.whenAny(callback);

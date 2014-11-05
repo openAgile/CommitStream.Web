@@ -8,7 +8,7 @@ var matchAsset = function(message) {
 };
 var callback = function(state, ev) {
     if (!(ev.data && ev.data.commit && ev.data.commit.message)) {
-        linkTo('error');
+        linkTo('error', ev);
     } else if (matchAsset(ev.data.commit.message)) {
         linkTo('mention-with', ev);
     } else {
