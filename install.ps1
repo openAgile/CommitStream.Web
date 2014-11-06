@@ -17,9 +17,11 @@ nssm start eventstore
 # Start your engines
 cd src/app
 npm install
-start npm start 
+start npm start
 
 sleep 10
 
 # Import commits into EventStore via the service API
-iwr -uri http://localhost:6565/api/importHistory -method POST -body (ConvertTo-Json @{owner="$owner";repo="$repo";accessToken="$accessToken"}) -headers @{'Content-Type'='application/json'}
+if(-not [string]::IsNullOrEmpty($accessToken) ) {
+  iwr -uri http://localhost:6565/api/importHistory -method POST -body (ConvertTo-Json @{owner="$owner";repo="$repo";accessToken="$accessToken"}) -headers @{'Content-Type'='application/json'}
+}
