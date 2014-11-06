@@ -1,20 +1,22 @@
-var app = express(),
-  assert = require('assert'),
-  chai = require('chai');
+var express = require('express'),
+  app = express(),
+  chai = require('chai'),
+  should = chai.should(),
   controller = require('../../api/digestController'),
-  express = require('express'),
   request = require('supertest'),
-  validator = require('validator'),
+  validator = require('validator');
+
+chai.config.includeStack = true;
 
 controller.init(app);
 
 describe('digestController', function () {
   describe('when creating a digest', function () {
-    it('should be to a valid uri', function(done) {
+    it('digestUrl should be a valid URI', function(done) {
       request(app)
             .post('/api/digest', 'myfirstdigest')
             .end(function (err, res) {
-              assert.equal(validator.isURL(res.body.digestUrl), true);
+              validator.isURL(res.body.digestUrl).should.be.true;
               done();
       });
     });
@@ -25,7 +27,7 @@ describe('digestController', function () {
             .end(function (err, res) {
               var digestUrlParts = res.body.digestUrl.split('/');
               var id = digestUrlParts[digestUrlParts.length - 1];
-              assert.equal(validator.isUUID(id), true);
+              validator.isUUID(id).should.be.true;
               done();
       });
     })
