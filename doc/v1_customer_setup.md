@@ -5,8 +5,8 @@ This document describes the manual steps necessary to configure a CommitStream i
 ## Create code branch for the customer instance
 
 * Given a customer named DevOpsHeros:
-* Create a new branch named devopsheros from the [master](https://github.com/openAgile/CommitStream.Web/tree/master) branch in this repository
-* Push the newly created devopsheros branch to the remote (git push origin devopsheros). You will see a newly created branch up on GitHub.
+* Create a new branch named **devopsheros** from the [master](https://github.com/openAgile/CommitStream.Web/tree/master) branch in this repository
+* Push the newly created **devopsheros** branch to the remote with `git push origin devopsheros`. You will see a newly created branch up on GitHub.
 
 ## Create virtual machine to host EventStore
 
@@ -37,7 +37,7 @@ netsh http add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-44
 
 ## Create the Azure web site to host the customer instance
 * Create a new web site in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `devopsheroscs`
-* Configure the site to publish from source control and select [https://github.com/openAgile/CommitStream.Web](openAgile/CommitStream.Web) on the `devopsheroscs` branch
+* Configure the site to publish from source control and select [https://github.com/openAgile/CommitStream.Web](openAgile/CommitStream.Web) on the `devopsheros` branch
   * **Note:** If you need access to the repo ask Josh in HipChat
 * Verify that the deployment worked in the web site details view
 * Configure the site's App Settings so that it knows where to find its EventStore instance with these settings
