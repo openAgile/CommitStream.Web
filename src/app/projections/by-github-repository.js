@@ -8,7 +8,7 @@ var getRepoUser = function (url) {
 
 var callback = function (state, ev) {
     if (!(ev.data && ev.data.html_url)) {
-        linkTo('repo-error', ev);
+        emit("github-repository-error", "missingCommitOrMessageFound", ev.data);
     } else {
         var repoUser = getRepoUser(ev.data.html_url);
         {

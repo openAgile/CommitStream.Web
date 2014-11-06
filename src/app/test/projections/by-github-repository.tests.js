@@ -1,10 +1,9 @@
 ﻿var assert = require('assert'),
     eventStoreEvnironment = require('./eventStoreEnvironment.js');
-var checkIntoStream = function (repo) {
+var verifyAllMatch = function (repo) {
     var repo2 = repo.replace(/-/, "/");
     var result = true;
     getStream('repo-' + repo).forEach(function (event) {
-        console.log(repo2);
         if (!(event.data.html_url.indexOf(repo2) > -1)) {
             return result = false;
         }
@@ -21,7 +20,7 @@ describe('projection by-repository', function () {
         done();
     });
     it('sould contain only links for the repo MatiasHeffel/EventStore-CommitMentions', function (done) {
-        var result = checkIntoStream('MatiasHeffel-EventStore-CommitMentions');
+        var result = verifyAllMatch('MatiasHeffel-EventStore-CommitMentions');
         assert.equal(result, true);
         done();
     });
@@ -30,7 +29,7 @@ describe('projection by-repository', function () {
         done();
     });
     it('sould contain only links for the repo KunziMariano/EventStore-Demo', function (done) {
-        var result = checkIntoStream('KunziMariano-EventStore-Demo');
+        var result = verifyAllMatch('KunziMariano-EventStore-Demo');
         assert.equal(result, true);
         done();
     });    
@@ -39,12 +38,12 @@ describe('projection by-repository', function () {
         done();
     });
     it('sould contain only links for the repo KunziMariano/Anhoter-Demo', function (done) {
-        var result = checkIntoStream('KunziMariano-Anhoter-Demo');
+        var result = verifyAllMatch('KunziMariano-Anhoter-Demo');
         assert.equal(result, true);
         done();
     });    
     it('should have 2 events corrupted for the error stream', function (done) {
-        assert.equal(getStream('repo-error').length, 2);
+        assert.equal(getStream('github-repository-error').length, 2);
         done();
     });
 });

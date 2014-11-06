@@ -26,3 +26,11 @@ global.linkTo = function (name, value) {
         streamResult[name] = [value];
     }
 };
+global.emit = function (name, type, value) {
+    if (streamResult[name])
+        streamResult[name].push(value);
+    else {
+        streamResult[name] = [value];
+    }
+};
+

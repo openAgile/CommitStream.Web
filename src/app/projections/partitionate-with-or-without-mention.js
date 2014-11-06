@@ -8,7 +8,7 @@ var matchAsset = function(message) {
 };
 var callback = function(state, ev) {
     if (!(ev.data && ev.data.commit && ev.data.commit.message)) {
-        linkTo('error', ev);
+        emit("github-events-error", "missingCommitOrMessageFound", ev.data);
     } else if (matchAsset(ev.data.commit.message)) {
         linkTo('mention-with', ev);
     } else {

@@ -1,7 +1,7 @@
 ﻿var assert = require('assert'),
     eventStoreEvnironment = require('./eventStoreEnvironment.js');
 
-var checkIntoStream = function(asset) {
+var verifyAllMatch  = function(asset) {
     var result = true;
     getStream('asset-' + asset).forEach(function(event) {
         if (!(event.data.commit.message.toUpperCase().indexOf(asset) > -1)) {
@@ -20,7 +20,7 @@ describe('projection by-asset', function () {
         done();
     });
     it('sould contain only mentions for the asset S-47665', function (done) {
-        var result = checkIntoStream('S-47665');
+        var result = verifyAllMatch ('S-47665');
         assert.equal(result, true);
         done();
     });
@@ -29,7 +29,7 @@ describe('projection by-asset', function () {
         done();
     });
     it('sould contain only mentions for the asset S-99999', function (done) {
-        var result = checkIntoStream('S-99999');
+        var result = verifyAllMatch ('S-99999');
         assert.equal(result, true);
         done();
     });
