@@ -10,28 +10,29 @@ chai.config.includeStack = true;
 
 controller.init(app);
 
+postDigest = function(should) {
+  request(app)
+    .post('/api/digest', 'myfirstdigest')
+    .end(should);
+};
+
 describe('digestController', function () {
   describe('when creating a digest', function () {
     it('digestUrl should be a valid URI', function(done) {
-      request(app)
-            .post('/api/digest', 'myfirstdigest')
-            .end(function (err, res) {
-              validator.isURL(res.body.digestUrl).should.be.true;
-              done();
+      postDigest(function (err, res) {
+        validator.isURL(res.body.digestUrl).should.be.true;
+        done();
       });
     });
 
     it('should have a valid uuid as an identifier', function(done) {
-      request(app)
-            .post('/api/digest', 'myfirstdigest')
-            .end(function (err, res) {
-              var digestUrlParts = res.body.digestUrl.split('/');
-              var id = digestUrlParts[digestUrlParts.length - 1];
-              validator.isUUID(id).should.be.true;
-              done();
+      postDigest(function (err, res) {
+        var digestUrlParts = res.body.digestUrl.split('/');
+        var id = digestUrlParts[digestUrlParts.length - 1];
+        validator.isUUID(id).should.be.true;
+        done();
       });
-    })
-
+    });
   });
 });
 
