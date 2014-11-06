@@ -1,9 +1,10 @@
-var assert = require('assert'),
-  express = require('express'),
-  app = express(),
-  request = require('supertest'),
+var app = express(),
+  assert = require('assert'),
+  chai = require('chai');
   controller = require('../../api/digestController'),
-  validator = require('validator');
+  express = require('express'),
+  request = require('supertest'),
+  validator = require('validator'),
 
 controller.init(app);
 
