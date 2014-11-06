@@ -19,8 +19,8 @@ This document describes the manual steps necessary to configure a CommitStream i
 * Once this machine is up and running, [log into it with Remote Desktop](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-log-on-windows-server/) and then install EventStore using the [automated script documented here](install.md). Note you will execute the script without the GitHub access token since you do not need to import commits from our default repository at this time. TODO: Modify install.ps1 to support not providing the access token.
 * Verify that eventstore is up and running as a service by navigating to http://localhost:2113 and logging in with admin / changeit
 * Assuming you followed the script linked above, you should have installed Chocolatey. Now install the Windows 8 SDK with: `choco install windows-8-1-sdk`
-* In Powershell, navigate to TODO
-* Now, we will generate a self-signed certificate to secure EventStore on the machine:
+* In Powershell, navigate to the installation location for the SDK. On my machine it is: `C:\Program Files (x86)\Windows Kits\8.1\bin\x64`. If you cannot find it, do a file search for `makecert.exe`.
+* Now, use `makecert.exe` to generate a self-signed certificate to secure EventStore on the machine:
 ```text
 makecert -ss My -sr LocalMachine -sky exchange -r -n "CN=EventStoreCert" -sk EventStoreCert -pe
 certmgr.exe -add -r LocalMachine -s My -c -n EventStoreCert -r CurrentUser -s My
