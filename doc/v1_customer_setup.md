@@ -32,7 +32,11 @@ netsh http add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-44
    * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. In powershell you can type `[guid]::NewGuid()`.
    * Install the Windows Developer kit that has makecert.exe
    * Run the powershell commands for this.
-   * Update the config.yml file for eventstore. Ensure that it has TODO: Update it with what?
+   * Update the config.yml file for eventstore. Ensure that it has the right HttpPrefixes:
+``` 
+HttpPrefixes:
+  - https://localhost:2113/
+```
    * Verify that EventStore now operates only over https:// and not http://
 
 ## Create the Azure web site to host the customer instance
