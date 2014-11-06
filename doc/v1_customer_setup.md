@@ -16,7 +16,7 @@ This document describes the manual steps necessary to configure a CommitStream i
   * Size: `Standard A2 (2 Cores, 3.75 GB)` TODO: is this really big enough?
   * Username, Password fields: **Ask Josh in HipChat, as this might need to be standard for Jenkins jobs**
   * Affinity Group: `East US 2`
-* Once this machine is up and running, [log into it with Remote Desktop](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-log-on-windows-server/) and then install EventStore using the [automated script documented here](install.md). Note you will execute the script without the GitHub access token since you do not need to import commits from our default repository at this time. TODO: Modify install.ps1 to support not providing the access token.
+* Once this machine is up and running, [log into it with Remote Desktop](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-log-on-windows-server/) and then install EventStore using the [automated script documented here](install.md). Note you will execute the script without the GitHub access token since you do not need to import commits from our default repository at this time.
 * Verify that eventstore is up and running as a service by navigating to http://localhost:2113 and logging in with admin / changeit
 * Assuming you followed the script linked above, you should have installed Chocolatey. Now install the Windows 8 SDK with: `choco install windows-8-1-sdk`
 * In Powershell, navigate to the installation location for the SDK. On my machine it is: `C:\Program Files (x86)\Windows Kits\8.1\bin\x64`. If you cannot find it, do a file search for `makecert.exe`.
