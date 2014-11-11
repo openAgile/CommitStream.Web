@@ -19,11 +19,12 @@
     "octonode": "^0.6.9",
     "proxyquire": "^1.0.1",
     "request": "^2.44.0",
-    "request-json": "^0.4.13",    
+    "request-json": "^0.4.13",
     "sinon": "^1.11.1",
     "supertest": "^0.14.0",
     "underscore": "^1.7.0",
-    "uuid-v4": "^0.1.0"
+    "uuid-v4": "^0.1.0",
+    "githubCommits": "kunzimariano/githubCommits"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
