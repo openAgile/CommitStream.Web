@@ -1,11 +1,12 @@
-(function(api) {
+(function (api) {
 
-  var githubCommits = require('githubCommits'),
-    settingsController = require('./settingsController');
+	var importController = require("./importController"),
+		queryController = require("./queryController"),
+		settingsController = require("./settingsController");
 
-  api.init = function(app) {
-    githubCommits.importController.init(app);
-    githubCommits.queryController.init(app);
-    settingsController.init(app);
-  };
+	api.init = function (app) {
+		importController.init(app);
+		queryController.init(app);
+		settingsController.init(app);
+	};
 })(module.exports);
