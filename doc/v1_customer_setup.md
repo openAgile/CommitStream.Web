@@ -17,7 +17,7 @@ This document describes the manual steps necessary to configure a CommitStream i
   * Username, Password fields: **Ask Josh in HipChat, as this might need to be standard for Jenkins jobs**
   * Affinity Group: `East US 2`
 * Once this machine is up and running, [log into it with Remote Desktop](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-log-on-windows-server/) and then install EventStore using the [automated script documented here](install.md). Note you will execute the script without the GitHub access token since you do not need to import commits from our default repository at this time.
-* Verify that eventstore is up and running as a service by navigating to http://localhost:2113 and logging in with admin / changeit
+* Verify that eventstore is up and running as a service by navigating to http://localhost:2113 and logging in with admin / changeitgui
 * Assuming you followed the script linked above, you should have installed Chocolatey. Now install the Windows 8 SDK with: `choco install windows-8-1-sdk`
 * In Powershell, navigate to the installation location for the SDK. On my machine it is: `C:\Program Files (x86)\Windows Kits\8.1\bin\x64`. If you cannot find it, do a file search for `makecert.exe`.
 * Now, use `makecert.exe` to generate a self-signed certificate to secure EventStore on the machine:
@@ -25,11 +25,12 @@ This document describes the manual steps necessary to configure a CommitStream i
 makecert -ss My -sr LocalMachine -sky exchange -r -n "CN=EventStoreCert" -sk EventStoreCert -pe
 certmgr.exe -add -r LocalMachine -s My -c -n EventStoreCert -r CurrentUser -s My
 ```
-* Now, open the cert from the cert manager and read the Thumprint GUID and use in place of the hard-coded value below:
+* First, open Powershell and create a new GUID to use in place of the hard-coded `appid={00112233-4455-6677-8899-AABBCCDDEEFF}` value below. Type `[guid]::NewGuid()` to genreate the GUID. This particular value is not needed anywhere else.
+* Next, using Windows file explorer, open the cert from the cert manager and read the Thumprint GUID and use in place of the hard-coded `certhash` value below:
 ```text
 netsh http add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-4455-6677-8899-AABBCCDDEEFF}
 ```
-   * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. In powershell you can type `[guid]::NewGuid()`.
+   * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. Again, in powershell you can type `[guid]::NewGuid()`.
    * Update the config.yml file for eventstore. Ensure that it has the right HttpPrefixes and the external ip for your VM:
 ``` 
 ExtIp: 0.0.0.1
