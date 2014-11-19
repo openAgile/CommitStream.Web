@@ -30,8 +30,6 @@ certmgr.exe -add -r LocalMachine -s My -c -n EventStoreCert -r CurrentUser -s My
 netsh http add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-4455-6677-8899-AABBCCDDEEFF}
 ```
    * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. In powershell you can type `[guid]::NewGuid()`.
-   * Install the Windows Developer kit that has makecert.exe
-   * Run the powershell commands for this.
    * Update the config.yml file for eventstore. Ensure that it has the right HttpPrefixes and the external ip for your VM:
 ``` 
 ExtIp: 0.0.0.1
