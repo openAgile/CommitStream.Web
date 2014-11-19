@@ -38,7 +38,7 @@
                 });
             } else {
                 res.set("Content-Type", "application/json");
-                res.send({
+                res.status(400).send({
                     error: 'Parameter workitem is required'
                 });
             }
