@@ -1,93 +1,99 @@
 ﻿// test/eventStore.tests.js
 var assert = require('assert'),
     proxyquire = require('proxyquire'),
+    sinon = require('sinon'),
     requestStub = {},
-    eventStore = proxyquire('../../../api/helpers/eventStore', { 'request': requestStub });
+    eventStore = proxyquire('../../../api/helpers/eventStore', { 'request': requestStub }),
+    es = new eventStore('http://localhost:1234', 'admin', 'changeit');
 
-var es = new eventStore('http://localhost:1234', 'admin', 'changeit');
 
 describe('eventStore', function () {
-  describe('pushEvents', function () {
-    //mock for the post
-    requestStub.post = function (options, callback) {
-      var response = {};
-      response.headers = options.headers;
-      response.body = options.body;
-      response.url = options.url;
-      
-      callback(null, response, response.body);
-    };
-    
-    
-    
-    it('uses the right url', function (done) {
-      es.pushEvents('', function (error, response, body) {
-        assert.equal(response.url, 'http://localhost:1234/streams/github-events');
-        done();
-      });
-      
-    });
-    
-    it('has the needed headers', function (done) {
-      es.pushEvents('', function (error, response, body) {
-        assert.equal(response.headers['Accept'], 'application/json');
-        assert.equal(response.headers['Content-Type'], 'application/vnd.eventstore.events+json');
-        assert.equal(response.headers['Content-Length'], 0);
-        assert.equal(response.headers['Authorization'], 'Basic YWRtaW46Y2hhbmdlaXQ=');
-        done();
-      });
-
-    });
-
-    //TODO: it throws exception if no events are present?
-  });
   
+  describe('pushEvents', function () {
+    before(function () {
+      requestStub.post = sinon.stub().callsArgWith(1, null, {});
+    });
+    
+    it('should call the proper url with the proper headers', function (done) {
+      var expect = {
+        url: 'http://localhost:1234/streams/github-events',
+        body: '',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type' : 'application/vnd.eventstore.events+json',
+          'Content-Length': 0,
+          'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',
+        }
+      };
+      
+      es.pushEvents('', function (error, response, body) {
+        assert.equal(requestStub.post.calledWith(expect), true);
+        done();
+      });
+  
+    });
+  });
   
   describe('getLastCommit', function () {
-    //mock for the get
-    requestStub.get = function (options, callback) {
-      var response = {};
-      response.headers = options.headers;
-      response.url = options.url;
-      
-      callback(null, response, response.body);
-    };
     
-    it('uses the right url', function (done) {
-      es.getLastCommit({ repo: 'somerepo', owner: 'mememe' }, function (error, response, body) {
-        assert.equal(response.url, 'http://localhost:1234/streams/repo-mememe-somerepo/head?embed=content');
+    before(function () {
+      requestStub.get = sinon.stub().callsArgWith(1, null, {});
+    });
+    
+    it('should call the proper url with the proper headers', function (done) {
+      
+      var expect = {
+        url: 'http://localhost:1234/streams/repo-someowner-somerepo/head?embed=content',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',
+        }
+      };
+      
+      es.getLastCommit({ repo: 'somerepo', owner: 'someowner' }, function (error, response, body) {
+        assert.equal(requestStub.get.calledWith(expect), true);
+        done();
+      });
+    });
+  
+  //it('should return no error and a valid body if the stream exists', function (done) {
+  //  es.getLastCommit({ repo: 'somerepo', owner: 'someowner' }, function (error, response, body) {
+  //    assert.ok(response);
+  //    assert.ok(body);
+  //    assert.equal(error, null);
+  //    done();
+  //  });
+  //});
+
+  });
+  
+  describe('getLastAssets', function () {
+    before(function () {
+      requestStub.get = sinon.stub().callsArgWith(1, null, { body: undefined });
+    });
+    
+    it('should call the proper url with the proper headers', function (done) {
+      var expect = {
+        url: 'http://localhost:1234/streams/asset-S-12345/head/backward/6?embed=content',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ='
+        }
+      };
+      
+      es.getLastAssets({ workitem: 'S-12345', pageSize: 6 }, function (error, response) {
+        assert.equal(requestStub.get.calledWith(expect), true);
         done();
       });
     });
     
-    it('has the needed headers', function (done) {
-      requestStub.get = function (options, callback) {
-        var response = {};
-        response.headers = options.headers;
-        response.url = options.url;
-        
-        callback(null, response, response.body);
-      };
-      
-      es.getLastCommit({ repo: 'somerepo', owner: 'mememe' }, function (error, response, body) {
-        assert.equal(response.headers['Accept'], 'application/json');
-        done();
-      });
-    });
-    
-    it('should return no error and a valid body if the stream exists', function (done) {
-      requestStub.get = function (options, callback) {
-        var response = {};
-        response.body = '{ "someBody":"somevalue"}';
-        callback(null, response, response.body);
-      };
-      
-      es.getLastCommit({ repo: 'somerepo', owner: 'mememe' }, function (error, response, body) {
-        assert.notEqual(body, null);
-        assert.equal(error, null);
+    it('should return an empty array', function (done) {
+      es.getLastAssets({ workitem: 'S-12345', pageSize: 6 }, function (error, response) {
+        assert.deepEqual(response, []);
         done();
       });
     });
 
   });
+
 });

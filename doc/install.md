@@ -64,19 +64,6 @@ OK created projection partitionate-with-or-without-mention
 * Type `get-help Install-V1CSInAzure.ps1 -full` or simply modify the script to suit your needs
 * Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being served by the NodeJS server you installed above.
 
-# Technical notes 
-
-TODO: outdated:
-
-The `app.js` JavaScript module that gets loaded into VersionOne pulls in the following dependencies using require.js: 
-  * Moment.js
-  * Handlebars
-  * assetDetailCommits module from <nodeServerUrl>/assetDetailCommits.js
-    * This in turn loads from our Azure-hosted EventStore service at [http://weventstore.cloudapp.net:2113](http://weventstore.cloudapp.net:2113), but you can change that to whereover your EventStore is hosted.
-* This will evolve into ability for an Admin to install the CommitStream integration from an Integrations.mvc page
-* This page will initially be unlinked from the top-level menu system, but we will tell customers about it.
-  * Only customers who we add to the whitelist at [../client/whitelist.json](../client/whitelist.json) will be able to access this page
-
 # Open VersionOne and see commits!
 
 * You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
