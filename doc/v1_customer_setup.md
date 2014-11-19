@@ -25,12 +25,12 @@ This document describes the manual steps necessary to configure a CommitStream i
 makecert -ss My -sr LocalMachine -sky exchange -r -n "CN=EventStoreCert" -sk EventStoreCert -pe
 certmgr.exe -add -r LocalMachine -s My -c -n EventStoreCert -r CurrentUser -s My
 ```
-* First, open Powershell and create a new GUID to use in place of the hard-coded `appid={00112233-4455-6677-8899-AABBCCDDEEFF}` value below. Type `[guid]::NewGuid()` to genreate the GUID. This particular value is not needed anywhere else.
-* Next, using Windows file explorer, open the cert from the cert manager and read the Thumprint GUID and use in place of the hard-coded `certhash` value below:
+* First, open PowerShell and create a new GUID to use in place of the hard-coded `appid={00112233-4455-6677-8899-AABBCCDDEEFF}` value below. Type `[guid]::NewGuid()` to genreate the GUID. This particular value is not needed anywhere else.
+* Next, in the Windows Certificate Manager, open the imported certificate and read the Thumprint GUID and use in place of the hard-coded `certhash` value below:
 ```text
 netsh http add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-4455-6677-8899-AABBCCDDEEFF}
 ```
-   * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. Again, in powershell you can type `[guid]::NewGuid()`.
+   * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. Again, in PowerShell you can type `[guid]::NewGuid()`.
    * Update the config.yml file for eventstore. Ensure that it has the right HttpPrefixes and the external ip for your VM:
 ``` 
 ExtIp: 0.0.0.1
