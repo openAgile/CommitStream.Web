@@ -23,18 +23,25 @@
 		 * @apiSuccess {String} commitHref Link to an HTML page to view the commit in the source VCS
 		 */		
 		app.get("/api/query", function (req, res) {
-      var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
-      
-      var options = {
-        workitem: req.query.workitem, 
-        pageSize: req.query.pageSize || 5
-      };
-      
-      es.getLastAssets(options, function (err, entries) {
-        var commits = gitHubEventsToApiResponse(entries);
-        res.set("Content-Type", "application/json");
-        res.send(commits);
-      });
-    });
+            if (req.query.workitem) {
+                var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
+                
+                var options = {
+                    workitem: req.query.workitem,
+                    pageSize: req.query.pageSize || 5
+                };
+                
+                es.getLastAssets(options, function (err, entries) {
+                    var commits = gitHubEventsToApiResponse(entries);
+                    res.set("Content-Type", "application/json");
+                    res.send(commits);
+                });
+            } else {
+                res.set("Content-Type", "application/json");
+                res.send({
+                    error: 'Parameter workitem is required'
+                });
+            }
+        });
   };
 })(module.exports);
