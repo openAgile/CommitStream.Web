@@ -10,10 +10,10 @@ chai.config.includeStack = true;
 
 controller.init(app);
 
-postDigest = function(should) {
+postDigest = function(shouldBehaveThusly) {
   request(app)
     .post('/api/digest', 'myfirstdigest')
-    .end(should);
+    .end(shouldBehaveThusly);
 };
 
 describe('digestController', function () {
