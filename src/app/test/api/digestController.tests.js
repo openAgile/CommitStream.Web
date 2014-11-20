@@ -19,20 +19,28 @@ postDigest = function(shouldBehaveThusly) {
 describe('digestController', function () {
   describe('when creating a digest', function () {
     it('digestUrl should be a valid URI', function(done) {
-      postDigest(function (err, res) {
+      postDigest(function(err, res) {
         validator.isURL(res.body.digestUrl).should.be.true;
         done();
       });
     });
 
     it('should have a valid uuid as an identifier', function(done) {
-      postDigest(function (err, res) {
+      postDigest(function(err, res) {
         var digestUrlParts = res.body.digestUrl.split('/');
         var id = digestUrlParts[digestUrlParts.length - 1];
         validator.isUUID(id).should.be.true;
         done();
       });
     });
+
+    it('response should have links to other resources', function(done) {
+      postDigest(function(err, res) {
+        res.body.should.include.key('_links');
+        done();
+      })
+    })
+
   });
 });
 

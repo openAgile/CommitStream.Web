@@ -11,7 +11,8 @@
       var host = req.get('host');
 
       var hypermedia = {
-        'digestUrl': protocol + '://' + host + '/api/digest/' + uuid()
+        'digestUrl': protocol + '://' + host + '/api/digest/' + uuid(),
+        '_links': []
       }
 
       response = hypermedia;
