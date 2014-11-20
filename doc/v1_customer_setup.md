@@ -7,6 +7,15 @@ This document describes the manual steps necessary to configure a CommitStream i
 * Given a customer named DevOpsHeros:
 * Create a new branch named **devopsheros** from the [master](https://github.com/openAgile/CommitStream.Web/tree/master) branch in this repository
 * Push the newly created **devopsheros** branch to the remote with `git push origin devopsheros`. You will see a newly created branch up on GitHub.
+* Example Git Bash commands for this:
+```bash
+git clone https://github.com/openAgile/CommitStream.Web.git
+cd CommitStream.Web/
+git checkout master
+git branch devopsheros
+git checkout devopsheros
+git push origin devopsheros
+```
 
 ## Create virtual machine to host EventStore
 
