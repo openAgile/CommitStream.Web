@@ -6,11 +6,16 @@
   digestController.init = function (app) {
 
     app.post('/api/digest', function(req, res) {
-      var response = {};
+      var response;
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
-      response.digestUrl = protocol + '://' + host + '/api/digest/' + uuid();
+      var hypermedia = {
+        'digestUrl': protocol + '://' + host + '/api/digest/' + uuid()
+      }
+
+      response = hypermedia;
+
       res.send(response);
     })
   }
