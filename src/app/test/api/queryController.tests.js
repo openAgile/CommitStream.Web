@@ -27,7 +27,7 @@ describe('queryController', function() {
                 });
         });
     });
-    describe('when I issue a query without a wrokitem as a parameter', function () {       
+    describe('when I issue a query without a workitem as a parameter', function () {       
         it('returns a 400 Bad Request response with a error message', function (done){
             request(app)
             .get('/api/query')
