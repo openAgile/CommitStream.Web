@@ -49,7 +49,7 @@ add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-4455-6677-889
    * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. Again, in PowerShell you can type `[guid]::NewGuid()`.
    * Update the config.yml file for eventstore. Ensure that it has the right HttpPrefixes and the external ip for your VM. The value for ExtIp is actually what in azure shows as "INTERNAL IP ADDRESS". Dashboard tab of your VM:
 ``` 
-ExtIp: 0.0.0.1
+ExtIp: INTERNAL.AZURE.IP.ADRESS
 HttpPrefixes:
   - https://localhost:2113/
   - https://your.azure.dns.name:2113/
