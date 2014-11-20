@@ -70,7 +70,7 @@ HttpPrefixes:
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
     * eventStoreBaseUrl: `https://devopsheroscs.cloudapp.net:2113`
-	  * protoco" : `https`
+	  * protocol : `https`
 	  * apiKey: `<apiKey GUID>`
 	  * eventStoreUser `admin`
 	  * eventStorePassword: `<eventStorePassword GUID>`
