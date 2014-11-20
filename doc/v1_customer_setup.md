@@ -37,9 +37,14 @@ makecert -ss My -sr LocalMachine -sky exchange -r -n "CN=EventStoreCert" -sk Eve
 certmgr.exe -add -r LocalMachine -s My -c -n EventStoreCert -r CurrentUser -s My
 ```
 * First, open PowerShell and create a new GUID to use in place of the hard-coded `appid={00112233-4455-6677-8899-AABBCCDDEEFF}` value below. Type `[guid]::NewGuid()` to genreate the GUID. This particular value is not needed anywhere else.
-* Next, in the Windows Certificate Manager (go to the start menu and type certmgr.msc) open the imported certificate and read the Thumprint GUID and use in place of the hard-coded `certhash` value below:
+* Next, in the Windows Certificate Manager (go to the start menu and type certmgr.msc) open the imported certificate and copy the Thumbprint hash, without spaces, and use in place of the hard-coded `certhash` in the steps below. Make sure to use no quotes or brackets around `certhas`, but **do** keep the curly braces around the GUID for `appid`.
+
+Commands:
+
 ```text
-netsh http add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-4455-6677-8899-AABBCCDDEEFF}
+netsh 
+http
+add sslcert ipport=0.0.0.0:2113 certhash=thumbhere appid={00112233-4455-6677-8899-AABBCCDDEEFF}
 ```
    * Change the EventStore admin password by generating a new guid, which will also serve as the `eventStorePassword` value below. Again, in PowerShell you can type `[guid]::NewGuid()`.
    * Update the config.yml file for eventstore. Ensure that it has the right HttpPrefixes and the external ip for your VM. The value for ExtIp is actually what in azure shows as "INTERNAL IP ADDRESS". Dashboard tab of your VM:
