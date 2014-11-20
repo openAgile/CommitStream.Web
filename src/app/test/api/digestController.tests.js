@@ -34,7 +34,7 @@ describe('digestController', function () {
       });
     });
 
-    it('response should have links to other resources', function(done) {
+    it('should have links to other resources', function(done) {
       postDigest(function(err, res) {
         res.body.should.include.key('_links');
         done();
