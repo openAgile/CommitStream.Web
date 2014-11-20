@@ -70,12 +70,12 @@ HttpPrefixes:
 * Configure the site's App Settings so that it knows where to find its EventStore instance with these settings
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
-    * eventStoreBaseUrl: `https://devopsheroscs.cloudapp.net:2113`
-	  * protocol : `https`
-	  * apiKey: `<apiKey GUID>`
-	  * eventStoreUser `admin`
-	  * eventStorePassword: `<eventStorePassword GUID>`
-	  * eventStoreAllowSelfSignedCert: `true`
+	* protocol : `https`
+	* apiKey: `<apiKey GUID>`
+	* eventStoreBaseUrl: `https://devopsheroscs.cloudapp.net:2113`
+	* eventStoreUser `admin`
+	* eventStorePassword: `<eventStorePassword GUID>`
+	* eventStoreAllowSelfSignedCert: `true`
 * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
 ##  Configure VersionOne instance
