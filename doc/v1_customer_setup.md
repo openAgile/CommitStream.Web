@@ -57,9 +57,10 @@ HttpPrefixes:
    * Verify that EventStore now operates only over https:// and not http://
 
 ###Open the necessary ports so EventStore can be seen from the outside###
+
 * In the azure portal go to the endpoints tab of your VM.
-* Add the ports 1113 and 2113.	
-* Try connecting to EventStore from a different machine using the url defined in your config.yml (https://your.azure.dns.name:2113), if that still doesn't work add the same ports to the windows firewall inside the VM you were configuring. 
+* Add port 2113 and label it `EventStore`.
+* From the VM, use Windows Advanced Firewall to add the same 2113 and name it `EventStore`.
 
 ## Create the Azure web site to host the customer instance
 * Create a new web site in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `devopsheroscs`
