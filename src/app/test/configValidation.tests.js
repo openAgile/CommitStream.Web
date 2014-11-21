@@ -84,4 +84,26 @@ describe('configValidation', function() {
 
   });
 
+  describe('validateEventStoreUser', function() {
+    it('should raise an exception when eventStorePassword is not set.', function(done) {
+      configStub.eventStoreUser  = undefined;
+      expect(configValidation.validate).to.throw(Error);
+      done();
+    });
+
+    it('should raise an exception when eventStorePassword is an empty string.', function(done) {
+      configStub.eventStoreUser  = '';
+      expect(configValidation.validate).to.throw(Error);
+      done();
+    });
+
+    it('should NOT raise an exception when eventStorePassword has a value.', function(done) {
+      configStub.eventStoreUser  = 'admin';
+      expect(configValidation.validate).to.not.throw(Error);
+      done();
+    });
+
+  });
+
+
 });

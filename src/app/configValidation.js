@@ -37,13 +37,23 @@ function validateEventStorePassword() {
   }
 };
 
+function validateEventStoreUser() {
+  if (!config.eventStoreUser) {
+    var errorObj = {
+      error: 'error.fatal.config.eventStoreUser.invalid',
+      message: 'The config.eventStoreUser value is either not set or is an empty string.Please set it to a valid non - empty string.'
+    }
+
+    throw new Error(JSON.stringify(errorObj));
+  }
+};
+
 var validate = function() {
   //if (config.validateConfig) only in azure
   validateProtocol();
   validateApiKey();
   validateEventStorePassword();
-
-
+  validateEventStoreUser();
 };
 
 module.exports.validate = validate;
