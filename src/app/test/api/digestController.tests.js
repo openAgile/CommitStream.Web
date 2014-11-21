@@ -41,6 +41,12 @@ describe('digestController', function () {
       })
     })
 
+    it('should link to inbox', function(done) {
+      postDigest(function(err, res) {
+        res.body.should.have.deep.property('_links[0].rel', 'inbox-form');
+        done();
+      })
+    })
   });
 });
 

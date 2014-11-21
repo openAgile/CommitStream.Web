@@ -12,7 +12,11 @@
 
       var hypermedia = {
         'digestUrl': protocol + '://' + host + '/api/digest/' + uuid(),
-        '_links': []
+        '_links': [
+          {
+            'rel': 'inbox-form'
+          }
+        ]
       }
 
       response = hypermedia;
