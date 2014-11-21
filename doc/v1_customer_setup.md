@@ -28,6 +28,10 @@ git push origin devopsheros
 * Once this machine is up and running, [log into it with Remote Desktop](http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-log-on-windows-server/) and then install EventStore using the [automated script documented here](install.md). Note you will execute the script without the GitHub access token since you do not need to import commits from our default repository at this time.
 * Verify that eventstore is up and running as a service by navigating to http://localhost:2113 and logging in with admin / changeit
 
+### Important: Add the VM to the exclusion list for the Azure Instances Stopper Jenkins job
+* Go to https://ci-server/job/Azure%20VM%20Instances%20Stopper/
+* Under **Build** modify the `Stop-AllAzureInstances @("sqlSandbox*","v1commitstream","VmTFS2013","v1cs-test")` by adding `,"devopsheros"` to the list.
+
 ###Set up EventStore to use https###
 * Assuming you followed the script linked above, you should have installed Chocolatey. Now install the Windows 8 SDK with: `choco install windows-8-1-sdk`
 * In Powershell, navigate to the installation location for the SDK. On my machine it is: `C:\Program Files (x86)\Windows Kits\8.1\bin\x64`. If you cannot find it, do a file search for `makecert.exe`.
