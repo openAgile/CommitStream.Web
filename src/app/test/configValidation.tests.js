@@ -14,6 +14,7 @@ describe('configValidation', function() {
     configStub.eventStorePassword = '098765432109876543210987654321098765';
     configStub.eventStoreUser = 'admin';
     configStub.eventStoreBaseUrl = 'https://localhost:2113/';
+    configStub.production = true;
   });
 
   describe('validateProtocol', function() {
@@ -109,6 +110,7 @@ describe('configValidation', function() {
 
   describe('validateUri', function() {
     it('should raise an exception when eventStoreBaseUrl is not a valid URI.', function(done) {
+      configStub.production = false;
       configStub.eventStoreBaseUrl = undefined;
       expect(configValidation.validate).to.throw(Error);
       configStub.eventStoreBaseUrl = '';
@@ -125,6 +127,7 @@ describe('configValidation', function() {
     });
 
     it('should NOT raise an exception when eventStoreBaseUrl is a valid URI.', function(done) {
+      configStub.production = false;
       configStub.eventStoreBaseUrl = 'http://localhost:2113';
       expect(configValidation.validate).to.not.throw(Error);
       configStub.eventStoreBaseUrl = 'https://localhost:2113';
@@ -136,6 +139,26 @@ describe('configValidation', function() {
       done();
     });
 
+  });
+
+  describe('validateHttpsUri', function() {
+    it('should raise an exception when eventStoreBaseUrl is not a valid https URI.', function(done) {
+      configStub.production = true;
+      configStub.eventStoreBaseUrl = 'http://localhost:2113';
+      expect(configValidation.validate).to.throw(Error);
+      configStub.eventStoreBaseUrl = 'http://some.domain.net:2113';
+      expect(configValidation.validate).to.throw(Error);
+      done();
+    });
+
+    it('should NOT raise an exception when eventStoreBaseUrl is a valid https URI.', function(done) {
+      configStub.production = true;
+      configStub.eventStoreBaseUrl = 'https://localhost:2113';
+      expect(configValidation.validate).to.not.throw(Error);
+      configStub.eventStoreBaseUrl = 'https://some.other.domain:9999';
+      expect(configValidation.validate).to.not.throw(Error);
+      done();
+    });
   });
 
 });

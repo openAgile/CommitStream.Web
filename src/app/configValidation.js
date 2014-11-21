@@ -1,7 +1,6 @@
 var config = require('./config'),
   validator = require('validator');
 
-// TODO: only on azure
 function validateProtocol() {
   if (config.protocol != 'https') {
 
@@ -15,7 +14,6 @@ function validateProtocol() {
   };
 };
 
-// TODO: only on azure
 function validateApiKey() {
   if (!config.apiKey || config.apiKey.length < 36) {
     var errorObj = {
@@ -63,17 +61,37 @@ function validateUri() {
     }
 
     throw new Error(JSON.stringify(errorObj));
+  };
+}
 
+function validateHttpsUri() {
+  var options = {
+    protocols: ['https'],
+    require_protocol: true
+  };
+
+  if (!validator.isURL(config.eventStoreBaseUrl, options)) {
+    var errorObj = {
+      error: 'error.fatal.config.eventStoreBaseUrl.invalid.azure',
+      message: 'The config.eventStoreBaseUrl value is either not set or is set to a value that is not a valid URI ' +
+        'using the required HTTPS protocol. When running in Azure, CommitStream\'s EventStore dependency must operate over HTTPS. ' +
+        'Please set the eventStoreBaseUrl value to a valid URI using the HTTPS protocol in the App Settings configuration for the web site.'
+    }
+
+    throw new Error(JSON.stringify(errorObj));
   };
 }
 
 var validate = function() {
-  //if (config.validateConfig) only in azure
-  validateProtocol();
-  validateApiKey();
-  validateEventStorePassword();
+  if (config.production) {
+    validateProtocol();
+    validateApiKey();
+    validateEventStorePassword();
+    validateHttpsUri();
+  } else {
+    validateUri();
+  }
   validateEventStoreUser();
-  validateUri();
 };
 
 module.exports.validate = validate;
