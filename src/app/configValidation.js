@@ -23,13 +23,25 @@ function validateApiKey() {
         'Please set it to a string containing at least 36 characters.'
     };
     throw new Error(JSON.stringify(errorObj));
+  };
+};
+
+function validateEventStorePassword() {
+  if (!config.eventStorePassword || config.eventStorePassword.length < 36) {
+    var errorObj = {
+      error: 'error.fatal.config.eventStorePassword.invalid',
+      message: 'The config.eventStorePassword value is either not set or is set to a value containing fewer than 36 characters.' +
+        ' Please set it to a string containing at least 36 characters.'
+    }
+    throw new Error(JSON.stringify(errorObj));
   }
-}
+};
 
 var validate = function() {
   //if (config.validateConfig) only in azure
   validateProtocol();
   validateApiKey();
+  validateEventStorePassword();
 
 
 };
