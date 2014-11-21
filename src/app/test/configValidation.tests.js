@@ -109,6 +109,10 @@ describe('configValidation', function() {
 
   describe('validateUri', function() {
     it('should raise an exception when eventStoreBaseUrl is not a valid URI.', function(done) {
+      configStub.eventStoreBaseUrl = undefined;
+      expect(configValidation.validate).to.throw(Error);
+      configStub.eventStoreBaseUrl = '';
+      expect(configValidation.validate).to.throw(Error);
       configStub.eventStoreBaseUrl = 'www.localhost.com';
       expect(configValidation.validate).to.throw(Error);
       configStub.eventStoreBaseUrl = 'httpc://localhost:2113';
