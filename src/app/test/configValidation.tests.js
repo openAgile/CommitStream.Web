@@ -13,6 +13,7 @@ describe('configValidation', function() {
     configStub.apiKey = '0123456789012345678901234567890123456789';
     configStub.eventStorePassword = '098765432109876543210987654321098765';
     configStub.eventStoreUser = 'admin';
+    configStub.eventStoreBaseUrl = 'https://localhost:2113/';
   });
 
   describe('validateProtocol', function() {
@@ -86,24 +87,51 @@ describe('configValidation', function() {
 
   describe('validateEventStoreUser', function() {
     it('should raise an exception when eventStorePassword is not set.', function(done) {
-      configStub.eventStoreUser  = undefined;
+      configStub.eventStoreUser = undefined;
       expect(configValidation.validate).to.throw(Error);
       done();
     });
 
     it('should raise an exception when eventStorePassword is an empty string.', function(done) {
-      configStub.eventStoreUser  = '';
+      configStub.eventStoreUser = '';
       expect(configValidation.validate).to.throw(Error);
       done();
     });
 
     it('should NOT raise an exception when eventStorePassword has a value.', function(done) {
-      configStub.eventStoreUser  = 'admin';
+      configStub.eventStoreUser = 'admin';
       expect(configValidation.validate).to.not.throw(Error);
       done();
     });
 
   });
 
+
+  describe('validateUri', function() {
+    it('should raise an exception when eventStoreBaseUrl is not a valid URI.', function(done) {
+      configStub.eventStoreBaseUrl = 'www.localhost.com';
+      expect(configValidation.validate).to.throw(Error);
+      configStub.eventStoreBaseUrl = 'httpc://localhost:2113';
+      expect(configValidation.validate).to.throw(Error);
+      configStub.eventStoreBaseUrl = 'http://localhost2113';
+      expect(configValidation.validate).to.throw(Error);
+      configStub.eventStoreBaseUrl = 'https:///localhost:2113';;
+      expect(configValidation.validate).to.throw(Error);
+      done();
+    });
+
+    it('should NOT raise an exception when eventStoreBaseUrl is a valid URI.', function(done) {
+      configStub.eventStoreBaseUrl = 'http://localhost:2113';
+      expect(configValidation.validate).to.not.throw(Error);
+      configStub.eventStoreBaseUrl = 'https://localhost:2113';
+      expect(configValidation.validate).to.not.throw(Error);
+      configStub.eventStoreBaseUrl = 'http://some.domain.net:2113';
+      expect(configValidation.validate).to.not.throw(Error);
+      configStub.eventStoreBaseUrl = 'https://some.other.domain:9999';
+      expect(configValidation.validate).to.not.throw(Error);
+      done();
+    });
+
+  });
 
 });

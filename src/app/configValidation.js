@@ -1,4 +1,5 @@
-var config = require('./config');
+var config = require('./config'),
+  validator = require('validator');
 
 // TODO: only on azure
 function validateProtocol() {
@@ -48,12 +49,31 @@ function validateEventStoreUser() {
   }
 };
 
+function validateUri() {
+  var options = {
+    protocols: ['http', 'https'],
+    require_protocol: true
+  };
+
+  if (!validator.isURL(config.eventStoreBaseUrl, options)) {
+    var errorObj = {
+      error: 'error.fatal.config.eventStoreBaseUrl.invalid',
+      message: 'The config.eventStoreBaseUrl value is either not set or is set to a value that is not a valid ' +
+        'URI using protocol HTTP or HTTPS. Please set it to a valid URI.'
+    }
+
+    throw new Error(JSON.stringify(errorObj));
+
+  };
+}
+
 var validate = function() {
   //if (config.validateConfig) only in azure
   validateProtocol();
   validateApiKey();
   validateEventStorePassword();
   validateEventStoreUser();
+  validateUri();
 };
 
 module.exports.validate = validate;
