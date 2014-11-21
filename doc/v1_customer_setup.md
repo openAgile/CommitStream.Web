@@ -29,7 +29,7 @@ git push origin devopsheros
 * Verify that eventstore is up and running as a service by navigating to http://localhost:2113 and logging in with admin / changeit
 
 ### Important: Add the VM to the exclusion list for the Azure Instances Stopper Jenkins job
-* Go to https://ci-server/job/Azure%20VM%20Instances%20Stopper/
+* Go to [https://ci-server/job/Azure%20VM%20Instances%20Stopper/](https://ci-server/job/Azure%20VM%20Instances%20Stopper/)
 * Under **Build** modify the `Stop-AllAzureInstances @("sqlSandbox*","v1commitstream","VmTFS2013","v1cs-test")` by adding `,"devopsheros"` to the list.
 
 ###Set up EventStore to use https###
