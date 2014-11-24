@@ -12,6 +12,7 @@
       var digestId = uuid();
 
       var hypermedia = {
+        'id': digestId,
         'digestUrl': protocol + '://' + host + '/api/digest/' + digestId,
         '_links': [
           {

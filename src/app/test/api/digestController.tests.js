@@ -26,11 +26,27 @@ describe('digestController', function () {
       });
     });
 
-    it('should have a valid uuid as an identifier', function(done) {
+    it('should have an id to identify the digest', function(done) {
+      postDigest(function(err, res) {
+        var id = res.body.id;
+        res.body.should.have.property('id');
+        done();
+      })
+    })
+
+    it('id for a digest should be a valid uuid', function(done) {
+      postDigest(function(err, res) {
+        var id = res.body.id;
+        validator.isUUID(id).should.be.true;
+        done();
+      })
+    })
+
+    it('digestUrl should contain the id of the digest', function(done) {
       postDigest(function(err, res) {
         var digestUrlParts = res.body.digestUrl.split('/');
         var id = digestUrlParts[digestUrlParts.length - 1];
-        validator.isUUID(id).should.be.true;
+        id.should.equal(res.body.id);
         done();
       });
     });
