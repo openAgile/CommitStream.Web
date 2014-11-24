@@ -42,9 +42,17 @@ describe('digestController', function () {
       })
     })
 
-    it('should link to inbox', function(done) {
+    it('should link to an inbox form - v1', function(done) {
       postDigest(function(err, res) {
         res.body.should.have.deep.property('_links[0].rel', 'inbox-form');
+        done();
+      })
+    })
+
+    it('should link to an inbox form - v2', function(done) {
+      postDigest(function(err, res) {
+        var link = _.find(res.body._links, function(element) { return element.rel === 'inbox-form'; });
+        link.should.have.property('rel', 'inbox-form');
         done();
       })
     })
