@@ -5,6 +5,7 @@ var express = require('express'),
   controller = require('../../api/digestController'),
   request = require('supertest'),
   validator = require('validator');
+  _ = require('underscore');
 
 chai.config.includeStack = true;
 
@@ -47,6 +48,15 @@ describe('digestController', function () {
         done();
       })
     })
+
+    it('should have an HTTP GET verb to interract with the inbox form ', function(done) {
+      postDigest(function(err, res) {
+        var link = _.find(res.body._links, function(element) { return element.rel === 'inbox-form'; });
+        link.should.have.property('method', 'GET');
+        done();
+      })
+    })
+
   });
 });
 

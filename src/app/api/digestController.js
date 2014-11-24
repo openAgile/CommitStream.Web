@@ -14,6 +14,7 @@
         'digestUrl': protocol + '://' + host + '/api/digest/' + uuid(),
         '_links': [
           {
+            'method': 'GET',
             'rel': 'inbox-form'
           }
         ]
