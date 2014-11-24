@@ -9,11 +9,13 @@
       var response;
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
+      var digestId = uuid();
 
       var hypermedia = {
-        'digestUrl': protocol + '://' + host + '/api/digest/' + uuid(),
+        'digestUrl': protocol + '://' + host + '/api/digest/' + digestId,
         '_links': [
           {
+            'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox/new',
             'method': 'GET',
             'rel': 'inbox-form'
           }

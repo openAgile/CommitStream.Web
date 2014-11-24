@@ -65,6 +65,14 @@ describe('digestController', function () {
       })
     })
 
+    it('should have a reference to the inbox form', function(done) {
+      postDigest(function(err, res) {
+        var response = res.body;
+        var link = _.find(response._links, function(element) { return element.rel === 'inbox-form'; });
+        link.should.have.property('href', response.digestUrl + '/inbox/new');
+        done();
+      })
+    })
   });
 });
 
