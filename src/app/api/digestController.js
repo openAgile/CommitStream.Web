@@ -32,6 +32,7 @@
           {
             'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox/new',
             'method': 'GET',
+            'description': 'Navigate to form for creating an inbox for a repository',
             'rel': 'inbox-form'
           }
         ]

@@ -89,6 +89,16 @@ describe('digestController', function () {
         done();
       })
     })
+
+    it('link for inbox form should have a description', function(done) {
+      postDigest(function(err, res) {
+        var response = res.body;
+        var link = _.find(response._links, function(element) { return element.rel === 'inbox-form'; });
+        link.should.have.property('description', 'Navigate to form for creating an inbox for a repository');
+        done();
+      })
+    })
+
   });
 });
 
