@@ -1,7 +1,7 @@
 var config = require('./config'),
   validator = require('validator');
 
-function validateProtocol() {
+function validateProtocolIsHttps() {
   if (config.protocol != 'https') {
 
     var errorObj = {
@@ -14,15 +14,26 @@ function validateProtocol() {
   };
 };
 
-function validateApiKey() {
+function validateApiKeyIsSet() {
+  if (!config.apiKey) {
+    var errorObj = {
+      error: 'error.fatal.config.apiKey.invalid',
+      message: 'The config.apiKey value is not set. Please set it to a string.'
+    };
+    throw new Error(JSON.stringify(errorObj));
+  };
+};
+
+function validateApiKeyLength() {
   if (!config.apiKey || config.apiKey.length < 36) {
     var errorObj = {
       error: 'error.fatal.config.apiKey.invalid',
-      message: 'The config.apiKey value is either not set or is set to a value containing fewer than 36 characters.' +
+      message: 'The config.apiKey value is set to a value containing fewer than 36 characters.' +
         'Please set it to a string containing at least 36 characters.'
     };
     throw new Error(JSON.stringify(errorObj));
   };
+
 };
 
 function validateEventStorePassword() {
@@ -84,13 +95,15 @@ function validateHttpsUri() {
 
 var validate = function() {
   if (config.production) {
-    validateProtocol();
-    validateApiKey();
+    validateProtocolIsHttps();
+    validateApiKeyIsSet();
+    validateApiKeyLength();
     validateEventStorePassword();
     validateHttpsUri();
   } else {
     validateUri();
   }
+  validateApiKeyIsSet();
   validateEventStoreUser();
 };
 
