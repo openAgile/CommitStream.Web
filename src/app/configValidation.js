@@ -106,17 +106,22 @@ function validateEventStoreHttpsUri() {
 
 var validate = function() {
 
+  // common validations
   validateApiKeyIsSet();
-  validateEventStoreUri();
   validateEventStoreUserIsSet();
   validateEventStorePasswordIsSet();
 
+  // production validations
   if (config.production) {
     validateProtocolIsHttps();
     validateApiKeyIsSet();
     validateApiKeyLength();
     validateEventStorePasswordLength();
     validateEventStoreHttpsUri();
+  }
+  // local validations
+  else {
+    validateEventStoreUri();
   }
 
 };
