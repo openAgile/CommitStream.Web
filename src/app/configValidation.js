@@ -36,11 +36,22 @@ function validateApiKeyLength() {
 
 };
 
-function validateEventStorePassword() {
-  if (!config.eventStorePassword || config.eventStorePassword.length < 36) {
+function validateEventStorePasswordIsSet() {
+  if (!config.eventStorePassword) {
     var errorObj = {
       error: 'error.fatal.config.eventStorePassword.invalid',
-      message: 'The config.eventStorePassword value is either not set or is set to a value containing fewer than 36 characters.' +
+      message: 'The config.eventStorePassword value is not set.' +
+        ' Please set it to a string.'
+    }
+    throw new Error(JSON.stringify(errorObj));
+  }
+};
+
+function validateEventStorePasswordLength() {
+  if (config.eventStorePassword.length < 36) {
+    var errorObj = {
+      error: 'error.fatal.config.eventStorePassword.invalid',
+      message: 'The config.eventStorePassword value is set to a value containing fewer than 36 characters.' +
         ' Please set it to a string containing at least 36 characters.'
     }
     throw new Error(JSON.stringify(errorObj));
@@ -94,17 +105,20 @@ function validateHttpsUri() {
 }
 
 var validate = function() {
+
+  validateApiKeyIsSet();
+  validateEventStoreUser();
+  validateEventStorePasswordIsSet();
+
   if (config.production) {
     validateProtocolIsHttps();
     validateApiKeyIsSet();
     validateApiKeyLength();
-    validateEventStorePassword();
+    validateEventStorePasswordLength();
     validateHttpsUri();
   } else {
     validateUri();
   }
-  validateApiKeyIsSet();
-  validateEventStoreUser();
 };
 
 module.exports.validate = validate;
