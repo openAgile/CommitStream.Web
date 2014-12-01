@@ -24,5 +24,6 @@
   config.eventStoreAllowSelfSignedCert = nconf.get('eventStoreAllowSelfSignedCert') === 'true';
   config.eventStoreAssetQueryParams = nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
   config.assetDetailTemplateUrl = nconf.get('assetDetailTemplateUrl') || config.serverBaseUrl + ':' + config.port + '/assetDetailCommits.html';
-  config.production = nconf.get('production') || true;
+  var notSet = nconf.get('production') == undefined;
+  config.production = nconf.get('production') === 'true' || notSet;
 })(module.exports);
