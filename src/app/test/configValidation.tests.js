@@ -31,7 +31,7 @@ describe('configValidation', function() {
     });
   });
 
-  describe('validateApiKey', function() {
+  describe('validateApiKeyIsSet', function() {
     it('should raise an exception when the apiKey is not set.', function(done) {
       configStub.apiKey = undefined;
       expect(configValidation.validate).to.throw(Error);
@@ -44,6 +44,9 @@ describe('configValidation', function() {
       done();
     });
 
+  });
+
+  describe('validateApiKeyLength', function() {
     it('should raise an exception when the apiKey is less than 36 characters long.', function(done) {
       // 35 characters long
       configStub.apiKey = '01234567890123456789012345678901234';
@@ -58,7 +61,7 @@ describe('configValidation', function() {
     });
   });
 
-  describe('validateEventStorePassword', function(done) {
+  describe('validateEventStorePasswordIsSet', function(done) {
     it('should raise an exception when eventStorePassword is not set.', function(done) {
       configStub.eventStorePassword = undefined;
       expect(configValidation.validate).to.throw(Error);
@@ -71,6 +74,9 @@ describe('configValidation', function() {
       done();
     });
 
+  });
+
+  describe('validateEventStorePasswordLength', function(done) {
     it('should raise an exception when eventStorePassword is less than 36 characters long.', function(done) {
       // 35 characters long
       configStub.eventStorePassword = '09876543210987654321098765432109876';
@@ -86,7 +92,7 @@ describe('configValidation', function() {
 
   });
 
-  describe('validateEventStoreUser', function() {
+  describe('validateEventStoreUserIsSet', function() {
     it('should raise an exception when eventStorePassword is not set.', function(done) {
       configStub.eventStoreUser = undefined;
       expect(configValidation.validate).to.throw(Error);
@@ -108,7 +114,7 @@ describe('configValidation', function() {
   });
 
 
-  describe('validateUri', function() {
+  describe('validateEventStoreUri', function() {
     it('should raise an exception when eventStoreBaseUrl is not a valid URI.', function(done) {
       configStub.production = false;
       configStub.eventStoreBaseUrl = undefined;
@@ -118,8 +124,6 @@ describe('configValidation', function() {
       configStub.eventStoreBaseUrl = 'www.localhost.com';
       expect(configValidation.validate).to.throw(Error);
       configStub.eventStoreBaseUrl = 'httpc://localhost:2113';
-      expect(configValidation.validate).to.throw(Error);
-      configStub.eventStoreBaseUrl = 'http://localhost2113';
       expect(configValidation.validate).to.throw(Error);
       configStub.eventStoreBaseUrl = 'https:///localhost:2113';;
       expect(configValidation.validate).to.throw(Error);
@@ -141,7 +145,7 @@ describe('configValidation', function() {
 
   });
 
-  describe('validateHttpsUri', function() {
+  describe('validateEventStoreHttpsUri', function() {
     it('should raise an exception when eventStoreBaseUrl is not a valid https URI.', function(done) {
       configStub.production = true;
       configStub.eventStoreBaseUrl = 'http://localhost:2113';

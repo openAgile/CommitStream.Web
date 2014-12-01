@@ -58,11 +58,11 @@ function validateEventStorePasswordLength() {
   }
 };
 
-function validateEventStoreUser() {
+function validateEventStoreUserIsSet() {
   if (!config.eventStoreUser) {
     var errorObj = {
       error: 'error.fatal.config.eventStoreUser.invalid',
-      message: 'The config.eventStoreUser value is either not set or is an empty string.Please set it to a valid non - empty string.'
+      message: 'The config.eventStoreUser value is either not set or is an empty string. Please set it to a valid non - empty string.'
     }
 
     throw new Error(JSON.stringify(errorObj));
@@ -86,7 +86,7 @@ function validateEventStoreUri() {
   };
 }
 
-function validateHttpsUri() {
+function validateEventStoreHttpsUri() {
   var options = {
     protocols: ['https'],
     require_protocol: true
@@ -108,7 +108,7 @@ var validate = function() {
 
   validateApiKeyIsSet();
   validateEventStoreUri();
-  validateEventStoreUser();
+  validateEventStoreUserIsSet();
   validateEventStorePasswordIsSet();
 
   if (config.production) {
@@ -116,7 +116,7 @@ var validate = function() {
     validateApiKeyIsSet();
     validateApiKeyLength();
     validateEventStorePasswordLength();
-    validateHttpsUri();
+    validateEventStoreHttpsUri();
   }
 
 };
