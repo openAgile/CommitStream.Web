@@ -63,7 +63,7 @@ describe('configValidation', function() {
     });
 
 //added by SMA
-    it('should NOT raise and exception when the apiKey is equal to 36 characters in length.', function(done)) {
+    it('should NOT raise and exception when the apiKey is equal to 36 characters in length.', function(done) {
       // 36 characters long
       configStub.apiKey = 'jklkifshe543890qwe345790lkjsh9123456';
       expect(configValidation.validate).to.not.throw(Error);
