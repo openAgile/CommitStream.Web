@@ -69,7 +69,7 @@ function validateEventStoreUser() {
   }
 };
 
-function validateUri() {
+function validateEventStoreUri() {
   var options = {
     protocols: ['http', 'https'],
     require_protocol: true
@@ -107,6 +107,7 @@ function validateHttpsUri() {
 var validate = function() {
 
   validateApiKeyIsSet();
+  validateEventStoreUri();
   validateEventStoreUser();
   validateEventStorePasswordIsSet();
 
@@ -116,9 +117,8 @@ var validate = function() {
     validateApiKeyLength();
     validateEventStorePasswordLength();
     validateHttpsUri();
-  } else {
-    validateUri();
   }
+
 };
 
 module.exports.validate = validate;
