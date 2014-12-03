@@ -1,7 +1,8 @@
 (function(digestController) {
 
   var uuid = require('uuid-v4'),
-      config = require('../config');
+      config = require('../config'),
+      hypermediaResponse = require('./hypermediaResponse');
 
   digestController.constructHypermedia = function(protocol, host, digestId) {
     return {
@@ -33,27 +34,13 @@
      * @apiSuccess {Array[Object]} _links - Links to other resources as a result of creating a digest.
      *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
    **/
-
     app.post('/api/digest', function(req, res) {
       var response;
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
       var digestId = uuid();
 
-      var hypermedia = {
-        'id': digestId,
-        'digestUrl': protocol + '://' + host + '/api/digest/' + digestId,
-        '_links': [
-          {
-            'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox/new',
-            'method': 'GET',
-            'description': 'Navigate to form for creating an inbox for a repository',
-            'rel': 'inbox-form'
-          }
-        ]
-      }
-
-      response = hypermedia;
+      response = hypermediaResponse.digest(protocol, host, digestId);
 
       res.send(response);
     })
