@@ -3,19 +3,8 @@ var chai = require('chai'),
   controller = require('../../api/inboxController'),
   validator = require('validator');
   _ = require('underscore');
-  // app = express(),
-  // request = require('supertest'),
-// express = require('express'),
 
 chai.config.includeStack = true;
-
-// controller.init(app);
-
-// postInbox = function(shouldBehaveThusly) {
-//   request(app)
-//     .post('/api/inbox', 'myfirstinbox')
-//     .end(shouldBehaveThusly);
-// };
 
 describe('inboxController', function () {
   describe('when creating a hypermedia response', function() {
@@ -76,79 +65,3 @@ describe('inboxController', function () {
     })
   })
 })
-
-// describe('inboxController', function () {
-//   describe('when creating a inbox', function () {
-//     it('inboxUrl should be a valid URI', function(done) {
-//       postInbox(function(err, res) {
-//         validator.isURL(res.body.inboxUrl).should.be.true;
-//         done();
-//       });
-//     });
-
-    // it('should have an id to identify the inbox', function(done) {
-    //   postInbox(function(err, res) {
-    //     var id = res.body.id;
-    //     res.body.should.have.property('id');
-    //     done();
-    //   })
-    // })
-
-    // it('id for a inbox should be a valid uuid', function(done) {
-    //   postInbox(function(err, res) {
-    //     var id = res.body.id;
-    //     validator.isUUID(id).should.be.true;
-    //     done();
-    //   })
-    // })
-
-    // it('inboxUrl should contain the id of the inbox', function(done) {
-    //   postInbox(function(err, res) {
-    //     var inboxUrlParts = res.body.inboxUrl.split('/');
-    //     var id = inboxUrlParts[inboxUrlParts.length - 1];
-    //     id.should.equal(res.body.id);
-    //     done();
-    //   });
-    // });
-
-    // it('should have links to other resources', function(done) {
-    //   postInbox(function(err, res) {
-    //     res.body.should.include.key('_links');
-    //     done();
-    //   })
-    // })
-
-    // it('should link to a digest form - v1', function(done) {
-    //   postInbox(function(err, res) {
-    //     res.body.should.have.deep.property('_links[0].rel', 'digest-form');
-    //     done();
-    //   })
-    // })
-
-    // it('should link to an digest form - v2', function(done) {
-    //   postInbox(function(err, res) {
-    //     var link = _.find(res.body._links, function(element) { return element.rel === 'digest-form'; });
-    //     link.should.have.property('rel', 'digest-form');
-    //     done();
-    //   })
-    // })
-
-    // it('should have an HTTP GET verb to interract with the digest form ', function(done) {
-    //   postInbox(function(err, res) {
-    //     var link = _.find(res.body._links, function(element) { return element.rel === 'digest-form'; });
-    //     link.should.have.property('method', 'GET');
-    //     done();
-    //   })
-    // })
-
-    // it('link for digest form should have a description', function(done) {
-    //   postInbox(function(err, res) {
-    //     var response = res.body;
-    //     var link = _.find(response._links, function(element) { return element.rel === 'digest-form'; });
-    //     link.should.have.property('description');
-    //     done();
-    //   })
-    // })
-
-//   });
-// });
