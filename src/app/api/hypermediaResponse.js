@@ -16,3 +16,29 @@
   }
 
 })(module.exports)
+
+// see jsonpath, appcatalog has some in it appcatalogentry.schema
+// {
+//   "digestUrl": "http://host/api/digest/1f1aa47629c44116a3ca08a9bb911309",
+//   "_links": [
+//     {
+//     "href": "http://host/api/digest/1f1aa47629c44116a3ca08a9bb911309/inbox/new",
+//     "rel": "inbox",
+//     "name": "Navigate to form for creating an inbox for a repository",
+//     "method": "GET"
+//     }
+//   ]
+// }
+
+
+// {
+//   'digest' : {
+//     'id' : '1f1aa47629c44116a3ca08a9bb911309',
+//     'href' : 'http://host/api/digest/',
+//     'links' : {
+//       'inbox' : {
+//         'href' : ''
+//       }
+//     }
+//   }
+// }
