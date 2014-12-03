@@ -45,11 +45,7 @@ describe('inboxController', function () {
       hypermedia.should.include.key('_links');
     });
 
-    it('should link to an digest form - v2', function() {
-      hypermedia.should.have.deep.property('_links[0].rel', 'digest-form');
-    });
-
-    it('should link to an digest form - v2', function() {
+    it('should link to an digest form', function() {
       var link = _.find(hypermedia._links, function(element) { return element.rel === 'digest-form'; });
       link.should.have.property('rel', 'digest-form');
     });
