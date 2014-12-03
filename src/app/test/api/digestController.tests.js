@@ -1,7 +1,7 @@
 var chai = require('chai'),
   should = chai.should(),
-  validator = require('validator');
-  _ = require('underscore');
+  validator = require('validator'),
+  _ = require('underscore'),
   express = require('express'),
   app = express(),
   chai = require('chai'),
@@ -9,7 +9,7 @@ var chai = require('chai'),
   sinonChai = require("sinon-chai"),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
-  hypermediaResponseStub = { digest: sinon.spy() }
+  hypermediaResponseStub = { digest: sinon.spy() },
   controller = proxyquire('../../api/digestController', { './hypermediaResponse' : hypermediaResponseStub });
 
 chai.use(sinonChai);
