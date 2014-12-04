@@ -2,6 +2,7 @@
 
   var uuid = require('uuid-v4'),
       config = require('../config'),
+      validator = require('validator'),
       hypermediaResponse = require('./hypermediaResponse');
 
   digestController.init = function (app) {
@@ -28,7 +29,15 @@
       response = hypermediaResponse.digest(protocol, host, digestId);
 
       res.send(response);
-    })
+    });
+
+    app.get('/api/digest/:uuid', function (req, res, next) {
+      if (!validator.isUUID(req.params.uuid)) {
+        res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
+      } else {
+        res.status(200).end();
+      }
+    });
   }
 
 })(module.exports)
