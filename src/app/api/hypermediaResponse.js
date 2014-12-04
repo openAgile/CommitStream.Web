@@ -12,9 +12,9 @@
           'rel': 'inbox-form'
         },
         {
-          'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox/',
+          'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox',
           'method': 'POST',
-          'description': 'Create an inbox for a repository on digest ' + digestId,
+          'description': 'Endpoint for creating an inbox for a repository on digest ' + digestId,
           'rel': 'inbox-create'
         }
       ]
@@ -37,29 +37,3 @@
   }
 
 })(module.exports)
-
-// see jsonpath, appcatalog has some in it appcatalogentry.schema
-// {
-//   "digestUrl": "http://host/api/digest/1f1aa47629c44116a3ca08a9bb911309",
-//   "_links": [
-//     {
-//     "href": "http://host/api/digest/1f1aa47629c44116a3ca08a9bb911309/inbox/new",
-//     "rel": "inbox",
-//     "name": "Navigate to form for creating an inbox for a repository",
-//     "method": "GET"
-//     }
-//   ]
-// }
-
-
-// {
-//   'digest' : {
-//     'id' : '1f1aa47629c44116a3ca08a9bb911309',
-//     'href' : 'http://host/api/digest/',
-//     'links' : {
-//       'inbox' : {
-//         'href' : ''
-//       }
-//     }
-//   }
-// }

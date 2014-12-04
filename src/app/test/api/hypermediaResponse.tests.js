@@ -4,6 +4,7 @@ var chai = require('chai'),
   _ = require('underscore'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
+// see jsonpath, appcatalog has some in it appcatalogentry.schema
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest', function() {
     var digestID = '7f74aa58-74e0-11e4-b116-123b93f75cba';
@@ -32,6 +33,7 @@ describe('hypermediaResponse', function() {
       hypermedia.should.include.key('_links');
     });
 
+    // inbox-form
     it('it should link to an inbox form to create an inbox', function() {
       var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
       link.should.have.property('rel', 'inbox-form');
@@ -52,6 +54,26 @@ describe('hypermediaResponse', function() {
       link.should.have.property('description', 'Navigate to form for creating an inbox for a repository on digest ' + digestID);
     });
 
+    // inbox-create
+    it('it should link to an inbox resource to create an inbox', function() {
+      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
+      link.should.have.property('rel', 'inbox-create');
+    });
+
+    it('it should have an HTTP POST verb to create the inbox', function() {
+      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
+      link.should.have.property('method', 'POST');
+    });
+
+    it('it should have a reference to the inbox create resource', function() {
+      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
+      link.should.have.property('href', hypermedia.digestUrl + '/inbox');
+    });
+
+    it('the link for inbox creation should have a description', function() {
+      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
+      link.should.have.property('description', 'Endpoint for creating an inbox for a repository on digest ' + digestID);
+    });
 
 
   })
