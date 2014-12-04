@@ -6,7 +6,8 @@ var chai = require('chai'),
 
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest', function() {
-    var hypermedia = hypermediaResponse.digest('http', 'localhost', '7f74aa58-74e0-11e4-b116-123b93f75cba');
+    var digestID = '7f74aa58-74e0-11e4-b116-123b93f75cba';
+    var hypermedia = hypermediaResponse.digest('http', 'localhost', digestID);
 
     it('digestUrl should be a valid URI', function() {
         validator.isURL(hypermedia.digestUrl).should.be.true;
@@ -48,7 +49,7 @@ describe('hypermediaResponse', function() {
 
     it('link for inbox form should have a description', function() {
       var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
-      link.should.have.property('description', 'Navigate to form for creating an inbox for a repository');
+      link.should.have.property('description', 'Navigate to form for creating an inbox for a repository on digest ' + digestID);
     });
 
   })
