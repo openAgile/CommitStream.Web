@@ -2,9 +2,11 @@ var proxyquire = require('proxyquire'),
   sinon = require('sinon'),
   expect = require('chai').expect,
   configStub = {},
-  configValidation = proxyquire('../configValidation', {
+  ConfigValidation = proxyquire('../configValidation', {
     './config': configStub
   });
+
+var configValidation = new ConfigValidation();
 
 describe('configValidation', function() {
   //set configStub values that will make all test pass
@@ -54,7 +56,7 @@ describe('configValidation', function() {
       done();
     });
 
-//updated by SMA
+    //updated by SMA
     it('should NOT raise an exception when the apiKey is more than 36 characters long.', function(done) {
       // 40 characters long
       configStub.apiKey = '0123456789012345678901234567890123456789';
@@ -62,7 +64,7 @@ describe('configValidation', function() {
       done();
     });
 
-//added by SMA
+    //added by SMA
     it('should NOT raise and exception when the apiKey is equal to 36 characters in length.', function(done) {
       // 36 characters long
       configStub.apiKey = 'jklkifshe543890qwe345790lkjsh9123456';
@@ -94,7 +96,7 @@ describe('configValidation', function() {
       done();
     });
 
-//updated by SMA
+    //updated by SMA
     it('should NOT raise an exception when eventStorePassword is equal to 36 characters long.', function(done) {
       // 36 characters long
       configStub.eventStorePassword = '098765432109876543210987654321098765';
@@ -102,7 +104,7 @@ describe('configValidation', function() {
       done();
     });
 
-//added by SMA
+    //added by SMA
     it('should NOT raise an exception when the eventStorePassword is more than 36 characters in length.', function(done) {
       // 39 characters long
       configStub.eventStorePassword = 'iuytrewsdf5678902wdr432ju45klopw12scg@@';
@@ -112,7 +114,7 @@ describe('configValidation', function() {
 
   });
 
-//corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
+  //corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
   describe('validateEventStoreUserIsSet', function() {
     it('should raise an exception when eventStoreUser is not set.', function(done) {
       configStub.eventStoreUser = undefined;
@@ -120,14 +122,14 @@ describe('configValidation', function() {
       done();
     });
 
-//corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
+    //corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
     it('should raise an exception when eventStoreUser is an empty string.', function(done) {
       configStub.eventStoreUser = '';
       expect(configValidation.validate).to.throw(Error);
       done();
     });
 
-//corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
+    //corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
     it('should NOT raise an exception when eventStoreUser has a value.', function(done) {
       configStub.eventStoreUser = 'admin';
       expect(configValidation.validate).to.not.throw(Error);
@@ -137,8 +139,8 @@ describe('configValidation', function() {
   });
 
 
-// SMA ???? here on down
-//comments added by SMA
+  // SMA ???? here on down
+  //comments added by SMA
   describe('validateEventStoreUri', function() {
     it('should raise an exception when eventStoreBaseUrl is not a valid URI.', function(done) {
       configStub.production = false;
