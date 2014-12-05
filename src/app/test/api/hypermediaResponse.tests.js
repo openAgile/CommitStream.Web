@@ -33,6 +33,16 @@ describe('hypermediaResponse', function() {
       hypermedia.should.include.key('_links');
     });
 
+    it('it should have a link to itself', function() {
+      var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
+      selfLink.should.have.property('rel', 'self');
+    });
+
+    it('it\'s self link should be to the appropriate href.', function() {
+      var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
+      selfLink.should.have.property('href','http://localhost/api/digest');
+    } );
+
     // inbox-form
     it('it should link to an inbox form to create an inbox', function() {
       var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
@@ -108,6 +118,17 @@ describe('hypermediaResponse', function() {
       hypermedia.should.include.key('_links');
     });
 
+    it('it should have a link to itself', function() {
+      var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
+      selfLink.should.have.property('rel', 'self');
+    });
+
+    it('it\'s self link should be to the appropriate href.', function() {
+      var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
+      selfLink.should.have.property('href','http://localhost/api/inbox');
+    } );
+
+    // digest-form
     it('should link to an digest form', function() {
       var link = _.find(hypermedia._links, function(element) { return element.rel === 'digest-form'; });
       link.should.have.property('rel', 'digest-form');

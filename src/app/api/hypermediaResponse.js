@@ -6,6 +6,10 @@
       'digestUrl': protocol + '://' + host + '/api/digest/' + digestId,
       '_links': [
         {
+          'href': protocol + '://' + host + '/api/digest',
+          'rel': 'self'
+        },
+        {
           'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox/new',
           'method': 'GET',
           'description': 'Navigate to form for creating an inbox for a repository on digest ' + digestId,
@@ -26,6 +30,10 @@
               'id': inboxId,
               'inboxUrl': protocol + '://' + host + '/api/inbox/' + inboxId,
               '_links': [
+              {
+                'href': protocol + '://' + host + '/api/inbox',
+                'rel': 'self'
+              },
               {
                   'href' : protocol + '://' + host + '/api/digest/new',
                   'method': 'GET',
