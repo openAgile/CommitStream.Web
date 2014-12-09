@@ -6,7 +6,7 @@ var express = require('express'),
   exphbs = require('express-handlebars'),
   validation = require('./configValidation');
 
-validation.validate();
+validation.validateConfig();
 
 app.get('/version', function(req, res) {
   res.json({
