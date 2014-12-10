@@ -16,7 +16,7 @@
           'rel': 'inbox-create'
         }
       ]
-    }
+    };
   }
 
   hypermediaResponse.inbox = function(protocol, host, inboxId) {
@@ -35,7 +35,7 @@
                   'rel': 'digest-form'
                 }
               ]
-           }
+           };
   }
 
 })(module.exports)

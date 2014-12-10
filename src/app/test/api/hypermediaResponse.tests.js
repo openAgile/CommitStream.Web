@@ -44,28 +44,28 @@ describe('hypermediaResponse', function() {
     });
 
     it('it should have a link to itself', function() {
-      linkShouldExistWithProperty('self', 'rel', 'self')
+      linkShouldExistWithProperty('self', 'rel', 'self');
     });
 
     it('it\'s self link should be to the appropriate href.', function() {
-      linkShouldExistWithProperty('self', 'href','http://localhost/api/digests')
+      linkShouldExistWithProperty('self', 'href','http://localhost/api/digests');
     });
 
     // inbox-create
     it('it should link to an inbox resource to create an inbox', function() {
-      linkShouldExistWithProperty('inbox-create', 'rel', 'inbox-create')
+      linkShouldExistWithProperty('inbox-create', 'rel', 'inbox-create');
     });
 
     it('it should have an HTTP POST verb to create the inbox', function() {
-      linkShouldExistWithProperty('inbox-create', 'method', 'POST')
+      linkShouldExistWithProperty('inbox-create', 'method', 'POST');
     });
 
     it('it should have a reference to the inbox create resource', function() {
-      linkShouldExistWithProperty('inbox-create', 'href', 'http://localhost/api/digests/' + digestID +'/inbox')
+      linkShouldExistWithProperty('inbox-create', 'href', 'http://localhost/api/digests/' + digestID +'/inbox');
     });
 
     it('the link for inbox creation should have a description', function() {
-      linkShouldExistWithProperty('inbox-create', 'description', 'Endpoint for creating an inbox for a repository on digest ' + digestID)
+      linkShouldExistWithProperty('inbox-create', 'description', 'Endpoint for creating an inbox for a repository on digest ' + digestID);
     });
 
   })
