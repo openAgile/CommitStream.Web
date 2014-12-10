@@ -1,6 +1,6 @@
 (function(hypermediaResponse) {
 
-  hypermediaResponse.digest = function(protocol, host, digestId) {
+  hypermediaResponse.digestPOST = function(protocol, host, digestId) {
     return {
       'id': digestId,
       'digestUrl': protocol + '://' + host + '/api/digests/' + digestId,

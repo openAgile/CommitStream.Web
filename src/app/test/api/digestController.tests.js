@@ -7,7 +7,7 @@ var chai = require('chai'),
   sinonChai = require("sinon-chai"),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
-  hypermediaResponseStub = { digest: sinon.spy() },
+  hypermediaResponseStub = { digestPOST: sinon.spy() },
   controller = proxyquire('../../api/digestController', { './hypermediaResponse' : hypermediaResponseStub });
 
 chai.use(sinonChai);
@@ -31,7 +31,7 @@ describe('digestController', function () {
   describe('when creating a digest', function() {
     it('should request digest hypermedia', function(done) {
       postDigest(function(err, res) {
-        hypermediaResponseStub.digest.should.have.been.calledOnce;
+        hypermediaResponseStub.digestPOST.should.have.been.calledOnce;
         done();
       });
     });

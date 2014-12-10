@@ -9,7 +9,7 @@ var chai = require('chai'),
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest', function() {
     var digestID = '7f74aa58-74e0-11e4-b116-123b93f75cba';
-    var hypermedia = hypermediaResponse.digest('http', 'localhost', digestID);
+    var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestID);
 
     function linkShouldExistWithProperty(rel, property, value) {
       var link = _.find(hypermedia._links, function(element) { return element.rel === rel; });
