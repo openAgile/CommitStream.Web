@@ -48,7 +48,7 @@ describe('digestController', function () {
     it('it should create the DigestAdded event.', function(done) {
       var digestDescription = { description: 'myfirstdigest' };
       postDigest(digestDescription, function(err, res) {
-        digestAdded.create.should.have.been.calledWith(digestDescription);
+        digestAdded.create.should.have.been.calledWith(digestDescription.description);
         done();
       })
     })

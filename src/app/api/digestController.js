@@ -27,7 +27,8 @@
       var host = req.get('host');
       var digestId = uuid();
 
-      digestAdded.create(req.body);
+      var digestAddedEvent = digestAdded.create(req.body.description);
+      
       response = hypermediaResponse.digestPOST(protocol, host, digestId);
 
       res.send(response);
