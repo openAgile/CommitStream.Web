@@ -3,7 +3,8 @@
   var uuid = require('uuid-v4'),
       config = require('../config'),
       validator = require('validator'),
-      hypermediaResponse = require('./hypermediaResponse');
+      hypermediaResponse = require('./hypermediaResponse'),
+      digestAdded = require('./digestAdded');
 
   digestController.init = function (app) {
 
@@ -26,6 +27,7 @@
       var host = req.get('host');
       var digestId = uuid();
 
+      digestAdded.create(req.body);
       response = hypermediaResponse.digestPOST(protocol, host, digestId);
 
       res.send(response);

@@ -2,22 +2,31 @@ var chai = require('chai'),
   should = chai.should(),
   express = require('express'),
   app = express(),
+  bodyParser = require('body-parser'),
   chai = require('chai'),
   sinon = require("sinon"),
   sinonChai = require("sinon-chai"),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
   hypermediaResponseStub = { digestPOST: sinon.spy() },
-  controller = proxyquire('../../api/digestController', { './hypermediaResponse' : hypermediaResponseStub });
+  digestAdded = { create: sinon.spy() },
+  controller = proxyquire('../../api/digestController',
+      { './hypermediaResponse' : hypermediaResponseStub,
+        './digestAdded' : digestAdded
+      }
+    );
+
+app.use(bodyParser.json());
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
 
 controller.init(app);
 
-function postDigest(shouldBehaveThusly) {
+function postDigest(payload, shouldBehaveThusly) {
   request(app)
-    .post('/api/digest', 'myfirstdigest')
+    .post('/api/digest')
+    .send(payload)
     .end(shouldBehaveThusly);
 };
 
@@ -29,12 +38,21 @@ function getDigest(path, shouldBehaveThusly) {
 
 describe('digestController', function () {
   describe('when creating a digest', function() {
-    it('should request digest hypermedia', function(done) {
-      postDigest(function(err, res) {
+    it('it should receive digest hypermedia as a response.', function(done) {
+      postDigest({}, function(err, res) {
         hypermediaResponseStub.digestPOST.should.have.been.calledOnce;
         done();
       });
     });
+
+    it('it should create the DigestAdded event.', function(done) {
+      var digestDescription = { description: 'myfirstdigest' };
+      postDigest(digestDescription, function(err, res) {
+        digestAdded.create.should.have.been.calledWith(digestDescription);
+        done();
+      })
+    })
+
   });
 
   describe('when requesting a digest', function() {
