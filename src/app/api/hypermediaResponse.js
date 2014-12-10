@@ -10,12 +10,6 @@
           'rel': 'self'
         },
         {
-          'href' : protocol + '://' + host + '/api/digests/' + digestId + '/inbox/new',
-          'method': 'GET',
-          'description': 'Navigate to form for creating an inbox for a repository on digest ' + digestId,
-          'rel': 'inbox-form'
-        },
-        {
           'href' : protocol + '://' + host + '/api/digests/' + digestId + '/inbox',
           'method': 'POST',
           'description': 'Endpoint for creating an inbox for a repository on digest ' + digestId,

@@ -5,8 +5,6 @@ var chai = require('chai'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
 
-
-
 // see jsonpath, appcatalog has some in it appcatalogentry.schema
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest', function() {
@@ -51,23 +49,6 @@ describe('hypermediaResponse', function() {
 
     it('it\'s self link should be to the appropriate href.', function() {
       linkShouldExistWithProperty('self', 'href','http://localhost/api/digests')
-    });
-
-    // inbox-form
-    it('it should link to an inbox form to create an inbox', function() {
-      linkShouldExistWithProperty('inbox-form', 'rel', 'inbox-form')
-    });
-
-    it('it should have an HTTP GET verb to interract with the inbox form ', function() {
-      linkShouldExistWithProperty('inbox-form', 'method', 'GET')
-    });
-
-    it('it should have a reference to the inbox form', function() {
-      linkShouldExistWithProperty('inbox-form', 'href', 'http://localhost/api/digests/' + digestID +'/inbox/new')
-    });
-
-    it('the link for inbox form should have a description', function() {
-      linkShouldExistWithProperty('inbox-form', 'description', 'Navigate to form for creating an inbox for a repository on digest ' + digestID)
     });
 
     // inbox-create
