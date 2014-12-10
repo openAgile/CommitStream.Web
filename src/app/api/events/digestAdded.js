@@ -1,3 +1,15 @@
 (function(digestAdded) {
+	var uuid = require('uuid-v4');
 
-})(module.exports)
+	digestAdded.create = function(description) {
+		var eventId = uuid();
+		var digestId = uuid();
+
+		return {
+			eventType: 'DigestAdded',
+			eventId : eventId,
+			digestId: digestId,
+			description: description
+		};
+	};
+})(module.exports);
