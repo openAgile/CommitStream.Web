@@ -2,8 +2,10 @@ var proxyquire = require('proxyquire'),
   sinon = require('sinon'),
   expect = require('chai').expect,
   configStub = {},
+  requestStub = {},
   configValidation = proxyquire('../configValidation', {
-    './config': configStub
+    './config': configStub,
+    'request': requestStub
   });
 
 describe('configValidation', function() {
@@ -195,6 +197,47 @@ describe('configValidation', function() {
       configStub.eventStoreBaseUrl = 'https://some.other.domain:9999';
       expect(configValidation.validateConfig).to.not.throw(Error);
       done();
+    });
+  });
+
+  describe('validateEventStore', function() {
+    it('should return an error if it cannot connect to the event store server.', function(done) {
+
+      requestStub.get = function(options, cb) {
+        cb('someError', undefined);
+      };
+
+      configValidation.validateEventStore(function(error) {
+        expect(error).to.not.be.undefined;
+        done();
+      });
+    });
+
+    it('should return an error if the response from event store is undefined.', function(done) {
+
+      requestStub.get = function(options, cb) {
+        cb(null, undefined);
+      };
+
+      configValidation.validateEventStore(function(error) {
+        expect(error).to.not.be.undefined;
+        done();
+      });
+    });
+
+    it('should not return an error if it can connect to the event store server.', function(done) {
+
+      requestStub.get = function(options, cb) {
+        cb(null, {
+          statusCode: 200,
+          body: 'this is suppose to be a body'
+        });
+      };
+
+      configValidation.validateEventStore(function(error) {
+        expect(error).to.be.undefined;
+        done();
+      });
     });
   });
 

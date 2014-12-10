@@ -1,5 +1,6 @@
 var config = require('./config'),
-  validator = require('validator');
+  validator = require('validator'),
+  request = require('request');
 
 var validateProtocolIsHttps = function() {
   if (config.protocol != 'https') {
@@ -125,7 +126,29 @@ var configValidation = {
     else {
       validateEventStoreUri();
     }
+  },
+  validateEventStore: function(cb) {
 
+    var options = {
+      rejectUnauthorized: false,
+      url: config.eventStoreBaseUrl + '/projections/all-non-transient',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Basic ' + new Buffer(config.eventStoreUser + ':' + config.eventStorePassword).toString('base64')
+      }
+    };
+    // TODO: once we refactor to use eventstore-client library
+    request.get(options, function(error, response) {
+      if (error || !response || response.statusCode != 200) {
+        var errorObj = {
+          'error': 'error.fatal.boot.eventStore.connect',
+          'message': 'The service was unable to connect to EventStore at the configured address of <config.eventStoreBaseUrl> to configure projections. Please verify that EventStore is available at the configured address and is accessible with the configured eventStoreUser and eventStorePassword values.'
+        }
+        cb(JSON.stringify(errorObj))
+      } else {
+        cb();
+      }
+    });
   }
 }
 

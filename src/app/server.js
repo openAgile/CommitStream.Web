@@ -7,6 +7,11 @@ var express = require('express'),
   validation = require('./configValidation');
 
 validation.validateConfig();
+validation.validateEventStore(function(error) {
+  if (error) {
+    throw new Error(error);
+  }
+});
 
 app.get('/version', function(req, res) {
   res.json({
