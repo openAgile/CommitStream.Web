@@ -8,21 +8,22 @@ var chai = require('chai'),
 // see jsonpath, appcatalog has some in it appcatalogentry.schema
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest', function() {
-    var digestID = '7f74aa58-74e0-11e4-b116-123b93f75cba';
-    var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestID);
+    var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
+    var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestId);
+
+    function getLinkForRel(rel) {
+      return _.find(hypermedia._links, function(element) { return element.rel === rel; });
+    }
 
     function linkShouldExistWithProperty(rel, property, value) {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === rel; });
+      var link = getLinkForRel(rel);
       link.should.have.property(property, value);
     }
 
-    it('the digestUrl should be a valid URI', function() {
-        validator.isURL(hypermedia.digestUrl).should.be.true;
+    it('the self link href should be a valid URL', function() {
+        var selfLink = getLinkForRel('self');
+        validator.isURL(selfLink.href).should.be.true;
     });
-
-    it('the digestUrl should reference the digest created', function() {
-      hypermedia.should.have.property('digestUrl', 'http://localhost/api/digests/' + digestID);
-    })
 
     it('it should have an id to identify the digest', function() {
         hypermedia.should.have.property('id');
@@ -34,9 +35,10 @@ describe('hypermediaResponse', function() {
     });
 
     it('the digestUrl should contain the id of the digest', function() {
-      var digestUrlParts = hypermedia.digestUrl.split('/');
-      var id = digestUrlParts[digestUrlParts.length - 1];
-      id.should.equal(hypermedia.id);
+      var selfLink = getLinkForRel('self');
+      var selfLinkParts = selfLink.href.split('/');
+      var id = selfLinkParts[selfLinkParts.length - 1];
+      id.should.equal(digestId);
     });
 
     it('it should have links to other resources', function() {
@@ -47,8 +49,8 @@ describe('hypermediaResponse', function() {
       linkShouldExistWithProperty('self', 'rel', 'self');
     });
 
-    it('it\'s self link should be to the appropriate href.', function() {
-      linkShouldExistWithProperty('self', 'href','http://localhost/api/digests');
+    it('it\'s self link should reference the digest created.', function() {
+      linkShouldExistWithProperty('self', 'href','http://localhost/api/digests/' + digestId);
     });
 
     // inbox-create
@@ -61,11 +63,16 @@ describe('hypermediaResponse', function() {
     });
 
     it('it should have a reference to the inbox create resource', function() {
-      linkShouldExistWithProperty('inbox-create', 'href', 'http://localhost/api/digests/' + digestID +'/inbox');
+      linkShouldExistWithProperty('inbox-create', 'href', 'http://localhost/api/digests/' + digestId +'/inbox');
     });
 
     it('the link for inbox creation should have a description', function() {
-      linkShouldExistWithProperty('inbox-create', 'description', 'Endpoint for creating an inbox for a repository on digest ' + digestID);
+      linkShouldExistWithProperty('inbox-create', 'description', 'Endpoint for creating an inbox for a repository on digest ' + digestId);
+    });
+
+    it('the inbox creation href should be a valid URL', function() {
+        var inboxCreateLink = getLinkForRel('inbox-create');
+        validator.isURL(inboxCreateLink.href).should.be.true;
     });
 
   })

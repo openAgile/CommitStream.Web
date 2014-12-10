@@ -3,10 +3,9 @@
   hypermediaResponse.digestPOST = function(protocol, host, digestId) {
     return {
       'id': digestId,
-      'digestUrl': protocol + '://' + host + '/api/digests/' + digestId,
       '_links': [
         {
-          'href': protocol + '://' + host + '/api/digests',
+          'href': protocol + '://' + host + '/api/digests/' + digestId,
           'rel': 'self'
         },
         {
