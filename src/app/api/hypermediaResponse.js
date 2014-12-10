@@ -3,20 +3,20 @@
   hypermediaResponse.digest = function(protocol, host, digestId) {
     return {
       'id': digestId,
-      'digestUrl': protocol + '://' + host + '/api/digest/' + digestId,
+      'digestUrl': protocol + '://' + host + '/api/digests/' + digestId,
       '_links': [
         {
-          'href': protocol + '://' + host + '/api/digest',
+          'href': protocol + '://' + host + '/api/digests',
           'rel': 'self'
         },
         {
-          'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox/new',
+          'href' : protocol + '://' + host + '/api/digests/' + digestId + '/inbox/new',
           'method': 'GET',
           'description': 'Navigate to form for creating an inbox for a repository on digest ' + digestId,
           'rel': 'inbox-form'
         },
         {
-          'href' : protocol + '://' + host + '/api/digest/' + digestId + '/inbox',
+          'href' : protocol + '://' + host + '/api/digests/' + digestId + '/inbox',
           'method': 'POST',
           'description': 'Endpoint for creating an inbox for a repository on digest ' + digestId,
           'rel': 'inbox-create'

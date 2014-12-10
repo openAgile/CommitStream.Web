@@ -14,6 +14,10 @@ describe('hypermediaResponse', function() {
         validator.isURL(hypermedia.digestUrl).should.be.true;
     });
 
+    it('the digestUrl should reference the digest created', function() {
+      hypermedia.should.have.property('digestUrl', 'http://localhost/api/digests/' + digestID);
+    })
+
     it('it should have an id to identify the digest', function() {
         hypermedia.should.have.property('id');
     });
@@ -40,7 +44,7 @@ describe('hypermediaResponse', function() {
 
     it('it\'s self link should be to the appropriate href.', function() {
       var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
-      selfLink.should.have.property('href','http://localhost/api/digest');
+      selfLink.should.have.property('href','http://localhost/api/digests');
     } );
 
     // inbox-form
@@ -56,7 +60,7 @@ describe('hypermediaResponse', function() {
 
     it('it should have a reference to the inbox form', function() {
       var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
-      link.should.have.property('href', hypermedia.digestUrl + '/inbox/new');
+      link.should.have.property('href', 'http://localhost/api/digests/' + digestID +'/inbox/new');
     });
 
     it('the link for inbox form should have a description', function() {
@@ -77,7 +81,7 @@ describe('hypermediaResponse', function() {
 
     it('it should have a reference to the inbox create resource', function() {
       var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
-      link.should.have.property('href', hypermedia.digestUrl + '/inbox');
+      link.should.have.property('href', 'http://localhost/api/digests/' + digestID +'/inbox');
     });
 
     it('the link for inbox creation should have a description', function() {
