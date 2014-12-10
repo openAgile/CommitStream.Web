@@ -4,7 +4,8 @@ var express = require('express'),
   config = require('./config'),
   apikey = require('./apikey'),
   exphbs = require('express-handlebars'),
-  validation = require('./configValidation');
+  validation = require('./configValidation'),
+  bodyParser = require('body-parser');
 
 validation.validateConfig();
 validation.validateEventStore(function(error) {
@@ -18,6 +19,8 @@ app.get('/version', function(req, res) {
     version: "0.0.0"
   });
 });
+
+app.use(bodyParser.json());
 
 var api = require("./api");
 require('./bootstrapper').boot(config);
