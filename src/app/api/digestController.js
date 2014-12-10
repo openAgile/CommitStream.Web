@@ -4,7 +4,7 @@
       config = require('../config'),
       validator = require('validator'),
       hypermediaResponse = require('./hypermediaResponse'),
-      digestAdded = require('./digestAdded');
+      digestAdded = require('./events/digestAdded');
 
   digestController.init = function (app) {
 

@@ -12,7 +12,7 @@ var chai = require('chai'),
   digestAdded = { create: sinon.spy() },
   controller = proxyquire('../../api/digestController',
       { './hypermediaResponse' : hypermediaResponseStub,
-        './digestAdded' : digestAdded
+        './events/digestAdded' : digestAdded
       }
     );
 
