@@ -9,7 +9,7 @@ var chai = require('chai'),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
   hypermediaResponseStub = { digestPOST: sinon.spy() },
-  digestAdded = { create: sinon.spy() },
+  digestAdded = { create: sinon.stub() },
   controller = proxyquire('../../api/digestController',
       { './hypermediaResponse' : hypermediaResponseStub,
         './events/digestAdded' : digestAdded
@@ -38,6 +38,15 @@ function getDigest(path, shouldBehaveThusly) {
 
 describe('digestController', function () {
   describe('when creating a digest', function() {
+    var digestAddedEvent = {
+      eventType: 'DigestAdded',
+      eventId: '87b66de8-8307-4e03-b2d3-da447c66501a',
+      digestId: '7f74aa58-74e0-11e4-b116-123b93f75cba',
+      description: 'my first digest'
+    };
+
+    digestAdded.create.returns(digestAddedEvent);
+
     it('it should receive digest hypermedia as a response.', function(done) {
       postDigest({}, function(err, res) {
         hypermediaResponseStub.digestPOST.should.have.been.calledOnce;
@@ -50,8 +59,8 @@ describe('digestController', function () {
       postDigest(digestDescription, function(err, res) {
         digestAdded.create.should.have.been.calledWith(digestDescription.description);
         done();
-      })
-    })
+      });
+    });
 
   });
 

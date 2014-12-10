@@ -25,11 +25,10 @@
       var response;
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
-      var digestId = uuid();
 
       var digestAddedEvent = digestAdded.create(req.body.description);
-      
-      response = hypermediaResponse.digestPOST(protocol, host, digestId);
+
+      response = hypermediaResponse.digestPOST(protocol, host, digestAddedEvent.digestId);
 
       res.send(response);
     });
