@@ -4,11 +4,19 @@ var chai = require('chai'),
   _ = require('underscore'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
+
+
+
 // see jsonpath, appcatalog has some in it appcatalogentry.schema
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest', function() {
     var digestID = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var hypermedia = hypermediaResponse.digest('http', 'localhost', digestID);
+
+    function linkShouldExistWithProperty(rel, property, value) {
+      var link = _.find(hypermedia._links, function(element) { return element.rel === rel; });
+      link.should.have.property(property, value);
+    }
 
     it('the digestUrl should be a valid URI', function() {
         validator.isURL(hypermedia.digestUrl).should.be.true;
@@ -38,57 +46,46 @@ describe('hypermediaResponse', function() {
     });
 
     it('it should have a link to itself', function() {
-      var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
-      selfLink.should.have.property('rel', 'self');
+      linkShouldExistWithProperty('self', 'rel', 'self')
     });
 
     it('it\'s self link should be to the appropriate href.', function() {
-      var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
-      selfLink.should.have.property('href','http://localhost/api/digests');
-    } );
+      linkShouldExistWithProperty('self', 'href','http://localhost/api/digests')
+    });
 
     // inbox-form
     it('it should link to an inbox form to create an inbox', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
-      link.should.have.property('rel', 'inbox-form');
+      linkShouldExistWithProperty('inbox-form', 'rel', 'inbox-form')
     });
 
     it('it should have an HTTP GET verb to interract with the inbox form ', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
-      link.should.have.property('method', 'GET');
+      linkShouldExistWithProperty('inbox-form', 'method', 'GET')
     });
 
     it('it should have a reference to the inbox form', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
-      link.should.have.property('href', 'http://localhost/api/digests/' + digestID +'/inbox/new');
+      linkShouldExistWithProperty('inbox-form', 'href', 'http://localhost/api/digests/' + digestID +'/inbox/new')
     });
 
     it('the link for inbox form should have a description', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-form'; });
-      link.should.have.property('description', 'Navigate to form for creating an inbox for a repository on digest ' + digestID);
+      linkShouldExistWithProperty('inbox-form', 'description', 'Navigate to form for creating an inbox for a repository on digest ' + digestID)
     });
 
     // inbox-create
     it('it should link to an inbox resource to create an inbox', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
-      link.should.have.property('rel', 'inbox-create');
+      linkShouldExistWithProperty('inbox-create', 'rel', 'inbox-create')
     });
 
     it('it should have an HTTP POST verb to create the inbox', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
-      link.should.have.property('method', 'POST');
+      linkShouldExistWithProperty('inbox-create', 'method', 'POST')
     });
 
     it('it should have a reference to the inbox create resource', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
-      link.should.have.property('href', 'http://localhost/api/digests/' + digestID +'/inbox');
+      linkShouldExistWithProperty('inbox-create', 'href', 'http://localhost/api/digests/' + digestID +'/inbox')
     });
 
     it('the link for inbox creation should have a description', function() {
-      var link = _.find(hypermedia._links, function(element) { return element.rel === 'inbox-create'; });
-      link.should.have.property('description', 'Endpoint for creating an inbox for a repository on digest ' + digestID);
+      linkShouldExistWithProperty('inbox-create', 'description', 'Endpoint for creating an inbox for a repository on digest ' + digestID)
     });
-
 
   })
 
