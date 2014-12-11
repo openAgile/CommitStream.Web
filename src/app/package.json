@@ -7,6 +7,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "body-parser": "^1.6.3",
+    "chai": "^1.10.0",
     "cors": "^2.4.1",
     "express": "^4.8.3",
     "express-handlebars": "^1.1.0",
@@ -19,11 +20,12 @@
     "octonode": "^0.6.9",
     "proxyquire": "^1.0.1",
     "request": "^2.44.0",
-    "request-json": "^0.4.13",    
+    "request-json": "^0.4.13",
     "sinon": "^1.11.1",
     "supertest": "^0.14.0",
     "underscore": "^1.7.0",
-    "uuid-v4": "^0.1.0"
+    "uuid-v4": "^0.1.0",
+    "validator": "^3.22.1"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
