@@ -4,14 +4,19 @@ var chai = require('chai'),
   _ = require('underscore'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
-
-// see jsonpath, appcatalog has some in it appcatalogentry.schema
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestId);
 
+    // helpers
     function getLinkForRel(rel) {
+      console.log(hypermedia._links)
+      return _.find(hypermedia._links, function(element) { return element.rel === rel; });
+    }
+
+    function getLinkForRel(rel) {
+      console.log(hypermedia._links)
       return _.find(hypermedia._links, function(element) { return element.rel === rel; });
     }
 
@@ -19,11 +24,6 @@ describe('hypermediaResponse', function() {
       var link = getLinkForRel(rel);
       link.should.have.property(property, value);
     }
-
-    it('the self link href should be a valid URL', function() {
-        var selfLink = getLinkForRel('self');
-        validator.isURL(selfLink.href).should.be.true;
-    });
 
     it('it should have an id to identify the digest', function() {
         hypermedia.should.have.property('id');
@@ -34,44 +34,50 @@ describe('hypermediaResponse', function() {
       validator.isUUID(id).should.be.true;
     });
 
-    it('the digestUrl should contain the id of the digest', function() {
-      var selfLink = getLinkForRel('self');
-      var selfLinkParts = selfLink.href.split('/');
-      var id = selfLinkParts[selfLinkParts.length - 1];
-      id.should.equal(digestId);
+    it('the self link href should be a valid URL', function() {
+        var selfLink = hypermedia._links['self'];
+        validator.isURL(selfLink.href).should.be.true;
     });
 
     it('it should have links to other resources', function() {
       hypermedia.should.include.key('_links');
     });
 
-    it('it should have a link to itself', function() {
-      linkShouldExistWithProperty('self', 'rel', 'self');
+    // self link
+    it('it should have self a link to the newly created digest', function() {
+      hypermedia._links.should.include.key('self')
+    });
+
+    it('the self link href should contain the id of the digest', function() {
+      var selfLink = hypermedia._links.self;
+      var selfLinkParts = selfLink.href.split('/');
+      var id = selfLinkParts[selfLinkParts.length - 1];
+      id.should.equal(digestId);
     });
 
     it('it\'s self link should reference the digest created.', function() {
-      linkShouldExistWithProperty('self', 'href','http://localhost/api/digests/' + digestId);
+      hypermedia._links['self'].should.have.property('href','http://localhost/api/digests/' + digestId);
     });
 
-    // inbox-create
+    // inbox-create link
     it('it should link to an inbox resource to create an inbox', function() {
-      linkShouldExistWithProperty('inbox-create', 'rel', 'inbox-create');
+      hypermedia._links.should.include.key('inbox-create')
     });
 
     it('it should have an HTTP POST verb to create the inbox', function() {
-      linkShouldExistWithProperty('inbox-create', 'method', 'POST');
+      hypermedia._links['inbox-create'].should.have.property('method', 'POST');
     });
 
     it('it should have a reference to the inbox create resource', function() {
-      linkShouldExistWithProperty('inbox-create', 'href', 'http://localhost/api/digests/' + digestId +'/inbox');
+      hypermedia._links['inbox-create'].should.have.property('href', 'http://localhost/api/digests/' + digestId +'/inbox');
     });
 
     it('the link for inbox creation should have a description', function() {
-      linkShouldExistWithProperty('inbox-create', 'description', 'Endpoint for creating an inbox for a repository on digest ' + digestId);
+      hypermedia._links['inbox-create'].should.have.property('title', 'Endpoint for creating an inbox for a repository on digest ' + digestId);
     });
 
     it('the inbox creation href should be a valid URL', function() {
-        var inboxCreateLink = getLinkForRel('inbox-create');
+        var inboxCreateLink = hypermedia._links['inbox-create'];
         validator.isURL(inboxCreateLink.href).should.be.true;
     });
 

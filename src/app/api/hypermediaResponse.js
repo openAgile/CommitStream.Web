@@ -2,22 +2,17 @@
 
   hypermediaResponse.digestPOST = function(protocol, host, digestId) {
     return {
-      'id': digestId,
-      '_links': [
-        {
-          'href': protocol + '://' + host + '/api/digests/' + digestId,
-          'rel': 'self'
-        },
-        {
-          'href' : protocol + '://' + host + '/api/digests/' + digestId + '/inbox',
-          'method': 'POST',
-          'description': 'Endpoint for creating an inbox for a repository on digest ' + digestId,
-          'rel': 'inbox-create'
+      "id": digestId,
+      "_links": {
+        "self" : { "href": protocol + "://" + host + "/api/digests/" + digestId },
+        "inbox-create" : {  "href": protocol + "://" + host + "/api/digests/" + digestId + "/inbox",
+                            "method": "POST",
+                            "title": "Endpoint for creating an inbox for a repository on digest " + digestId }
         }
-      ]
     };
   }
 
+  // THIS NEEDS TO BE CONVERTED TO PROPER HAL ONCE THE INBOX CREATION STORY IS PLAYED
   hypermediaResponse.inbox = function(protocol, host, inboxId) {
     return {
               'id': inboxId,
