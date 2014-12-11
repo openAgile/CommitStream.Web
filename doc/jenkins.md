@@ -17,7 +17,7 @@ For VersionOne developers, these are our internal Jenkins builds for CommitStrea
 * Jenkins job name: CommitStream-core-deploy-to-azure-sandbox
 * Installs and configures new version on [http://v1commitstream.cloudapp.net/VersionOne](http://v1commitstream.cloudapp.net/VersionOne) 
 
-# [CommitStream](http://ci-server/job/CommitStream-Web-develop/)
+# [CommitStream.Web](http://ci-server/job/CommitStream-Web-develop/)
 * Builds CommitStream.Web 
 * Executes tests
 * Reports code coverage.
