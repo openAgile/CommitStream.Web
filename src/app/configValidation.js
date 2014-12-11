@@ -59,6 +59,16 @@ var validateEventStorePasswordLength = function() {
   }
 };
 
+var validateEventStorePasswordIsGuid = function() {
+  if (validator.isUUID(config.eventStorePassword)) {
+    var errorObj = {
+      error: 'error.fatal.config.eventStorePassword.invalid',
+      message: 'The config.eventStorePassword value should be a GUID when running in production.'
+    }
+    throw new Error(JSON.stringify(errorObj));
+  }
+};
+
 var validateEventStoreUserIsSet = function() {
   if (!config.eventStoreUser) {
     var errorObj = {
@@ -120,6 +130,7 @@ var configValidation = {
       validateApiKeyIsSet();
       validateApiKeyLength();
       validateEventStorePasswordLength();
+      validateEventStorePasswordIsGuid();
       validateEventStoreHttpsUri();
     }
     // local validations
