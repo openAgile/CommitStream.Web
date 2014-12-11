@@ -13,7 +13,7 @@ describe('configValidation', function() {
   beforeEach(function() {
     configStub.protocol = 'https';
     configStub.apiKey = '0123456789012345678901234567890123456789';
-    configStub.eventStorePassword = '098765432109876543210987654321098765';
+    configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
     configStub.eventStoreUser = 'admin';
     configStub.eventStoreBaseUrl = 'https://localhost:2113/';
     configStub.production = true;
@@ -99,20 +99,36 @@ describe('configValidation', function() {
     //updated by SMA
     it('should NOT raise an exception when eventStorePassword is equal to 36 characters long.', function(done) {
       // 36 characters long
-      configStub.eventStorePassword = '098765432109876543210987654321098765';
+      configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
       expect(configValidation.validateConfig).to.not.throw(Error);
       done();
     });
 
     //added by SMA
-    it('should NOT raise an exception when the eventStorePassword is more than 36 characters in length.', function(done) {
+    it('should raise an exception when the eventStorePassword is more than 36 characters in length.', function(done) {
       // 39 characters long
-      configStub.eventStorePassword = 'iuytrewsdf5678902wdr432ju45klopw12scg@@';
-      expect(configValidation.validateConfig).to.not.throw(Error);
+      configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4@@';
+      expect(configValidation.validateConfig).to.throw(Error);
       done();
     });
 
   });
+
+describe('validateEventStorePasswordIsGuid', function(done) {
+  it('should NOT raise an exception when eventStorePassword is a GUID.', function(done) {
+    configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
+    configStub.production = true;
+    expect(configValidation.validateConfig).to.not.throw(Error);
+    done();
+  });
+
+  it('should raise an exception when eventStorePassword is not a proper GUID.', function(done) {
+    configStub.eventStorePassword = 'F9168C5ECE-B2-4faa-B6BF-329BF39FA1E4w'
+    configStub.production = true;
+    expect(configValidation.validateConfig).to.throw(Error);
+    done();
+  });
+});
 
   //corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
   describe('validateEventStoreUserIsSet', function() {
@@ -138,8 +154,6 @@ describe('configValidation', function() {
 
   });
 
-
-  // SMA ???? here on down
   //comments added by SMA
   describe('validateEventStoreUri', function() {
     it('should raise an exception when eventStoreBaseUrl is not a valid URI.', function(done) {

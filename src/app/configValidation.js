@@ -60,7 +60,7 @@ var validateEventStorePasswordLength = function() {
 };
 
 var validateEventStorePasswordIsGuid = function() {
-  if (validator.isUUID(config.eventStorePassword)) {
+  if (!validator.isUUID(config.eventStorePassword)) {
     var errorObj = {
       error: 'error.fatal.config.eventStorePassword.invalid',
       message: 'The config.eventStorePassword value should be a GUID when running in production.'
