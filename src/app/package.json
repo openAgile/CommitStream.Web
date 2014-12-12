@@ -25,7 +25,8 @@
     "supertest": "^0.14.0",
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
-    "validator": "^3.22.1"
+    "validator": "^3.22.1",
+    "eventstore-client": "openAgile/eventstore-client"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
