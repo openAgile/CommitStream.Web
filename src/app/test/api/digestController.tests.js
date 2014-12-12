@@ -2,7 +2,6 @@ var chai = require('chai'),
   should = chai.should(),
   express = require('express'),
   app = express(),
-  bodyParser = require('body-parser'),
   chai = require('chai'),
   sinon = require("sinon"),
   sinonChai = require("sinon-chai"),
@@ -15,8 +14,6 @@ var chai = require('chai'),
         './events/digestAdded' : digestAdded
       }
     );
-
-app.use(bodyParser.json());
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
