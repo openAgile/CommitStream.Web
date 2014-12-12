@@ -40,17 +40,21 @@ describe('digestAdded', function() {
       it('has eventId of type UUID', function() {
         validator.isUUID(digestAddedEvent.eventId).should.be.true;
       });
-
-      it('has digestId of ' + eventId, function() {
-        digestAddedEvent.should.have.property('digestId', digestId);
-      });
-
-      it('has digestId of type UUID', function() {
-        validator.isUUID(digestAddedEvent.digestId).should.be.true;
-      });
       
-      it('has description of passed argument value', function() {
-        digestAddedEvent.should.have.property('description', description);
+      it('has data of type Object', function() {
+        digestAddedEvent.data.should.be.an('object');
+      });      
+
+      it('has data.digestId of ' + eventId, function() {
+        digestAddedEvent.data.should.have.property('digestId', digestId);
+      });
+
+      it('has data.digestId of type UUID', function() {
+        validator.isUUID(digestAddedEvent.data.digestId).should.be.true;
+      });
+
+      it('has data.description of passed argument value', function() {
+        digestAddedEvent.data.should.have.property('description', description);
       });
 
     });

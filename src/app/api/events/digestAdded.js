@@ -7,9 +7,11 @@
 
 		return {
 			eventType: 'DigestAdded',
-			eventId : eventId,
-			digestId: digestId,
-			description: description
+			eventId: eventId,
+			data: {
+				digestId: digestId,
+				description: description
+			}
 		};
 	};
 })(module.exports);

@@ -41,8 +41,10 @@ describe('digestController', function () {
     var digestAddedEvent = {
       eventType: 'DigestAdded',
       eventId: '87b66de8-8307-4e03-b2d3-da447c66501a',
-      digestId: '7f74aa58-74e0-11e4-b116-123b93f75cba',
-      description: 'my first digest'
+      data: {
+        digestId: '7f74aa58-74e0-11e4-b116-123b93f75cba',
+        description: 'my first digest'
+      }
     };
 
     digestAdded.create.returns(digestAddedEvent);
