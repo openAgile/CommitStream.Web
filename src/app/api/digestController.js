@@ -11,7 +11,7 @@
   digestController.init = function (app) {
 
   /**
-     * The response to creating a digest will have links (see _links below) to other resources
+     * The hypermedia to creating a digest will have links (see _links below) to other resources
      * that are a result of having created a digest. Those links are identified for documentation
      * purposes via their rel value.
      *
@@ -24,29 +24,31 @@
      *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
    **/
     app.post('/api/digest', bodyParser.json() , function(req, res) {
-      var response;
+      var hypermedia;
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
+      // THESE SHOULD NOT BE NEEDED.
       config.eventStoreUser = 'admin';
-      config.eventStorePassword = 'changeit'
+      config.eventStorePassword = 'changeit';
       var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
 
       var digestAddedEvent = digestAdded.create(req.body.description);
-      console.log(JSON.stringify([digestAddedEvent]))
+
       es.pushEventsII('digests', JSON.stringify([digestAddedEvent]), function(err, resp, body) {
+        // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
         if(err) {
-          console.log('callback ERROR:' + err);
         }
 
-        console.log('callback RESPONSE:' + resp.toString());
-        console.log('callback RESPONSE:' + resp.statusCode);
-        console.log('callback BODY:' +  body);
       })
 
-      response = hypermediaResponse.digestPOST(protocol, host, digestAddedEvent.digestId);
+      hypermedia = hypermediaResponse.digestPOST(protocol, host, digestAddedEvent.digestId);
 
-      res.send(response);
+      res.location(hypermedia._links.self.href);
+      res.set('Content-Type', 'application/hal+json');
+      res.status(201);
+
+      res.send(hypermedia);
     });
 
     app.get('/api/digest/:uuid', function (req, res, next) {

@@ -35,16 +35,28 @@ function getDigest(path, shouldBehaveThusly) {
 
 describe('digestController', function () {
   describe('when creating a digest', function() {
-    var digestAddedEvent = {
-      eventType: 'DigestAdded',
-      eventId: '87b66de8-8307-4e03-b2d3-da447c66501a',
-      data: {
-        digestId: '7f74aa58-74e0-11e4-b116-123b93f75cba',
-        description: 'my first digest'
-      }
-    };
+    var hypermediaResponse;
 
-    digestAdded.create.returns(digestAddedEvent);
+    before(function() {
+      var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
+
+      var digestAddedEvent = {
+        eventType: 'DigestAdded',
+        eventId: '87b66de8-8307-4e03-b2d3-da447c66501a',
+        data: {
+          digestId: digestId,
+          description: 'my first digest'
+        }
+      };
+      hypermediaResponse = {
+      "_links": {
+        "self" : { "href": 'http' + "://" + 'localhost' + "/api/digests/" + digestId }
+      }
+    }
+
+      digestAdded.create.returns(digestAddedEvent);
+      hypermediaResponseStub.digestPOST.returns(hypermediaResponse);
+    })
 
     it('it should receive digest hypermedia as a response.', function(done) {
       postDigest({}, function(err, res) {
@@ -61,19 +73,31 @@ describe('digestController', function () {
       });
     });
 
-    // it('it should set the Location response header to the newly created digest', function(done) {
-    //   var digestDescription = { description: 'myfirstdigest' };
-    //   postDigest(digestDescription, function(err, res) {
-    //     done();
-    //   });
-    // })
 
-    // it('it should have a response code of 201 created', function(done) {
-    //   var digestDescription = { description: 'myfirstdigest' };
-    //   postDigest(digestDescription, function(err, res) {
-    //     done();
-    //   });
-    // })
+
+    it('it should have a response Content-Type of hal+json', function(done) {
+      var digestDescription = { description: 'myfirstdigest' };
+      postDigest(digestDescription, function(err, res) {
+        res.header['content-type'].should.equal('application/hal+json; charset=utf-8');
+        done();
+      });
+    })
+
+    it('it should set the Location response header to the newly created digest', function(done) {
+      var digestDescription = { description: 'myfirstdigest' };
+      postDigest(digestDescription, function(err, res) {
+        res.header['location'].should.equal(hypermediaResponse._links.self.href);
+        done();
+      });
+    })
+
+    it('it should have a response code of 201 created', function(done) {
+      var digestDescription = { description: 'myfirstdigest' };
+      postDigest(digestDescription, function(err, res) {
+        res.status.should.equal(201);
+        done();
+      });
+    })
 
   });
 
