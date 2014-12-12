@@ -61,6 +61,20 @@ describe('digestController', function () {
       });
     });
 
+    // it('it should set the Location response header to the newly created digest', function(done) {
+    //   var digestDescription = { description: 'myfirstdigest' };
+    //   postDigest(digestDescription, function(err, res) {
+    //     done();
+    //   });
+    // })
+
+    // it('it should have a response code of 201 created', function(done) {
+    //   var digestDescription = { description: 'myfirstdigest' };
+    //   postDigest(digestDescription, function(err, res) {
+    //     done();
+    //   });
+    // })
+
   });
 
   describe('when requesting a digest', function() {

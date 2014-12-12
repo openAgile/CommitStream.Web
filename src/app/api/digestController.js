@@ -4,7 +4,9 @@
       config = require('../config'),
       validator = require('validator'),
       hypermediaResponse = require('./hypermediaResponse'),
-      digestAdded = require('./events/digestAdded');
+      digestAdded = require('./events/digestAdded'),
+      eventStore = require('./helpers/eventStore'),
+      bodyParser = require('body-parser');
 
   digestController.init = function (app) {
 
@@ -21,12 +23,26 @@
      * @apiSuccess {Array[Object]} _links - Links to other resources as a result of creating a digest.
      *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
    **/
-    app.post('/api/digest', function(req, res) {
+    app.post('/api/digest', bodyParser.json() , function(req, res) {
       var response;
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
+      config.eventStoreUser = 'admin';
+      config.eventStorePassword = 'changeit'
+      var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
+
       var digestAddedEvent = digestAdded.create(req.body.description);
+      console.log(JSON.stringify([digestAddedEvent]))
+      es.pushEventsII('digests', JSON.stringify([digestAddedEvent]), function(err, resp, body) {
+        if(err) {
+          console.log('callback ERROR:' + err);
+        }
+
+        console.log('callback RESPONSE:' + resp.toString());
+        console.log('callback RESPONSE:' + resp.statusCode);
+        console.log('callback BODY:' +  body);
+      })
 
       response = hypermediaResponse.digestPOST(protocol, host, digestAddedEvent.digestId);
 
