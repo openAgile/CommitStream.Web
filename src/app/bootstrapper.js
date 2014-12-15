@@ -32,7 +32,6 @@
     function getLocalProjections(cb) {
       var projections = [];
       var dir = path.join(__dirname, 'projections');
-      console.log(dir);
       fs.readdir(dir, function(err, files) {
         files.forEach(function(name) {
           var fullPath = path.join(dir, name);

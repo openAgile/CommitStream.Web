@@ -1,11 +1,9 @@
-var proxyquire = require('proxyquire'),
+var proxyquire = require('proxyquire').noPreserveCache(),
   sinon = require('sinon'),
   expect = require('chai').expect,
   configStub = {},
-  requestStub = {},
   configValidation = proxyquire('../configValidation', {
-    './config': configStub,
-    'request': requestStub
+    './config': configStub
   });
 
 describe('configValidation', function() {
@@ -114,21 +112,21 @@ describe('configValidation', function() {
 
   });
 
-describe('validateEventStorePasswordIsGuid', function(done) {
-  it('should NOT raise an exception when eventStorePassword is a GUID.', function(done) {
-    configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
-    configStub.production = true;
-    expect(configValidation.validateConfig).to.not.throw(Error);
-    done();
-  });
+  describe('validateEventStorePasswordIsGuid', function(done) {
+    it('should NOT raise an exception when eventStorePassword is a GUID.', function(done) {
+      configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
+      configStub.production = true;
+      expect(configValidation.validateConfig).to.not.throw(Error);
+      done();
+    });
 
-  it('should raise an exception when eventStorePassword is not a proper GUID.', function(done) {
-    configStub.eventStorePassword = 'F9168C5ECE-B2-4faa-B6BF-329BF39FA1E4w'
-    configStub.production = true;
-    expect(configValidation.validateConfig).to.throw(Error);
-    done();
+    it('should raise an exception when eventStorePassword is not a proper GUID.', function(done) {
+      configStub.eventStorePassword = 'F9168C5ECE-B2-4faa-B6BF-329BF39FA1E4w'
+      configStub.production = true;
+      expect(configValidation.validateConfig).to.throw(Error);
+      done();
+    });
   });
-});
 
   //corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
   describe('validateEventStoreUserIsSet', function() {
@@ -216,39 +214,63 @@ describe('validateEventStorePasswordIsGuid', function(done) {
 
   describe('validateEventStore', function() {
     it('should return an error if it cannot connect to the event store server.', function(done) {
-
-      requestStub.get = function(options, cb) {
-        cb('someError', undefined);
+      var esStub = function() {
+        this.projections = {
+          get: function(cb) {
+            cb('someError', undefined);
+          }
+        }
       };
 
-      configValidation.validateEventStore(function(error) {
+      var v = proxyquire('../configValidation', {
+        './config': configStub,
+        'eventstore-client': esStub
+      });
+
+      v.validateEventStore(function(error) {
         expect(error).to.not.be.undefined;
         done();
       });
     });
 
     it('should return an error if the response from event store is undefined.', function(done) {
+      var esStub = function() {
+        this.projections = {
+          get: function(cb) {
+            cb(null, undefined);
+          }
+        }
+      }
 
-      requestStub.get = function(options, cb) {
-        cb(null, undefined);
-      };
+      var v = proxyquire('../configValidation', {
+        './config': configStub,
+        'eventstore-client': esStub
+      });
 
-      configValidation.validateEventStore(function(error) {
+      v.validateEventStore(function(error) {
         expect(error).to.not.be.undefined;
         done();
       });
     });
 
     it('should not return an error if it can connect to the event store server.', function(done) {
+      var esStub = function() {
+        this.projections = {
+          get: function(cb) {
+            cb(null, {
+              statusCode: 200,
+              body: 'this is suppose to be a body'
+            });
+          }
+        }
+      }
 
-      requestStub.get = function(options, cb) {
-        cb(null, {
-          statusCode: 200,
-          body: 'this is suppose to be a body'
-        });
-      };
+      var v = proxyquire('../configValidation', {
+        './config': configStub,
+        'eventstore-client': esStub
+      });
 
-      configValidation.validateEventStore(function(error) {
+      v.validateEventStore(function(error) {
         expect(error).to.be.undefined;
         done();
       });
