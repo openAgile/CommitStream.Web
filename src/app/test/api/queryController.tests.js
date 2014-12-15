@@ -3,7 +3,7 @@ var assert = require('assert'),
   express = require('express'),
   app = express(),
   request = require('supertest'),
-  proxyquire = require('proxyquire'),
+  proxyquire = require('proxyquire').noPreserveCache(),
   eventStoreStub = function() {
     this.streams = {
       get: function(args, callback) {
@@ -22,6 +22,20 @@ controller.init(app);
 
 describe('queryController', function() {
   describe('when I issue a workitem query for an asset that has no associated commits', function() {
+    var esStub = function() {
+      this.streams = {
+        get: function(args, callback) {
+          callback(null, {
+            statusCode: '404',
+            body: ''
+          });
+        }
+      }
+    };
+
+    controller = proxyquire('../../api/queryController', {
+      'eventstore-client': esStub
+    });
 
     it('returns a 200 OK response with an empty commits array', function(done) {
       //exercise our api
@@ -37,6 +51,10 @@ describe('queryController', function() {
   });
 
   describe('when I issue a query without a workitem as a parameter', function() {
+    controller = proxyquire('../../api/queryController', {
+      'eventstore-client': {}
+    });
+
     it('returns a 400 Bad Request response with a error message', function(done) {
       request(app)
         .get('/api/query')
