@@ -27,9 +27,6 @@
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
-      // THESE SHOULD NOT BE NEEDED.
-      config.eventStoreUser = 'admin';
-      config.eventStorePassword = 'changeit';
       var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
 
       var digestAddedEvent = digestAdded.create(req.body.description);
