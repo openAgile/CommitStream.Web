@@ -24,7 +24,6 @@
      *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
    **/
     app.post('/api/digest', bodyParser.json() , function(req, res) {
-      var hypermedia;
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
@@ -42,7 +41,7 @@
 
       })
 
-      hypermedia = hypermediaResponse.digestPOST(protocol, host, digestAddedEvent.digestId);
+      var hypermedia = hypermediaResponse.digestPOST(protocol, host, digestAddedEvent.data.digestId);
 
       res.location(hypermedia._links.self.href);
       res.set('Content-Type', 'application/hal+json');

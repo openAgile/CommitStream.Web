@@ -36,11 +36,14 @@ function getDigest(path, shouldBehaveThusly) {
 describe('digestController', function () {
   describe('when creating a digest', function() {
     var hypermediaResponse;
+    var protocol;
+    var host;
+    var digestAddedEvent;
 
     before(function() {
       var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
 
-      var digestAddedEvent = {
+      digestAddedEvent = {
         eventType: 'DigestAdded',
         eventId: '87b66de8-8307-4e03-b2d3-da447c66501a',
         data: {
@@ -48,19 +51,24 @@ describe('digestController', function () {
           description: 'my first digest'
         }
       };
+
+      protocol = 'http';
+      host = 'localhost';
+
       hypermediaResponse = {
       "_links": {
-        "self" : { "href": 'http' + "://" + 'localhost' + "/api/digests/" + digestId }
+        "self" : { "href": protocol + "://" + host + "/api/digests/" + digestId }
       }
+
     }
 
       digestAdded.create.returns(digestAddedEvent);
       hypermediaResponseStub.digestPOST.returns(hypermediaResponse);
     })
 
-    it('it should receive digest hypermedia as a response.', function(done) {
+    it('it should use proper arguments when creating hypermedia.', function(done) {
       postDigest({}, function(err, res) {
-        hypermediaResponseStub.digestPOST.should.have.been.calledOnce;
+        hypermediaResponseStub.digestPOST.should.have.been.calledWith(protocol, sinon.match.any, digestAddedEvent.data.digestId);
         done();
       });
     });
@@ -72,8 +80,6 @@ describe('digestController', function () {
         done();
       });
     });
-
-
 
     it('it should have a response Content-Type of hal+json', function(done) {
       var digestDescription = { description: 'myfirstdigest' };
