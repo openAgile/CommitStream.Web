@@ -26,7 +26,7 @@
         });
 
         var e = JSON.stringify(events)
-        es.stream.post({
+        es.streams.post({
           name: 'github-events',
           events: e
         }, function(error, response) {
@@ -58,7 +58,7 @@
           password: config.eventStorePassword
         });
         var e = JSON.stringify(events)
-        es.stream.post({
+        es.streams.post({
           name: 'github-events',
           events: e
         }, function(error, response) {

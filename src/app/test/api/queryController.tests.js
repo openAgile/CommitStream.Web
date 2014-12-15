@@ -5,7 +5,7 @@ var assert = require('assert'),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
   eventStoreStub = function() {
-    this.stream = {
+    this.streams = {
       get: function(args, callback) {
         callback(null, {
           statusCode: '404',
@@ -22,9 +22,6 @@ controller.init(app);
 
 describe('queryController', function() {
   describe('when I issue a workitem query for an asset that has no associated commits', function() {
-    eventStoreStub.getLastAssets = function(args, callback) {
-      callback(null, undefined);
-    };
 
     it('returns a 200 OK response with an empty commits array', function(done) {
       //exercise our api

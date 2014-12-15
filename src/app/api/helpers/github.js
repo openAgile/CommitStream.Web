@@ -23,6 +23,7 @@ function Helper(repoClient) {
     that.parms.sha = args.branchName;
 
     that.ghrepo.commits(that.parms, function(err, body, headers) {
+      // TODO: check error
       if (body.length != 0) {
         body.forEach(function(item) {
           //TODO: do this in the translator

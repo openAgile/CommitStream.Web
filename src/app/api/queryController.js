@@ -33,7 +33,7 @@
         var stream = 'asset-' + req.query.workitem;
         var count = req.query.pageSize || 5;
 
-        es.stream.get({
+        es.streams.get({
           name: stream,
           count: count
         }, function(error, response) {
