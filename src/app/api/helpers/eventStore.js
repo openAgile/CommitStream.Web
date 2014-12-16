@@ -149,4 +149,31 @@ eventStore.prototype.getProjections = function (callback) {
   });
 };
 
+eventStore.prototype.getState = function(args, cb) {
+  assert.ok(args.name, 'You must specify a name and a projection.');
+  
+  var url = this.baseUrl + '/projection/' + args.name + '/state';
+  
+  if (args.partition) {
+    url += '?partition=' + args.partition;
+  }
+
+  var options = {
+    url: url,
+    rejectUnauthorized: false,
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': this.authorization
+    }
+  };
+
+  console.log(url);
+
+  request.get(options, function(error, response) {
+    cb(error, response);
+  });
+
+};
+
+
 module.exports = eventStore;
