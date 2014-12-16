@@ -64,7 +64,6 @@ var validateEventStoreUserIsSet = function() {
       error: 'error.fatal.config.eventStoreUser.invalid',
       message: 'The config.eventStoreUser value is either not set or is an empty string. Please set it to a valid non-empty string.'
     }
-
     throw new Error(JSON.stringify(errorObj));
   }
 };
@@ -81,7 +80,6 @@ var validateEventStoreUri = function() {
       message: 'The config.eventStoreBaseUrl value is ' + config.eventStoreBaseUrl +
         '. You must specify a valid URI using protocol HTTP or HTTPS.'
     }
-
     throw new Error(JSON.stringify(errorObj));
   };
 }
