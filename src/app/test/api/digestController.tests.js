@@ -133,7 +133,6 @@ describe('digestController', function () {
       });
     });
 
-    /*
     describe('with a valid, uuid digest identifier', function() {
       var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
       beforeEach(function() {
@@ -168,7 +167,6 @@ describe('digestController', function () {
         });
       });
     });
-    */
 
     describe('with a valid, uuid that does not match a real digest', function() {
       beforeEach(function() {
@@ -192,13 +190,14 @@ describe('digestController', function () {
         });
       });
 
-      /*
       it('it returns a 404 status code', function(done) {
         get(function(err, res) {
             res.statusCode.should.equal(404);
             done();
         });
       });
+
+      /*
       it('returns a Content-Type of application/hal+json', function(done) {
         get(function(err, res) {
           res.get('Content-Type').should.equal('application/hal+json7; charset=utf-8');

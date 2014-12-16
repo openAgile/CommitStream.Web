@@ -54,6 +54,7 @@
             res.status(500).send(err);
           } else if (!resp.body || resp.body.length < 1) {
             // TODO
+            res.status(404);
             res.end();
           } else { // our shit is good(resp.body && resp.body.length > 0) {
             res.set('Content-Type', 'application/hal+json');
