@@ -50,11 +50,10 @@
       } else {
         eventStore.getState({ name: 'digest.js', partition: 'digest-' + req.params.uuid }, function(err, resp) {
           if (err) {
-            res.status(500).send(err);
+            res.status(500).json({'error': 'There was an internal error when trying to process your request'});
           } else if (!resp.body || resp.body.length < 1) {
-            res.set('Content-Type', 'application/json');
-            res.status(404);            
-            res.json({'error': 'Could not find a digest with id ' + req.params.uuid});
+            //res.set('Content-Type', 'application/json');
+            res.status(404).json({'error': 'Could not find a digest with id ' + req.params.uuid});
           } else { // our shit is good(resp.body && resp.body.length > 0) {
             res.set('Content-Type', 'application/hal+json');
             res.send(resp.body);

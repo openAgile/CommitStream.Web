@@ -119,12 +119,14 @@ describe('digestController', function () {
       function get(shouldBehaveThusly) {
         getDigest('/api/digests/not_a_uuid', shouldBehaveThusly);
       }
+
       it('it returns a 400 status code', function(done) {
         get(function(err, res) {
             res.statusCode.should.equal(400);
             done();
         });
       });
+
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
             res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
@@ -134,7 +136,9 @@ describe('digestController', function () {
     });
 
     describe('with a valid, uuid digest identifier', function() {
+
       var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+
       beforeEach(function() {
         eventStoreClient.getState = sinon.stub();
         eventStoreClient.pushEventsII = sinon.spy();
@@ -142,9 +146,11 @@ describe('digestController', function () {
           body: '{ "description": "BalZac!", "digestId": "' + uuid + '"}'
         });
       });
+
       function get(shouldBehaveThusly) {
         getDigest('/api/digests/' + uuid, shouldBehaveThusly);
-      }      
+      }
+
       it('calls eventStore.getState with correct parameters', function(done) {
         get(function(err, res) {
           eventStoreClient.getState.should.have.been.calledWith({ 
@@ -154,21 +160,25 @@ describe('digestController', function () {
           done();
         });
       });
+
       it('it returns a 200 status code', function(done) {
         get(function(err, res) {
             res.statusCode.should.equal(200);
             done();
         });
       });
+
       it('returns a Content-Type of application/hal+json', function(done) {
         get(function(err, res) {
           res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
           done();
         });
       });
+
     });
 
     describe('with a valid, uuid that does not match a real digest', function() {
+
       beforeEach(function() {
         eventStoreClient.getState = sinon.stub();
         eventStoreClient.pushEventsII = sinon.spy();
@@ -176,10 +186,13 @@ describe('digestController', function () {
           body: ''
         }); // No error, but nothing found on the remote end
       });
+
       var uuid = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
+
       function get(shouldBehaveThusly) {
         getDigest('/api/digests/' + uuid, shouldBehaveThusly);
       }
+
       it('calls eventStore.getState with correct parameters', function(done) {
         get(function(err, res) {
           eventStoreClient.getState.should.have.been.calledWith({ 
@@ -189,25 +202,75 @@ describe('digestController', function () {
           done();
         });
       });
+
       it('it returns a 404 status code', function(done) {
         get(function(err, res) {
             res.statusCode.should.equal(404);
             done();
         });
       });
+
       it('returns a Content-Type of application/json', function(done) {
         get(function(err, res) {
           res.get('Content-Type').should.equal('application/json; charset=utf-8');
           done();
         });
       });
+
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {          
           res.text.should.equal(JSON.stringify({'error': 'Could not find a digest with id ' + uuid}));
           done();
         });
       });
+
     });
 
+    describe('with an error returned from eventStoreClient', function() {
+
+      beforeEach(function() {
+        eventStoreClient.getState = sinon.stub();
+        eventStoreClient.pushEventsII = sinon.spy();
+        eventStoreClient.getState.callsArgWith(1, 'Hey there is an error!', {});
+      });
+
+      var uuid = '4cc217e4-0802-4f0f-8218-f8e5772aac5b';
+
+      function get(shouldBehaveThusly) {
+        getDigest('/api/digests/' + uuid, shouldBehaveThusly);
+      }
+
+      it('calls eventStore.getState with correct parameters', function(done) {
+        get(function(err, res) {
+          eventStoreClient.getState.should.have.been.calledWith({ 
+              name: sinon.match.any, 
+              partition: 'digest-' + uuid
+            }, sinon.match.any);        
+          done();
+        });
+      });
+
+      it('it returns a 500 status code', function(done) {
+        get(function(err, res) {
+            res.statusCode.should.equal(500);
+            done();
+        });
+      });
+
+      it('returns a Content-Type of application/json', function(done) {
+        get(function(err, res) {
+          res.get('Content-Type').should.equal('application/json; charset=utf-8');
+          done();
+        });
+      });
+
+      it('it returns a meaningful error message', function(done) {
+        get(function(err, res) {          
+          res.text.should.equal(JSON.stringify({'error': 'There was an internal error when trying to process your request'}));
+          done();
+        });
+      });
+
+    });
   });
 });
