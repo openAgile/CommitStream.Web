@@ -5,7 +5,7 @@
       validator = require('validator'),
       hypermediaResponse = require('./hypermediaResponse'),
       digestAdded = require('./events/digestAdded'),
-      eventStore = require('./helpers/eventStore'),
+      eventStore = require('./helpers/eventStoreClient')
       bodyParser = require('body-parser');
 
   digestController.init = function (app) {
@@ -23,15 +23,13 @@
      * @apiSuccess {Array[Object]} _links - Links to other resources as a result of creating a digest.
      *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
    **/
-    app.post('/api/digest', bodyParser.json() , function(req, res) {
+    app.post('/api/digests', bodyParser.json() , function(req, res) {
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
-      var es = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
-
       var digestAddedEvent = digestAdded.create(req.body.description);
 
-      es.pushEventsII('digests', JSON.stringify([digestAddedEvent]), function(err, resp, body) {
+      eventStore.pushEventsII('digests', JSON.stringify([digestAddedEvent]), function(err, resp, body) {
         // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
         if(err) {
         }
@@ -47,11 +45,20 @@
       res.send(hypermedia);
     });
 
-    app.get('/api/digest/:uuid', function (req, res, next) {
+    app.get('/api/digests/:uuid', function (req, res, next) {
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
       } else {
-        res.status(200).end();
+        eventStore.getState({ name: 'digest.js', partition: 'digest-' + req.params.uuid }, function(err, resp) {
+          if (err) {
+            res.status(500).send(err);
+          } else if (!resp.body || resp.body.length < 1) {
+            // TODO
+          } else { // our shit is good(resp.body && resp.body.length > 0) {
+            res.set('Content-Type', 'application/hal+json');
+            res.send(resp.body);
+          }
+        });
       }
     });
   }

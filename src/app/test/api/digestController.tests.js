@@ -3,15 +3,23 @@ var chai = require('chai'),
   express = require('express'),
   app = express(),
   chai = require('chai'),
-  sinon = require("sinon"),
-  sinonChai = require("sinon-chai"),
+  sinon = require('sinon'),
+  sinonChai = require('sinon-chai'),
+  sandbox = sinon.sandbox.create(),
+  _ = require('underscore'),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
-  hypermediaResponseStub = { digestPOST: sinon.stub() },
-  digestAdded = { create: sinon.stub() },
+  hypermediaResponseStub = { digestPOST: sandbox.stub() },
+  digestAdded = { create: sandbox.stub() },
+  eventStoreClient = { 
+    getState: sandbox.stub(),
+    pushEventsII: sandbox.spy()
+  },
   controller = proxyquire('../../api/digestController',
-      { './hypermediaResponse' : hypermediaResponseStub,
-        './events/digestAdded' : digestAdded
+      { 
+        './hypermediaResponse' : hypermediaResponseStub,
+        './events/digestAdded' : digestAdded,
+        './helpers/eventStoreClient': eventStoreClient
       }
     );
 
@@ -22,7 +30,7 @@ controller.init(app);
 
 function postDigest(payload, shouldBehaveThusly) {
   request(app)
-    .post('/api/digest')
+    .post('/api/digests')
     .send(payload)
     .end(shouldBehaveThusly);
 };
@@ -33,12 +41,18 @@ function getDigest(path, shouldBehaveThusly) {
     .end(shouldBehaveThusly);
 }
 
+
+
 describe('digestController', function () {
   describe('when creating a digest', function() {
     var hypermediaResponse;
     var protocol;
     var host;
     var digestAddedEvent;
+
+    beforeEach(function() {
+      sandbox.restore();
+    });
 
     before(function() {
       var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
@@ -84,7 +98,7 @@ describe('digestController', function () {
     it('it should have a response Content-Type of hal+json', function(done) {
       var digestDescription = { description: 'myfirstdigest' };
       postDigest(digestDescription, function(err, res) {
-        res.header['content-type'].should.equal('application/hal+json; charset=utf-8');
+        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
         done();
       });
     })
@@ -92,7 +106,7 @@ describe('digestController', function () {
     it('it should set the Location response header to the newly created digest', function(done) {
       var digestDescription = { description: 'myfirstdigest' };
       postDigest(digestDescription, function(err, res) {
-        res.header['location'].should.equal(hypermediaResponse._links.self.href);
+        res.get('Location').should.equal(hypermediaResponse._links.self.href);
         done();
       });
     })
@@ -110,7 +124,7 @@ describe('digestController', function () {
   describe('when requesting a digest', function() {
     describe('with an invalid, non-uuid digest identifier', function() {
       function get(shouldBehaveThusly) {
-        getDigest('/api/digest/not_a_uuid', shouldBehaveThusly);
+        getDigest('/api/digests/not_a_uuid', shouldBehaveThusly);
       }
       it('it returns a 400 status code', function(done) {
         get(function(err, res) {
@@ -127,15 +141,36 @@ describe('digestController', function () {
     });
     describe('with a valid, uuid digest identifier', function() {
       var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+      eventStoreClient.getState.callsArgWith(1, null, {
+        body: '{ "description": "BalZac!", "digestId": "' + uuid + '"}'
+      });
       function get(shouldBehaveThusly) {
-        getDigest('/api/digest/' + uuid, shouldBehaveThusly);
+        getDigest('/api/digests/' + uuid, shouldBehaveThusly);
       }
+      
+      it('calls eventStore.getState with correct parameters', function(done) {
+        get(function(err, res) {
+          eventStoreClient.getState.should.have.been.calledWith({ 
+              name: sinon.match.any, 
+              partition: 'digest-' + uuid 
+            }, sinon.match.any);
+          done();
+        });
+      });
+
       it('it returns a 200 status code', function(done) {
         get(function(err, res) {
             res.statusCode.should.equal(200);
             done();
         });
       });
+
+      it('returns a Content-Type of application/hal+json', function(done) {
+        get(function(err, res) {
+          res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        });
+      })
     });
   });
 });
