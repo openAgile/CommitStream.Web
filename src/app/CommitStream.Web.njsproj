@@ -18,17 +18,35 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="apikey.js" />
+    <Compile Include="api\digestController.js" />
+    <Compile Include="api\events\digestAdded.js" />
+    <Compile Include="api\hypermediaResponse.js" />
+    <Compile Include="api\inboxController.js" />
+    <Compile Include="api\settingsController.js" />
+    <Compile Include="configValidation.js" />
+    <Compile Include="projections\digests-by-id.js" />
+    <Compile Include="test\api\digestController.tests.js" />
+    <Compile Include="test\api\events\digestAdded.tests.js" />
     <Compile Include="test\api\helpers\eventStore.tests.js" />
+    <Compile Include="test\api\hypermediaResponse.tests.js" />
+    <Compile Include="test\api\inboxController.tests.js" />
     <Compile Include="test\api\queryController.tests.js" />
     <Compile Include="test\api\translators\gitHubEventsToApiResponse.tests.js" />
+    <Compile Include="test\configValidation.tests.js" />
     <Compile Include="test\projections\by-asset.tests.js" />
     <Compile Include="test\projections\by-github-repository.tests.js" />
+    <Compile Include="test\projections\digests-by-id.tests.js" />
     <Compile Include="test\projections\eventStoreEnvironment.js" />
     <Compile Include="test\projections\partitioner-with-or-without-mention.tests.js" />
     <Compile Include="test\projections\sampleData.json" />
+    <Content Include="client\logo.png" />
+    <Content Include="config.staging.json" />
     <Content Include="iisnode.yaml" />
     <Content Include="projections\by-asset.js" />
     <Content Include="projections\partitionate-with-or-without-mention.js" />
+    <Content Include="test-coverage.sh" />
+    <Content Include="test\projections\digests.json" />
     <Content Include="views\app.handlebars" />
     <Content Include="config.production.json" />
     <Content Include="package.json" />
@@ -46,15 +64,19 @@
     <Content Include="client\assetDetailCommits.html" />
     <Content Include="client\index.html" />
     <Content Include="client\icon-commit-16x16.png" />
+    <Content Include="views\instances.handlebars" />
+    <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api" />
+    <Folder Include="api\events\" />
     <Folder Include="api\helpers" />
     <Folder Include="api\translators\" />
     <Folder Include="client" />
     <Folder Include="projections" />
     <Folder Include="test\" />
     <Folder Include="test\api\" />
+    <Folder Include="test\api\events\" />
     <Folder Include="test\api\helpers\" />
     <Folder Include="test\api\translators\" />
     <Folder Include="test\projections\" />
