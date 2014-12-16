@@ -125,7 +125,7 @@ describe('digestController', function () {
             done();
         });
       });
-      it('it returns a meaningful error message in the body', function(done) {
+      it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
             res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
             done();
@@ -189,22 +189,24 @@ describe('digestController', function () {
           done();
         });
       });
-
       it('it returns a 404 status code', function(done) {
         get(function(err, res) {
             res.statusCode.should.equal(404);
             done();
         });
       });
-
-      /*
-      it('returns a Content-Type of application/hal+json', function(done) {
+      it('returns a Content-Type of application/json', function(done) {
         get(function(err, res) {
-          res.get('Content-Type').should.equal('application/hal+json7; charset=utf-8');
+          res.get('Content-Type').should.equal('application/json; charset=utf-8');
           done();
         });
       });
-      */
+      it('it returns a meaningful error message', function(done) {
+        get(function(err, res) {          
+          res.text.should.equal(JSON.stringify({'error': 'Could not find a digest with id ' + uuid}));
+          done();
+        });
+      });
     });
 
   });

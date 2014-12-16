@@ -41,7 +41,6 @@
       res.location(hypermedia._links.self.href);
       res.set('Content-Type', 'application/hal+json');
       res.status(201);
-
       res.send(hypermedia);
     });
 
@@ -53,9 +52,9 @@
           if (err) {
             res.status(500).send(err);
           } else if (!resp.body || resp.body.length < 1) {
-            // TODO
-            res.status(404);
-            res.end();
+            res.set('Content-Type', 'application/json');
+            res.status(404);            
+            res.json({'error': 'Could not find a digest with id ' + req.params.uuid});
           } else { // our shit is good(resp.body && resp.body.length > 0) {
             res.set('Content-Type', 'application/hal+json');
             res.send(resp.body);
