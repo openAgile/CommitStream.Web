@@ -17,10 +17,17 @@ describe('configValidation', function() {
     configStub.production = true;
   });
 
-  describe('validateProtocol', function() {
+  describe('validateProtocolIsHttps', function() {
+    var errorObj = {
+      error: 'error.fatal.config.protocol.invalid.azure',
+      message: 'The config.protocol value is http.' +
+        ' When running in Azure, CommitStream must operate over HTTPS.' +
+        ' Please set the protocol value to https in the App Settings configuration for the web site.'
+    };
+
     it('should raise an exception when the protocol is not https.', function(done) {
       configStub.protocol = 'http';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
@@ -32,15 +39,24 @@ describe('configValidation', function() {
   });
 
   describe('validateApiKeyIsSet', function() {
+    var errorObj = {
+      error: 'error.fatal.config.apiKey.invalid',
+      message: 'The config.apiKey value is not set. Please set it to a string.'
+    };
+
     it('should raise an exception when the apiKey is not set.', function(done) {
       configStub.apiKey = undefined;
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(function() {
+        configValidation.validateConfig();
+      }).to.throw(JSON.stringify(errorObj));
       done();
     });
 
     it('should raise an exception when the apiKey is an empty string.', function(done) {
       configStub.apiKey = '';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(function() {
+        configValidation.validateConfig();
+      }).to.throw(JSON.stringify(errorObj));
       done();
     });
 
@@ -80,32 +96,6 @@ describe('configValidation', function() {
 
     it('should raise an exception when eventStorePassword is an empty string.', function(done) {
       configStub.eventStorePassword = '';
-      expect(configValidation.validateConfig).to.throw(Error);
-      done();
-    });
-
-  });
-
-  describe('validateEventStorePasswordLength', function(done) {
-    it('should raise an exception when eventStorePassword is less than 36 characters long.', function(done) {
-      // 35 characters long
-      configStub.eventStorePassword = '09876543210987654321098765432109876';
-      expect(configValidation.validateConfig).to.throw(Error);
-      done();
-    });
-
-    //updated by SMA
-    it('should NOT raise an exception when eventStorePassword is equal to 36 characters long.', function(done) {
-      // 36 characters long
-      configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
-      expect(configValidation.validateConfig).to.not.throw(Error);
-      done();
-    });
-
-    //added by SMA
-    it('should raise an exception when the eventStorePassword is more than 36 characters in length.', function(done) {
-      // 39 characters long
-      configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4@@';
       expect(configValidation.validateConfig).to.throw(Error);
       done();
     });
