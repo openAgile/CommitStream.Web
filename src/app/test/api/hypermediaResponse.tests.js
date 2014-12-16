@@ -15,11 +15,6 @@ describe('hypermediaResponse', function() {
       return _.find(hypermedia._links, function(element) { return element.rel === rel; });
     }
 
-    function getLinkForRel(rel) {
-      console.log(hypermedia._links)
-      return _.find(hypermedia._links, function(element) { return element.rel === rel; });
-    }
-
     function linkShouldExistWithProperty(rel, property, value) {
       var link = getLinkForRel(rel);
       link.should.have.property(property, value);
