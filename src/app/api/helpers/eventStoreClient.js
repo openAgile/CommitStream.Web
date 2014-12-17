@@ -1,5 +1,9 @@
 (function() {
-	var eventStore = require('./eventStore');
-	var config = require('../../config');
-	module.exports = new eventStore(config.eventStoreBaseUrl, config.eventStoreUser, config.eventStorePassword);
+  var EventStore = require('eventstore-client'),
+      config = require('../../config');
+  module.exports = new EventStore({
+    baseUrl: config.eventStoreBaseUrl,
+    username: config.eventStoreUser,
+    password: config.eventStorePassword
+  });
 })();
