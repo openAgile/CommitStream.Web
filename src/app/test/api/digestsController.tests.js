@@ -8,19 +8,27 @@ var chai = require('chai'),
   _ = require('underscore'),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
-  hypermediaResponseStub = { digestPOST: sinon.stub() },
-  digestAdded = { create: sinon.stub() },
-  eventStoreClient = { 
-    getState: sinon.stub(),
-    pushEventsII: sinon.spy()
+  hypermediaResponseStub = { 
+    digestPOST: sinon.stub() 
+  },
+  digestAdded = {
+    create: sinon.stub()
+  },
+  eventStoreClient = {
+    streams: {
+      post: sinon.stub()
+    },
+    projection: {
+      getState: sinon.stub()
+    }
   },
   controller = proxyquire('../../api/digestsController',
-      { 
-        './hypermediaResponse' : hypermediaResponseStub,
-        './events/digestAdded' : digestAdded,
-        './helpers/eventStoreClient': eventStoreClient
-      }
-    );
+    { 
+      './hypermediaResponse' : hypermediaResponseStub,
+      './events/digestAdded' : digestAdded,
+      './helpers/eventStoreClient': eventStoreClient
+    }
+  );
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
@@ -71,6 +79,10 @@ describe('digestsController', function () {
 
       digestAdded.create.returns(digestAddedEvent);
       hypermediaResponseStub.digestPOST.returns(hypermediaResponse);
+    });
+
+    beforeEach(function() {
+      eventStoreClient.streams.post.callsArgWith(1, null, "ignored response");
     });
 
     it('it should use proper arguments when creating hypermedia.', function(done) {
@@ -140,9 +152,9 @@ describe('digestsController', function () {
       var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
 
       beforeEach(function() {
-        eventStoreClient.getState = sinon.stub();
-        eventStoreClient.pushEventsII = sinon.spy();
-        eventStoreClient.getState.callsArgWith(1, null, {
+        eventStoreClient.projection.getState = sinon.stub();
+        eventStoreClient.streams.post = sinon.stub();
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
           body: '{ "description": "BalZac!", "digestId": "' + uuid + '"}'
         });
       });
@@ -151,9 +163,9 @@ describe('digestsController', function () {
         getDigest('/api/digests/' + uuid, shouldBehaveThusly);
       }
 
-      it('calls eventStore.getState with correct parameters', function(done) {
+      it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
-          eventStoreClient.getState.should.have.been.calledWith({ 
+          eventStoreClient.projection.getState.should.have.been.calledWith({ 
               name: sinon.match.any, 
               partition: 'digest-' + uuid 
             }, sinon.match.any);
@@ -180,9 +192,9 @@ describe('digestsController', function () {
     describe('with a valid, uuid that does not match a real digest', function() {
 
       beforeEach(function() {
-        eventStoreClient.getState = sinon.stub();
-        eventStoreClient.pushEventsII = sinon.spy();
-        eventStoreClient.getState.callsArgWith(1, null, {
+        eventStoreClient.projection.getState = sinon.stub();
+        eventStoreClient.streams.post = sinon.stub();
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
           body: ''
         }); // No error, but nothing found on the remote end
       });
@@ -193,9 +205,9 @@ describe('digestsController', function () {
         getDigest('/api/digests/' + uuid, shouldBehaveThusly);
       }
 
-      it('calls eventStore.getState with correct parameters', function(done) {
+      it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
-          eventStoreClient.getState.should.have.been.calledWith({ 
+          eventStoreClient.projection.getState.should.have.been.calledWith({ 
               name: sinon.match.any, 
               partition: 'digest-' + uuid
             }, sinon.match.any);        
@@ -229,9 +241,9 @@ describe('digestsController', function () {
     describe('with an error returned from eventStoreClient', function() {
 
       beforeEach(function() {
-        eventStoreClient.getState = sinon.stub();
-        eventStoreClient.pushEventsII = sinon.spy();
-        eventStoreClient.getState.callsArgWith(1, 'Hey there is an error!', {});
+        eventStoreClient.projection.getState = sinon.stub();
+        eventStoreClient.streams.post = sinon.stub();
+        eventStoreClient.projection.getState.callsArgWith(1, 'Hey there is an error!', {});
       });
 
       var uuid = '4cc217e4-0802-4f0f-8218-f8e5772aac5b';
@@ -240,9 +252,9 @@ describe('digestsController', function () {
         getDigest('/api/digests/' + uuid, shouldBehaveThusly);
       }
 
-      it('calls eventStore.getState with correct parameters', function(done) {
+      it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
-          eventStoreClient.getState.should.have.been.calledWith({ 
+          eventStoreClient.projection.getState.should.have.been.calledWith({ 
               name: sinon.match.any, 
               partition: 'digest-' + uuid
             }, sinon.match.any);        
@@ -273,4 +285,9 @@ describe('digestsController', function () {
 
     });
   });
+
+  describe('when requesting a list of digests', function() {
+    
+  });
+
 });

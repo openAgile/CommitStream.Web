@@ -29,32 +29,36 @@
 
       var digestAddedEvent = digestAdded.create(req.body.description);
 
-      eventStore.pushEventsII('digests', JSON.stringify([digestAddedEvent]), function(err, resp, body) {
-        // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
-        if(err) {
+      var args = {
+        name: 'digests',
+        events: JSON.stringify([digestAddedEvent])
+      };
+
+      eventStore.streams.post(args, function(error, resp) {
+        if(error) {
+          // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
+        } else {
+          var hypermedia = hypermediaResponse.digestPOST(protocol, 
+            host, digestAddedEvent.data.digestId);
+
+          res.location(hypermedia._links.self.href);
+          res.set('Content-Type', 'application/hal+json');
+          res.status(201);
+          res.send(hypermedia);
         }
-
-      })
-
-      var hypermedia = hypermediaResponse.digestPOST(protocol, host, digestAddedEvent.data.digestId);
-
-      res.location(hypermedia._links.self.href);
-      res.set('Content-Type', 'application/hal+json');
-      res.status(201);
-      res.send(hypermedia);
+      });      
     });
 
     app.get('/api/digests/:uuid', function (req, res, next) {
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
       } else {
-        eventStore.getState({ name: 'digest.js', partition: 'digest-' + req.params.uuid }, function(err, resp) {
+        eventStore.projection.getState({ name: 'digest', partition: 'digest-' + req.params.uuid }, function(err, resp) {
           if (err) {
             res.status(500).json({'error': 'There was an internal error when trying to process your request'});
           } else if (!resp.body || resp.body.length < 1) {
-            //res.set('Content-Type', 'application/json');
             res.status(404).json({'error': 'Could not find a digest with id ' + req.params.uuid});
-          } else { // our shit is good(resp.body && resp.body.length > 0) {
+          } else { // all good
             res.set('Content-Type', 'application/hal+json');
             res.send(resp.body);
           }
@@ -63,4 +67,4 @@
     });
   }
 
-})(module.exports)
+})(module.exports);
