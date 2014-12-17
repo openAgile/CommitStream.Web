@@ -1,5 +1,6 @@
 var config = require('./config'),
   validator = require('validator'),
+  EventStore = require('eventstore-client'),
   request = require('request');
 
 var validateProtocolIsHttps = function() {
@@ -34,7 +35,6 @@ var validateApiKeyLength = function() {
     };
     throw new Error(JSON.stringify(errorObj));
   };
-
 };
 
 var validateEventStorePasswordIsSet = function() {
@@ -43,17 +43,6 @@ var validateEventStorePasswordIsSet = function() {
       error: 'error.fatal.config.eventStorePassword.invalid',
       message: 'The config.eventStorePassword value is not set.' +
         ' Please set it to a string.'
-    }
-    throw new Error(JSON.stringify(errorObj));
-  }
-};
-
-var validateEventStorePasswordLength = function() {
-  if (config.eventStorePassword.length < 36) {
-    var errorObj = {
-      error: 'error.fatal.config.eventStorePassword.invalid',
-      message: 'The config.eventStorePassword value is set to a value containing fewer than 36 characters.' +
-        ' Please set it to a string containing at least 36 characters.'
     }
     throw new Error(JSON.stringify(errorObj));
   }
@@ -73,9 +62,8 @@ var validateEventStoreUserIsSet = function() {
   if (!config.eventStoreUser) {
     var errorObj = {
       error: 'error.fatal.config.eventStoreUser.invalid',
-      message: 'The config.eventStoreUser value is either not set or is an empty string. Please set it to a valid non - empty string.'
+      message: 'The config.eventStoreUser value is either not set or is an empty string. Please set it to a valid non-empty string.'
     }
-
     throw new Error(JSON.stringify(errorObj));
   }
 };
@@ -89,10 +77,9 @@ var validateEventStoreUri = function() {
   if (!validator.isURL(config.eventStoreBaseUrl, options)) {
     var errorObj = {
       error: 'error.fatal.config.eventStoreBaseUrl.invalid',
-      message: 'The config.eventStoreBaseUrl value is either not set or is set to a value that is not a valid ' +
-        'URI using protocol HTTP or HTTPS. Please set it to a valid URI.'
+      message: 'The config.eventStoreBaseUrl value is ' + config.eventStoreBaseUrl +
+        '. You must specify a valid URI using protocol HTTP or HTTPS.'
     }
-
     throw new Error(JSON.stringify(errorObj));
   };
 }
@@ -106,8 +93,8 @@ var validateEventStoreHttpsUri = function() {
   if (!validator.isURL(config.eventStoreBaseUrl, options)) {
     var errorObj = {
       error: 'error.fatal.config.eventStoreBaseUrl.invalid.azure',
-      message: 'The config.eventStoreBaseUrl value is either not set or is set to a value that is not a valid URI ' +
-        'using the required HTTPS protocol. When running in Azure, CommitStream\'s EventStore dependency must operate over HTTPS. ' +
+      message: 'The config.eventStoreBaseUrl value is ' + config.eventStoreBaseUrl +
+        '. When running in Azure, CommitStream\'s EventStore dependency must operate over HTTPS. ' +
         'Please set the eventStoreBaseUrl value to a valid URI using the HTTPS protocol in the App Settings configuration for the web site.'
     }
 
@@ -129,7 +116,6 @@ var configValidation = {
       validateProtocolIsHttps();
       validateApiKeyIsSet();
       validateApiKeyLength();
-      validateEventStorePasswordLength();
       validateEventStorePasswordIsGuid();
       validateEventStoreHttpsUri();
     }
@@ -139,21 +125,19 @@ var configValidation = {
     }
   },
   validateEventStore: function(cb) {
+    var es = new EventStore({
+      baseUrl: config.eventStoreBaseUrl,
+      username: config.eventStoreUser,
+      password: config.eventStorePassword
+    });
 
-    var options = {
-      rejectUnauthorized: false,
-      url: config.eventStoreBaseUrl + '/projections/all-non-transient',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Basic ' + new Buffer(config.eventStoreUser + ':' + config.eventStorePassword).toString('base64')
-      }
-    };
-    // TODO: once we refactor to use eventstore-client library
-    request.get(options, function(error, response) {
+    es.projections.get(function(error, response) {
       if (error || !response || response.statusCode != 200) {
         var errorObj = {
           'error': 'error.fatal.boot.eventStore.connect',
-          'message': 'The service was unable to connect to EventStore at the configured address of <config.eventStoreBaseUrl> to configure projections. Please verify that EventStore is available at the configured address and is accessible with the configured eventStoreUser and eventStorePassword values.'
+          'message': 'The service was unable to connect to EventStore at the configured address of ' +
+            config.eventStoreBaseUrl +
+            ' to configure projections. Please verify that EventStore is available at the configured address and is accessible with the configured eventStoreUser and eventStorePassword values.'
         }
         cb(JSON.stringify(errorObj))
       } else {

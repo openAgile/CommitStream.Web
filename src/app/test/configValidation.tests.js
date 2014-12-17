@@ -1,11 +1,9 @@
-var proxyquire = require('proxyquire'),
+var proxyquire = require('proxyquire').noPreserveCache(),
   sinon = require('sinon'),
   expect = require('chai').expect,
   configStub = {},
-  requestStub = {},
   configValidation = proxyquire('../configValidation', {
-    './config': configStub,
-    'request': requestStub
+    './config': configStub
   });
 
 describe('configValidation', function() {
@@ -19,10 +17,17 @@ describe('configValidation', function() {
     configStub.production = true;
   });
 
-  describe('validateProtocol', function() {
+  describe('validateProtocolIsHttps', function() {
+    var errorObj = {
+      error: 'error.fatal.config.protocol.invalid.azure',
+      message: 'The config.protocol value is http.' +
+        ' When running in Azure, CommitStream must operate over HTTPS.' +
+        ' Please set the protocol value to https in the App Settings configuration for the web site.'
+    };
+
     it('should raise an exception when the protocol is not https.', function(done) {
       configStub.protocol = 'http';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
@@ -34,25 +39,37 @@ describe('configValidation', function() {
   });
 
   describe('validateApiKeyIsSet', function() {
+    var errorObj = {
+      error: 'error.fatal.config.apiKey.invalid',
+      message: 'The config.apiKey value is not set. Please set it to a string.'
+    };
+
     it('should raise an exception when the apiKey is not set.', function(done) {
       configStub.apiKey = undefined;
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
     it('should raise an exception when the apiKey is an empty string.', function(done) {
       configStub.apiKey = '';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
   });
 
   describe('validateApiKeyLength', function() {
+
+    var errorObj = {
+      error: 'error.fatal.config.apiKey.invalid',
+      message: 'The config.apiKey value is set to a value containing fewer than 36 characters.' +
+        'Please set it to a string containing at least 36 characters.'
+    };
+
     it('should raise an exception when the apiKey is less than 36 characters long.', function(done) {
       // 35 characters long
       configStub.apiKey = '01234567890123456789012345678901234';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
@@ -74,74 +91,67 @@ describe('configValidation', function() {
   });
 
   describe('validateEventStorePasswordIsSet', function(done) {
+
+    var errorObj = {
+      error: 'error.fatal.config.eventStorePassword.invalid',
+      message: 'The config.eventStorePassword value is not set.' +
+        ' Please set it to a string.'
+    }
+
     it('should raise an exception when eventStorePassword is not set.', function(done) {
       configStub.eventStorePassword = undefined;
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
     it('should raise an exception when eventStorePassword is an empty string.', function(done) {
       configStub.eventStorePassword = '';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
   });
 
-  describe('validateEventStorePasswordLength', function(done) {
-    it('should raise an exception when eventStorePassword is less than 36 characters long.', function(done) {
-      // 35 characters long
-      configStub.eventStorePassword = '09876543210987654321098765432109876';
-      expect(configValidation.validateConfig).to.throw(Error);
-      done();
-    });
+  describe('validateEventStorePasswordIsGuid', function(done) {
 
-    //updated by SMA
-    it('should NOT raise an exception when eventStorePassword is equal to 36 characters long.', function(done) {
-      // 36 characters long
+    var errorObj = {
+      error: 'error.fatal.config.eventStorePassword.invalid',
+      message: 'The config.eventStorePassword value should be a GUID when running in production.'
+    }
+
+    it('should NOT raise an exception when eventStorePassword is a GUID.', function(done) {
       configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
+      configStub.production = true;
       expect(configValidation.validateConfig).to.not.throw(Error);
       done();
     });
 
-    //added by SMA
-    it('should raise an exception when the eventStorePassword is more than 36 characters in length.', function(done) {
-      // 39 characters long
-      configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4@@';
-      expect(configValidation.validateConfig).to.throw(Error);
+    it('should raise an exception when eventStorePassword is not a proper GUID.', function(done) {
+      configStub.eventStorePassword = 'F9168C5ECE-B2-4faa-B6BF-329BF39FA1E4w'
+      configStub.production = true;
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
-
   });
-
-describe('validateEventStorePasswordIsGuid', function(done) {
-  it('should NOT raise an exception when eventStorePassword is a GUID.', function(done) {
-    configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
-    configStub.production = true;
-    expect(configValidation.validateConfig).to.not.throw(Error);
-    done();
-  });
-
-  it('should raise an exception when eventStorePassword is not a proper GUID.', function(done) {
-    configStub.eventStorePassword = 'F9168C5ECE-B2-4faa-B6BF-329BF39FA1E4w'
-    configStub.production = true;
-    expect(configValidation.validateConfig).to.throw(Error);
-    done();
-  });
-});
 
   //corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
   describe('validateEventStoreUserIsSet', function() {
+
+    var errorObj = {
+      error: 'error.fatal.config.eventStoreUser.invalid',
+      message: 'The config.eventStoreUser value is either not set or is an empty string. Please set it to a valid non-empty string.'
+    }
+
     it('should raise an exception when eventStoreUser is not set.', function(done) {
       configStub.eventStoreUser = undefined;
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
     //corrected by SMA -- it statement contained eventStorePassword rather than eventStoreUser
     it('should raise an exception when eventStoreUser is an empty string.', function(done) {
       configStub.eventStoreUser = '';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       done();
     });
 
@@ -156,8 +166,18 @@ describe('validateEventStorePasswordIsGuid', function(done) {
 
   //comments added by SMA
   describe('validateEventStoreUri', function() {
+
+    var errorObj = {
+      error: 'error.fatal.config.eventStoreBaseUrl.invalid',
+      message: 'The config.eventStoreBaseUrl value is https:///localhost:2113' +
+        '. You must specify a valid URI using protocol HTTP or HTTPS.'
+    }
+
     it('should raise an exception when eventStoreBaseUrl is not a valid URI.', function(done) {
       configStub.production = false;
+      //eventStoreBaseURL too many /, but is https
+      configStub.eventStoreBaseUrl = 'https:///localhost:2113';;
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       //eventStoreBaseURL is undefined
       configStub.eventStoreBaseUrl = undefined;
       expect(configValidation.validateConfig).to.throw(Error);
@@ -169,9 +189,6 @@ describe('validateEventStorePasswordIsGuid', function(done) {
       expect(configValidation.validateConfig).to.throw(Error);
       //eventStoreBaseURL is not https or http
       configStub.eventStoreBaseUrl = 'httpc://localhost:2113';
-      expect(configValidation.validateConfig).to.throw(Error);
-      //eventStoreBaseURL too many /, but is https
-      configStub.eventStoreBaseUrl = 'https:///localhost:2113';;
       expect(configValidation.validateConfig).to.throw(Error);
       done();
     });
@@ -192,10 +209,17 @@ describe('validateEventStorePasswordIsGuid', function(done) {
   });
 
   describe('validateEventStoreHttpsUri', function() {
+    var errorObj = {
+      error: 'error.fatal.config.eventStoreBaseUrl.invalid.azure',
+      message: 'The config.eventStoreBaseUrl value is http://localhost:2113' +
+        '. When running in Azure, CommitStream\'s EventStore dependency must operate over HTTPS. ' +
+        'Please set the eventStoreBaseUrl value to a valid URI using the HTTPS protocol in the App Settings configuration for the web site.'
+    }
+
     it('should raise an exception when in production mode and eventStoreBaseUrl is not a valid https URI.', function(done) {
       configStub.production = true;
       configStub.eventStoreBaseUrl = 'http://localhost:2113';
-      expect(configValidation.validateConfig).to.throw(Error);
+      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
       configStub.eventStoreBaseUrl = 'http://some.domain.net:2113';
       expect(configValidation.validateConfig).to.throw(Error);
       //added by SMA
@@ -216,39 +240,63 @@ describe('validateEventStorePasswordIsGuid', function(done) {
 
   describe('validateEventStore', function() {
     it('should return an error if it cannot connect to the event store server.', function(done) {
-
-      requestStub.get = function(options, cb) {
-        cb('someError', undefined);
+      var esStub = function() {
+        this.projections = {
+          get: function(cb) {
+            cb('someError', undefined);
+          }
+        }
       };
 
-      configValidation.validateEventStore(function(error) {
+      var v = proxyquire('../configValidation', {
+        './config': configStub,
+        'eventstore-client': esStub
+      });
+
+      v.validateEventStore(function(error) {
         expect(error).to.not.be.undefined;
         done();
       });
     });
 
     it('should return an error if the response from event store is undefined.', function(done) {
+      var esStub = function() {
+        this.projections = {
+          get: function(cb) {
+            cb(null, undefined);
+          }
+        }
+      }
 
-      requestStub.get = function(options, cb) {
-        cb(null, undefined);
-      };
+      var v = proxyquire('../configValidation', {
+        './config': configStub,
+        'eventstore-client': esStub
+      });
 
-      configValidation.validateEventStore(function(error) {
+      v.validateEventStore(function(error) {
         expect(error).to.not.be.undefined;
         done();
       });
     });
 
     it('should not return an error if it can connect to the event store server.', function(done) {
+      var esStub = function() {
+        this.projections = {
+          get: function(cb) {
+            cb(null, {
+              statusCode: 200,
+              body: 'this is suppose to be a body'
+            });
+          }
+        }
+      }
 
-      requestStub.get = function(options, cb) {
-        cb(null, {
-          statusCode: 200,
-          body: 'this is suppose to be a body'
-        });
-      };
+      var v = proxyquire('../configValidation', {
+        './config': configStub,
+        'eventstore-client': esStub
+      });
 
-      configValidation.validateEventStore(function(error) {
+      v.validateEventStore(function(error) {
         expect(error).to.be.undefined;
         done();
       });
