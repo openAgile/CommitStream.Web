@@ -1,4 +1,4 @@
-(function(digestController) {
+(function(digestsController) {
 
   var uuid = require('uuid-v4'),
       config = require('../config'),
@@ -8,7 +8,7 @@
       eventStore = require('./helpers/eventStoreClient')
       bodyParser = require('body-parser');
 
-  digestController.init = function (app) {
+  digestsController.init = function (app) {
 
   /**
      * The hypermedia to creating a digest will have links (see _links below) to other resources

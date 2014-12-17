@@ -14,7 +14,7 @@ var chai = require('chai'),
     getState: sinon.stub(),
     pushEventsII: sinon.spy()
   },
-  controller = proxyquire('../../api/digestController',
+  controller = proxyquire('../../api/digestsController',
       { 
         './hypermediaResponse' : hypermediaResponseStub,
         './events/digestAdded' : digestAdded,
@@ -40,7 +40,7 @@ function getDigest(path, shouldBehaveThusly) {
     .end(shouldBehaveThusly);
 }
 
-describe('digestController', function () {
+describe('digestsController', function () {
     
   describe('when creating a digest', function() {
     var hypermediaResponse;
