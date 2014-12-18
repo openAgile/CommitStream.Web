@@ -36,6 +36,10 @@ chai.config.includeStack = true;
 controller.init(app);
 
 function postDigest(payload, shouldBehaveThusly) {
+  if (!payload || !payload.description) {
+    payload = { description: 'Yay!' };
+  }
+
   request(app)
     .post('/api/digests')
     .send(payload)
@@ -84,6 +88,41 @@ describe('digestsController', function () {
     beforeEach(function() {
       eventStoreClient.streams.post.callsArgWith(1, null, "ignored response");
     });
+
+    describe('with a script tag in the description', function() {
+      var data = { description: '<script>var x = 123; alert(x);</script>' };
+      it('it should reject the request request and return a 400 status code.', function(done) {
+        postDigest(data, function(err, res) {
+          res.statusCode.should.equal(400);
+          done();
+        }); 
+      });
+      
+      it('it should reject a request and return a meaningful error message.', function(done) {
+        postDigest(data, function(err, res) {
+          res.text.should.equal('A digest description cannot contain script tags or HTML.');
+          done();
+        });
+      }); 
+    });
+
+    describe('with HTML tags in the description', function() {
+      var data = { description: 'Hey there <b>Bold!</b> and <i><u>italicized and underlined</u></i>' };
+      it('it should reject the request request and return a 400 status code.', function(done) {
+        postDigest(data, function(err, res) {
+          res.statusCode.should.equal(400);
+          done();
+        }); 
+      });
+      
+      it('it should reject a request and return a meaningful error message.', function(done) {
+        postDigest(data, function(err, res) {
+          res.text.should.equal('A digest description cannot contain script tags or HTML.');
+          done();
+        });
+      }); 
+    });
+
 
     it('it should use proper arguments when creating hypermedia.', function(done) {
       postDigest({}, function(err, res) {

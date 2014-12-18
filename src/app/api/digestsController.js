@@ -5,8 +5,9 @@
       validator = require('validator'),
       hypermediaResponse = require('./hypermediaResponse'),
       digestAdded = require('./events/digestAdded'),
-      eventStore = require('./helpers/eventStoreClient')
-      bodyParser = require('body-parser');
+      eventStore = require('./helpers/eventStoreClient'),
+      bodyParser = require('body-parser'),
+      sanitize = require('sanitize-html');
 
   digestsController.init = function (app) {
 
@@ -27,7 +28,15 @@
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
-      var digestAddedEvent = digestAdded.create(req.body.description);
+      var originalDescription = req.body.description;
+      var description = sanitize(req.body.description, {allowedTags: []});
+
+      if (originalDescription !== description) {
+        res.status(400).send('A digest description cannot contain script tags or HTML.');
+        return;
+      }
+
+      var digestAddedEvent = digestAdded.create(description);
 
       var args = {
         name: 'digests',
