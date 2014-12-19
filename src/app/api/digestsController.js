@@ -25,6 +25,13 @@
      *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
    **/
     app.post('/api/digests', bodyParser.json() , function(req, res) {
+      var contentType = req.get('Content-Type');
+
+      if (!contentType || contentType.toLowerCase() !== 'application/json') {
+        res.status(415).send('When creating a digest, you must send a Content-Type: application/json header.');
+        return;
+      }
+
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 

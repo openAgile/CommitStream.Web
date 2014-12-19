@@ -35,10 +35,14 @@ chai.config.includeStack = true;
 
 controller.init(app);
 
-function postDigest(payload, shouldBehaveThusly) {
+function postDigest(payload, shouldBehaveThusly, contentType) {
+  if (!contentType) {
+    contentType = 'application/json';
+  }
   request(app)
     .post('/api/digests')
-    .send(payload)
+    .send(JSON.stringify(payload))
+    .type(contentType)
     .end(shouldBehaveThusly);
 };
 
@@ -85,16 +89,45 @@ describe('digestsController', function () {
       eventStoreClient.streams.post.callsArgWith(1, null, "ignored response");
     });
 
+    describe('with an unsupported or missing Content-Type header', function() {
+      var data = { description: 'Just your average run-of-the-mill description up in this.' };
+      it('should reject request and return a 415 status code.', function(done) {
+        postDigest(data, function(err, res) {
+          res.statusCode.should.equal(415);
+          done();
+        }, 'application/jackson');
+      });
+
+      it('it should reject the request and explain that only application/json is accepted.', function(done) {      
+        postDigest(data, function(err, res) {
+          res.text.should.equal('When creating a digest, you must send a Content-Type: application/json header.');
+          done();
+        }, 'application/jackson');
+      });
+
+    });
+
+    describe('with a Content-Type: aPpLiCation/JSON (weird case) header', function() {
+      var data = { description: 'Just your average run-of-the-mill description up in this.' };
+      it('should accept the request and return a 201 status code.', function(done) {
+        postDigest(data, function(err, res) {
+          res.statusCode.should.equal(201);
+          done();
+        }, 'aPpLiCation/JSON');
+      });
+
+    });    
+
     describe('with a script tag in the description', function() {
       var data = { description: '<script>var x = 123; alert(x);</script>' };
-      it('it should reject the request request and return a 400 status code.', function(done) {
+      it('it should reject the request and return a 400 status code.', function(done) {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(400);
           done();
         }); 
       });
       
-      it('it should reject a request and return a meaningful error message.', function(done) {
+      it('it should reject the request and return a meaningful error message.', function(done) {      
         postDigest(data, function(err, res) {
           res.text.should.equal('A digest description cannot contain script tags or HTML.');
           done();
