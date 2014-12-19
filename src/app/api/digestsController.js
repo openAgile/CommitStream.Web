@@ -29,12 +29,27 @@
       var host = req.get('host');
 
       var originalDescription = req.body.description;
-      var description = sanitize(req.body.description, {allowedTags: []});
 
+      if (originalDescription === undefined) {
+        res.status(400).send('A digest must contain a description.');
+        return;        
+      }
+
+      if(originalDescription === null) {        
+        res.status(400).send('A digest description must not be null.');
+        return;
+      }
+
+      if(originalDescription.trim().length === 0) {        
+        res.status(400).send('A digest description must contain a value.');
+        return;
+      }
+
+      var description = sanitize(req.body.description, {allowedTags: []});
       if (originalDescription !== description) {
         res.status(400).send('A digest description cannot contain script tags or HTML.');
         return;
-      }
+      } 
 
       var digestAddedEvent = digestAdded.create(description);
 

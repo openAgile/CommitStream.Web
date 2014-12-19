@@ -36,10 +36,6 @@ chai.config.includeStack = true;
 controller.init(app);
 
 function postDigest(payload, shouldBehaveThusly) {
-  if (!payload || !payload.description) {
-    payload = { description: 'Yay!' };
-  }
-
   request(app)
     .post('/api/digests')
     .send(payload)
@@ -123,9 +119,66 @@ describe('digestsController', function () {
       }); 
     });
 
+    describe('with a zero length description', function() {
+
+      describe('where description is an empty string', function() {
+        it('it should reject a request and return a 400 status code.', function(done) {
+          var data = { description: '' };
+          postDigest(data, function(err, res) {
+            res.statusCode.should.equal(400);
+            done();
+          });
+        });
+
+        it('it should reject a request and return a meaningful error message.', function(done) {
+          var data = { description: '' };
+          postDigest(data, function(err, res) {
+            res.text.should.equal('A digest description must contain a value.');
+            done();
+          });
+        });
+      });
+
+      describe('where description is null as a value', function() {
+        it('it should reject a request and return a 400 status code.', function(done) {
+          var data = { description: null };
+          postDigest(data, function(err, res) {
+            res.statusCode.should.equal(400);
+            done();
+          });
+        });
+
+        it('should reject a request and return a meaningful error message.', function(done) {
+          var data = { description: null };
+          postDigest(data, function(err, res) {
+            res.text.should.equal('A digest description must not be null.');
+            done();
+          });
+        });
+      });
+
+      describe('where description does not exist in the json payload', function() {
+        var data = { notdescription: 'I am not the description property you deserve.' };
+        it('should reject a request and return a 400 status code.', function(done) {
+          postDigest(data, function(err, res) {
+            res.statusCode.should.equal(400);
+            done();
+          });
+        });
+
+        it('should reject a request and return a meaningful error message.', function(done) {
+          postDigest(data, function(err, res) {
+            res.text.should.equal('A digest must contain a description.');
+            done();
+          });
+        });
+
+      });
+
+    });
 
     it('it should use proper arguments when creating hypermedia.', function(done) {
-      postDigest({}, function(err, res) {
+      postDigest({ description: 'Yay!'}, function(err, res) {
         hypermediaResponseStub.digestPOST.should.have.been.calledWith(protocol, sinon.match.any, digestAddedEvent.data.digestId);
         done();
       });

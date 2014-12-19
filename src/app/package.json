@@ -27,7 +27,8 @@
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
     "validator": "^3.22.1",
-    "eventstore-client": "openAgile/eventstore-client"
+    "eventstore-client": "openAgile/eventstore-client",
+    "sanitize-html": "^1.4.3"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
