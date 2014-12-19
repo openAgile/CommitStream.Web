@@ -49,7 +49,12 @@
       if (originalDescription !== description) {
         res.status(400).send('A digest description cannot contain script tags or HTML.');
         return;
-      } 
+      }
+
+      if (description.length > 140) {
+        res.status(400).send ('A digest description cannot contain more than 140 characters. The description you submitted contains ' + description.length + ' characters.');
+        return;
+      }
 
       var digestAddedEvent = digestAdded.create(description);
 

@@ -177,6 +177,24 @@ describe('digestsController', function () {
 
     });
 
+    describe('with a description greater than 140 characters', function() {
+      var data = { description: Array(142).join('.') };      
+      it('it should reject a request and return a 400 status code.', function(done) {
+        postDigest(data, function(err, res) {
+          res.statusCode.should.equal(400);
+          done();
+        });
+      });
+
+      it('it should reject a request and return a meaningful error message.', function(done) {
+        postDigest(data, function(err, res) {
+          res.text.should.equal('A digest description cannot contain more than 140 characters. The description you submitted contains 141 characters.');
+          done();
+        });
+      });
+
+    });
+
     it('it should use proper arguments when creating hypermedia.', function(done) {
       postDigest({ description: 'Yay!'}, function(err, res) {
         hypermediaResponseStub.digestPOST.should.have.been.calledWith(protocol, sinon.match.any, digestAddedEvent.data.digestId);
