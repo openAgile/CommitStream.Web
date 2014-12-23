@@ -8,7 +8,13 @@ var chai = require('chai'),
   _ = require('underscore'),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
-  hypermediaResponseStub = { 
+  /* We must provide some dummy values here for the module: */
+  config = require ('../../config');
+  config.eventStorePassword = '123';
+  config.eventStoreUser = 'admin',
+  config.eventStoreBaseUrl = 'http://nothing:7887';
+
+var hypermediaResponseStub = { 
     digestPOST: sinon.stub() 
   },
   digestAdded = {
