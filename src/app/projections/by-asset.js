@@ -1,12 +1,15 @@
-var getAsset = function (message) {
-    var re = new RegExp("[A-Z,a-z]{1,2}-[0-9]+", "");
+var getAssets = function (message) {
+    var re = new RegExp("[A-Z,a-z]{1,2}-[0-9]+", "g");
     var matches = message.match(re);
-    return matches[0];
+    return matches;
 }
 
 var callback = function (state, ev) {
-    var asset = getAsset(ev.data.commit.message).toUpperCase();
-    linkTo('asset-' + asset, ev);
+    var assets = getAssets(ev.data.commit.message);
+    assets.forEach(function(asset) {
+    	asset = asset.toUpperCase();
+    	linkTo('asset-' + asset, ev);
+    });
 };
 
 fromStream('mention-with')

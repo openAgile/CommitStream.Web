@@ -23,6 +23,13 @@
         },
         {
             "data": {
+                "commit": {
+                    "message": "S-12345 S-98765 I mentioned 3 items s-19285"
+                }
+            }
+        },
+        {
+            "data": {
                 "commit": { }
             }
         },
@@ -52,7 +59,14 @@
                     "message": "s-47665 another different commit"
                 }
             }
-        }
+        },
+        {
+            "data": {
+                "commit": {
+                    "message": "S-12345 S-98765 I mentioned 3 items s-19285"
+                }
+            }
+        }        
     ],
     "byRepo": [
         {
