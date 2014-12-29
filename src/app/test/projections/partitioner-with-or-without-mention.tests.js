@@ -6,7 +6,7 @@ describe('projection to partitioner', function () {
     setEvents(sampleData.toBePartitioned);
     var partitioner = require('../../projections/partitionate-with-or-without-mention.js');
     it('should have 2 events for the stream mention-with ', function (done) {
-        assert.equal(getStream('mention-with').length, 2);
+        assert.equal(getStream('mention-with').length, 3);
         done();
     });
     it('should have  1 events for the stream mention-without', function (done) {
