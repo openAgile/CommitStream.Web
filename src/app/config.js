@@ -1,6 +1,6 @@
 (function(config) {
   var configFile = 'config.json',
-      nconf = require('nconf');
+    nconf = require('nconf');
 
   if (process.env['commitStreamConfigFile'] != null) {
     configFile = process.env['commitStreamConfigFile'];
@@ -24,4 +24,6 @@
   config.eventStoreAllowSelfSignedCert = nconf.get('eventStoreAllowSelfSignedCert') === 'true';
   config.eventStoreAssetQueryParams = nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
   config.assetDetailTemplateUrl = nconf.get('assetDetailTemplateUrl') || config.serverBaseUrl + ':' + config.port + '/assetDetailCommits.html';
+  var notSet = nconf.get('production') == undefined;
+  config.production = nconf.get('production') === 'true' || notSet;
 })(module.exports);
