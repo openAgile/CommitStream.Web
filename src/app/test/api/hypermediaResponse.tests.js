@@ -11,8 +11,7 @@ describe('hypermediaResponse', function() {
 
     // helpers
     function getLinkForRel(rel) {
-      console.log(hypermedia._links)
-      return _.find(hypermedia._links, function(element) { return element.rel === rel; });
+      return hypermedia._links[rel];
     }
 
     function linkShouldExistWithProperty(rel, property, value) {
@@ -45,6 +44,78 @@ describe('hypermediaResponse', function() {
       hypermedia._links['self'].should.have.property('href','http://localhost/api/digests/' + digestId);
     });
 
+    it('should have a link to get all digests', function() {
+      linkShouldExistWithProperty('digests', 'href', 'http://localhost/api/digests');
+    });
+
+    it('the digests link should be a valid URL', function() {
+        var link = hypermedia._links['digests'];
+        validator.isURL(link.href).should.be.true;
+    });
+  });
+
+  describe('when constructing a hypermedia response for digest GET', function() {
+    var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
+    var data = { "description": "BalZac!", "digestId": digestId };
+    var hypermedia = hypermediaResponse.digestGET('http', 'localhost', digestId, data);
+
+    // helpers
+    function getLinkForRel(rel) {
+      return hypermedia._links[rel];
+    }
+
+    function linkShouldExistWithProperty(rel, property, value) {
+      var link = getLinkForRel(rel);
+      link.should.have.property(property, value);
+    }
+
+    it('the self link href should be a valid URL', function() {
+        var selfLink = hypermedia._links['self'];
+        validator.isURL(selfLink.href).should.be.true;  
+    });
+
+    it('it should have links to other resources', function() {
+      hypermedia.should.include.key('_links');
+    });
+
+    // self link
+    it('it should have self a link to itself', function() {
+      hypermedia._links.should.include.key('self')
+    });
+
+    it('the self link href should contain the id of the digest', function() {
+      var selfLink = hypermedia._links.self;
+      var selfLinkParts = selfLink.href.split('/');
+      var id = selfLinkParts[selfLinkParts.length - 1];
+      id.should.equal(digestId);
+    });
+
+    it('it\'s self link should reference the digest.', function() {
+      hypermedia._links['self'].should.have.property('href','http://localhost/api/digests/' + digestId);
+    });
+
+    it('should have a link to get all digests', function() {
+      linkShouldExistWithProperty('digests', 'href', 'http://localhost/api/digests');
+    });
+
+    it('the digests link should be a valid URL', function() {
+        var link = hypermedia._links['digests'];
+        validator.isURL(link.href).should.be.true;
+    });
+
+    it('should embed the description property that was passed', function() {
+      hypermedia.should.include.key('description');
+      hypermedia.description.should.equal(data.description);
+    });
+
+    it('should embed the digestId property that was passed', function() {
+      hypermedia.should.include.key('digestId');
+      hypermedia.digestId.should.equal(data.digestId);
+    });    
+
+  });
+
+
     // inbox-create link
     // it('it should link to an inbox resource to create an inbox', function() {
     //   hypermedia._links.should.include.key('inbox-create')
@@ -66,8 +137,6 @@ describe('hypermediaResponse', function() {
     //     var inboxCreateLink = hypermedia._links['inbox-create'];
     //     validator.isURL(inboxCreateLink.href).should.be.true;
     // });
-
-  })
 
 //   describe('when constructing a hypermedia response for inbox', function() {
 //     var hypermedia = hypermediaResponse.inbox('http', 'localhost', '7f74aa58-74e0-11e4-b116-123b93f75cba');

@@ -15,8 +15,9 @@ var chai = require('chai'),
   config.eventStoreBaseUrl = 'http://nothing:7887';
 
 var hypermediaResponseStub = { 
-    digestPOST: sinon.stub() 
-  },
+    digestPOST: sinon.stub(),
+    digestGET: sinon.stub()
+  },  
   digestAdded = {
     create: sinon.stub()
   },
@@ -275,7 +276,17 @@ describe('digestsController', function () {
 
   });
 
+  /********************************************
+
+   GET tests
+
+   *******************************************/
+
   describe('when requesting a digest', function() {
+
+    var protocol = 'http';
+    var host = 'localhost';
+
     describe('with an invalid, non-uuid digest identifier', function() {
       function get(shouldBehaveThusly) {
         getDigest('/api/digests/not_a_uuid', shouldBehaveThusly);
@@ -299,12 +310,14 @@ describe('digestsController', function () {
     describe('with a valid, uuid digest identifier', function() {
 
       var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+      var data = { "description": "BalZac!", "digestId": uuid };
 
       beforeEach(function() {
+        hypermediaResponseStub.digestGET = sinon.stub();
         eventStoreClient.projection.getState = sinon.stub();
         eventStoreClient.streams.post = sinon.stub();
         eventStoreClient.projection.getState.callsArgWith(1, null, {
-          body: '{ "description": "BalZac!", "digestId": "' + uuid + '"}'
+          body: JSON.stringify(data)
         });
       });
 
@@ -318,6 +331,15 @@ describe('digestsController', function () {
               name: sinon.match.any, 
               partition: 'digest-' + uuid 
             }, sinon.match.any);
+          done();
+        });
+      });
+
+      it('calls hypermediaResponse.digestPOST with correct parameters', function(done) {
+        get(function(err, res) {
+          hypermediaResponseStub.digestGET.should.have.been.calledWith(
+            protocol, sinon.match.any, uuid, data
+          );
           done();
         });
       });

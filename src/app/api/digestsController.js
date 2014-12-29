@@ -95,8 +95,12 @@
           } else if (!resp.body || resp.body.length < 1) {
             res.status(404).json({'error': 'Could not find a digest with id ' + req.params.uuid});
           } else { // all good
-            res.set('Content-Type', 'application/hal+json');
-            res.send(resp.body);
+            var protocol = config.protocol || req.protocol;
+            var host = req.get('host');
+            var data = JSON.parse(resp.body);
+            var response = hypermediaResponse.digestGET(protocol, host, data.digestId, data);
+            res.set('Content-Type', 'application/hal+json; charset=utf-8');
+            res.send(response);
           }
         });
       }
