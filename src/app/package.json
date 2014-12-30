@@ -35,7 +35,8 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "mocha -u exports -R spec test/**/*tests.js"
+    "test": "mocha -u exports -R spec test/**/*tests.js",
+    "smoke": "mocha -u exports -R spec smoke-test/**/*tests.js"
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"
