@@ -23,9 +23,6 @@
       }
     };
 
-    console.log('sdfdsfdsfdsfdsdfsfdsfsd');
-    console.log(data);
-
     response.description = data.description;
     response.digestId = data.digestId;
 
