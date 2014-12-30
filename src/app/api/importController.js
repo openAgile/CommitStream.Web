@@ -70,7 +70,7 @@
           }
         });
         res.json({
-          message: 'Your push event is in queue to be added to CommitStream.'
+          message: 'Your push event has been queued to be added to CommitStream.'
         });
 
       } else if (req.headers['x-github-event'] == 'ping') {
