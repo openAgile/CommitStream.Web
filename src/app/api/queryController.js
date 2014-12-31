@@ -86,11 +86,16 @@
             var obj = JSON.parse(response.body);
             var links = obj.links;
             var guiNextId = uuid();
-            cache.set(guiNextId, links[3].uri);
             result = gitHubEventsToApiResponse(obj.entries);
+            //TODO: check all of them, not just the third one
+            if (links[3].relation == 'next') {
+              cache.set(guiNextId, links[3].uri);
+              var nextUri = config.serverBaseUrl + '/api/query?key=' + req.query.key + '&workitem=' + req.query.workitem + '&page=' + guiNextId;
+              res.set("Next-Page", nextUri);
+            }
           }
+
           res.set("Content-Type", "application/json");
-          res.set("Next-Page", guiNextId);
           res.send(result);
         });
       } else {
