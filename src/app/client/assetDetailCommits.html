@@ -10,7 +10,7 @@
 	{{#if noCommits}}
 	<p style="color: #dedede;font-size: .95em;margin-top: 0.5em;padding-left:20px;text-align: center;">No commits available...</p>
 	{{else}}
-	<ul class="commits.list" style="list-style:none">
+	<ul class="commits.list side-panel-scrollable" style="list-style:none">
 		{{#each commits}}
 		<hr />
 		<li class="li.commit" id="{{sha1Partial}}">
