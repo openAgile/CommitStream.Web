@@ -30,7 +30,12 @@
           password: config.eventStorePassword
         });
 
-        var stream = 'asset-' + req.query.workitem;
+        var stream ;
+        if (req.query.workitem.toLowerCase() === 'all') {
+          stream = 'github-events';
+        } else {
+          stream = 'asset-' + req.query.workitem;
+        }
         var count = req.query.pageSize || 5;
 
         es.streams.get({
