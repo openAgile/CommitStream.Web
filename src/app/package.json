@@ -28,7 +28,8 @@
     "uuid-v4": "^0.1.0",
     "validator": "^3.22.1",
     "eventstore-client": "openAgile/eventstore-client",
-    "sanitize-html": "^1.4.3"
+    "sanitize-html": "^1.4.3",
+    "mocha-tap-reporter": "^0.1.2"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
