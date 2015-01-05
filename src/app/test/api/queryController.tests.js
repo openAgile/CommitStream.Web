@@ -1,9 +1,16 @@
 // test/queryController.tests.js
-var assert = require('assert'),
+var chai = require('chai'),
+  should = chai.should(),
   express = require('express'),
   app = express(),
+  sinon = require('sinon'),
+  sinonChai = require('sinon-chai'),
+  _ = require('underscore'),
   request = require('supertest'),
   proxyquire = require('proxyquire').noPreserveCache();
+
+chai.use(sinonChai);
+chai.config.includeStack = true;
 
 describe('queryController', function() {
   describe('when I issue a workitem query for an asset that has no associated commits', function() {
@@ -29,9 +36,9 @@ describe('queryController', function() {
       request(app)
         .get('/api/query?workitem=123&pageSize=5')
         .end(function(err, res) {
-          assert.equal(err, null);
-          assert.equal(res.statusCode, 200);
-          assert.deepEqual(res.body.commits, []);
+          should.not.exist(err);
+          res.statusCode.should.equal(200);
+          res.body.commits.should.deep.equal([]);
           done();
         });
     });
@@ -48,9 +55,9 @@ describe('queryController', function() {
       request(app)
         .get('/api/query')
         .end(function(err, res) {
-          assert.equal(err, null);
-          assert.equal(res.statusCode, 400);
-          assert.equal(res.body.error, 'Parameter workitem is required');
+          should.not.exist(err);
+          res.statusCode.should.equal(400);
+          res.body.error.should.equal('Parameter workitem is required');
           done();
         });
     });
