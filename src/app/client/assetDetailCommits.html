@@ -1,4 +1,5 @@
 <div>
+	{{#if firstCommits}}
 	<div class="stream-title-area">
 		<div class="titlebar">
 			<div class="title-container">
@@ -7,6 +8,7 @@
 			</div>
 		</div>
 	</div>
+	{{/if}}
 	{{#if noCommits}}
 	<p style="color: #dedede;font-size: .95em;margin-top: 0.5em;padding-left:20px;text-align: center;">No Commits to display...</p>
 	{{else}}

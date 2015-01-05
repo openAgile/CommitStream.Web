@@ -22,7 +22,7 @@
     var assetDetailCommitsTmpl = null;
     function render(commitStreamDomId, data, errorHandler) {
         try {
-            var content = assetDetailCommitsTmpl(data);
+            var content = assetDetailCommitsTmpl(data);           
             $(commitStreamDomId).html(content);
             $(commitStreamDomId).find('.cs-refresh').unbind('click');
             $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
@@ -37,12 +37,25 @@
     }
 
     function queryCommitStream(commitStreamDomId, workitem, handlebars, errorHandler) {
+	var firstCommits = true;
+	if (window.CommitStream.next) {
+	  apiUrl = window.CommitStream.next;
+	  firstCommits = false;
+        };
         $.getJSON('{{{apiUrl}}}' + workitem).done(function(data) {
             if (!data || !data.commits) {
                 errorHandler();
             } else {
                 data.noCommits = data.commits.length < 1;
                 data.resourcePath = "{{{resourcePath}}}";
+                data.firstCommits = firstCommits;
+                window.CommitStream.next = data._links.next;
+
+                //alert(data._links.next);
+                if(!data._links.next){
+                alert('no more');
+                $(window).unbind('scroll');
+        }
 
                 if (assetDetailCommitsTmpl === null) {
                     $.get('{{{templateUrl}}}').done(function(source) {
@@ -97,10 +110,18 @@
         }, errorHandler);
     }
 
+  function bindScrollEvent(commitStreamDomId, workitem, errorHandler) {
+    $(window).scroll(function() {
+      if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+        invokeCommitStream(commitStreamDomId, workitem, errorHandler);
+      }
+    });
+  }
     // Put a commitStream object in the global space
     if (!window.CommitStream) {
         window.CommitStream = {
             commitsDisplay : function(commitStreamDomId, workitem, errorHandler) {
+                bindScrollEvent(commitStreamDomId, workitem, errorHandler);
                 try {
                     if (!hasAllDeps()) {
                         $.getScript(requirejsUrl, function(data, status, jqxhr) {
