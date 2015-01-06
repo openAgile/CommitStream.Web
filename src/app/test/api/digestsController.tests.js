@@ -6,7 +6,7 @@ var chai = require('chai'),
   sinonChai = require('sinon-chai'),
   _ = require('underscore'),
   request = require('supertest'),
-  proxyquire = require('proxyquire'),
+  proxyquire = require('proxyquire').noPreserveCache();
   /* We must provide some dummy values here for the module: */
   config = require ('../../config');
   config.eventStorePassword = '123';

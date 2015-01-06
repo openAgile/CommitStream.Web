@@ -7,7 +7,7 @@ var chai = require('chai'),
   sinonChai = require('sinon-chai'),
   _ = require('underscore'),
   request = require('supertest'),
-  proxyquire = require('proxyquire').noPreserveCache(),
+  proxyquire = require('proxyquire').noPreserveCache();
   /* We must provide some dummy values here for the module: */
   config = require ('../../config');
   config.eventStorePassword = '123';
@@ -21,7 +21,7 @@ var eventStoreClient = {
   streams: {
     get: sinon.stub()
   }
-}
+};
 
 var controller = proxyquire('../../api/queryController', {
   './helpers/eventStoreClient': eventStoreClient
@@ -34,11 +34,11 @@ describe('queryController', function() {
     var mockData = {
       body: '',
       statusCode: '404'
-    }
+    };
 
     beforeEach(function() {
       eventStoreClient.streams.get.callsArgWith(1, null, mockData);
-    })
+    });
 
     it('returns a 200 OK response with an empty commits array', function(done) {
       //exercise our api
@@ -70,11 +70,11 @@ describe('queryController', function() {
   describe('when I issue a query with a workitem=all as a parameter', function() {
     var mockData = {
       body: '{ "entries": [] }'
-    }
+    };
 
     beforeEach(function() {
       eventStoreClient.streams.get.callsArgWith(1, null, mockData);
-    })
+    });
 
     it('calls eventstore-client.streams.get asking for the github-events stream and default pageSize', function(done) {
       request(app)
@@ -87,7 +87,33 @@ describe('queryController', function() {
 
           done();
         });
-
     })
+  });
+
+  describe('when I issue a query for an asset for default pageSize', function() {
+    var assetId = 'S-83940';
+
+    var mockData = {
+      query: {
+        workitem: assetId
+      }
+    };
+
+    beforeEach(function() {
+      eventStoreClient.streams.get.callsArgWith(1, null, {});
+    });
+
+    it('calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 5', function(done) {
+      request(app)
+        .get('/api/query?workitem=' + assetId)
+        .end(function(err, res) {
+          eventStoreClient.streams.get.should.have.been.calledWith({
+            name: 'asset-' + assetId,
+            count: 5
+          }, sinon.match.any);
+
+          done();
+        });
+    });
   });
 });
