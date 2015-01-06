@@ -1,7 +1,7 @@
 (function(controller) {
   var config = require('../config'),
     gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
-    EventStore = require('eventstore-client');
+    es = require('./helpers/eventStoreClient');
 
 
   controller.init = function(app) {
@@ -24,11 +24,6 @@
      */
     app.get("/api/query", function(req, res) {
       if (req.query.workitem) {
-        var es = new EventStore({
-          baseUrl: config.eventStoreBaseUrl,
-          username: config.eventStoreUser,
-          password: config.eventStorePassword
-        });
 
         var stream ;
         if (req.query.workitem.toLowerCase() === 'all') {
@@ -45,6 +40,7 @@
           var result = {
             commits: []
           }
+
           if (response.body) {
             var obj = JSON.parse(response.body);
             result = gitHubEventsToApiResponse(obj.entries);
