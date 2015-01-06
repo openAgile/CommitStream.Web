@@ -67,7 +67,7 @@ describe('queryController', function() {
     });
   });
 
-  describe('when I issue a query with a workitem=all as a parameter', function() {
+  describe('when I issue a query with a workitem=all as a parameter for default pageSize', function() {
     var mockData = {
       body: '{ "entries": [] }'
     };
@@ -76,7 +76,7 @@ describe('queryController', function() {
       eventStoreClient.streams.get.callsArgWith(1, null, mockData);
     });
 
-    it('calls eventstore-client.streams.get asking for the github-events stream and default pageSize', function(done) {
+    it('calls eventstore-client.streams.get asking for the github-events stream and pageSize of 5', function(done) {
       request(app)
         .get('/api/query?workitem=all')
         .end(function(err, res) {
