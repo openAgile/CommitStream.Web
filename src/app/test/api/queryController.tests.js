@@ -23,43 +23,35 @@ var eventStoreClient = {
   }
 }
 
-controller = proxyquire('../../api/queryController', {
+var controller = proxyquire('../../api/queryController', {
   './helpers/eventStoreClient': eventStoreClient
 });
 
 controller.init(app);
 
 describe('queryController', function() {
-  // describe('when I issue a workitem query for an asset that has no associated commits', function() {
-  //   var esStub = function() {
-  //     this.streams = {
-  //       get: function(args, callback) {
-  //         callback(null, {
-  //           statusCode: '404',
-  //           body: ''
-  //         });
-  //       }
-  //     }
-  //   };
+  describe('when I issue a workitem query for an asset that has no associated commits', function() {
+    var mockData = {
+      body: '',
+      statusCode: '404'
+    }
 
-  //   controller = proxyquire('../../api/queryController', {
-  //     'eventstore-client': esStub
-  //   });
+    beforeEach(function() {
+      eventStoreClient.streams.get.callsArgWith(1, null, mockData);
+    })
 
-  //   controller.init(app);
-
-  //   it('returns a 200 OK response with an empty commits array', function(done) {
-  //     //exercise our api
-  //     request(app)
-  //       .get('/api/query?workitem=123&pageSize=5')
-  //       .end(function(err, res) {
-  //         should.not.exist(err);
-  //         res.statusCode.should.equal(200);
-  //         res.body.commits.should.deep.equal([]);
-  //         done();
-  //       });
-  //   });
-  // });
+    it('returns a 200 OK response with an empty commits array', function(done) {
+      //exercise our api
+      request(app)
+        .get('/api/query?workitem=123&pageSize=5')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.statusCode.should.equal(200);
+          res.body.commits.should.deep.equal([]);
+          done();
+        });
+    });
+  });
 
   describe('when I issue a query without a workitem as a parameter', function() {
 
