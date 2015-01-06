@@ -61,24 +61,19 @@ describe('queryController', function() {
   //   });
   // });
 
-  // describe('when I issue a query without a workitem as a parameter', function() {
-  //   controller = proxyquire('../../api/queryController', {
-  //     'eventstore-client': {}
-  //   });
+  describe('when I issue a query without a workitem as a parameter', function() {
 
-  //   controller.init(app);
-
-  //   it('returns a 400 Bad Request response with a error message', function(done) {
-  //     request(app)
-  //       .get('/api/query')
-  //       .end(function(err, res) {
-  //         should.not.exist(err);
-  //         res.statusCode.should.equal(400);
-  //         res.body.error.should.equal('Parameter workitem is required');
-  //         done();
-  //       });
-  //   });
-  // });
+    it('returns a 400 Bad Request response with a error message', function(done) {
+      request(app)
+        .get('/api/query')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.statusCode.should.equal(400);
+          res.body.error.should.equal('Parameter workitem is required');
+          done();
+        });
+    });
+  });
 
   describe('when I issue a query with a workitem=all as a parameter', function() {
     var mockData = {
