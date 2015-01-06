@@ -10,13 +10,13 @@ var chai = require('chai'),
   /* We must provide some dummy values here for the module: */
   config = require ('../../config');
   config.eventStorePassword = '123';
-  config.eventStoreUser = 'admin',
+  config.eventStoreUser = 'admin';
   config.eventStoreBaseUrl = 'http://nothing:7887';
 
-var hypermediaResponseStub = { 
+var hypermediaResponseStub = {
     digestPOST: sinon.stub(),
     digestGET: sinon.stub()
-  },  
+  },
   digestAdded = {
     create: sinon.stub()
   },
@@ -29,7 +29,7 @@ var hypermediaResponseStub = {
     }
   },
   controller = proxyquire('../../api/digestsController',
-    { 
+    {
       './hypermediaResponse' : hypermediaResponseStub,
       './events/digestAdded' : digestAdded,
       './helpers/eventStoreClient': eventStoreClient
@@ -59,7 +59,7 @@ function getDigest(path, shouldBehaveThusly) {
 }
 
 describe('digestsController', function () {
-    
+
   describe('when creating a digest', function() {
     var hypermediaResponse;
     var protocol;
@@ -104,7 +104,7 @@ describe('digestsController', function () {
         }, 'application/jackson');
       });
 
-      it('it should reject the request and explain that only application/json is accepted.', function(done) {      
+      it('it should reject the request and explain that only application/json is accepted.', function(done) {
         postDigest(data, function(err, res) {
           res.text.should.equal('When creating a digest, you must send a Content-Type: application/json header.');
           done();
@@ -122,7 +122,7 @@ describe('digestsController', function () {
         }, 'aPpLiCation/JSON');
       });
 
-    });    
+    });
 
     describe('with a script tag in the description', function() {
       var data = { description: '<script>var x = 123; alert(x);</script>' };
@@ -130,15 +130,15 @@ describe('digestsController', function () {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(400);
           done();
-        }); 
+        });
       });
-      
-      it('it should reject the request and return a meaningful error message.', function(done) {      
+
+      it('it should reject the request and return a meaningful error message.', function(done) {
         postDigest(data, function(err, res) {
           res.text.should.equal('A digest description cannot contain script tags or HTML.');
           done();
         });
-      }); 
+      });
     });
 
     describe('with HTML tags in the description', function() {
@@ -147,15 +147,15 @@ describe('digestsController', function () {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(400);
           done();
-        }); 
+        });
       });
-      
+
       it('it should reject a request and return a meaningful error message.', function(done) {
         postDigest(data, function(err, res) {
           res.text.should.equal('A digest description cannot contain script tags or HTML.');
           done();
         });
-      }); 
+      });
     });
 
     describe('with a zero length description', function() {
@@ -217,7 +217,7 @@ describe('digestsController', function () {
     });
 
     describe('with a description greater than 140 characters', function() {
-      var data = { description: Array(142).join('.') };      
+      var data = { description: Array(142).join('.') };
       it('it should reject a request and return a 400 status code.', function(done) {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(400);
@@ -326,9 +326,9 @@ describe('digestsController', function () {
 
       it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
-          eventStoreClient.projection.getState.should.have.been.calledWith({ 
-              name: sinon.match.any, 
-              partition: 'digest-' + uuid 
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+              name: sinon.match.any,
+              partition: 'digest-' + uuid
             }, sinon.match.any);
           done();
         });
@@ -377,10 +377,10 @@ describe('digestsController', function () {
 
       it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
-          eventStoreClient.projection.getState.should.have.been.calledWith({ 
-              name: sinon.match.any, 
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+              name: sinon.match.any,
               partition: 'digest-' + uuid
-            }, sinon.match.any);        
+            }, sinon.match.any);
           done();
         });
       });
@@ -400,7 +400,7 @@ describe('digestsController', function () {
       });
 
       it('it returns a meaningful error message', function(done) {
-        get(function(err, res) {          
+        get(function(err, res) {
           res.text.should.equal(JSON.stringify({'error': 'Could not find a digest with id ' + uuid}));
           done();
         });
@@ -424,10 +424,10 @@ describe('digestsController', function () {
 
       it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
-          eventStoreClient.projection.getState.should.have.been.calledWith({ 
-              name: sinon.match.any, 
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+              name: sinon.match.any,
               partition: 'digest-' + uuid
-            }, sinon.match.any);        
+            }, sinon.match.any);
           done();
         });
       });
@@ -447,7 +447,7 @@ describe('digestsController', function () {
       });
 
       it('it returns a meaningful error message', function(done) {
-        get(function(err, res) {          
+        get(function(err, res) {
           res.text.should.equal(JSON.stringify({'error': 'There was an internal error when trying to process your request'}));
           done();
         });
@@ -457,7 +457,7 @@ describe('digestsController', function () {
   });
 
   describe('when requesting a list of digests', function() {
-    
+
   });
 
 });
