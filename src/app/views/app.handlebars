@@ -37,11 +37,15 @@
     }
 
     function queryCommitStream(commitStreamDomId, workitem, handlebars, errorHandler) {
-	var firstCommits = true;
-	if (window.CommitStream.next) {
-	  apiUrl = window.CommitStream.next;
-	  firstCommits = false;
-        };
+      var firstCommits = false;
+      var apiUrl;
+      if (!window.CommitStream.next) {
+        apiUrl = '{{{apiUrl}}}' + workitem;
+        firstCommits = true;
+      } else {
+        apiUrl = window.CommitStream.next;
+      }
+
         $.getJSON('{{{apiUrl}}}' + workitem).done(function(data) {
             if (!data || !data.commits) {
                 errorHandler();
@@ -51,10 +55,13 @@
                 data.firstCommits = firstCommits;
                 window.CommitStream.next = data._links.next;
 
-                //alert(data._links.next);
-                if(!data._links.next){
-                alert('no more');
-                $(window).unbind('scroll');
+          if (!data._links || !data._links.next) {
+            $(window).unbind('scroll');
+            window.CommitStream.next = undefined;
+          } else {
+            window.CommitStream.next = data._links.next;
+          }
+
         }
 
                 if (assetDetailCommitsTmpl === null) {
