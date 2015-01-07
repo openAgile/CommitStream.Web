@@ -146,11 +146,26 @@ describe('queryController', function() {
         eventStoreClient.streams.get.callsArgWith(1, null, {});
       });
 
-      var nonNumericValue = '12ForYou';
+      var nonNumericValueStartingWithNumbers = '12ForYou';
 
-      it('it uses the default pageSize of ' + defaultPageSize + ' when passing the request to the event store client', function(done) {
+      it('of ' + nonNumericValueStartingWithNumbers + 'it uses the default pageSize of ' + defaultPageSize + ' when passing the request to the event store client', function(done) {
         request(app)
-          .get('/api/query?workitem=' + assetId + '&pageSize=' + nonNumericValue)
+          .get('/api/query?workitem=' + assetId + '&pageSize=' + nonNumericValueStartingWithNumbers)
+          .end(function(err, res) {
+            eventStoreClient.streams.get.should.have.been.calledWith({
+              name: 'asset-' + assetId,
+              count: defaultPageSize
+            }, sinon.match.any);
+
+            done();
+          });
+      });
+
+      var nonNumericValueEndingWithNumbers = 'ForYou12';
+
+      it('of ' + nonNumericValueEndingWithNumbers + 'it uses the default pageSize of ' + defaultPageSize + ' when passing the request to the event store client', function(done) {
+        request(app)
+          .get('/api/query?workitem=' + assetId + '&pageSize=' + nonNumericValueEndingWithNumbers)
           .end(function(err, res) {
             eventStoreClient.streams.get.should.have.been.calledWith({
               name: 'asset-' + assetId,
