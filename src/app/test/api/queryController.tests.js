@@ -30,6 +30,8 @@ var controller = proxyquire('../../api/queryController', {
 controller.init(app);
 
 describe('queryController', function() {
+  var defaultPageSize = 5;
+
   describe('when I issue a workitem query for an asset that has no associated commits', function() {
     var mockData = {
       body: '',
@@ -37,6 +39,7 @@ describe('queryController', function() {
     };
 
     beforeEach(function() {
+      eventStoreClient.streams.get = sinon.stub();
       eventStoreClient.streams.get.callsArgWith(1, null, mockData);
     });
 
@@ -73,6 +76,7 @@ describe('queryController', function() {
     };
 
     beforeEach(function() {
+      eventStoreClient.streams.get = sinon.stub();
       eventStoreClient.streams.get.callsArgWith(1, null, mockData);
     });
 
@@ -87,19 +91,14 @@ describe('queryController', function() {
 
           done();
         });
-    })
+    });
   });
 
   describe('when I issue a query for an asset for default pageSize', function() {
     var assetId = 'S-83940';
 
-    var mockData = {
-      query: {
-        workitem: assetId
-      }
-    };
-
     beforeEach(function() {
+      eventStoreClient.streams.get = sinon.stub();
       eventStoreClient.streams.get.callsArgWith(1, null, {});
     });
 
@@ -116,4 +115,52 @@ describe('queryController', function() {
         });
     });
   });
+
+  describe('when I issue a query for an asset for non-default pageSize', function() {
+    var assetId = 'S-83940';
+
+    beforeEach(function() {
+      eventStoreClient.streams.get = sinon.stub();
+      eventStoreClient.streams.get.callsArgWith(1, null, {});
+    });
+
+    it('of 10, it calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 10', function(done) {
+      var pageSize=10;
+
+      request(app)
+        .get('/api/query?workitem=' + assetId + '&pageSize=' + pageSize)
+        .end(function(err, res) {
+          eventStoreClient.streams.get.should.have.been.calledWith({
+            name: 'asset-' + assetId,
+            count: 10
+          }, sinon.match.any);
+
+          done();
+        });
+    });
+
+    describe('giving a non-numeric value', function() {
+
+      beforeEach(function() {
+        eventStoreClient.streams.get = sinon.stub();
+        eventStoreClient.streams.get.callsArgWith(1, null, {});
+      });
+
+      var nonNumericValue = '12ForYou';
+
+      it('it uses the default pageSize of ' + defaultPageSize + ' when passing the request to the event store client', function(done) {
+        request(app)
+          .get('/api/query?workitem=' + assetId + '&pageSize=' + nonNumericValue)
+          .end(function(err, res) {
+            eventStoreClient.streams.get.should.have.been.calledWith({
+              name: 'asset-' + assetId,
+              count: defaultPageSize
+            }, sinon.match.any);
+
+            done();
+          });
+      });
+    });
+  });
+
 });

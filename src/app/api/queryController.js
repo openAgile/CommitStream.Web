@@ -2,6 +2,7 @@
   var config = require('../config'),
     gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
     es = require('./helpers/eventStoreClient');
+    _ = require('underscore');
 
 
   controller.init = function(app) {
@@ -31,11 +32,42 @@
         } else {
           stream = 'asset-' + req.query.workitem;
         }
-        var count = req.query.pageSize || 5;
+
+        function hasPageSize(query) {
+          return _.has(query, "pageSize");
+        }
+
+        function getPageSize(query) {
+            return query.pageSize;
+        }
+
+        function convertToInt(stringVal) {
+          if(!isNaN(stringVal))
+            return parseInt(stringVal);
+          else
+            return NaN;
+        }
+
+        function getDefaultWhenNaN(value, defaultValue) {
+          if (_.isNaN(value)) {
+            return defaultValue;
+          }
+          else
+            return value;
+        }
+
+        function getConvertedPageSizeOrDefault(query) {
+          var defaultSize = 5;
+          if(!hasPageSize(query)) return defaultSize;
+          var convertedSize = convertToInt(getPageSize(query));
+          return getDefaultWhenNaN(convertedSize, defaultSize);
+        }
+
+        var pageSize = getConvertedPageSizeOrDefault(req.query);
 
         es.streams.get({
           name: stream,
-          count: count
+          count: pageSize
         }, function(error, response) {
           var result = {
             commits: []
