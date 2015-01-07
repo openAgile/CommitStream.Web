@@ -24,6 +24,8 @@
         try {
             var content = assetDetailCommitsTmpl(data);
             $(commitStreamDomId).html(content);
+            $(commitStreamDomId).find('.cs-refresh').unbind('click');
+            $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);            
         } catch(ex) {
             errorHandler();
         }
@@ -53,9 +55,14 @@
         }).fail(errorHandler);
     }
 
+    function queryCommitStreamRefresh() {};
+
     function invokeCommitStream(commitStreamDomId, workitem, errorHandler) {
         require(deps, function(handlebars) {
-            queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);
+            queryCommitStreamRefresh = function() {
+                queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);
+            };
+            queryCommitStreamRefresh();
         }, errorHandler);
     }
 
