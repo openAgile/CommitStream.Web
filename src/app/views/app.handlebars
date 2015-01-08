@@ -53,11 +53,12 @@
                 data.noCommits = data.commits.length < 1;
                 data.resourcePath = "{{{resourcePath}}}";
                 data.firstCommits = firstCommits;
-                window.CommitStream.next = data._links.next;
+		data.lastPage = false;
 
           if (!data._links || !data._links.next) {
-            $(window).unbind('scroll');
+            $('#scrollable-content').unbind('scroll');
             window.CommitStream.next = undefined;
+            data.lastPage = true;
           } else {
             window.CommitStream.next = data._links.next;
           }
@@ -69,6 +70,7 @@
                         try {
                             assetDetailCommitsTmpl = handlebars.compile(source);
                             render(commitStreamDomId, data, errorHandler);
+		            bindScrollEvent('#scrollable-content', workitem, errorHandler);
                         } catch(ex) {
                             errorHandler();
                         }
@@ -118,8 +120,8 @@
     }
 
   function bindScrollEvent(commitStreamDomId, workitem, errorHandler) {
-    $(window).scroll(function() {
-      if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+    $(commitStreamDomId).bind('scroll', function() {
+      if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
         invokeCommitStream(commitStreamDomId, workitem, errorHandler);
       }
     });
@@ -128,7 +130,6 @@
     if (!window.CommitStream) {
         window.CommitStream = {
             commitsDisplay : function(commitStreamDomId, workitem, errorHandler) {
-                bindScrollEvent(commitStreamDomId, workitem, errorHandler);
                 try {
                     if (!hasAllDeps()) {
                         $.getScript(requirejsUrl, function(data, status, jqxhr) {

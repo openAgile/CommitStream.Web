@@ -2,6 +2,15 @@
 <html>
   <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style type="text/css">
+      .side-panel-scrollable {
+        overflow-y: auto;
+        position: absolute;
+        bottom: 0;
+        top: 45px;
+      }
+    </style>
+
     <script>
 $(function() {
   function getQueryVariable(variable) {
@@ -26,7 +35,7 @@ $(function() {
     function(data, status, jqxhr) {
       CommitStream.commitsDisplay('#commits', workitem);
     });
-});   
+});
     </script>
   </head>
 
