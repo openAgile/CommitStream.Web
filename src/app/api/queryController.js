@@ -1,7 +1,8 @@
 (function(controller) {
   var config = require('../config'),
     gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
-    EventStore = require('eventstore-client');
+    es = require('./helpers/eventStoreClient');
+    _ = require('underscore');
 
 
   controller.init = function(app) {
@@ -24,22 +25,54 @@
      */
     app.get("/api/query", function(req, res) {
       if (req.query.workitem) {
-        var es = new EventStore({
-          baseUrl: config.eventStoreBaseUrl,
-          username: config.eventStoreUser,
-          password: config.eventStorePassword
-        });
 
-        var stream = 'asset-' + req.query.workitem;
-        var count = req.query.pageSize || 5;
+        var stream ;
+        if (req.query.workitem.toLowerCase() === 'all') {
+          stream = 'github-events';
+        } else {
+          stream = 'asset-' + req.query.workitem;
+        }
+
+        function hasPageSize(query) {
+          return _.has(query, "pageSize");
+        }
+
+        function getPageSize(query) {
+            return query.pageSize;
+        }
+
+        function convertToInt(stringVal) {
+          if(!isNaN(stringVal))
+            return parseInt(stringVal);
+          else
+            return NaN;
+        }
+
+        function getDefaultWhenNaN(value, defaultValue) {
+          if (_.isNaN(value)) {
+            return defaultValue;
+          }
+          else
+            return value;
+        }
+
+        function getConvertedPageSizeOrDefault(query) {
+          var defaultSize = 5;
+          if(!hasPageSize(query)) return defaultSize;
+          var convertedSize = convertToInt(getPageSize(query));
+          return getDefaultWhenNaN(convertedSize, defaultSize);
+        }
+
+        var pageSize = getConvertedPageSizeOrDefault(req.query);
 
         es.streams.get({
           name: stream,
-          count: count
+          count: pageSize
         }, function(error, response) {
           var result = {
             commits: []
           }
+
           if (response.body) {
             var obj = JSON.parse(response.body);
             result = gitHubEventsToApiResponse(obj.entries);

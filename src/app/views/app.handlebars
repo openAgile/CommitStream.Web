@@ -24,6 +24,14 @@
         try {
             var content = assetDetailCommitsTmpl(data);
             $(commitStreamDomId).html(content);
+            $(commitStreamDomId).find('.cs-refresh').unbind('click');
+            $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
+            $(commitStreamDomId).find('.toggle-cs-autorefresh').unbind('click');
+            $(commitStreamDomId).find('.toggle-cs-autorefresh').bind('click', autoRefreshToggle);
+            if (autoRefreshIntervalId) {
+                console.log('we in this');
+                $(commitStreamDomId).find('.toggle-cs-autorefresh').prop('checked', true);
+            }
         } catch(ex) {
             errorHandler();
         }
@@ -53,9 +61,40 @@
         }).fail(errorHandler);
     }
 
+    function queryCommitStreamRefresh() {};
+
+    var autoRefreshIntervalId = null;
+
+    function autoRefreshToggle() {
+        var toggle = $(this);
+        if (toggle.is(':checked')) {
+            autoRefreshEnable();
+        } else {
+            autoRefreshDisable();
+        }
+    }
+
+    function autoRefreshEnable() {
+        if (autoRefreshIntervalId) {
+            clearInterval(autoRefreshIntervalId);
+        }
+       autoRefreshIntervalId = setInterval(queryCommitStreamRefresh,
+        window.CommitStream.autoRefreshIntervalInSeconds * 1000);
+    }
+
+    function autoRefreshDisable() {
+        if (autoRefreshIntervalId) {
+            clearInterval(autoRefreshIntervalId);
+            autoRefreshIntervalId = null;
+        }
+    }
+
     function invokeCommitStream(commitStreamDomId, workitem, errorHandler) {
         require(deps, function(handlebars) {
-            queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);
+            queryCommitStreamRefresh = function() {
+                queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);
+            };
+            queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);            
         }, errorHandler);
     }
 
@@ -77,5 +116,6 @@
                 }
             }
         };
+        window.CommitStream.autoRefreshIntervalInSeconds = 30;
     }
 })();
