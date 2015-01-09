@@ -29,7 +29,6 @@
             $(commitStreamDomId).find('.toggle-cs-autorefresh').unbind('click');
             $(commitStreamDomId).find('.toggle-cs-autorefresh').bind('click', autoRefreshToggle);
             if (autoRefreshIntervalId) {
-                console.log('we in this');
                 $(commitStreamDomId).find('.toggle-cs-autorefresh').prop('checked', true);
             }
         } catch(ex) {
