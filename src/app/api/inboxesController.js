@@ -6,11 +6,11 @@
       inboxAdded = require('./events/inboxAdded'),
       eventStore = require('./helpers/eventStoreClient'),
       bodyParser = require('body-parser'),
-      sanitize = require('sanitize-html');
+      sanitize = require('./sanitizer').sanitize;
 
   inboxesController.init = function (app) {
 
-    app.post('/api/inboxes', bodyParser.json() , function(req, res) {
+    app.post('/api/inboxes', bodyParser.json() , function(req, res) {      
       var contentType = req.get('Content-Type');
 
       if (!contentType || contentType.toLowerCase() !== 'application/json') {
@@ -21,42 +21,27 @@
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
-      // TODO: use JSON Schema for these validations
-
-      var originalFamily = req.body.family;
-
-      if (originalFamily === undefined) {
-        res.status(400).send('An inbox must contain a family.');
-        return;        
+      function hasErrors(errors) {
+        return errors.length > 0;
       }
+      
+      function sendErrors(errors) {
+        res.status(400).send({errors: errors});
+      }     
 
-      if(originalFamily === null) {        
-        res.status(400).send('An inbox family must not be null.');
+      var errors = sanitize('inbox', req.body, ['name']);
+      if (hasErrors(errors)) {
+        sendErrors(errors);
         return;
       }
 
-      if(originalFamily.trim().length === 0) {        
-        res.status(400).send('An inbox family must contain a value.');
+      errors = inboxAdded.validate(req.body);
+      if (hasErrors(errors)) {
+        sendErrors(errors);
         return;
       }
 
-      var family = sanitize(req.body.family, {allowedTags: []});
-      if (originalFamily !== family) {
-        res.status(400).send('An inbox family cannot contain script tags or HTML.');
-        return;
-      }
-
-      if (family.length > 140) {
-        res.status(400).send ('An inbox family cannot contain more than 140 characters. The family you submitted contains ' + family.length + ' characters.');
-        return;
-      }
-
-      // TODO: validate this
-      var digestId = sanitize(req.body.digestId, {allowedTags: []});      
-      var name = sanitize(req.body.name, {allowedTags: []});
-      var url = sanitize(req.body.url, {allowedTags: []});
-
-      var inboxAddedEvent = inboxAdded.create(digestId, family, name, url);
+      var inboxAddedEvent = inboxAdded.create(req.body.digestId, req.body.family, req.body.name, req.body.url);
 
       var args = {
         name: 'inboxes',

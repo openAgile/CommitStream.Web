@@ -31,7 +31,11 @@
     "ttl-cache": "^1.0.2",
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
-    "validator": "^3.22.1"
+    "validator": "^3.22.1",
+    "eventstore-client": "openAgile/eventstore-client",
+    "sanitize-html": "^1.4.3",
+    "mocha-tap-reporter": "^0.1.2",
+    "jsonschema": "^1.0.0"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
