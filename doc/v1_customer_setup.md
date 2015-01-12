@@ -65,6 +65,7 @@ HttpPrefixes:
 * In the azure portal go to the endpoints tab of your VM.
 * Add port 2113 and label it `EventStore`.
 * From the VM, use Windows Advanced Firewall to add the same 2113 and name it `EventStore`.
+* Load EventStore and then go to the Projections tab and click **Enable All** to start the system projections.
 
 ## Create the Azure web site to host the customer instance
 * Create a new web site in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `devopsheroscs`
