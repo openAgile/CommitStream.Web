@@ -81,7 +81,7 @@ HttpPrefixes:
 	* eventStoreUser `admin`
 	* eventStorePassword: `<eventStorePassword GUID>`
 	* eventStoreAllowSelfSignedCert: `true`
-* Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
+* Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
 ##  Configure VersionOne instance
 
