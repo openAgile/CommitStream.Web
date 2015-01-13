@@ -26,7 +26,7 @@ postInbox = function(shouldBehaveThusly) {
     .end(shouldBehaveThusly);
 };
 
-describe('inboxController', function() {
+/*describe('inboxController', function() {
   describe('when creating a inbox', function() {
     it('should request inbox hypermedia', function(done) {
       postInbox(function(err, res) {
@@ -35,4 +35,4 @@ describe('inboxController', function() {
       })
     })
   })
-})
+})*/

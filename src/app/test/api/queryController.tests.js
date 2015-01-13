@@ -8,11 +8,11 @@ var chai = require('chai'),
   _ = require('underscore'),
   request = require('supertest'),
   proxyquire = require('proxyquire').noPreserveCache();
-  /* We must provide some dummy values here for the module: */
-  config = require ('../../config');
-  config.eventStorePassword = '123';
-  config.eventStoreUser = 'admin';
-  config.eventStoreBaseUrl = 'http://nothing:7887';
+/* We must provide some dummy values here for the module: */
+config = require('../../config');
+config.eventStorePassword = '123';
+config.eventStoreUser = 'admin';
+config.eventStoreBaseUrl = 'http://nothing:7887';
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
@@ -82,10 +82,10 @@ describe('queryController', function() {
 
     it('calls eventstore-client.streams.get asking for the github-events stream and pageSize of 25', function(done) {
       request(app)
-        .get('/api/query?workitem=all')
+        .get('/api/query?digestId=123&workitem=all')
         .end(function(err, res) {
           eventStoreClient.streams.get.should.have.been.calledWith({
-            name: 'github-events',
+            name: 'digestCommits-123',
             count: 25,
             pageUrl: undefined
           }, sinon.match.any);
@@ -127,7 +127,7 @@ describe('queryController', function() {
     });
 
     it('of 10, it calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 10', function(done) {
-      var pageSize=10;
+      var pageSize = 10;
 
       request(app)
         .get('/api/query?workitem=' + assetId + '&pageSize=' + pageSize)

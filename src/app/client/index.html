@@ -28,6 +28,7 @@ $(function() {
   }
 
   var key = getQueryVariable('key');
+  var digestId = getQueryVariable('digestId');
   if (!key) {
     alert('Must specify API key in the form of key=<apikey> as a query string parameter');
   }
@@ -35,7 +36,7 @@ $(function() {
 
   $.getScript('app?key=' + key,
     function(data, status, jqxhr) {
-      CommitStream.commitsDisplay('#commits', workitem);
+      CommitStream.commitsDisplay('#commits', digestId, workitem);
     });
 });
     </script>
