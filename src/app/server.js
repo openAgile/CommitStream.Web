@@ -57,7 +57,7 @@ app.get('/app', function(req, res) {
 
   res.render('app', {
     apiUrl: protocol + '://' + host + '/api/query?key=' + key + '&workitem=',
-    templateUrl: protocol + '://' + host + '/assetDetailCommits.html',
+    assetDetailTemplateUrl: protocol + '://' + host + '/',
     resourcePath: protocol + '://' + host + '/'
   });
 });
