@@ -1,17 +1,17 @@
 (function(inboxesController) {
 
   var uuid = require('uuid-v4'),
-      config = require('../config'),
-      validator = require('validator'),
-      inboxAdded = require('./events/inboxAdded'),
-      eventStore = require('./helpers/eventStoreClient'),
-      bodyParser = require('body-parser'),
-      sanitize = require('./sanitizer').sanitize,
-      request = require('request');
+    config = require('../config'),
+    validator = require('validator'),
+    inboxAdded = require('./events/inboxAdded'),
+    eventStore = require('./helpers/eventStoreClient'),
+    bodyParser = require('body-parser'),
+    sanitize = require('./sanitizer').sanitize,
+    request = require('request');
 
-  inboxesController.init = function (app) {
+  inboxesController.init = function(app) {
 
-    app.post('/api/inboxes', bodyParser.json() , function(req, res) {
+    app.post('/api/inboxes', bodyParser.json(), function(req, res) {
       var contentType = req.get('Content-Type');
 
       if (!contentType || contentType.toLowerCase() !== 'application/json') {
@@ -27,7 +27,9 @@
       }
 
       function sendErrors(errors) {
-        res.status(400).send({errors: errors});
+        res.status(400).send({
+          errors: errors
+        });
       }
 
       var errors = sanitize('inbox', req.body, ['name']);
@@ -50,13 +52,17 @@
       };
 
       eventStore.streams.post(args, function(error, resp) {
-        if(error) {
+        if (error) {
           // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
         } else {
           var hypermedia = {
             "_links": {
-              "self" : { "href": protocol + "://" + host + "/api/inboxes/" + inboxAddedEvent.data.inboxId },
-              "inboxes": { "href": protocol + "://" + host + "/api/inboxes" }
+              "self": {
+                "href": protocol + "://" + host + "/api/inboxes/" + inboxAddedEvent.data.inboxId
+              },
+              "inboxes": {
+                "href": protocol + "://" + host + "/api/inboxes"
+              }
             }
           };
 
@@ -68,86 +74,88 @@
       });
     });
 
-    app.post('/api/inboxes/:uuid', bodyParser.json(), function (req, res, next) {
-      console.log('HEEEEEEEERRRRRRRRRRRRRREEEEEEEEEEE')
-      request(config.protocol +
-              '://' +
-              config.serverBaseUrl +
-              '/api/inboxes/' +
-              req.params.uuid, function (error, response, body) {
-
-          console.log(error)
-        // if (!error && response.statusCode == 200) {
-        // }
-      });
-
-
-      res.set('Content-Type', 'application/json');
-      //TODO: all this logic, yikes!
-      if (!req.headers.hasOwnProperty('x-github-event')) {
-        res.json({
-          message: 'Unknown event type.'
-        });
-      } else if (req.headers['x-github-event'] == 'push') {
-
-        var translator = require('./translators/githubTranslator');
-        var events = translator.translatePush(req.body);
-
-        var e = JSON.stringify(events)
-        eventStore.streams.post({
-          name: 'inboxCommits-' + req.params.uuid,
-          events: e
-        }, function(error, response) {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log('Posted to eventstore.');
-            console.log(response.statusCode);
-          }
-        });
-        res.json({
-          message: 'Your push event has been queued to be added to CommitStream.'
-        });
-
-      } else if (req.headers['x-github-event'] == 'ping') {
-        res.json({
-          message: 'Pong.'
-        });
-      } else {
-        res.json({
-          message: 'Unknown event type.'
-        });
-      }
-      res.end();
-
-    })
-
-    app.get('/api/inboxes/:uuid', function (req, res, next) {
-      console.log('555555555555555555555555555555555555555')
+    app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {
       if (!validator.isUUID(req.params.uuid)) {
-        console.log('44444444444444444444444444444444444444')
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid inbox identifier.');
       } else {
-        console.log('6666666666666666666666666666666666666666666666666')
-        eventStore.projection.getState({ name: 'inbox', partition: 'inbox-' + req.params.uuid }, function(err, resp) {
+        getPartitionState('inbox', req.params.uuid, function(error, response) {
+          if (!error && response.statusCode == 200) {
+            var digestId = JSON.parse(response.body).digestId;
+
+            res.set('Content-Type', 'application/json');
+            //TODO: all this logic, yikes!
+            if (!req.headers.hasOwnProperty('x-github-event')) {
+              res.json({
+                message: 'Unknown event type.'
+              });
+            } else if (req.headers['x-github-event'] == 'push') {
+
+              var translator = require('./translators/githubTranslator');
+              var events = translator.translatePush(req.body, digestId);
+
+              var e = JSON.stringify(events)
+              eventStore.streams.post({
+                name: 'inboxCommits-' + req.params.uuid,
+                events: e
+              }, function(error, response) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Posted to eventstore.');
+                  console.log(response.statusCode);
+                }
+              });
+              res.json({
+                message: 'Your push event has been queued to be added to CommitStream.'
+              });
+
+            } else if (req.headers['x-github-event'] == 'ping') {
+              res.json({
+                message: 'Pong.'
+              });
+            } else {
+              res.json({
+                message: 'Unknown event type.'
+              });
+            }
+          } else {
+            res.json({
+              message: error
+            });
+          }
+          res.end();
+        });
+      }
+    })
+
+    app.get('/api/inboxes/:uuid', function(req, res, next) {
+      if (!validator.isUUID(req.params.uuid)) {
+        res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid inbox identifier.');
+      } else {
+        getPartitionState('inbox', req.params.uuid, function(err, resp) {
           if (err) {
-            console.log('111111111111111111111111111111111')
-            res.status(500).json({'error': 'There was an internal error when trying to process your request'});
+            res.status(500).json({
+              'error': 'There was an internal error when trying to process your request'
+            });
           } else if (!resp.body || resp.body.length < 1) {
-            console.log('22222222222222222222222222222222222222222222')
-            res.status(404).json({'error': 'Could not find an inbox with id ' + req.params.uuid});
+            res.status(404).json({
+              'error': 'Could not find an inbox with id ' + req.params.uuid
+            });
           } else { // all good
-            console.log('3333333333333333333333333333333333')
             var protocol = config.protocol || req.protocol;
             var host = req.get('host');
-            console.log(protocol)
-            console.log(host)
             var data = JSON.parse(resp.body);
             var hypermedia = {
               "_links": {
-                "self" : { "href": protocol + "://" + host + "/api/inboxes/" + req.params.uuid },
-                "inboxes": { "href": protocol + "://" + host + "/api/inboxes" },
-                "digest-parent": { "href": protocol + "://" + host + "/api/digests/" + data.digestId }
+                "self": {
+                  "href": protocol + "://" + host + "/api/inboxes/" + req.params.uuid
+                },
+                "inboxes": {
+                  "href": protocol + "://" + host + "/api/inboxes"
+                },
+                "digest-parent": {
+                  "href": protocol + "://" + host + "/api/digests/" + data.digestId
+                }
               }
             };
             hypermedia.digestId = data.digestId;
@@ -155,11 +163,20 @@
             hypermedia.name = data.name;
             hypermedia.url = data.url;
             res.set('Content-Type', 'application/hal+json; charset=utf-8');
-            res.send(hypermedia);
+            res.status(200).send(hypermedia);
           }
         });
       }
     });
+
+    getPartitionState = function(name, uuid, callback) {
+      eventStore.projection.getState({
+        name: name,
+        partition: name + '-' + uuid
+      }, function(err, resp) {
+        callback(err, resp);
+      });
+    }
   }
 
 })(module.exports);
