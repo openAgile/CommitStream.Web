@@ -8,7 +8,7 @@
             id: pushEvent.repository.id,
             name: pushEvent.repository.name
         };
-        var events = _.map(pushEvent.commits, function (aCommit) {            
+        var events = _.map(pushEvent.commits, function (aCommit) {
             var commit = {
                 sha: aCommit.id,
                 commit: {
@@ -28,9 +28,12 @@
             return {
                 eventId: uuid(),
                 eventType: 'github-event',
-                data: commit
-            };            
+                data: commit,
+                metadata: {
+                    digestId: 'ee8f321c-325c-44ea-895e-383b0c357c64'
+                }
+            };
         });
         return events;
-    };    
+    };
 })(module.exports);

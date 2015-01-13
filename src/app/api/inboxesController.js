@@ -6,11 +6,12 @@
       inboxAdded = require('./events/inboxAdded'),
       eventStore = require('./helpers/eventStoreClient'),
       bodyParser = require('body-parser'),
-      sanitize = require('./sanitizer').sanitize;
+      sanitize = require('./sanitizer').sanitize,
+      request = require('request');
 
   inboxesController.init = function (app) {
 
-    app.post('/api/inboxes', bodyParser.json() , function(req, res) {      
+    app.post('/api/inboxes', bodyParser.json() , function(req, res) {
       var contentType = req.get('Content-Type');
 
       if (!contentType || contentType.toLowerCase() !== 'application/json') {
@@ -24,10 +25,10 @@
       function hasErrors(errors) {
         return errors.length > 0;
       }
-      
+
       function sendErrors(errors) {
         res.status(400).send({errors: errors});
-      }     
+      }
 
       var errors = sanitize('inbox', req.body, ['name']);
       if (hasErrors(errors)) {
@@ -64,21 +65,83 @@
           res.status(201);
           res.send(hypermedia);
         }
-      });      
+      });
     });
 
+    app.post('/api/inboxes/:uuid', bodyParser.json(), function (req, res, next) {
+      console.log('HEEEEEEEERRRRRRRRRRRRRREEEEEEEEEEE')
+      request(config.protocol +
+              '://' +
+              config.serverBaseUrl +
+              '/api/inboxes/' +
+              req.params.uuid, function (error, response, body) {
+
+          console.log(error)
+        // if (!error && response.statusCode == 200) {
+        // }
+      });
+
+
+      res.set('Content-Type', 'application/json');
+      //TODO: all this logic, yikes!
+      if (!req.headers.hasOwnProperty('x-github-event')) {
+        res.json({
+          message: 'Unknown event type.'
+        });
+      } else if (req.headers['x-github-event'] == 'push') {
+
+        var translator = require('./translators/githubTranslator');
+        var events = translator.translatePush(req.body);
+
+        var e = JSON.stringify(events)
+        eventStore.streams.post({
+          name: 'inboxCommits-' + req.params.uuid,
+          events: e
+        }, function(error, response) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Posted to eventstore.');
+            console.log(response.statusCode);
+          }
+        });
+        res.json({
+          message: 'Your push event has been queued to be added to CommitStream.'
+        });
+
+      } else if (req.headers['x-github-event'] == 'ping') {
+        res.json({
+          message: 'Pong.'
+        });
+      } else {
+        res.json({
+          message: 'Unknown event type.'
+        });
+      }
+      res.end();
+
+    })
+
     app.get('/api/inboxes/:uuid', function (req, res, next) {
+      console.log('555555555555555555555555555555555555555')
       if (!validator.isUUID(req.params.uuid)) {
+        console.log('44444444444444444444444444444444444444')
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid inbox identifier.');
       } else {
+        console.log('6666666666666666666666666666666666666666666666666')
         eventStore.projection.getState({ name: 'inbox', partition: 'inbox-' + req.params.uuid }, function(err, resp) {
           if (err) {
+            console.log('111111111111111111111111111111111')
             res.status(500).json({'error': 'There was an internal error when trying to process your request'});
           } else if (!resp.body || resp.body.length < 1) {
+            console.log('22222222222222222222222222222222222222222222')
             res.status(404).json({'error': 'Could not find an inbox with id ' + req.params.uuid});
           } else { // all good
+            console.log('3333333333333333333333333333333333')
             var protocol = config.protocol || req.protocol;
             var host = req.get('host');
+            console.log(protocol)
+            console.log(host)
             var data = JSON.parse(resp.body);
             var hypermedia = {
               "_links": {
