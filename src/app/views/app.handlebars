@@ -87,9 +87,14 @@
     data.resourcePath = "{{{resourcePath}}}";
     data.lastPage = false;
     if (!data._links || !data._links.next) {
+      data.lastPage = true;
+    }
+  }
+
+  function checkIfNextPage(data) {
+    if (!data._links || !data._links.next) {
       $('#scrollable-content').unbind('scroll');
       $('#scrollable-content').attr("next", '');
-      data.lastPage = true;
     } else {
       //TODO: puke
       setTimeout(function() {
@@ -124,29 +129,16 @@
          if (thereAreNoCommits(data)) {
            window.CommitStream.errorHandler();
          } else {
-           renderCommits(data);
            setData(data);
+           renderCommits(data);
+           checkIfNextPage(data);
+
          }
        });
      }
    });
  }
 
-  function commits(commitStreamDomId, data) {
-    if (thereAreNoCommits(data)) {
-      window.CommitStream.errorHandler();
-    } else {
-      if (assetDetailCommitsTmpl === null) {
-        getCompiledTemplate('assetDetailCommits.html', function(result) {
-          assetDetailCommitsTmpl = result;
-          renderCommits(data);
-        });
-      } else {
-        renderCommits(data);
-      }
-      setData(data);
-    }
-  }
     function queryCommitStreamRefresh() {};
 
     var autoRefreshIntervalId = null;
@@ -192,8 +184,9 @@
             if (thereAreNoCommits(data)) {
               window.CommitStream.errorHandler();
             } else {
-              renderInit(commitStreamDomId, data);
               setData(data);
+              renderInit(commitStreamDomId, data);
+              checkIfNextPage(data);
             }
           }
 
