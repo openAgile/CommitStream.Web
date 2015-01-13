@@ -25,8 +25,17 @@
 
   function renderInit(commitStreamDomId, data) {
     try {
-      var content = assetDetailInitTmpl(data);
-      $(commitStreamDomId).html(content);
+      if (assetDetailInitTmpl === null) {
+        getCompiledTemplate('assetDetailInit.html', function(tmpl) {
+          assetDetailInitTmpl = tmpl;
+          var content = tmpl(data);
+          $(commitStreamDomId).html(content);
+        });
+      } else {
+        var content = assetDetailInitTmpl(data);
+        $(commitStreamDomId).html(content);
+
+
       $(commitStreamDomId).find('.cs-refresh').unbind('click');
       $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
       $(commitStreamDomId).find('.toggle-cs-autorefresh').unbind('click');
@@ -41,8 +50,16 @@
 
   function renderCommits(data) {
     try {
-      var content = assetDetailCommitsTmpl(data);
-      $('#scrollable-content').append(content);
+      if (assetDetailCommitsTmpl === null) {
+        getCompiledTemplate('assetDetailCommits.html', function(tmpl) {
+          assetDetailCommitsTmpl = tmpl;
+          var content = tmpl(data);
+          $('#scrollable-content').append(content);
+        });
+      } else {
+        var content = assetDetailCommitsTmpl(data);
+        $('#scrollable-content').append(content);
+      }
     } catch (ex) {
       window.CommitStream.errorHandler();
     }
@@ -82,25 +99,38 @@
     }
   }
 
-  function thereAreNoCommits(data){
+  function thereAreNoCommits(data) {
     return (!data || !data.commits);
   }
 
-  function init(commitStreamDomId, data) {
-    if (thereAreNoCommits(data)) {
-      window.CommitStream.errorHandler();
+  function getUrlToQuery(workitem) {
+    if ($('#scrollable-content').attr("next")) {
+      return $('#scrollable-content').attr("next");
+    } else if (workitem) {
+      return '{{{apiUrl}}}' + workitem;
     } else {
-      if (assetDetailInitTmpl === null) {
-        getCompiledTemplate('assetDetailInit.html', function(result) {
-          assetDetailInitTmpl = result;
-          renderInit(commitStreamDomId, data);
-        });
-      } else {
-        renderInit(commitStreamDomId, data);
-      }
-      setData(data);
+      throw 'It was not possible to get the url to query.'
     }
   }
+
+  function isEndOfScrollbar(el) {
+    return (el.scrollTop() + el.innerHeight() >= el[0].scrollHeight);
+  }
+  
+ function bindScrollEvent(commitStreamDomId) {
+   $('#scrollable-content').on('scroll', function() {
+     if (isEndOfScrollbar($(this))) {
+       queryCommitStream(commitStreamDomId, getUrlToQuery(), function(commitStreamDomId, data) {
+         if (thereAreNoCommits(data)) {
+           window.CommitStream.errorHandler();
+         } else {
+           renderCommits(data);
+           setData(data);
+         }
+       });
+     }
+   });
+ }
 
   function commits(commitStreamDomId, data) {
     if (thereAreNoCommits(data)) {
@@ -145,19 +175,12 @@
         }
     }
 
-  function queryCommitStream(commitStreamDomId, workitem, cb) {
-    var apiUrl;
-    if ($('#scrollable-content').attr("next")) {
-      apiUrl = $('#scrollable-content').attr("next");
-    } else {
-      apiUrl = '{{{apiUrl}}}' + workitem;
-    }
+  function queryCommitStream(commitStreamDomId, apiUrl, cb) {
     $.getJSON(apiUrl).done(function(data) {
       cb(commitStreamDomId, data);
     }).fail(window.CommitStream.errorHandler);
   }
 
-  var bindScrollEvent = function() {};
   // Put a commitStream object in the global space
   if (!window.CommitStream) {
     window.CommitStream = {
@@ -165,21 +188,22 @@
         try {
           window.CommitStream.errorHandler = errorHandler;
 
-          bindScrollEvent = function(commitStreamDomId) {
-            $('#scrollable-content').on('scroll', function() {
-              if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                queryCommitStream(commitStreamDomId, workitem, commits);
-              }
-            });
+          var init = function(commitStreamDomId, data) {
+            if (thereAreNoCommits(data)) {
+              window.CommitStream.errorHandler();
+            } else {
+              renderInit(commitStreamDomId, data);
+              setData(data);
+            }
           }
 
           if (!hasAllDeps()) {
             $.getScript(requirejsUrl, function(data, status, jqxhr) {
               configureCommitStreamDependencies();
-              queryCommitStream(commitStreamDomId, workitem, init);
+              queryCommitStream(commitStreamDomId, getUrlToQuery(workitem), init);
             }).fail(errorHandler);
           } else {
-            queryCommitStream(commitStreamDomId, workitem, init);
+            queryCommitStream(commitStreamDomId, getUrlToQuery(workitem), init);
           }
         } catch (ex) {
           console.log(ex);
