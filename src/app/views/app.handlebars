@@ -39,7 +39,7 @@
     }
   }
 
-  function renderCommits(commitStreamDomId, data) {
+  function renderCommits(data) {
     try {
       var content = assetDetailCommitsTmpl(data);
       $('#scrollable-content').append(content);
@@ -48,86 +48,73 @@
     }
   }
 
-  function getAssetDetailCommitsTmpl() {
+  function compileSource(source, cb) {
     require(deps, function(handlebars) {
-      return assetDetailInitTmpl = handlebars.compile(source);
+      cb(handlebars.default.compile(source));
     }, window.CommitStream.errorHandler);
   }
 
+  function getTemplate(template, cb) {
+    var tmplUrl = '{{{assetDetailTemplateUrl}}}' + template;
+    $.get(tmplUrl).done(cb).fail(window.CommitStream.errorHandler);
+  }
+
+  function getCompiledTemplate(template, cb) {
+    getTemplate(template, function(source) {
+      compileSource(source, cb);
+    });
+  }
+
+  function setData(data) {
+    data.noCommits = data.commits.length < 1;
+    data.resourcePath = "{{{resourcePath}}}";
+    data.lastPage = false;
+    if (!data._links || !data._links.next) {
+      $('#scrollable-content').unbind('scroll');
+      $('#scrollable-content').attr("next", '');
+      data.lastPage = true;
+    } else {
+      //TODO: puke
+      setTimeout(function() {
+        $('#scrollable-content').attr('next', data._links.next);
+        bindScrollEvent('#scrollable-content');
+      }, 1000);
+    }
+  }
+
+  function thereAreNoCommits(data){
+    return (!data || !data.commits);
+  }
+
   function init(commitStreamDomId, data) {
-    if (!data || !data.commits) {
+    if (thereAreNoCommits(data)) {
       window.CommitStream.errorHandler();
     } else {
-      //extract function
-      data.noCommits = data.commits.length < 1;
-      data.resourcePath = "{{{resourcePath}}}";
-      data.firstCommits = true;
-      data.lastPage = false;
-
       if (assetDetailInitTmpl === null) {
-        var tmplUrl = '{{{assetDetailTemplateUrl}}}' + 'assetDetailInit.html';
-        $.get(tmplUrl).done(function(source) {
-          try {
-            assetDetailInitTmpl = window.CommitStream.handlebars.compile(source);
-            renderInit(commitStreamDomId, data);
-          } catch (ex) {
-            window.CommitStream.errorHandler();
-          }
-        }).fail(window.CommitStream.errorHandler);
+        getCompiledTemplate('assetDetailInit.html', function(result) {
+          assetDetailInitTmpl = result;
+          renderInit(commitStreamDomId, data);
+        });
       } else {
         renderInit(commitStreamDomId, data);
       }
-
-      if (!data._links || !data._links.next) {
-        data.lastPage = true;
-      } else {
-        //TODO: puke
-        setTimeout(function() {
-          $('#scrollable-content').attr('next', data._links.next);
-          bindScrollEvent('#scrollable-content');
-        }, 1000);
-      }
+      setData(data);
     }
   }
 
   function commits(commitStreamDomId, data) {
-    if (!data || !data.commits) {
+    if (thereAreNoCommits(data)) {
       window.CommitStream.errorHandler();
     } else {
-      data.noCommits = data.commits.length < 1;
-      data.resourcePath = "{{{resourcePath}}}";
-      data.firstCommits = false;
-      data.lastPage = false;
-
-      if (!data._links || !data._links.next) {
-        $('#scrollable-content').unbind('scroll');
-        $('#scrollable-content').attr("next", '');
-        data.lastPage = true;
-      } else {
-        $('#scrollable-content').attr('next', data._links.next);
-      }
-
       if (assetDetailCommitsTmpl === null) {
-        var tmplUrl = '{{{assetDetailTemplateUrl}}}' + 'assetDetailCommits.html';
-        $.get(tmplUrl).done(function(source) {
-          try {
-            assetDetailCommitsTmpl = window.CommitStream.handlebars.compile(source);
-            renderCommits('#scrollable-content', data);
-          } catch (ex) {
-            window.CommitStream.errorHandler();
-          }
-        }).fail(window.CommitStream.errorHandler);
+        getCompiledTemplate('assetDetailCommits.html', function(result) {
+          assetDetailCommitsTmpl = result;
+          renderCommits(data);
+        });
       } else {
-        renderCommits('#scrollable-content', data);
+        renderCommits(data);
       }
-
-      if (!data._links || !data._links.next) {
-        $('#scrollable-content').unbind('scroll');
-        $('#scrollable-content').attr("next", '');
-        data.lastPage = true;
-      } else {
-        $('#scrollable-content').attr('next', data._links.next);
-      }
+      setData(data);
     }
   }
     function queryCommitStreamRefresh() {};
@@ -170,13 +157,6 @@
     }).fail(window.CommitStream.errorHandler);
   }
 
-  function invokeCommitStream(commitStreamDomId, workitem, cb) {
-    require(deps, function(handlebars) {
-      window.CommitStream.handlebars = handlebars.default;
-      queryCommitStream(commitStreamDomId, workitem, cb);
-    }, window.CommitStream.errorHandler);
-  }
-
   var bindScrollEvent = function() {};
   // Put a commitStream object in the global space
   if (!window.CommitStream) {
@@ -184,12 +164,11 @@
       commitsDisplay: function(commitStreamDomId, workitem, errorHandler) {
         try {
           window.CommitStream.errorHandler = errorHandler;
-          window.CommitStream.commitStreamDomId = commitStreamDomId;
 
           bindScrollEvent = function(commitStreamDomId) {
             $('#scrollable-content').on('scroll', function() {
               if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                invokeCommitStream(commitStreamDomId, workitem, commits);
+                queryCommitStream(commitStreamDomId, workitem, commits);
               }
             });
           }
@@ -197,10 +176,10 @@
           if (!hasAllDeps()) {
             $.getScript(requirejsUrl, function(data, status, jqxhr) {
               configureCommitStreamDependencies();
-              invokeCommitStream(commitStreamDomId, workitem, init);
+              queryCommitStream(commitStreamDomId, workitem, init);
             }).fail(errorHandler);
           } else {
-            invokeCommitStream(commitStreamDomId, workitem, init);
+            queryCommitStream(commitStreamDomId, workitem, init);
           }
         } catch (ex) {
           console.log(ex);
