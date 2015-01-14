@@ -18,5 +18,8 @@
   	</li>
   	{{/each}}
 	</ul>
+		{{#if lastPage}}
+			<p style="color: #dedede;font-size: .95em;margin-top: 0.5em;padding-left:20px;text-align: center;">No more Commits to display...</p>
+		{{/if}}
 	{{/if}}
 </div>
