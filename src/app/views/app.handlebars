@@ -30,11 +30,12 @@
           assetDetailInitTmpl = tmpl;
           var content = tmpl(data);
           $(commitStreamDomId).html(content);
+          checkIfNextPage(data);
         });
       } else {
         var content = assetDetailInitTmpl(data);
         $(commitStreamDomId).html(content);
-
+        checkIfNextPage(data);
 
       $(commitStreamDomId).find('.cs-refresh').unbind('click');
       $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
@@ -55,10 +56,12 @@
           assetDetailCommitsTmpl = tmpl;
           var content = tmpl(data);
           $('#scrollable-content').append(content);
+          checkIfNextPage(data);
         });
       } else {
         var content = assetDetailCommitsTmpl(data);
         $('#scrollable-content').append(content);
+        checkIfNextPage(data);
       }
     } catch (ex) {
       window.CommitStream.errorHandler();
@@ -96,11 +99,8 @@
       $('#scrollable-content').unbind('scroll');
       $('#scrollable-content').attr("next", '');
     } else {
-      //TODO: puke
-      setTimeout(function() {
-        $('#scrollable-content').attr('next', data._links.next);
-        bindScrollEvent('#scrollable-content');
-      }, 1000);
+      $('#scrollable-content').attr('next', data._links.next);
+      bindScrollEvent('#scrollable-content');
     }
   }
 
@@ -131,8 +131,6 @@
          } else {
            setData(data);
            renderCommits(data);
-           checkIfNextPage(data);
-
          }
        });
      }
@@ -186,7 +184,6 @@
             } else {
               setData(data);
               renderInit(commitStreamDomId, data);
-              checkIfNextPage(data);
             }
           }
 
