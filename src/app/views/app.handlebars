@@ -30,12 +30,12 @@
           assetDetailInitTmpl = tmpl;
           var content = tmpl(data);
           $(commitStreamDomId).html(content);
-          checkIfNextPage(data);
+          checkIfNextPage(commitStreamDomId, data);
         });
       } else {
         var content = assetDetailInitTmpl(data);
         $(commitStreamDomId).html(content);
-        checkIfNextPage(data);
+        checkIfNextPage(commitStreamDomId, data);
 
       $(commitStreamDomId).find('.cs-refresh').unbind('click');
       $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
@@ -49,19 +49,19 @@
     }
   }
 
-  function renderCommits(data) {
+  function renderCommits(commitStreamDomId, data) {
     try {
       if (assetDetailCommitsTmpl === null) {
         getCompiledTemplate('assetDetailCommits.html', function(tmpl) {
           assetDetailCommitsTmpl = tmpl;
           var content = tmpl(data);
-          $('#scrollable-content').append(content);
-          checkIfNextPage(data);
+          $(commitStreamDomId).find('.side-panel-scrollable').append(content);
+          checkIfNextPage(commitStreamDomId, data);
         });
       } else {
         var content = assetDetailCommitsTmpl(data);
-        $('#scrollable-content').append(content);
-        checkIfNextPage(data);
+        $(commitStreamDomId).find('.side-panel-scrollable').append(content);
+        checkIfNextPage(commitStreamDomId, data);
       }
     } catch (ex) {
       window.CommitStream.errorHandler();
@@ -94,13 +94,13 @@
     }
   }
 
-  function checkIfNextPage(data) {
+  function checkIfNextPage(commitStreamDomId, data) {
     if (!data._links || !data._links.next) {
-      $('#scrollable-content').unbind('scroll');
-      $('#scrollable-content').attr("next", '');
+      $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
+      $(commitStreamDomId).find('.side-panel-scrollable').attr("next", '');
     } else {
-      $('#scrollable-content').attr('next', data._links.next);
-      bindScrollEvent('#scrollable-content');
+      $(commitStreamDomId).find('.side-panel-scrollable').attr('next', data._links.next);
+      bindScrollEvent(commitStreamDomId);
     }
   }
 
@@ -108,9 +108,9 @@
     return (!data || !data.commits);
   }
 
-  function getUrlToQuery(workitem) {
-    if ($('#scrollable-content').attr("next")) {
-      return $('#scrollable-content').attr("next");
+  function getUrlToQuery(commitStreamDomId, workitem) {
+    if ($(commitStreamDomId).find('.side-panel-scrollable').attr("next")) {
+      return $(commitStreamDomId).find('.side-panel-scrollable').attr("next");
     } else if (workitem) {
       return '{{{apiUrl}}}' + workitem;
     } else {
@@ -123,14 +123,14 @@
   }
   
  function bindScrollEvent(commitStreamDomId) {
-   $('#scrollable-content').on('scroll', function() {
+    $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
      if (isEndOfScrollbar($(this))) {
-       queryCommitStream(commitStreamDomId, getUrlToQuery(), function(commitStreamDomId, data) {
+        queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, data) {
          if (thereAreNoCommits(data)) {
            window.CommitStream.errorHandler();
          } else {
            setData(data);
-           renderCommits(data);
+            renderCommits(commitStreamDomId, data);
          }
        });
      }
@@ -190,10 +190,10 @@
           if (!hasAllDeps()) {
             $.getScript(requirejsUrl, function(data, status, jqxhr) {
               configureCommitStreamDependencies();
-              queryCommitStream(commitStreamDomId, getUrlToQuery(workitem), init);
+              queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId, workitem), init);
             }).fail(errorHandler);
           } else {
-            queryCommitStream(commitStreamDomId, getUrlToQuery(workitem), init);
+            queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId, workitem), init);
           }
         } catch (ex) {
           console.log(ex);
