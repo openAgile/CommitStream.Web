@@ -50,6 +50,14 @@ global.fromStream = function (streamSource) {
     }
 };
 
+global.fromCategory = function(streamSource) {
+    return {
+        whenAny: function(callback) {
+            // empty stub
+        }
+    }
+}
+
 global.linkTo = function (name, value) {
     if (streamResult[name])
         streamResult[name].push(value);
