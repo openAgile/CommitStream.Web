@@ -14,7 +14,8 @@
           "method": "POST",
           "title": "Endpoint for creating an inbox for a repository on digest " + digestId
         }
-      }
+      },
+      "digestId": digestId
     }
   };
 

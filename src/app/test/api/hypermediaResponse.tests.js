@@ -40,6 +40,10 @@ describe('hypermediaResponse', function() {
       id.should.equal(digestId);
     });
 
+    it('should contain the id of the digest as a property', function() {
+      hypermedia.digestId.should.equal(digestId);
+    });
+
     it('it\'s self link should reference the digest created.', function() {
       hypermedia._links['self'].should.have.property('href','http://localhost/api/digests/' + digestId);
     });
@@ -71,7 +75,7 @@ describe('hypermediaResponse', function() {
 
     it('the self link href should be a valid URL', function() {
         var selfLink = hypermedia._links['self'];
-        validator.isURL(selfLink.href).should.be.true;  
+        validator.isURL(selfLink.href).should.be.true;
     });
 
     it('it should have links to other resources', function() {
@@ -111,7 +115,7 @@ describe('hypermediaResponse', function() {
     it('should embed the digestId property that was passed', function() {
       hypermedia.should.include.key('digestId');
       hypermedia.digestId.should.equal(data.digestId);
-    });    
+    });
 
   });
 
