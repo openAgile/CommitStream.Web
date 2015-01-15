@@ -4,6 +4,10 @@ This document describes the manual steps necessary to configure a CommitStream i
 
 ## Create a new virtual machine to host EventStore from a saved image
 
+Normall, you can just clone the base virtual machine image that already has EventStore loaded. However, to create a virtual machine from scratch, see the section **How to create a virtual machine to host EventStore from scratch** below.
+
+TODO: create a clean baseline that doesn't have existing events in it
+
 * Start creating a new Virtual Machine and select **From gallery**, like so:
 
 ![VM from gallery](https://s3.amazonaws.com/uploads.hipchat.com/12722/130235/xabinc0jrpxk0HV/VM%20from%20gallery.png)
@@ -20,11 +24,11 @@ This document describes the manual steps necessary to configure a CommitStream i
 * Go to [https://ci-server/job/Azure%20VM%20Instances%20Stopper/](https://ci-server/job/Azure%20VM%20Instances%20Stopper/)
 * Under **Build** modify the `Stop-AllAzureInstances @("sqlSandbox*","v1commitstream","VmTFS2013","v1cs-test")` by adding `,"v1cs-devopsheros"` to the list.
 
-For advanced scenarios, see the section **How to create a virtual machine to host EventStore from scratch** below.
+Now, continue to the next step to modify the IP address for your new clone.
 
 # Update IP address for a VM that has been rebooted or created from a clone
 
-When Azure restarts a Virtual Machine, you will need to login and change a file for EventStore in order for it to bind to the new IP address that Azure assigns to it.
+When Azure restarts a Virtual Machine or creates a new machine from a clone, you will need to login and change a file for EventStore in order for it to bind to the new IP address that Azure assigns to it.
 
 * From the Azure portal, select the virtual machine and **Start** it, then view its **Dashboard**
 * Take note of the `INTERNAL IP ADDRESS` value. For example:
