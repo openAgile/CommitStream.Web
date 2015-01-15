@@ -23,19 +23,19 @@
   var assetDetailInitTmpl = null;
   var assetDetailCommitsTmpl = null;
 
-  function renderInit(commitStreamDomId, data) {
+  function renderInit(commitStreamDomId, data, errorHandler) {
     try {
       if (assetDetailInitTmpl === null) {
         getCompiledTemplate('assetDetailInit.html', function(tmpl) {
           assetDetailInitTmpl = tmpl;
           var content = tmpl(data);
           $(commitStreamDomId).html(content);
-          checkIfNextPage(commitStreamDomId, data);
+          checkIfNextPage(commitStreamDomId, data, errorHandler);
         });
       } else {
         var content = assetDetailInitTmpl(data);
         $(commitStreamDomId).html(content);
-        checkIfNextPage(commitStreamDomId, data);
+        checkIfNextPage(commitStreamDomId, data, errorHandler);
 
       $(commitStreamDomId).find('.cs-refresh').unbind('click');
       $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
@@ -45,44 +45,44 @@
         $(commitStreamDomId).find('.toggle-cs-autorefresh').prop('checked', true);
       }
     } catch (ex) {
-      window.CommitStream.errorHandler();
+      errorHandler();
     }
   }
 
-  function renderCommits(commitStreamDomId, data) {
+  function renderCommits(commitStreamDomId, data, errorHandler) {
     try {
       if (assetDetailCommitsTmpl === null) {
         getCompiledTemplate('assetDetailCommits.html', function(tmpl) {
           assetDetailCommitsTmpl = tmpl;
           var content = tmpl(data);
           $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-          checkIfNextPage(commitStreamDomId, data);
-        });
+          checkIfNextPage(commitStreamDomId, data, errorHandler);
+        }, errorHandler);
       } else {
         var content = assetDetailCommitsTmpl(data);
         $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-        checkIfNextPage(commitStreamDomId, data);
+        checkIfNextPage(commitStreamDomId, data, errorHandler);
       }
     } catch (ex) {
-      window.CommitStream.errorHandler();
+      errorHandler();
     }
   }
 
-  function compileSource(source, cb) {
+  function compileSource(source, cb, errorHandler) {
     require(deps, function(handlebars) {
       cb(handlebars.default.compile(source));
-    }, window.CommitStream.errorHandler);
+    }, errorHandler);
   }
 
-  function getTemplate(template, cb) {
+  function getTemplate(template, cb, errorHandler) {
     var tmplUrl = '{{{assetDetailTemplateUrl}}}' + template;
-    $.get(tmplUrl).done(cb).fail(window.CommitStream.errorHandler);
+    $.get(tmplUrl).done(cb).fail(errorHandler);
   }
 
-  function getCompiledTemplate(template, cb) {
+  function getCompiledTemplate(template, cb, errorHandler) {
     getTemplate(template, function(source) {
-      compileSource(source, cb);
-    });
+      compileSource(source, cb, errorHandler);
+    }, errorHandler);
   }
 
   function setData(data) {
@@ -94,13 +94,13 @@
     }
   }
 
-  function checkIfNextPage(commitStreamDomId, data) {
+  function checkIfNextPage(commitStreamDomId, data, errorHandler) {
     if (!data._links || !data._links.next) {
       $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       $(commitStreamDomId).find('.side-panel-scrollable').attr("next", '');
     } else {
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', data._links.next);
-      bindScrollEvent(commitStreamDomId);
+      bindScrollEvent(commitStreamDomId, errorHandler);
     }
   }
 
@@ -122,17 +122,17 @@
     return (el.scrollTop() + el.innerHeight() >= el[0].scrollHeight);
   }
   
- function bindScrollEvent(commitStreamDomId) {
+  function bindScrollEvent(commitStreamDomId, errorHandler) {
     $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
      if (isEndOfScrollbar($(this))) {
         queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, data) {
          if (thereAreNoCommits(data)) {
-           window.CommitStream.errorHandler();
+            errorHandler();
          } else {
            setData(data);
             renderCommits(commitStreamDomId, data);
          }
-       });
+        }, errorHandler);
      }
    });
  }
@@ -165,10 +165,10 @@
         }
     }
 
-  function queryCommitStream(commitStreamDomId, apiUrl, cb) {
+  function queryCommitStream(commitStreamDomId, apiUrl, cb, errorHandler) {
     $.getJSON(apiUrl).done(function(data) {
       cb(commitStreamDomId, data);
-    }).fail(window.CommitStream.errorHandler);
+    }).fail(errorHandler);
   }
 
   // Put a commitStream object in the global space
@@ -176,24 +176,25 @@
     window.CommitStream = {
       commitsDisplay: function(commitStreamDomId, workitem, errorHandler) {
         try {
-          window.CommitStream.errorHandler = errorHandler;
 
           var init = function(commitStreamDomId, data) {
             if (thereAreNoCommits(data)) {
-              window.CommitStream.errorHandler();
+              errorHandler();
             } else {
               setData(data);
-              renderInit(commitStreamDomId, data);
+              renderInit(commitStreamDomId, data, errorHandler);
             }
           }
+
+          var url = getUrlToQuery(commitStreamDomId, workitem);
 
           if (!hasAllDeps()) {
             $.getScript(requirejsUrl, function(data, status, jqxhr) {
               configureCommitStreamDependencies();
-              queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId, workitem), init);
+              queryCommitStream(commitStreamDomId, url, init, errorHandler);
             }).fail(errorHandler);
           } else {
-            queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId, workitem), init);
+            queryCommitStream(commitStreamDomId, url, init, errorHandler);
           }
         } catch (ex) {
           console.log(ex);
