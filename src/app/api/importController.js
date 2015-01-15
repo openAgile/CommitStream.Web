@@ -59,7 +59,8 @@
         });
         var e = JSON.stringify(events)
         es.streams.post({
-          name: 'github-events',
+          // name: 'github-events',
+          name: 'inboxCommits-85dacc66-a47b-4f6e-8ea0-6413c5324274',
           events: e
         }, function(error, response) {
           if (error) {
