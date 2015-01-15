@@ -7,4 +7,4 @@ source ./smoke-test.vars.sh
 npm start &
 ./projections-enable.sh
 sleep 10
-npm run jenkins-smoke-Happy-path >results.tap
+npm run jenkins-smoke-happy-path >results.tap
