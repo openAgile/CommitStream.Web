@@ -99,6 +99,21 @@ var urlToPushCommitToInbox1 = undefined;
 var urlToPushCommitToInbox2 = undefined;
 
 describe('you need an digest to associate to the inboxes that it will be created', function() {
+  it('should return error message with 401 Unauthorized response when request is made without a key.', function(done){
+    request({
+      uri: "http://localhost:6565/api/digest?workitem=S-11111",
+        method: "POST",
+        body: JSON.stringify({
+          description: "Digest 1"
+        })
+      }, function(err, res, body) {
+      should.not.exist(err);
+      res.statusCode.should.equal(401);
+      res.body.should.equal('API key parameter missing or invalid');
+      done();
+    })
+  });
+
   it('create the digest', function(done) {
     request({
       uri: "http://localhost:6565/api/digests?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
@@ -175,6 +190,8 @@ describe('api/query before POST', function() {
     })
   });
 });
+
+
 
 describe('api/inboxes', function() {
   it('should accept a valid payload and return a 200 OK response.', function(done) {
