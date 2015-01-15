@@ -114,6 +114,21 @@ describe('you need an digest to associate to the inboxes that it will be created
     })
   });
 
+  it('should return error when request is made with incorrect key.', function(done) {
+    request({
+      uri: "http://localhost:6565/api/digest?key=S-11111",
+        method: "POST",
+        body: JSON.stringify({
+          description: "Digest 1"
+        })
+      }, function(err, res, body) {
+      should.not.exist(err);
+      res.statusCode.should.equal(401);
+      res.body.should.equal('API key parameter missing or invalid');
+      done();
+    })
+  });
+
   it('create the digest', function(done) {
     request({
       uri: "http://localhost:6565/api/digests?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",

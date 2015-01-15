@@ -39,21 +39,6 @@ var commit = {
   }
 };
 
-describe('api/listenerWebhook', function() {
-  it('should return error when request is made with incorrect key.', function(done) {
-    request({
-      uri: "http://localhost:6565/api/listenerWebhook?key=S-11111",
-        method: "POST",
-        body: JSON.stringify(commit)
-      }, function(err, res, body) {
-      should.not.exist(err);
-      res.statusCode.should.equal(401);
-      res.body.should.equal('API key parameter missing or invalid');
-      done();
-    })
-  });
-});
-
 describe('api/query after POST', function() {
   it('should accept a valid payload and returns commits for the specified workitem.', function(done) {
     this.timeout(5000);
