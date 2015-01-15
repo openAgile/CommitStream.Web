@@ -111,11 +111,37 @@ Substitute the real repo for `openAgile/CommitStream.Web` in the address below:
   * Check the Active checkbox
 * Now if you make a commit to that repository and mention a workitem that exists in your instance, like `S-01022`, then when you view that workitem in the VersionOne instance, you should see it in the sidepanel.
 
+# Update IP address for a VM that has been rebooted or created from a clone
 
+When Azure restarts a Virtual Machine, you will need to login and change a file for EventStore in order for it to bind to the new IP address that Azure assigns to it.
 
+* From the Azure portal, select the virtual machine and **Start** it, then view its **Dashboard**
+* Take note of the `INTERNAL IP ADDRESS` value. For example:
 
+![INTERNAL IP ADDRESS](https://s3.amazonaws.com/uploads.hipchat.com/12722/130235/MDrjM4yaRysPuAQ/INTERNAL%20IP%20ADDRESS.png)
 
+* Click the **Connect** link to open a Remote Desktop connection to the system. Use the same login credentials from the initial setup.
+* From the desktop of the machine, open the file `C:\Program Files\eventstore\config.yml` with Notepad.
+* Modify the file to have the correct `INTERNAL IP ADDRESS` for the `ExtIp` value:
 
+```yaml
+Db: C:\Program Files\eventstore\Data
+Log: C:\Program Files\eventstore\Log
+RunProjections: ALL
+ExtIp: INTERNAL.AZURE.IP.ADDRESS
+HttpPrefixes:
+ - https://localhost:2113/
+ - https://MACHINENAME.cloudapp.net:2113/
+```
+* For example, here is a complete file for a machine named `v1cs-se`:
 
-
-  
+```yaml
+Db: C:\Program Files\eventstore\Data
+Log: C:\Program Files\eventstore\Log
+RunProjections: ALL
+ExtIp: 100.75.252.17
+HttpPrefixes:
+ - https://localhost:2113/
+ - https://v1cs-se.cloudapp.net:2113/
+```
+* Try to access CommitStream normally now. If it does not respond, you may need to reset the EventStore service by opening **Powershell As Administrator** and typing: `nssm restart eventstore`.
