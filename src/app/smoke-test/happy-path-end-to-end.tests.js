@@ -94,8 +94,9 @@ var commitInbox2WithOutMention = {
 };
 
 var digestId = undefined;
-var inbox1 = undefined;
-var inbox2 = undefined;
+var urlToCreateInbox = undefined;
+var urlToPushCommitToInbox1 = undefined;
+var urlToPushCommitToInbox2 = undefined;
 
 describe('you need an digest to associate to the inboxes that it will be created', function() {
   it('create the digest', function(done) {
@@ -111,6 +112,7 @@ describe('you need an digest to associate to the inboxes that it will be created
     }, function(err, res, body) {
       should.not.exist(err);
       var digestIdCreated = JSON.parse(body).digestId;
+      urlToCreateInbox = JSON.parse(body)._links['inbox-create'].href;
       digestIdCreated.should.exist;
       digestId = digestIdCreated;
       done();
@@ -118,7 +120,7 @@ describe('you need an digest to associate to the inboxes that it will be created
   });
   it('create the inbox and associate to the digest created', function(done) {
     request({
-      uri: "http://localhost:6565/api/inboxes?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      uri: urlToCreateInbox + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -131,6 +133,7 @@ describe('you need an digest to associate to the inboxes that it will be created
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
+      urlToPushCommitToInbox1 = JSON.parse(body)._links['self'].href;
       inboxIdCreated.should.exist;
       inbox1 = inboxIdCreated;
       done();
@@ -138,7 +141,7 @@ describe('you need an digest to associate to the inboxes that it will be created
   });
   it('create a different inbox and associate to the same digest created', function(done) {
     request({
-      uri: "http://localhost:6565/api/inboxes?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      uri: urlToCreateInbox + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -151,6 +154,7 @@ describe('you need an digest to associate to the inboxes that it will be created
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
+      urlToPushCommitToInbox2 = JSON.parse(body)._links['self'].href;
       inboxIdCreated.should.exist;
       inbox2 = inboxIdCreated;
       done();
@@ -175,7 +179,7 @@ describe('api/query before POST', function() {
 describe('api/inboxes', function() {
   it('should accept a valid payload and return a 200 OK response.', function(done) {
     request({
-      uri: "http://localhost:6565/api/inboxes/" + inbox1 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      uri: urlToPushCommitToInbox1 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
       headers: {
         "x-github-event": "push",
@@ -207,7 +211,7 @@ describe('api/inboxes', function() {
   });
   it('should accept a valid payload and return a 200 OK response.', function(done) {
     request({
-      uri: "http://localhost:6565/api/inboxes/" + inbox2 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      uri: urlToPushCommitToInbox2 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
       headers: {
         "x-github-event": "push",
