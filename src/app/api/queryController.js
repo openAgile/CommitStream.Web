@@ -30,7 +30,7 @@
      * @apiSuccess {String} commitHref Link to an HTML page to view the commit in the source VCS
      */
     var cache = new Cache({
-      ttl: 1800, // Number of seconds to keep entries
+      ttl: 120, // Number of seconds to keep entries
       interval: 60 // Cleaning interval
     });
 
