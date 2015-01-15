@@ -18,7 +18,7 @@ This document describes the manual steps necessary to configure a CommitStream i
 
 ### Important: Add the VM to the exclusion list for the Azure Instances Stopper Jenkins job
 * Go to [https://ci-server/job/Azure%20VM%20Instances%20Stopper/](https://ci-server/job/Azure%20VM%20Instances%20Stopper/)
-* Under **Build** modify the `Stop-AllAzureInstances @("sqlSandbox*","v1commitstream","VmTFS2013","v1cs-test")` by adding `,"devopsheros"` to the list.
+* Under **Build** modify the `Stop-AllAzureInstances @("sqlSandbox*","v1commitstream","VmTFS2013","v1cs-test")` by adding `,"v1cs-devopsheros"` to the list.
 
 For advanced scenarios, see the section **How to create a virtual machine to host EventStore from scratch** below.
 
