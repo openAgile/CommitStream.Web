@@ -5,6 +5,10 @@
   _ = require('underscore'),
   uuid = require('uuid-v4'),
   Cache = require('ttl-cache');
+  
+  function buildUri(guid, parms) {
+    return config.serverBaseUrl + '/api/query?key=' + parms.key + '&workitem=' + parms.workitem + '&page=' + guid;
+  }
 
 
   controller.init = function(app) {
@@ -70,6 +74,7 @@
         }
 
         var pageSize = getConvertedPageSizeOrDefault(req.query);
+        
 
         var page = cache.get(req.query.page);
 
@@ -79,19 +84,23 @@
           pageUrl: page
         }, function(error, response) {
           var result = {
-            commits: []
+            commits: [],
+            _links: {}
           }
 
           if (response.body) {
             var obj = JSON.parse(response.body);
             var links = obj.links;
-            var guiNextId = uuid();
+            var guid = uuid();
             result = gitHubEventsToApiResponse(obj.entries);
             //TODO: check all of them, not just the third one
             if (links[3].relation == 'next') {
-              cache.set(guiNextId, links[3].uri);
-              var nextUri = config.serverBaseUrl + '/api/query?key=' + req.query.key + '&workitem=' + req.query.workitem + '&page=' + guiNextId;
-              res.set("Next-Page", nextUri);
+              cache.set(guid, links[3].uri);
+              var next = buildUri(guid, req.query);
+              var previous = buildUri(req.query.page, req.query);
+              result._links = {
+                next: next
+              };
             }
           }
 
