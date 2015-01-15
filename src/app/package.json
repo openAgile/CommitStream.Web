@@ -45,7 +45,8 @@
     "test": "mocha -u exports -R spec test/**/*tests.js",
     "smoke": "mocha -u exports -R spec smoke-test/**/*tests.js",
     "jenkins-test": "mocha -u exports -R tap test/**/*tests.js",
-    "jenkins-smoke": "mocha -u exports -R tap smoke-test/**/*tests.js"
+    "jenkins-smoke": "mocha -u exports -R tap smoke-test/**/*tests.js",
+    "jenkins-smoke-Happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js"
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"

@@ -63,7 +63,8 @@
               "inboxes": {
                 "href": protocol + "://" + host + "/api/inboxes"
               }
-            }
+            },
+            "inboxId": inboxAddedEvent.data.inboxId
           };
 
           res.location(hypermedia._links.self.href);
