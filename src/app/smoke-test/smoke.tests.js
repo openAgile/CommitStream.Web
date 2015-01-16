@@ -42,10 +42,10 @@ describe('api/query before POST', function() {
     request({
       uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=S-11111",
         method: "GET"
-      }, function(err, res, body) {       
+      }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(200);
-      res.body.should.equal('{"commits":[]}');
+      res.body.should.equal('{"commits":[],"_links":{}}');
       done();
     })
   });
@@ -58,7 +58,7 @@ describe('api/listenerWebhook', function() {
 	      method: "POST",
         headers: {"x-github-event": "push", "content-type": "application/json"},
 	      body: JSON.stringify(commit)
-	    }, function(err, res, body) {	    	
+	    }, function(err, res, body) {
 			should.not.exist(err);
 			res.statusCode.should.equal(200);
       res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
@@ -71,7 +71,7 @@ describe('api/listenerWebhook', function() {
 			uri: "http://localhost:6565/api/listenerWebhook?workitem=S-11111",
 	      method: "POST",
 	      body: JSON.stringify(commit)
-	    }, function(err, res, body) {	    	
+	    }, function(err, res, body) {
 			should.not.exist(err);
 			res.statusCode.should.equal(401);
 			res.body.should.equal('API key parameter missing or invalid');
@@ -84,7 +84,7 @@ describe('api/listenerWebhook', function() {
       uri: "http://localhost:6565/api/listenerWebhook?key=S-11111",
         method: "POST",
         body: JSON.stringify(commit)
-      }, function(err, res, body) {       
+      }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(401);
       res.body.should.equal('API key parameter missing or invalid');
@@ -101,7 +101,7 @@ describe('api/query after POST', function() {
       request({
         uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=S-11111",
           method: "GET"
-        }, function(err, res, body) {       
+        }, function(err, res, body) {
         should.not.exist(err);
         res.statusCode.should.equal(200);
         res.body.should.equal("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"timeFormatted\":\"3 months ago\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");
@@ -114,10 +114,10 @@ describe('api/query after POST', function() {
     request({
       uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=11111",
         method: "GET"
-      }, function(err, res, body) {       
+      }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(200);
-      res.body.should.equal('{"commits":[]}');
+      res.body.should.equal('{"commits":[],"_links":{}}');
       done();
     })
   });
@@ -126,7 +126,7 @@ describe('api/query after POST', function() {
     request({
       uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
         method: "GET"
-      }, function(err, res, body) {       
+      }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(400);
       res.body.should.equal('{"error":"Parameter workitem is required"}');
