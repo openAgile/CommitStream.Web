@@ -34,20 +34,20 @@
     }
   }
 
-  function renderInit(commitStreamDomId, data, errorHandler) {
+  function renderInit(commitStreamDomId, model, errorHandler) {
     try {
       if (assetDetailInitTmpl === null) {
         getCompiledTemplate('assetDetailInit.html', function(tmpl) {
           assetDetailInitTmpl = tmpl;
-          var content = tmpl(data);
+          var content = tmpl(model);
           $(commitStreamDomId).html(content);
-          checkIfNextPage(commitStreamDomId, data, errorHandler);
+          checkIfNextPage(commitStreamDomId, model, errorHandler);
           bindRefreshActions(commitStreamDomId);
         });
       } else {
-        var content = assetDetailInitTmpl(data);
+        var content = assetDetailInitTmpl(model);
         $(commitStreamDomId).html(content);
-        checkIfNextPage(commitStreamDomId, data, errorHandler);
+        checkIfNextPage(commitStreamDomId, model, errorHandler);
         bindRefreshActions(commitStreamDomId);
       }
     } catch (ex) {
@@ -56,19 +56,19 @@
   }
 
 
-  function renderCommits(commitStreamDomId, data, errorHandler) {
+  function renderCommits(commitStreamDomId, model, errorHandler) {
     try {
       if (assetDetailCommitsTmpl === null) {
         getCompiledTemplate('assetDetailCommits.html', function(tmpl) {
           assetDetailCommitsTmpl = tmpl;
-          var content = tmpl(data);
+          var content = tmpl(model);
           $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-          checkIfNextPage(commitStreamDomId, data, errorHandler);
+          checkIfNextPage(commitStreamDomId, model, errorHandler);
         }, errorHandler);
       } else {
-        var content = assetDetailCommitsTmpl(data);
+        var content = assetDetailCommitsTmpl(model);
         $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-        checkIfNextPage(commitStreamDomId, data, errorHandler);
+        checkIfNextPage(commitStreamDomId, model, errorHandler);
       }
     } catch (ex) {
       errorHandler();
@@ -92,32 +92,32 @@
     }, errorHandler);
   }
 
-  function setData(data) {
-    data.noCommits = data.commits.length < 1;
-    data.resourcePath = "{{{resourcePath}}}";
-    data.lastPage = false;
-    if (!data._links || !data._links.next) {
-      data.lastPage = true;
+  function configureModel(model) {
+    model.noCommits = model.commits.length < 1;
+    model.resourcePath = '{{{resourcePath}}}';
+    model.lastPage = false;
+    if (!model._links || !model._links.next) {
+      model.lastPage = true;
     }
   }
 
-  function checkIfNextPage(commitStreamDomId, data, errorHandler) {
-    if (!data._links || !data._links.next) {
+  function checkIfNextPage(commitStreamDomId, model, errorHandler) {
+    if (!model._links || !model._links.next) {
       $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
-      $(commitStreamDomId).find('.side-panel-scrollable').attr("next", '');
+      $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
     } else {
-      $(commitStreamDomId).find('.side-panel-scrollable').attr('next', data._links.next);
+      $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
       bindScrollEvent(commitStreamDomId, errorHandler);
     }
   }
 
-  function thereAreNoCommits(data) {
-    return (!data || !data.commits);
+  function thereAreNoCommits(model) {
+    return (!model || !model.commits);
   }
 
   function getUrlToQuery(commitStreamDomId, workitem) {
-    if ($(commitStreamDomId).find('.side-panel-scrollable').attr("next")) {
-      return $(commitStreamDomId).find('.side-panel-scrollable').attr("next");
+    if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
+      return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
     } else if (workitem) {
       return '{{{apiUrl}}}' + workitem;
     } else {
@@ -132,12 +132,12 @@
   function bindScrollEvent(commitStreamDomId, errorHandler) {
     $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
       if (isEndOfScrollbar($(this))) {
-        queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, data) {
-          if (thereAreNoCommits(data)) {
+        queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, model) {
+          if (thereAreNoCommits(model)) {
             errorHandler();
           } else {
-            setData(data);
-            renderCommits(commitStreamDomId, data);
+            configureModel(model);
+            renderCommits(commitStreamDomId, model);
           }
         }, errorHandler);
       }
@@ -173,8 +173,8 @@
   }
 
   function queryCommitStream(commitStreamDomId, apiUrl, cb, errorHandler) {
-    $.getJSON(apiUrl).done(function(data) {
-      cb(commitStreamDomId, data);
+    $.getJSON(apiUrl).done(function(model) {
+      cb(commitStreamDomId, model);
     }).fail(errorHandler);
   }
 
@@ -183,12 +183,15 @@
     window.CommitStream = {
       commitsDisplay: function(commitStreamDomId, workitem, errorHandler) {
         try {
-          var init = function(commitStreamDomId, data) {
-            if (thereAreNoCommits(data)) {
+          var init = function(commitStreamDomId, model) {
+            if (thereAreNoCommits(model)) {
               errorHandler();
             } else {
-              setData(data);
-              renderInit(commitStreamDomId, data, errorHandler);
+              configureModel(model);
+              if (workitem.toLowerCase() === 'all') {
+                model.enableAutoRefresh = true;
+              }
+              renderInit(commitStreamDomId, model, errorHandler);
             }
           }
 
@@ -199,7 +202,7 @@
           };
 
           if (!hasAllDeps()) {
-            $.getScript(requirejsUrl, function(data, status, jqxhr) {
+            $.getScript(requirejsUrl, function(model, status, jqxhr) {
               configureCommitStreamDependencies();
               queryCommitStream(commitStreamDomId, url, init, errorHandler);
             }).fail(errorHandler);
