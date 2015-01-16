@@ -165,7 +165,6 @@ describe('you need an digest to associate to the inboxes that it will be created
       var inboxIdCreated = JSON.parse(body).inboxId;
       urlToPushCommitToInbox1 = JSON.parse(body)._links['self'].href;
       inboxIdCreated.should.exist;
-      inbox1 = inboxIdCreated;
       done();
     });
   });
@@ -186,7 +185,6 @@ describe('you need an digest to associate to the inboxes that it will be created
       var inboxIdCreated = JSON.parse(body).inboxId;
       urlToPushCommitToInbox2 = JSON.parse(body)._links['self'].href;
       inboxIdCreated.should.exist;
-      inbox2 = inboxIdCreated;
       done();
     });
   });
@@ -206,10 +204,8 @@ describe('api/query before POST', function() {
   });
 });
 
-
-
 describe('api/inboxes', function() {
-  it('should accept a valid payload and return a 200 OK response.', function(done) {
+  it(urlToPushCommitToInbox1 + ' should accept a valid payload and return a 200 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInbox1 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -225,9 +221,9 @@ describe('api/inboxes', function() {
       done();
     });
   });
-  it('should accept a valid payload and return a 200 OK response.', function(done) {
+  it(urlToPushCommitToInbox2 + ' should accept a valid payload and return a 200 OK response.', function(done) {
     request({
-      uri: "http://localhost:6565/api/inboxes/" + inbox2 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      uri: urlToPushCommitToInbox2 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
       headers: {
         "x-github-event": "push",
@@ -241,7 +237,7 @@ describe('api/inboxes', function() {
       done();
     });
   });
-  it('should accept a valid payload and return a 200 OK response.', function(done) {
+  it(urlToPushCommitToInbox2 + ' should accept a valid payload with no mention of a workitem and return a 200 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInbox2 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -272,7 +268,7 @@ describe('api/query after POST', function() {
     })
   });
 
-  it('should accept a valid payload and returns 2 commits for the specified workitem.', function(done) {
+  it('should accept a valid payload and returns 2 commits for a specified workitem.', function(done) {
     request({
       uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&digestId=" + digestId + "&workitem=S-11111",
       method: "GET"
@@ -284,7 +280,7 @@ describe('api/query after POST', function() {
     })
   });
 
-  it('should accept a valid payload and returns commits for the specified workitem.', function(done) {
+  it('should accept a valid payload and return commit details for the specified workitem.', function(done) {
     this.timeout(5000);
 
     setTimeout(function () {
