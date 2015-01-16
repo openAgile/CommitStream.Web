@@ -51,11 +51,13 @@ global.fromStream = function (streamSource) {
 };
 
 global.fromCategory = function(streamSource) {
-    return {
-        whenAny: function(callback) {
-            // empty stub
-        }
+  return {
+    whenAny: function(callback) {
+      getEvents().forEach(function(element) {
+        callback(null, element);
+      });
     }
+  }
 }
 
 global.linkTo = function (name, value) {
