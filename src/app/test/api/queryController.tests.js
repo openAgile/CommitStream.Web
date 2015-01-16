@@ -30,7 +30,7 @@ var controller = proxyquire('../../api/queryController', {
 controller.init(app);
 
 describe('queryController', function() {
-  var defaultPageSize = 5;
+  var defaultPageSize = 25;
 
   describe('when I issue a workitem query for an asset that has no associated commits', function() {
     var mockData = {
@@ -80,13 +80,14 @@ describe('queryController', function() {
       eventStoreClient.streams.get.callsArgWith(1, null, mockData);
     });
 
-    it('calls eventstore-client.streams.get asking for the github-events stream and pageSize of 5', function(done) {
+    it('calls eventstore-client.streams.get asking for the github-events stream and pageSize of 25', function(done) {
       request(app)
         .get('/api/query?workitem=all')
         .end(function(err, res) {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'github-events',
-            count: 5
+            count: 25,
+            pageUrl: undefined
           }, sinon.match.any);
 
           done();
@@ -102,13 +103,14 @@ describe('queryController', function() {
       eventStoreClient.streams.get.callsArgWith(1, null, {});
     });
 
-    it('calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 5', function(done) {
+    it('calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 25', function(done) {
       request(app)
         .get('/api/query?workitem=' + assetId)
         .end(function(err, res) {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'asset-' + assetId,
-            count: 5
+            count: 25,
+            pageUrl: undefined
           }, sinon.match.any);
 
           done();
@@ -132,7 +134,8 @@ describe('queryController', function() {
         .end(function(err, res) {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'asset-' + assetId,
-            count: 10
+            count: 10,
+            pageUrl: undefined
           }, sinon.match.any);
 
           done();
@@ -154,7 +157,8 @@ describe('queryController', function() {
           .end(function(err, res) {
             eventStoreClient.streams.get.should.have.been.calledWith({
               name: 'asset-' + assetId,
-              count: defaultPageSize
+              count: defaultPageSize,
+              pageUrl: undefined
             }, sinon.match.any);
 
             done();
@@ -169,7 +173,8 @@ describe('queryController', function() {
           .end(function(err, res) {
             eventStoreClient.streams.get.should.have.been.calledWith({
               name: 'asset-' + assetId,
-              count: defaultPageSize
+              count: defaultPageSize,
+              pageUrl: undefined
             }, sinon.match.any);
 
             done();
