@@ -23,6 +23,17 @@
   var assetDetailInitTmpl = null;
   var assetDetailCommitsTmpl = null;
 
+  function bindRefreshActions(commitStreamDomId) {
+    var el = $(commitStreamDomId);
+    el.find('.cs-refresh').unbind('click');
+    el.find('.cs-refresh').bind('click', queryCommitStreamRefresh);
+    el.find('.toggle-cs-autorefresh').unbind('click');
+    el.find('.toggle-cs-autorefresh').bind('click', autoRefreshToggle);
+    if (autoRefreshIntervalId) {
+      el.find('.toggle-cs-autorefresh').prop('checked', true);
+    }
+  }
+
   function renderInit(commitStreamDomId, data, errorHandler) {
     try {
       if (assetDetailInitTmpl === null) {
@@ -31,23 +42,19 @@
           var content = tmpl(data);
           $(commitStreamDomId).html(content);
           checkIfNextPage(commitStreamDomId, data, errorHandler);
+          bindRefreshActions(commitStreamDomId);
         });
       } else {
         var content = assetDetailInitTmpl(data);
         $(commitStreamDomId).html(content);
         checkIfNextPage(commitStreamDomId, data, errorHandler);
-
-      $(commitStreamDomId).find('.cs-refresh').unbind('click');
-      $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
-      $(commitStreamDomId).find('.toggle-cs-autorefresh').unbind('click');
-      $(commitStreamDomId).find('.toggle-cs-autorefresh').bind('click', autoRefreshToggle);
-      if (autoRefreshIntervalId) {
-        $(commitStreamDomId).find('.toggle-cs-autorefresh').prop('checked', true);
+        bindRefreshActions(commitStreamDomId);
       }
     } catch (ex) {
       errorHandler();
     }
   }
+
 
   function renderCommits(commitStreamDomId, data, errorHandler) {
     try {
@@ -121,49 +128,49 @@
   function isEndOfScrollbar(el) {
     return (el.scrollTop() + el.innerHeight() >= el[0].scrollHeight);
   }
-  
+
   function bindScrollEvent(commitStreamDomId, errorHandler) {
     $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
-     if (isEndOfScrollbar($(this))) {
+      if (isEndOfScrollbar($(this))) {
         queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, data) {
-         if (thereAreNoCommits(data)) {
+          if (thereAreNoCommits(data)) {
             errorHandler();
-         } else {
-           setData(data);
+          } else {
+            setData(data);
             renderCommits(commitStreamDomId, data);
-         }
+          }
         }, errorHandler);
-     }
-   });
- }
+      }
+    });
+  }
 
-    function queryCommitStreamRefresh() {};
+  function queryCommitStreamRefresh() {};
 
-    var autoRefreshIntervalId = null;
+  var autoRefreshIntervalId = null;
 
-    function autoRefreshToggle() {
-        var toggle = $(this);
-        if (toggle.is(':checked')) {
-            autoRefreshEnable();
-        } else {
-            autoRefreshDisable();
-        }
+  function autoRefreshToggle() {
+    var toggle = $(this);
+    if (toggle.is(':checked')) {
+      autoRefreshEnable();
+    } else {
+      autoRefreshDisable();
     }
+  }
 
-    function autoRefreshEnable() {
-        if (autoRefreshIntervalId) {
-            clearInterval(autoRefreshIntervalId);
-        }
-       autoRefreshIntervalId = setInterval(queryCommitStreamRefresh,
-        window.CommitStream.autoRefreshIntervalInSeconds * 1000);
+  function autoRefreshEnable() {
+    if (autoRefreshIntervalId) {
+      clearInterval(autoRefreshIntervalId);
     }
+    autoRefreshIntervalId = setInterval(queryCommitStreamRefresh,
+      window.CommitStream.autoRefreshIntervalInSeconds * 1000);
+  }
 
-    function autoRefreshDisable() {
-        if (autoRefreshIntervalId) {
-            clearInterval(autoRefreshIntervalId);
-            autoRefreshIntervalId = null;
-        }
+  function autoRefreshDisable() {
+    if (autoRefreshIntervalId) {
+      clearInterval(autoRefreshIntervalId);
+      autoRefreshIntervalId = null;
     }
+  }
 
   function queryCommitStream(commitStreamDomId, apiUrl, cb, errorHandler) {
     $.getJSON(apiUrl).done(function(data) {
@@ -176,7 +183,6 @@
     window.CommitStream = {
       commitsDisplay: function(commitStreamDomId, workitem, errorHandler) {
         try {
-
           var init = function(commitStreamDomId, data) {
             if (thereAreNoCommits(data)) {
               errorHandler();
@@ -187,6 +193,10 @@
           }
 
           var url = getUrlToQuery(commitStreamDomId, workitem);
+
+          queryCommitStreamRefresh = function() {
+            queryCommitStream(commitStreamDomId, url, init, errorHandler);
+          };
 
           if (!hasAllDeps()) {
             $.getScript(requirejsUrl, function(data, status, jqxhr) {
@@ -201,5 +211,6 @@
         }
       }
     };
+    window.CommitStream.autoRefreshIntervalInSeconds = 30;
   }
 })();
