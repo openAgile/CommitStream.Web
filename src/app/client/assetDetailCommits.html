@@ -1,23 +1,12 @@
-<div>
-	<div class="stream-title-area">
-		<div class="titlebar">
-			<div class="title-container">
-				<h3 style='margin-bottom: .4em; margin-top: 0;'>CommitStream Commits <img src="{{resourcePath}}gray-refresh.png" alt="Refresh" class="cs-refresh" /></h3>
-				<label class="toggle-cs-autorefresh-label" style="margin-top: -5px"><input type="checkbox" class="toggle-cs-autorefresh"> Auto-refresh?</label>
-			</div>
-		</div>
-	</div>
-	{{#if noCommits}}
-	<p style="color: #dedede;font-size: .95em;margin-top: 0.5em;padding-left:20px;text-align: center;">No commits available...</p>
-	{{else}}
-	<ul class="commits.list" style="list-style:none">
-		{{#each commits}}
-		<hr />
-		<li class="li.commit" id="{{sha1Partial}}">
-	  	<p class="commit.info" style="padding-left:20px;font-size: .8em;color: #a6a6a6;">{{timeFormatted}}, {{author}} {{action}} <a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a> {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
-	  	<p class="commit.message" style="margin-left:18px; margin-top:5px; padding-left:20px;line-height: 1.15em;background-image:url({{../resourcePath}}icon-commit-16x16.png); background-repeat:no-repeat; white-space: pre-wrap"><span class="message">{{message}}</span></p>
-	  	</li>
-	  	{{/each}}
-  	</ul>
-	{{/if}}
-</div>
+<ul class="commits.list" style="list-style:none">
+	{{#each commits}}
+	<hr />
+	<li class="li.commit" id="{{sha1Partial}}">
+  	<p class="commit.info" style="padding-left:20px;font-size: .8em;color: #a6a6a6;">{{timeFormatted}}, {{author}} {{action}} <a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a> {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
+  	<p class="commit.message" style="margin-left:18px; margin-top:5px; padding-left:20px;line-height: 1.15em;background-image:url({{../resourcePath}}icon-commit-16x16.png); background-repeat:no-repeat;"><span class="message">{{message}}</span></p>
+	</li>
+	{{/each}}
+</ul>
+{{#if lastPage}}
+	<p style="color: #A6A6A6;font-size: .8em;margin-top: 1.5em; margin-bottom: 2em; padding-left:20px;text-align: center;">No more Commits to display...</p>
+{{/if}}

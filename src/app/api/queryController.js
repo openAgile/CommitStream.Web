@@ -2,7 +2,13 @@
   var config = require('../config'),
     gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
     es = require('./helpers/eventStoreClient');
-    _ = require('underscore');
+  _ = require('underscore'),
+  uuid = require('uuid-v4'),
+  Cache = require('ttl-cache');
+  
+  function buildUri(guid, parms) {
+    return config.serverBaseUrl + '/api/query?key=' + parms.key + '&workitem=' + parms.workitem + '&page=' + guid;
+  }
 
 
   controller.init = function(app) {
@@ -23,10 +29,15 @@
      * @apiSuccess {String} message Original commit message sent to the VCS
      * @apiSuccess {String} commitHref Link to an HTML page to view the commit in the source VCS
      */
+    var cache = new Cache({
+      ttl: 120, // Number of seconds to keep entries
+      interval: 60 // Cleaning interval
+    });
+
     app.get("/api/query", function(req, res) {
       if (req.query.workitem) {
 
-        var stream ;
+        var stream;
         if (req.query.workitem.toLowerCase() === 'all') {
           stream = 'github-events';
         } else {
@@ -38,11 +49,11 @@
         }
 
         function getPageSize(query) {
-            return query.pageSize;
+          return query.pageSize;
         }
 
         function convertToInt(stringVal) {
-          if(!isNaN(stringVal))
+          if (!isNaN(stringVal))
             return parseInt(stringVal);
           else
             return NaN;
@@ -51,32 +62,48 @@
         function getDefaultWhenNaN(value, defaultValue) {
           if (_.isNaN(value)) {
             return defaultValue;
-          }
-          else
+          } else
             return value;
         }
 
         function getConvertedPageSizeOrDefault(query) {
-          var defaultSize = 5;
-          if(!hasPageSize(query)) return defaultSize;
+          var defaultSize = 25;
+          if (!hasPageSize(query)) return defaultSize;
           var convertedSize = convertToInt(getPageSize(query));
           return getDefaultWhenNaN(convertedSize, defaultSize);
         }
 
         var pageSize = getConvertedPageSizeOrDefault(req.query);
+        
+
+        var page = cache.get(req.query.page);
 
         es.streams.get({
           name: stream,
-          count: pageSize
+          count: pageSize,
+          pageUrl: page
         }, function(error, response) {
           var result = {
-            commits: []
+            commits: [],
+            _links: {}
           }
 
           if (response.body) {
             var obj = JSON.parse(response.body);
+            var links = obj.links;
+            var guid = uuid();
             result = gitHubEventsToApiResponse(obj.entries);
+            //TODO: check all of them, not just the third one
+            if (links[3].relation == 'next') {
+              cache.set(guid, links[3].uri);
+              var next = buildUri(guid, req.query);
+              var previous = buildUri(req.query.page, req.query);
+              result._links = {
+                next: next
+              };
+            }
           }
+
           res.set("Content-Type", "application/json");
           res.send(result);
         });
