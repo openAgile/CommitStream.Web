@@ -20,11 +20,43 @@ chai.config.includeStack = true;
 
 controller.init(app);
 
-postInbox = function(shouldBehaveThusly) {
+var postInbox = function (payload, shouldBehaveThusly, contentType) {
+  if (!contentType) {
+    contentType = 'application/json';
+  }
   request(app)
-    .post('/api/inbox', 'myfirstinbox')
+    .post('/api/inboxes')
+    .send(JSON.stringify(payload))
+    .type(contentType)
     .end(shouldBehaveThusly);
 };
+
+
+describe('inboxesController', function() {
+  describe('when creating an inbox', function() {
+
+    describe('with an unsupported or missing Content-Type header', function() {
+      var data = { description: 'Just your average run-of-the-mill description up in this.' };
+      it('should reject request and return a 415 status code.', function(done) {
+        postInbox(data, function(err, res) {
+          res.statusCode.should.equal(415);
+          done();
+        }, 'application/jackson');
+      });
+
+      it('it should reject the request and explain that only application/json is accepted.', function(done) {
+        postInbox(data, function(err, res) {
+          res.text.should.equal('When creating an inbox, you must send a Content-Type: application/json header.');
+          done();
+        }, 'application/jackson');
+      });
+
+    });
+
+
+
+  })
+})
 
 /*describe('inboxController', function() {
   describe('when creating a inbox', function() {
