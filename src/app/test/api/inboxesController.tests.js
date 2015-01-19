@@ -11,9 +11,15 @@ var chai = require('chai'),
   hypermediaResponseStub = {
     inbox: sinon.spy()
   },
-  controller = proxyquire('../../api/inboxesController', {
-    './hypermediaResponse': hypermediaResponseStub
-  });
+  sanitizer = {
+    sanitize: sinon.stub()
+  }
+  controller = proxyquire('../../api/inboxesController',
+    {
+      './hypermediaResponse': hypermediaResponseStub,
+      './sanitizer': sanitizer
+    }
+  );
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
@@ -53,10 +59,18 @@ describe('inboxesController', function() {
 
     });
 
+    describe('with a name field', function() {
+      it('should clean the name field for illegal content', function(done) {
+        var payload = {name: 'His name was Robert Pawlson'};
+        postInbox(payload, function() {
+          sanitizer.sanitize.should.have.been.calledWith('inbox', payload, ['name']);
+          done();
+        });
+      });
+    });
 
-
-  })
-})
+  });
+});
 
 /*describe('inboxController', function() {
   describe('when creating a inbox', function() {
