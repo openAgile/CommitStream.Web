@@ -13,7 +13,7 @@ var chai = require('chai'),
   },
   sanitizer = {
     sanitize: sinon.stub()
-  }
+  },
   controller = proxyquire('../../api/inboxesController',
     {
       './hypermediaResponse': hypermediaResponseStub,
@@ -42,33 +42,38 @@ describe('inboxesController', function() {
   describe('when creating an inbox', function() {
 
     describe('with an unsupported or missing Content-Type header', function() {
-      var data = { description: 'Just your average run-of-the-mill description up in this.' };
+      var payload = {};
       it('should reject request and return a 415 status code.', function(done) {
-        postInbox(data, function(err, res) {
+        postInbox(payload, function(err, res) {
           res.statusCode.should.equal(415);
           done();
         }, 'application/jackson');
       });
 
       it('it should reject the request and explain that only application/json is accepted.', function(done) {
-        postInbox(data, function(err, res) {
+        postInbox(payload, function(err, res) {
           res.text.should.equal('When creating an inbox, you must send a Content-Type: application/json header.');
           done();
         }, 'application/jackson');
       });
-
     });
 
-    describe('with a name field', function() {
+    describe('with a valid payload', function() {
+      var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+
+      var payload = {
+        name: 'His name was Robert Pawlson',
+        digestId : digestId,
+        family: 'GitHub'
+      };
+
       it('should clean the name field for illegal content', function(done) {
-        var payload = {name: 'His name was Robert Pawlson'};
         postInbox(payload, function() {
           sanitizer.sanitize.should.have.been.calledWith('inbox', payload, ['name']);
           done();
         });
       });
-    });
-
+    })
   });
 });
 
