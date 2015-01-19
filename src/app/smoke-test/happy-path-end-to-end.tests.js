@@ -290,7 +290,19 @@ describe('api/query after POST', function() {
         }, function(err, res, body) {
         should.not.exist(err);
         res.statusCode.should.equal(200);
-        res.body.should.equal("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"timeFormatted\":\"3 months ago\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified UI validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"timeFormatted\":\"3 months ago\",\"author\":\"laureanoremedi\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 initial Commit to backend functionality!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");
+
+        // Need to remove the 'timeFormatted' field from the response body as
+        // we can not rely on that value staying constant as time moves on. It will
+        // change because we are using the timeago package to transform it into values
+        // like '3 months ago'. But once a month increments, then our assertion will be wrong
+        // because the actual value at runtime will then be '4 months ago'
+        var cleanedBody = JSON.parse(res.body);
+        cleanedBody.commits = _.map(cleanedBody.commits, function(value, key, list) {
+          return _.omit(value, 'timeFormatted');
+        })
+
+        cleanedBody = JSON.stringify(cleanedBody);
+        cleanedBody.should.equal("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified UI validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"laureanoremedi\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 initial Commit to backend functionality!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");
         done();
       });
     }, 3000);
