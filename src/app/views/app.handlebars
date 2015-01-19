@@ -119,6 +119,7 @@
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
     } else {
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
+      $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       bindScrollEvent(commitStreamDomId, errorHandler);
     }
   }
