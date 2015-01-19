@@ -37,13 +37,15 @@
   function renderInit(commitStreamDomId, model, errorHandler) {
     try {
       if (assetDetailInitTmpl === null) {
-        getCompiledTemplate('assetDetailInit.html', function(tmpl) {
-          assetDetailInitTmpl = tmpl;
-          var content = tmpl(model);
-          $(commitStreamDomId).html(content);
-          checkIfNextPage(commitStreamDomId, model, errorHandler);
-          bindRefreshActions(commitStreamDomId);
-        });
+        registerPartial('assetDetailCommits', function() {
+          getCompiledTemplate('assetDetailInit.html', function(tmpl) {
+            assetDetailInitTmpl = tmpl;
+            var content = tmpl(model);
+            $(commitStreamDomId).html(content);
+            checkIfNextPage(commitStreamDomId, model, errorHandler);
+            bindRefreshActions(commitStreamDomId);
+          });
+        }, errorHandler);
       } else {
         var content = assetDetailInitTmpl(model);
         $(commitStreamDomId).html(content);
@@ -79,6 +81,15 @@
     require(deps, function(handlebars) {
       cb(handlebars.default.compile(source));
     }, errorHandler);
+  }
+
+  function registerPartial(partial, cb, errorHandler) {
+    getTemplate(partial + '.html', function(source) {
+      require(deps, function(handlebars) {
+        handlebars.default.registerPartial(partial, source);
+        cb();
+      }, errorHandler);
+    });
   }
 
   function getTemplate(template, cb, errorHandler) {
