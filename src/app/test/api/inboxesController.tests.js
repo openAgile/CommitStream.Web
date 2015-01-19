@@ -11,13 +11,17 @@ var chai = require('chai'),
   hypermediaResponseStub = {
     inbox: sinon.spy()
   },
+  inboxAdded = {
+    validate: sinon.spy()
+  },
   sanitizer = {
     sanitize: sinon.stub()
   },
   controller = proxyquire('../../api/inboxesController',
     {
       './hypermediaResponse': hypermediaResponseStub,
-      './sanitizer': sanitizer
+      './sanitizer': sanitizer,
+      './events/inboxAdded': inboxAdded
     }
   );
 
@@ -39,6 +43,7 @@ var postInbox = function (payload, shouldBehaveThusly, contentType) {
 
 
 describe('inboxesController', function() {
+
   describe('when creating an inbox', function() {
 
     describe('with an unsupported or missing Content-Type header', function() {
@@ -67,12 +72,23 @@ describe('inboxesController', function() {
         family: 'GitHub'
       };
 
+      before(function() {
+        sanitizer.sanitize.returns([]);
+      })
+
       it('should clean the name field for illegal content', function(done) {
         postInbox(payload, function() {
           sanitizer.sanitize.should.have.been.calledWith('inbox', payload, ['name']);
           done();
         });
       });
+
+      it('should validate the payload against an inboxAdded schema', function(done) {
+        postInbox(payload, function() {
+          inboxAdded.validate.should.have.been.calledWith(payload);
+          done();
+        });
+      })
     })
   });
 });
