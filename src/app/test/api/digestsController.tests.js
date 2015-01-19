@@ -41,7 +41,7 @@ chai.config.includeStack = true;
 
 controller.init(app);
 
-function postDigest(payload, shouldBehaveThusly, contentType) {
+var postDigest = function(payload, shouldBehaveThusly, contentType) {
   if (!contentType) {
     contentType = 'application/json';
   }
@@ -52,7 +52,7 @@ function postDigest(payload, shouldBehaveThusly, contentType) {
     .end(shouldBehaveThusly);
 };
 
-function getDigest(path, shouldBehaveThusly) {
+var getDigest = function(path, shouldBehaveThusly) {
   request(app)
     .get(path)
     .end(shouldBehaveThusly);
