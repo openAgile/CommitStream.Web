@@ -11,8 +11,12 @@ var chai = require('chai'),
   eventStoreClient = {
     streams: {
       post: sinon.stub()
+    },
+    projection: {
+      getState: sinon.stub()
     }
-  },hypermediaResponseStub = {
+  },
+  hypermediaResponseStub = {
     inbox: sinon.spy()
   },
   inboxAdded = {
@@ -21,12 +25,16 @@ var chai = require('chai'),
   sanitizer = {
     sanitize: sinon.stub()
   },
+  translator = {
+    translatePush: sinon.stub()
+  },
   controller = proxyquire('../../api/inboxesController',
     {
       './hypermediaResponse': hypermediaResponseStub,
       './sanitizer': sanitizer,
       './events/inboxAdded': inboxAdded,
-      './helpers/eventStoreClient': eventStoreClient
+      './helpers/eventStoreClient': eventStoreClient,
+      './translators/githubTranslator': translator
     }
   );
 
@@ -46,6 +54,18 @@ var postInboxCreate = function (payload, shouldBehaveThusly, contentType) {
     .end(shouldBehaveThusly);
 };
 
+
+var postInbox = function (payload, shouldBehaveThusly, contentType, inboxUuid, xGithubEventValue) {
+  if (!contentType) {
+    contentType = 'application/json';
+  }
+  request(app)
+    .post('/api/inboxes/' + inboxUuid)
+    .set('x-github-event', xGithubEventValue || 'push')
+    .send(JSON.stringify(payload))
+    .type(contentType)
+    .end(shouldBehaveThusly);
+};
 
 describe('inboxesController', function() {
 
@@ -108,15 +128,48 @@ describe('inboxesController', function() {
       });
     })
   });
-});
 
-/*describe('inboxController', function() {
-  describe('when creating a inbox', function() {
-    it('should request inbox hypermedia', function(done) {
-      postInboxCreate(function(err, res) {
-        hypermediaResponseStub.inbox.should.have.been.calledOnce;
+  describe('when posting to an inbox', function() {
+    var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
+    var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+
+    var inboxPayload = {};
+
+    beforeEach(function() {
+      eventStoreClient.projection.getState.callsArgWith(1, null, {
+        body: JSON.stringify({digestId: digestId}),
+        statusCode: 200
+      });
+    });
+
+    it('it should call the translator with the correct params', function(done) {
+      postInbox(inboxPayload, function(err, res) {
+        translator.translatePush.should.have.been.calledWith(inboxPayload, digestId)
         done();
-      })
+      }, null, inboxId)
+    })
+
+    it('it should have a response Content-Type of hal+json', function(done) {
+
+      postInbox(inboxPayload, function(err, res) {
+        console.log(res.body);
+        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+        done();
+      }, null, inboxId)
+    });
+
+    // it('it should have an x-github-event header with a value of push', function(done) {
+    //   done();
+    // });
+  });
+
+  describe('when retrieving information about an inbox', function() {
+    it('it should have a response Content-Type of hal+json', function(done) {
+      // return false;
+      done();
+    });
+  });
+
   describe('when posting to an inbox without the x-github-event header', function() {
     it('it should provide an appropriate response', function(done) {
 
@@ -141,4 +194,5 @@ describe('inboxesController', function() {
       )
     })
   })
-})*/
+
+});
