@@ -135,6 +135,20 @@ describe('inboxesController', function() {
 
     var inboxPayload = {};
 
+    var translatorEvent = {
+        eventId: 'b0d65208-2afc-43f0-8926-6b20026ab1eb',
+        eventType: 'GitHubCommitReceived',
+        data: {},
+        metadata: {
+          digestId: digestId
+        }
+      };
+
+    before(function() {
+      translator.translatePush.returns(translatorEvent);
+      translatorEvent = JSON.stringify(translatorEvent);
+    });
+
     beforeEach(function() {
       eventStoreClient.projection.getState.callsArgWith(1, null, {
         body: JSON.stringify({digestId: digestId}),
@@ -146,8 +160,19 @@ describe('inboxesController', function() {
       postInbox(inboxPayload, function(err, res) {
         translator.translatePush.should.have.been.calledWith(inboxPayload, digestId)
         done();
-      }, null, inboxId)
-    })
+      }, null, inboxId);
+    });
+
+    it('it should post to the eventStoreClient with the correct params', function(done) {
+      postInbox(inboxPayload, function(err, res) {
+        var eventStoreClientParam1 = {
+                name: 'inboxCommits-' + inboxId,
+                events: translatorEvent
+              };
+        eventStoreClient.streams.post.should.have.been.calledWith(eventStoreClientParam1, sinon.match.any);
+        done();
+      });
+    });
 
     it('it should have a response Content-Type of hal+json', function(done) {
 
@@ -155,7 +180,7 @@ describe('inboxesController', function() {
         console.log(res.body);
         res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
         done();
-      }, null, inboxId)
+      }, null, inboxId);
     });
 
     // it('it should have an x-github-event header with a value of push', function(done) {
