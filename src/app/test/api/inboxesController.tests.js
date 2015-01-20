@@ -8,11 +8,15 @@ var chai = require('chai'),
   sinonChai = require("sinon-chai"),
   request = require('supertest'),
   proxyquire = require('proxyquire'),
-  hypermediaResponseStub = {
+  eventStoreClient = {
+    streams: {
+      post: sinon.stub()
+    }
+  },hypermediaResponseStub = {
     inbox: sinon.spy()
   },
   inboxAdded = {
-    validate: sinon.spy()
+    validate: sinon.stub()
   },
   sanitizer = {
     sanitize: sinon.stub()
@@ -21,7 +25,8 @@ var chai = require('chai'),
     {
       './hypermediaResponse': hypermediaResponseStub,
       './sanitizer': sanitizer,
-      './events/inboxAdded': inboxAdded
+      './events/inboxAdded': inboxAdded,
+      './helpers/eventStoreClient': eventStoreClient
     }
   );
 
@@ -74,7 +79,12 @@ describe('inboxesController', function() {
 
       before(function() {
         sanitizer.sanitize.returns([]);
+        inboxAdded.validate.returns([]);
       })
+
+      beforeEach(function() {
+        eventStoreClient.streams.post.callsArgWith(1, null, "unused response");
+      });
 
       it('should clean the name field for illegal content', function(done) {
         postInbox(payload, function() {
@@ -89,6 +99,13 @@ describe('inboxesController', function() {
           done();
         });
       })
+
+      it('it should have a response Content-Type of hal+json', function(done) {
+        postInbox(payload, function(err, res) {
+          res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        });
+      });
     })
   });
 });
