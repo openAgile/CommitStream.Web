@@ -115,7 +115,6 @@
 
   function checkIfNextPage(commitStreamDomId, model, errorHandler) {
     if (!model._links || !model._links.next) {
-      $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
     } else {
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
@@ -143,6 +142,7 @@
   }
 
   function bindScrollEvent(commitStreamDomId, errorHandler) {
+    $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
     $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
       if (isEndOfScrollbar($(this))) {
         queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, model) {
