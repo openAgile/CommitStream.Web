@@ -186,7 +186,10 @@
   }
 
   function queryCommitStream(commitStreamDomId, apiUrl, cb, errorHandler) {
+    var el = $(commitStreamDomId);
+    el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
+      el.find('.cs-refresh').removeClass('requesting');
       cb(commitStreamDomId, model);
     }).fail(errorHandler);
   }

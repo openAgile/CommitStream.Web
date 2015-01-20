@@ -973,15 +973,73 @@ select::-webkit-input-placeholder {
 .gadget.loading {
   min-height: 55px;
 }
+/*h3 .reload, .reload {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-left: 0.3em;
+  cursor: pointer;
+}
+h3 .reload, .reload {
+  background: url('sprite-refresh.png') no-repeat scroll left top;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  width: 13px;
+  height: 13px;
+  background-position: 0 0;
+}
+h3 .reload:hover, .reload:hover {
+  background-position: 0 -26px;
+}
+
+.requesting h3 .reload {
+  background-image: url('gray-refresh-anim.gif');
+}
+.requesting h3 .reload:hover {
+  background-position: 0 0;
+}
+*/
+
+
+
+h3 .reload {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-left: 0.3em;
+  cursor: pointer;
+}
+h3 .reload {
+  background: url('sprite-refresh.png') no-repeat scroll left top;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  width: 13px;
+  height: 13px;
+  background-position: 0 0;
+}
+h3 .reload:hover {
+  background-position: 0 -26px;
+}
+h3 .requesting {
+  background-image: url('gray-refresh-anim.gif');
+}
+h3 .requesting:hover {
+  background-position: 0 0;
+}
+
 
 
 /* New CommitStream Styles */
- div.window .remaining .finished {
+ /*div.window .remaining .finished {
   text-align: center;
   display: block;
   font-size: 0.855em;
   color: #a6a6a6;
-} 
+} */
 
 .toggle-cs-autorefresh-label {
   display: inline-block;
