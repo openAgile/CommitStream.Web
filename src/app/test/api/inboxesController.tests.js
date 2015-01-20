@@ -183,6 +183,13 @@ describe('inboxesController', function() {
       }, null, inboxId);
     });
 
+    it('it should have an appropriate response message', function(done) {
+      postInbox(inboxPayload, function(err, res) {
+        res.body.message.should.equal('Your push event has been queued to be added to CommitStream.');
+        done();
+      }, null, inboxId);
+    })
+
     // it('it should have an x-github-event header with a value of push', function(done) {
     //   done();
     // });
