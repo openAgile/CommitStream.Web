@@ -93,12 +93,43 @@ var commitInbox2WithOutMention = {
   }
 };
 
+var commitInboxA = {
+  "ref": "refs/heads/master",
+  "commits": [{
+    "id": "b42c285e1506edac965g92573a2121700fc92f8b",
+    "distinct": true,
+    "message": "S-11111 Updated Happy Path Validations!",
+    "timestamp": "2014-10-03T15:57:14-03:00",
+    "url": "https://github.com/kunzimariano/CommitService.DemoRepo/commit/b42c285e1506edac965g92573a2121700fc92f8b",
+    "author": {
+      "name": "shawnmarie",
+      "email": "shawn.abbott@versionone.com",
+      "username": "shawnmarie"
+    },
+    "committer": {
+      "name": "shawnmarie",
+      "email": "shawn.abbott@versionone.com",
+      "username": "shawnmarie"
+    },
+    "added": [],
+    "removed": [],
+    "modified": ["README.md"]
+  }],
+  "repository": {
+    "id": 23355501,
+    "name": "CommitService.DemoRepo"
+  }
+};
+
 var digestId = undefined;
+var digestIdA = undefined;
 var urlToCreateInbox = undefined;
+var urlToCreateInboxA = undefined;
 var urlToPushCommitToInbox1 = undefined;
 var urlToPushCommitToInbox2 = undefined;
+var urlToPushCommitToInboxA = undefined;
 
-describe('you need an digest to associate to the inboxes that it will be created', function() {
+describe('you need a digest to associate to the inboxes that will be created', function() {
   it('should return error message with 401 Unauthorized response when request is made without a key.', function(done){
     request({
       uri: "http://localhost:6565/api/digest?workitem=S-11111",
@@ -190,6 +221,49 @@ describe('you need an digest to associate to the inboxes that it will be created
   });
 });
 
+describe('need a second digest for same workitem', function() {
+  it('create a second new digest.', function(done) {
+    request({
+      uri: "http://localhost:6565/api/digests?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        description: "Digest A"
+      })
+    }, function(err, res, body) {
+      should.not.exist(err);
+      var digestIdCreated = JSON.parse(body).digestId;
+      urlToCreateInboxA = JSON.parse(body)._links['inbox-create'].href;
+      digestIdCreated.should.exist;
+      digestIdA = digestIdCreated;
+      done();
+    });
+  });
+
+  it('create inbox and associate it to the second digest.', function(done) {
+    request({
+      uri: urlToCreateInboxA + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        name: "Inbox A",
+        digestId: digestIdA,
+        family: "GitHub"
+      })
+    }, function(err, res, body) {
+      should.not.exist(err);
+      var inboxIdCreated = JSON.parse(body).inboxId;
+      urlToPushCommitToInboxA = JSON.parse(body)._links['self'].href;
+      inboxIdCreated.should.exist;
+      done();
+    });
+  });
+});
+
 describe('api/query before POST', function() {
   it('should return empty commits when request is made with correct key and workitem, but no data yet exists in the system.', function(done) {
     request({
@@ -200,7 +274,7 @@ describe('api/query before POST', function() {
       res.statusCode.should.equal(200);
       res.body.should.equal('{"commits":[]}');
       done();
-    })
+    });
   });
 });
 
@@ -252,7 +326,23 @@ describe('api/inboxes', function() {
       res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
       done();
     });
-  })
+  });
+  it(urlToPushCommitToInboxA + 'should accept a valid payload and return a 200 OK response.', function(done) {
+    request({
+      uri: urlToPushCommitToInboxA + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
+      method: "POST",
+      headers: {
+        "x-github-event": "push",
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(commitInboxA)
+    }, function(err, res, body) {
+      should.not.exist(err);
+      res.statusCode.should.equal(200);
+      res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
+      done();
+    });
+  });
 });
 
 describe('api/query after POST', function() {
@@ -268,7 +358,14 @@ describe('api/query after POST', function() {
     })
   });
 
-  it('should accept a valid payload and returns 2 commits for a specified workitem.', function(done) {
+  it('should accept a valid payload and returns 2 commits for a specified digestId and a specified workitem.', function(done) {
+    // console.log();
+    // console.log('digestId:');
+    // console.log(digestId);
+    // console.log();
+    // console.log('digestIdA:')
+    // console.log(digestIdA);
+    // console.log("http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&digestId=" + digestId + "&workitem=S-11111");
     request({
       uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&digestId=" + digestId + "&workitem=S-11111",
       method: "GET"
@@ -302,7 +399,7 @@ describe('api/query after POST', function() {
         })
 
         cleanedBody = JSON.stringify(cleanedBody);
-        cleanedBody.should.equal("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified UI validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"laureanoremedi\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 initial Commit to backend functionality!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");
+        cleanedBody.should.equal("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"shawnmarie\",\"sha1Partial\":\"b42c28\",\"action\":\"committed\",\"message\":\"S-11111 Updated Happy Path Validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/b42c285e1506edac965g92573a2121700fc92f8b\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified UI validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"laureanoremedi\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 initial Commit to backend functionality!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");        
         done();
       });
     }, 3000);
