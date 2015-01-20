@@ -35,7 +35,7 @@ chai.config.includeStack = true;
 
 controller.init(app);
 
-var postInbox = function (payload, shouldBehaveThusly, contentType) {
+var postInboxCreate = function (payload, shouldBehaveThusly, contentType) {
   if (!contentType) {
     contentType = 'application/json';
   }
@@ -54,14 +54,14 @@ describe('inboxesController', function() {
     describe('with an unsupported or missing Content-Type header', function() {
       var payload = {};
       it('should reject request and return a 415 status code.', function(done) {
-        postInbox(payload, function(err, res) {
+        postInboxCreate(payload, function(err, res) {
           res.statusCode.should.equal(415);
           done();
         }, 'application/jackson');
       });
 
       it('it should reject the request and explain that only application/json is accepted.', function(done) {
-        postInbox(payload, function(err, res) {
+        postInboxCreate(payload, function(err, res) {
           res.text.should.equal('When creating an inbox, you must send a Content-Type: application/json header.');
           done();
         }, 'application/jackson');
@@ -87,21 +87,21 @@ describe('inboxesController', function() {
       });
 
       it('should clean the name field for illegal content', function(done) {
-        postInbox(payload, function() {
+        postInboxCreate(payload, function() {
           sanitizer.sanitize.should.have.been.calledWith('inbox', payload, ['name']);
           done();
         });
       });
 
       it('should validate the payload against an inboxAdded schema', function(done) {
-        postInbox(payload, function() {
+        postInboxCreate(payload, function() {
           inboxAdded.validate.should.have.been.calledWith(payload);
           done();
         });
       })
 
       it('it should have a response Content-Type of hal+json', function(done) {
-        postInbox(payload, function(err, res) {
+        postInboxCreate(payload, function(err, res) {
           res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
           done();
         });
@@ -113,7 +113,7 @@ describe('inboxesController', function() {
 /*describe('inboxController', function() {
   describe('when creating a inbox', function() {
     it('should request inbox hypermedia', function(done) {
-      postInbox(function(err, res) {
+      postInboxCreate(function(err, res) {
         hypermediaResponseStub.inbox.should.have.been.calledOnce;
         done();
       })
