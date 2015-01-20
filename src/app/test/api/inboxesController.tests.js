@@ -117,6 +117,28 @@ describe('inboxesController', function() {
         hypermediaResponseStub.inbox.should.have.been.calledOnce;
         done();
       })
+  describe('when posting to an inbox without the x-github-event header', function() {
+    it('it should provide an appropriate response', function(done) {
+
+      var postInboxWithoutXGithubEvent = function(shouldBehaveThusly) {
+        var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
+        var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+        var payload = {
+          digestId: digestId
+        };
+
+        request(app)
+        .post('/api/inboxes/' + inboxId)
+        .send(JSON.stringify(payload))
+        .type('application/json')
+        .end(shouldBehaveThusly);
+      }
+
+      postInboxWithoutXGithubEvent(function(err, res) {
+          res.body.message.should.equal('Unknown event type.');
+          done();
+        }
+      )
     })
   })
 })*/
