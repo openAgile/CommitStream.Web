@@ -5,7 +5,7 @@ var chai = require('chai'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
 describe('hypermediaResponse', function() {
-  describe('when constructing a hypermedia response for digest', function() {
+  describe('when constructing a hypermedia response for digest POST', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestId);
 
@@ -119,6 +119,16 @@ describe('hypermediaResponse', function() {
 
   });
 
+  describe('when constructing a hypermedia response for inbox creation', function() {
+    var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
+    var hypermedia = hypermediaResponse.inboxes.POST('http', 'localhost', inboxId);
+
+    it('the self link href should be a valid URL', function() {
+        var selfLink = hypermedia._links['self'];
+        validator.isURL(selfLink.href).should.be.true;
+    });
+
+  })
 
     // inbox-create link
     // it('it should link to an inbox resource to create an inbox', function() {

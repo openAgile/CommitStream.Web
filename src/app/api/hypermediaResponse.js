@@ -41,4 +41,37 @@
 
     return response;
   };
+
+  // These are difficult to name. Here are some ideas
+  // For an endpoint like: /api/digests/id/inbox/id
+  // hypermediaResponseForADigestAndInbox
+  // hypermediaResponse.digests.id.inbox.id
+
+  // Here are some thoughts around the inbox cases of
+  // posting to /api/inboxes
+  // posting to /api/inboxes/:uuid
+  // geting from /api/inboxes/:uuid
+  // hypermediaResponseInboxCreation
+  // hypermediaResponseInboxPost
+  // hypermediaResponseInboxInformation
+  // hypermediaResponse.inboxes.POST
+  // hypermediaResponse.inboxes.id.POST
+  // hypermediaResponse.inboxes.id.GET
+
+  // If we were using a hal library, this would probably look something like
+  // halResponse.addLink(key, value), which removes the need to name them specifically.
+
+  hypermediaResponse.inboxes = {};
+  hypermediaResponse.inboxes.POST = function(protocol, host, inboxId) {
+    return {
+      "_links": {
+        "self": {
+          "href": protocol + "://" + host + "/api/inboxes/" + inboxId
+        }
+      }
+    }
+  }
+
 })(module.exports)
+
+
