@@ -170,7 +170,7 @@
       }
     });
 
-    getPartitionState = function(name, uuid, callback) {
+    var getPartitionState = function(name, uuid, callback) {
       eventStore.projection.getState({
         name: name,
         partition: name + '-' + uuid
