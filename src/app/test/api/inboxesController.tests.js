@@ -28,22 +28,26 @@ var chai = require('chai'),
   translator = {
     translatePush: sinon.stub()
   },
-  controller = proxyquire('../../api/inboxesController',
-    {
-      './hypermediaResponse': hypermediaResponseStub,
-      './sanitizer': sanitizer,
-      './events/inboxAdded': inboxAdded,
-      './helpers/eventStoreClient': eventStoreClient,
-      './translators/githubTranslator': translator
-    }
-  );
+  controller = proxyquire('../../api/inboxesController', {
+    './hypermediaResponse': hypermediaResponseStub,
+    './sanitizer': sanitizer,
+    './events/inboxAdded': inboxAdded,
+    './helpers/eventStoreClient': eventStoreClient,
+    './translators/githubTranslator': translator
+  });
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
 
 controller.init(app);
 
-var postInboxCreate = function (payload, shouldBehaveThusly, contentType) {
+var getInbox = function(path, shouldBehaveThusly) {
+  request(app)
+    .get(path)
+    .end(shouldBehaveThusly);
+}
+
+var postInboxCreate = function(payload, shouldBehaveThusly, contentType) {
   if (!contentType) {
     contentType = 'application/json';
   }
@@ -55,7 +59,7 @@ var postInboxCreate = function (payload, shouldBehaveThusly, contentType) {
 };
 
 
-var postInbox = function (payload, shouldBehaveThusly, contentType, inboxUuid, xGithubEventValue) {
+var postInbox = function(payload, shouldBehaveThusly, contentType, inboxUuid, xGithubEventValue) {
   if (!contentType) {
     contentType = 'application/json';
   }
@@ -93,7 +97,7 @@ describe('inboxesController', function() {
 
       var payload = {
         name: 'His name was Robert Paulson',
-        digestId : digestId,
+        digestId: digestId,
         family: 'GitHub'
       };
 
@@ -136,13 +140,13 @@ describe('inboxesController', function() {
     var inboxPayload = {};
 
     var translatorEvent = {
-        eventId: 'b0d65208-2afc-43f0-8926-6b20026ab1eb',
-        eventType: 'GitHubCommitReceived',
-        data: {},
-        metadata: {
-          digestId: digestId
-        }
-      };
+      eventId: 'b0d65208-2afc-43f0-8926-6b20026ab1eb',
+      eventType: 'GitHubCommitReceived',
+      data: {},
+      metadata: {
+        digestId: digestId
+      }
+    };
 
     before(function() {
       translator.translatePush.returns(translatorEvent);
@@ -151,7 +155,9 @@ describe('inboxesController', function() {
 
     beforeEach(function() {
       eventStoreClient.projection.getState.callsArgWith(1, null, {
-        body: JSON.stringify({digestId: digestId}),
+        body: JSON.stringify({
+          digestId: digestId
+        }),
         statusCode: 200
       });
     });
@@ -166,9 +172,9 @@ describe('inboxesController', function() {
     it('it should post to the eventStoreClient with the correct params', function(done) {
       postInbox(inboxPayload, function(err, res) {
         var eventStoreClientParam1 = {
-                name: 'inboxCommits-' + inboxId,
-                events: translatorEvent
-              };
+          name: 'inboxCommits-' + inboxId,
+          events: translatorEvent
+        };
         eventStoreClient.streams.post.should.have.been.calledWith(eventStoreClientParam1, sinon.match.any);
         done();
       });
@@ -206,21 +212,45 @@ describe('inboxesController', function() {
           };
 
           request(app)
-          .post('/api/inboxes/' + inboxId)
-          .send(JSON.stringify(payload))
-          .type('application/json')
-          .end(shouldBehaveThusly);
+            .post('/api/inboxes/' + inboxId)
+            .send(JSON.stringify(payload))
+            .type('application/json')
+            .end(shouldBehaveThusly);
         }
 
         postInboxWithoutXGithubEvent(function(err, res) {
-            res.body.message.should.equal('Unknown event type.');
-            done();
+          res.body.message.should.equal('Unknown event type.');
+          done();
         });
       });
     });
   });
 
   describe('when retrieving information about an inbox', function() {
+    var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
+    var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+
+    describe('with an invalid, non-uuid inboxes identifier', function() {
+      function get(shouldBehaveThusly) {
+        getInbox('/api/inboxes/not_a_uuid', shouldBehaveThusly);
+      }
+
+      it('it returns a 400 status code', function(done) {
+        get(function(err, res) {
+          res.statusCode.should.equal(400);
+          done();
+        });
+      });
+
+      it('it returns a meaningful error message', function(done) {
+        get(function(err, res) {
+          res.text.should.equal('The value "not_a_uuid" is not recognized as a valid inbox identifier.');
+          done();
+        });
+      });
+    });
+
+
     it('it should have a response Content-Type of hal+json', function(done) {
       // return false;
       done();
