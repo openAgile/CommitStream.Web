@@ -7,7 +7,8 @@
     eventStore = require('./helpers/eventStoreClient'),
     bodyParser = require('body-parser'),
     sanitize = require('./sanitizer').sanitize,
-    request = require('request');
+    request = require('request'),
+    translator = require('./translators/githubTranslator');
 
   inboxesController.init = function(app) {
 
@@ -91,7 +92,6 @@
               });
             } else if (req.headers['x-github-event'] == 'push') {
 
-              var translator = require('./translators/githubTranslator');
               var events = translator.translatePush(req.body, digestId);
 
               var e = JSON.stringify(events)
