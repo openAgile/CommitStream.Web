@@ -1,23 +1,19 @@
-<link type="text/css" rel="stylesheet" href="commitStream.css">
+<link type="text/css" rel="stylesheet" href="{{resourcePath}}commitStream.css">
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700,800'; rel='stylesheet' type='text/css'>
 
 
 <div class="commitStream-TR-panel">
 <div class="stream-title-area">
-  <div class="titlebar">
-    <div class="title-container">
-      <h3>CommitStream Commits&trade; <span class="reload cs-refresh"></span></h3>
-      {{#if enableAutoRefresh}}
-          <label class="toggle-cs-autorefresh-label"><input type="checkbox" class="toggle-cs-autorefresh"> Auto-refresh? (Occurs every 30 seconds)</label>
-      {{/if}}
-    </div>
-  </div>
+    <h3>CommitStream&trade; Commits <span class="reload cs-refresh"></span></h3>
+    {{#if enableAutoRefresh}}
+        <label class="toggle-cs-autorefresh-label"><input type="checkbox" class="toggle-cs-autorefresh"> Auto-refresh? (Occurs every 30 seconds)</label>
+    {{/if}}
 </div>
 <div class="window side-panel-scrollable">
   {{#if noCommits}}
   <div class="remaining">
     <div class="loading"></div>
-    <div class="finished">No Commits to display...</div>
+    <div class="finished">No Commits available...</div>
   </div>
   {{else}}
     {{> commitsList}}

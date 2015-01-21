@@ -973,37 +973,6 @@ select::-webkit-input-placeholder {
 .gadget.loading {
   min-height: 55px;
 }
-/*h3 .reload, .reload {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  margin-left: 0.3em;
-  cursor: pointer;
-}
-h3 .reload, .reload {
-  background: url('sprite-refresh.png') no-repeat scroll left top;
-  display: inline-block;
-  zoom: 1;
-  *display: inline;
-  width: 13px;
-  height: 13px;
-  background-position: 0 0;
-}
-h3 .reload:hover, .reload:hover {
-  background-position: 0 -26px;
-}
-
-.requesting h3 .reload {
-  background-image: url('gray-refresh-anim.gif');
-}
-.requesting h3 .reload:hover {
-  background-position: 0 0;
-}
-*/
-
-
-
 h3 .reload {
   display: inline-block;
   width: 16px;
@@ -1030,17 +999,46 @@ h3 .requesting {
 h3 .requesting:hover {
   background-position: 0 0;
 }
-
-
-
-/* New CommitStream Styles */
- /*div.window .remaining .finished {
+div.window .remaining,
+div.window .remaining {
   text-align: center;
+  padding-bottom: 1em;
+}
+div.window .remaining .loading,
+div.window .remaining .loading,
+div.window .remaining .finished,
+div.window .remaining .finished {
+  display: none;
+}
+div.window .remaining .loading,
+div.window .remaining .loading {
+  height: .5em;
+}
+div.window > ol,
+div.window > ol {
+  padding: 0.8em;
+}
+div.window .remaining .loading,
+div.window .remaining .loading {
+  display: block;
+}
+div.window .remaining .more,
+div.window .remaining .more {
+  display: none;
+}
+div.window .remaining .finished,
+div.window .remaining .finished {
   display: block;
   font-size: 0.855em;
   color: #a6a6a6;
-} */
+}
+div.window .remaining .more,
+div.window .remaining .more {
+  display: none;
+}
 
+
+/* New CommitStream Styles */
 .toggle-cs-autorefresh-label {
   display: inline-block;
   color: #a6a6a6;
@@ -1048,17 +1046,62 @@ h3 .requesting:hover {
   font-size: 0.8em;
   padding: 0.2em 0;
 }
+.cs-refresh {
+   margin-bottom: .4em; 
+   margin-top:0;
+}
+.toggle-cs-autorefresh {
+  margin-left: 1em;
+}
+.commitStream-TR-panel {
+  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+}
+  .commitStream-TR-panel h3 {
+    margin: 0; 
+    padding: 0.4em 0.8em 0.7em .8em; 
+    font-size: 1.1em; 
+    color:#8d0a39; 
+    font-weight: 600; 
+    letter-spacing: -0.03em;
+  }
+	.commitStream-TR-panel p {
+    color:#454545; 
+    font-size: 13px; 
+    word-wrap: break-word; 
+    line-height: 16.1000003814697px;
+  }
+  .commitStream-TR-panel ol {
+    -webkit-margin-before: 0; 
+    -webkit-padding-start: 0;
+  }
+  	.commitStream-TR-panel ol li {
+      border-top: 1px solid #dedede; 
+      padding: 1em 1em; 
+    }  
+  .commitStream-TR-panel .csInfo {
+    padding: 10px 20px 0px 20px; 
+    background-image:url(icon-github-16x16.png); 
+    background-repeat:no-repeat; 
+    background-position-y: 12px; 
+    min-height: 25px;
+  }  
+  .commitStream-TR-panel .csMessage {
+    padding-left: 20px; 
+    color:#8c8c8c;
+  }	
+  .commitStream-TR-panel .side-panel-scrollable {
+    top: 63px;
+  }
+.commitStreamTime {
+  font-size: 0.8em; 
+  color: #a6a6a6; 
+  text-transform: uppercase;
+}
 
-	.cs-refresh {margin-bottom: .4em; margin-top:0;}
-	.title-container {}
-	.toggle-cs-autorefresh {margin-left: 1em;}
-	.commitStream-TR-panel {font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; }
-		.commitStream-TR-panel h3 {margin: 0; padding: 0.4em 0.8em 0.7em .8em; font-size: 1.1em; color:#8d0a39; font-weight: 600; letter-spacing: -0.03em;}
-		.commitStream-TR-panel p {color:#454545; font-size: 13px; word-wrap: break-word; line-height: 16.1000003814697px;}
-  	.commitStream-TR-panel ol {-webkit-margin-before: 0; -webkit-padding-start: 0;}
-			.commitStream-TR-panel ol li {border-top: 1px solid #dedede; padding: 1em 1em; }
-    .commitStream-TR-panel .csInfo {padding: 10px 20px 0px 20px; background-image:url(icon-github-16x16.png); background-repeat:no-repeat; background-position-y: 12px; min-height: 25px;}
-    .commitStream-TR-panel .csMessage {/*background-image:url(icon-commit-16x16.png); background-repeat:no-repeat;*/ padding-left: 20px; color:#8c8c8c;}
-	  .commitStream-TR-panel .side-panel-scrollable {top: 63px;}
-  .commitStreamTime {font-size: 0.8em; color: #a6a6a6; text-transform: uppercase;}
+.inline-asset-detail .commitStream-TR-panel h3 {
+  color:#454545;
+  margin-top:4px;
+  font-size: 1.2em;
+  padding: 0.4em 0.8em 0.7em .6em; 
+}
 
