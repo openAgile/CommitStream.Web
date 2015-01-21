@@ -338,12 +338,57 @@ describe('inboxesController', function() {
 
     });
 
-    it('it should have a response Content-Type of hal+json', function(done) {
-      // return false;
-      done();
-    });
-  });
 
+    describe('with an error returned from eventStoreClient', function() {
+
+      beforeEach(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, 'Hey there is an error!', {});
+      });
+
+      function get(shouldBehaveThusly) {
+        getInbox('/api/inboxes/' + inboxId, shouldBehaveThusly);
+      }
+
+      it('calls eventStore.projection.getState with correct parameters', function(done) {
+        get(function(err, res) {
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+            name: sinon.match.any,
+            partition: 'inbox-' + inboxId
+          }, sinon.match.any);
+          done();
+        });
+      });
+
+      it('it returns a 500 status code', function(done) {
+        get(function(err, res) {
+          res.statusCode.should.equal(500);
+          done();
+        });
+      });
+
+      it('returns a Content-Type of application/json', function(done) {
+        get(function(err, res) {
+          res.get('Content-Type').should.equal('application/json; charset=utf-8');
+          done();
+        });
+      });
+
+      it('it returns a meaningful error message', function(done) {
+        get(function(err, res) {
+          res.text.should.equal(JSON.stringify({
+            'error': 'There was an internal error when trying to process your request'
+          }));
+          done();
+        });
+      });
+
+    });
+
+  });
+  it('it should have a response Content-Type of hal+json', function(done) {
+    // return false;
+    done();
+  });
 
 
 });
