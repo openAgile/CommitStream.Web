@@ -92,7 +92,7 @@ describe('inboxesController', function() {
       var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
 
       var payload = {
-        name: 'His name was Robert Pawlson',
+        name: 'His name was Robert Paulson',
         digestId : digestId,
         family: 'GitHub'
       };
