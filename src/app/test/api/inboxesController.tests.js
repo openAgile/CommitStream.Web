@@ -250,6 +250,55 @@ describe('inboxesController', function() {
       });
     });
 
+    describe('with a valid, uuid inbox identifier', function() {
+
+      beforeEach(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify({
+            digestId: digestId
+          }),
+          statusCode: 200
+        });
+      });
+
+      function get(shouldBehaveThusly) {
+        getInbox('/api/inboxes/' + inboxId, shouldBehaveThusly);
+      }
+
+      it('calls eventStore.projection.getState with correct parameters', function(done) {
+        get(function(err, res) {
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+            name: sinon.match.any,
+            partition: 'inbox-' + inboxId
+          }, sinon.match.any);
+          done();
+        });
+      });
+
+      // it('calls hypermediaResponse.digestPOST with correct parameters', function(done) {
+      //   get(function(err, res) {
+      //     hypermediaResponseStub.digestGET.should.have.been.calledWith(
+      //       protocol, sinon.match.any, uuid, data
+      //     );
+      //     done();
+      //   });
+      // });
+
+      it('it returns a 200 status code', function(done) {
+        get(function(err, res) {
+          res.statusCode.should.equal(200);
+          done();
+        });
+      });
+
+      it('returns a Content-Type of application/hal+json', function(done) {
+        get(function(err, res) {
+          res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        });
+      });
+
+    });
 
     it('it should have a response Content-Type of hal+json', function(done) {
       // return false;
