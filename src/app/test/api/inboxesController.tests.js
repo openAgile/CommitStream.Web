@@ -275,15 +275,6 @@ describe('inboxesController', function() {
         });
       });
 
-      // it('calls hypermediaResponse.digestPOST with correct parameters', function(done) {
-      //   get(function(err, res) {
-      //     hypermediaResponseStub.digestGET.should.have.been.calledWith(
-      //       protocol, sinon.match.any, uuid, data
-      //     );
-      //     done();
-      //   });
-      // });
-
       it('it returns a 200 status code', function(done) {
         get(function(err, res) {
           res.statusCode.should.equal(200);
@@ -294,6 +285,53 @@ describe('inboxesController', function() {
       it('returns a Content-Type of application/hal+json', function(done) {
         get(function(err, res) {
           res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        });
+      });
+
+    });
+
+    describe('with a valid, uuid that does not match a real inbox', function() {
+
+      beforeEach(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: ''
+        });
+      });
+
+      function get(shouldBehaveThusly) {
+        getInbox('/api/inboxes/' + inboxId, shouldBehaveThusly);
+      }
+
+      it('calls eventStore.projection.getState with correct parameters', function(done) {
+        get(function(err, res) {
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+            name: sinon.match.any,
+            partition: 'inbox-' + inboxId
+          }, sinon.match.any);
+          done();
+        });
+      });
+
+      it('it returns a 404 status code', function(done) {
+        get(function(err, res) {
+          res.statusCode.should.equal(404);
+          done();
+        });
+      });
+
+      it('returns a Content-Type of application/json', function(done) {
+        get(function(err, res) {
+          res.get('Content-Type').should.equal('application/json; charset=utf-8');
+          done();
+        });
+      });
+
+      it('it returns a meaningful error message', function(done) {
+        get(function(err, res) {
+          res.text.should.equal(JSON.stringify({
+            'error': 'Could not find an inbox with id ' + inboxId
+          }));
           done();
         });
       });
