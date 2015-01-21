@@ -128,6 +128,25 @@ describe('hypermediaResponse', function() {
         validator.isURL(selfLink.href).should.be.true;
     });
 
+    it('it should have links to other resources', function() {
+      hypermedia.should.include.key('_links');
+    });
+
+    it('it should have self a link to itself', function() {
+      hypermedia._links.should.include.key('self')
+    });
+
+    it('the self link href should contain the id of the inbox', function() {
+      var selfLink = hypermedia._links.self;
+      var selfLinkParts = selfLink.href.split('/');
+      var id = selfLinkParts[selfLinkParts.length - 1];
+      id.should.equal(inboxId);
+    });
+
+    it('it\'s self link should reference the digest.', function() {
+      hypermedia._links['self'].should.have.property('href','http://localhost/api/inboxes/' + inboxId);
+    });
+
   })
 
     // inbox-create link
