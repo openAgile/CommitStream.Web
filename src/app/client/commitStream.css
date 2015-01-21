@@ -1076,7 +1076,7 @@ div.window .remaining .more {
   }
   	.commitStream-TR-panel ol li {
       border-top: 1px solid #dedede; 
-      padding: 1em 1em; 
+      padding: 1em .2em; 
     }  
   .commitStream-TR-panel .csInfo {
     padding: 10px 20px 0px 20px; 
@@ -1105,3 +1105,6 @@ div.window .remaining .more {
   padding: 0.4em 0.8em 0.7em .6em; 
 }
 
+.inline-asset-detail div.window > ol, div.window > ol {
+  padding: 0 .8em .8em .8em;
+}
