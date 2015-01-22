@@ -160,15 +160,6 @@ describe('hypermediaResponse', function() {
       hypermedia._links['self'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId);
     });
 
-    it('should have a link to get all inboxes', function() {
-      linkShouldExistWithProperty('inboxes', 'href', 'http://localhost/api/inboxes');
-    });
-
-    it('the inboxes link should be a valid URL', function() {
-      var link = hypermedia._links['inboxes'];
-      validator.isURL(link.href).should.be.true;
-    });
-
     it('the inboxId property should exist ', function() {
       hypermedia.should.have.property('inboxId', inboxId);
     });

@@ -67,9 +67,6 @@
       "_links": {
         "self": {
           "href": protocol + "://" + host + "/api/inboxes/" + inboxId
-        },
-        'inboxes': {
-          "href": protocol + "://" + host + "/api/inboxes"
         }
       },
       "inboxId": inboxId

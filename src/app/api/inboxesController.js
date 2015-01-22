@@ -8,6 +8,7 @@
     bodyParser = require('body-parser'),
     sanitize = require('./sanitizer').sanitize,
     request = require('request'),
+    hypermediaResponse = require('./hypermediaResponse'),
     translator = require('./translators/githubTranslator');
 
   inboxesController.init = function(app) {
@@ -56,17 +57,8 @@
         if (error) {
           // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
         } else {
-          var hypermedia = {
-            "_links": {
-              "self": {
-                "href": protocol + "://" + host + "/api/inboxes/" + inboxAddedEvent.data.inboxId
-              },
-              "inboxes": {
-                "href": protocol + "://" + host + "/api/inboxes"
-              }
-            },
-            "inboxId": inboxAddedEvent.data.inboxId
-          };
+          var hypermedia = hypermediaResponse.inboxes.POST(protocol,
+            host, inboxAddedEvent.data.inboxId);
 
           res.location(hypermedia._links.self.href);
           res.set('Content-Type', 'application/hal+json');

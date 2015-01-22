@@ -17,10 +17,13 @@ var chai = require('chai'),
     }
   },
   hypermediaResponseStub = {
-    inbox: sinon.spy()
+    inboxes: {
+      POST: sinon.stub()
+    }
   },
   inboxAdded = {
-    validate: sinon.stub()
+    validate: sinon.stub(),
+    create: sinon.stub()
   },
   sanitizer = {
     sanitize: sinon.stub()
@@ -94,6 +97,18 @@ describe('inboxesController', function() {
 
     describe('with a valid payload', function() {
       var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+      var inboxId = '53d8c6ac-37f4-453f-b252-cb2d93c18fa7';
+
+      var protocol = 'http';
+      var host = 'localhost';
+
+      var hypermediaResponse = {
+        "_links": {
+          "self": {
+            "href": protocol + "://" + host + "/api/inboxes/" + inboxId
+          }
+        }
+      };
 
       var payload = {
         name: 'His name was Robert Paulson',
@@ -101,13 +116,28 @@ describe('inboxesController', function() {
         family: 'GitHub'
       };
 
+      var inboxAddedEvent = {
+        eventType: 'InboxAdded',
+        eventId: 'a4cfd6f3-3cb4-4504-ae52-cc8d9fcb8818',
+        data: {
+          digestId: digestId,
+          inboxId: inboxId,
+          family: 'GitHub',
+          name: 'some name',
+          url: 'http://www.someURL.com'
+        }
+      };
+
       before(function() {
         sanitizer.sanitize.returns([]);
         inboxAdded.validate.returns([]);
+        inboxAdded.create.returns(inboxAddedEvent);
+        hypermediaResponseStub.inboxes.POST.returns(hypermediaResponse);
       })
 
       beforeEach(function() {
         eventStoreClient.streams.post.callsArgWith(1, null, "unused response");
+        hypermediaResponseStub.inboxes.POST = sinon.stub();
       });
 
       it('should clean the name field for illegal content', function(done) {
@@ -127,6 +157,15 @@ describe('inboxesController', function() {
       it('it should have a response Content-Type of hal+json', function(done) {
         postInboxCreate(payload, function(err, res) {
           res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        });
+      });
+
+      it('it should use proper arguments when creating hypermedia.', function(done) {
+        postInboxCreate({
+          description: 'Yay!'
+        }, function(err, res) {
+          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(protocol, sinon.match.any, inboxAddedEvent.data.inboxId);
           done();
         });
       });
