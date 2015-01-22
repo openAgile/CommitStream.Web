@@ -182,18 +182,23 @@ describe('inboxesController', function() {
       });
     });
 
-    describe('and failures occur', function() {
+    describe('and failures occur when posting to eventstore', function() {
 
       before(function() {
         eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem', null);
-        sanitizer.sanitize.returns('Houston, we have a problem');
       });
 
-      it('when posting to eventstore it should send back an apprpriate error response', function(done) {
+      it('it should send back an apprpriate error response', function(done) {
         postInboxCreate(payload, function(err, res) {
           res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
           done();
         });
+      });
+    });
+
+    describe('and santize reports an error', function() {
+      before(function() {
+        sanitizer.sanitize.returns('Houston, we have a problem');
       });
 
       it('when santize returns an error it gives an appropriate error message', function(done) {
