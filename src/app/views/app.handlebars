@@ -20,8 +20,8 @@
     return true;
   }
 
-  var assetDetailInitTmpl = null;
-  var assetDetailCommitsTmpl = null;
+  var commitsContainerTmpl = null;
+  var commitsListTmpl = null;
 
   function bindRefreshActions(commitStreamDomId) {
     var el = $(commitStreamDomId);
@@ -34,18 +34,23 @@
     }
   }
 
-  function renderInit(commitStreamDomId, model, errorHandler) {
+  function renderCommitsContainer(commitStreamDomId, model, errorHandler) {
     try {
-      if (assetDetailInitTmpl === null) {
-        getCompiledTemplate('assetDetailInit.html', function(tmpl) {
-          assetDetailInitTmpl = tmpl;
-          var content = tmpl(model);
-          $(commitStreamDomId).html(content);
-          checkIfNextPage(commitStreamDomId, model, errorHandler);
-          bindRefreshActions(commitStreamDomId);
-        });
+      if (commitsContainerTmpl === null) {
+        getCompiledTemplate('commitsList.html', function(tmpl) {
+          commitsListTmpl = tmpl;
+          registerPartial('commitsList', tmpl, function() {
+            getCompiledTemplate('commitsContainer.html', function(tmpl) {
+              commitsContainerTmpl = tmpl;
+              var content = tmpl(model);
+              $(commitStreamDomId).html(content);
+              checkIfNextPage(commitStreamDomId, model, errorHandler);
+              bindRefreshActions(commitStreamDomId);
+            }, errorHandler);
+          }, errorHandler);
+        }, errorHandler);
       } else {
-        var content = assetDetailInitTmpl(model);
+        var content = commitsContainerTmpl(model);
         $(commitStreamDomId).html(content);
         checkIfNextPage(commitStreamDomId, model, errorHandler);
         bindRefreshActions(commitStreamDomId);
@@ -55,18 +60,17 @@
     }
   }
 
-
-  function renderCommits(commitStreamDomId, model, errorHandler) {
+  function renderCommitsList(commitStreamDomId, model, errorHandler) {
     try {
-      if (assetDetailCommitsTmpl === null) {
-        getCompiledTemplate('assetDetailCommits.html', function(tmpl) {
-          assetDetailCommitsTmpl = tmpl;
+      if (commitsListTmpl === null) {
+        getCompiledTemplate('commitsList.html', function(tmpl) {
+          commitsListTmpl = tmpl;
           var content = tmpl(model);
           $(commitStreamDomId).find('.side-panel-scrollable').append(content);
           checkIfNextPage(commitStreamDomId, model, errorHandler);
         }, errorHandler);
       } else {
-        var content = assetDetailCommitsTmpl(model);
+        var content = commitsListTmpl(model);
         $(commitStreamDomId).find('.side-panel-scrollable').append(content);
         checkIfNextPage(commitStreamDomId, model, errorHandler);
       }
@@ -79,6 +83,14 @@
     require(deps, function(handlebars) {
       cb(handlebars.default.compile(source));
     }, errorHandler);
+  }
+
+  function registerPartial(partialName, template, cb, errorHandler) {
+    require(deps, function(handlebars) {
+      handlebars.default.registerPartial(partialName, template);
+      cb();
+    }, errorHandler);
+
   }
 
   function getTemplate(template, cb, errorHandler) {
@@ -103,10 +115,10 @@
 
   function checkIfNextPage(commitStreamDomId, model, errorHandler) {
     if (!model._links || !model._links.next) {
-      $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
     } else {
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
+      $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       bindScrollEvent(commitStreamDomId, errorHandler);
     }
   }
@@ -130,6 +142,7 @@
   }
 
   function bindScrollEvent(commitStreamDomId, errorHandler) {
+    $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
     $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
       if (isEndOfScrollbar($(this))) {
         queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, model) {
@@ -137,7 +150,7 @@
             errorHandler();
           } else {
             configureModel(model);
-            renderCommits(commitStreamDomId, model);
+            renderCommitsList(commitStreamDomId, model);
           }
         }, errorHandler);
       }
@@ -173,7 +186,10 @@
   }
 
   function queryCommitStream(commitStreamDomId, apiUrl, cb, errorHandler) {
+    var el = $(commitStreamDomId);
+    el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
+      el.find('.cs-refresh').removeClass('requesting');
       cb(commitStreamDomId, model);
     }).fail(errorHandler);
   }
@@ -183,7 +199,7 @@
     window.CommitStream = {
       commitsDisplay: function(commitStreamDomId, workitem, errorHandler) {
         try {
-          var init = function(commitStreamDomId, model) {
+          var queryCallBack = function(commitStreamDomId, model) {
             if (thereAreNoCommits(model)) {
               errorHandler();
             } else {
@@ -191,23 +207,23 @@
               if (workitem.toLowerCase() === 'all') {
                 model.enableAutoRefresh = true;
               }
-              renderInit(commitStreamDomId, model, errorHandler);
+              renderCommitsContainer(commitStreamDomId, model, errorHandler);
             }
           }
 
           var url = getUrlToQuery(commitStreamDomId, workitem);
 
           queryCommitStreamRefresh = function() {
-            queryCommitStream(commitStreamDomId, url, init, errorHandler);
+            queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
           };
 
           if (!hasAllDeps()) {
             $.getScript(requirejsUrl, function(model, status, jqxhr) {
               configureCommitStreamDependencies();
-              queryCommitStream(commitStreamDomId, url, init, errorHandler);
+              queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
             }).fail(errorHandler);
           } else {
-            queryCommitStream(commitStreamDomId, url, init, errorHandler);
+            queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
           }
         } catch (ex) {
           console.log(ex);
