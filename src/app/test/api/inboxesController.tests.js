@@ -162,9 +162,7 @@ describe('inboxesController', function() {
       });
 
       it('it should use proper arguments when creating hypermedia.', function(done) {
-        postInboxCreate({
-          description: 'Yay!'
-        }, function(err, res) {
+        postInboxCreate(payload, function(err, res) {
           hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(protocol, sinon.match.any, inboxAddedEvent.data.inboxId);
           done();
         });
