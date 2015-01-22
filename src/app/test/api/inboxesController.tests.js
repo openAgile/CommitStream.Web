@@ -76,7 +76,7 @@ var postInbox = function(payload, shouldBehaveThusly, contentType, inboxUuid, xG
 
 describe('inboxesController', function() {
 
-  describe('when creating an inbox', function() {
+  describe('when creating an inbox (/api/inboxes)', function() {
 
     var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
     var payload = {
@@ -217,7 +217,7 @@ describe('inboxesController', function() {
     });
   });
 
-  describe('when posting to an inbox', function() {
+  describe('when posting to an inbox (/api/inboxes/:uuid)', function() {
     var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
     var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
 
@@ -309,7 +309,7 @@ describe('inboxesController', function() {
     });
   });
 
-  describe('when retrieving information about an inbox', function() {
+  describe('when retrieving information about an inbox (/api/inboxes/:uuid)', function() {
     var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
     var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
 
