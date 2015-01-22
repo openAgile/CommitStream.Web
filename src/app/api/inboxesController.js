@@ -29,7 +29,7 @@
       }
 
       function sendErrors(errors) {
-        res.status(400).send({
+        res.status(400).json({
           errors: errors
         });
       }
