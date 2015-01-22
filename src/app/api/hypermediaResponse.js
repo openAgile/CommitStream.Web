@@ -71,7 +71,8 @@
         'inboxes': {
           "href": protocol + "://" + host + "/api/inboxes"
         }
-      }
+      },
+      "inboxId": inboxId
     }
   }
 

@@ -169,6 +169,10 @@ describe('hypermediaResponse', function() {
       validator.isURL(link.href).should.be.true;
     });
 
+    it('the inboxId property should exist ', function() {
+      hypermedia.should.have.property('inboxId', inboxId);
+    });
+
   })
 
   // inbox-create link
