@@ -166,6 +166,13 @@ describe('inboxesController', function() {
           done();
         });
       });
+
+      it('it should have a response code of 201 created', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.status.should.equal(201);
+          done();
+        });
+      });
     })
   });
 
