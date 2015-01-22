@@ -137,7 +137,6 @@ describe('inboxesController', function() {
 
       beforeEach(function() {
         eventStoreClient.streams.post.callsArgWith(1, null, "unused response");
-        hypermediaResponseStub.inboxes.POST = sinon.stub();
       });
 
       it('should clean the name field for illegal content', function(done) {
@@ -220,7 +219,6 @@ describe('inboxesController', function() {
     it('it should have a response Content-Type of hal+json', function(done) {
 
       postInbox(inboxPayload, function(err, res) {
-        console.log(res.body);
         res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
         done();
       }, null, inboxId);
