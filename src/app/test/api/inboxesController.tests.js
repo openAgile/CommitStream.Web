@@ -78,6 +78,13 @@ describe('inboxesController', function() {
 
   describe('when creating an inbox', function() {
 
+    var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+    var payload = {
+      name: 'His name was Robert Paulson',
+      digestId: digestId,
+      family: 'GitHub'
+    };
+
     describe('with an unsupported or missing Content-Type header', function() {
       var payload = {};
       it('should reject request and return a 415 status code.', function(done) {
@@ -96,7 +103,6 @@ describe('inboxesController', function() {
     });
 
     describe('with a valid payload', function() {
-      var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
       var inboxId = '53d8c6ac-37f4-453f-b252-cb2d93c18fa7';
 
       var protocol = 'http';
@@ -108,12 +114,6 @@ describe('inboxesController', function() {
             "href": protocol + "://" + host + "/api/inboxes/" + inboxId
           }
         }
-      };
-
-      var payload = {
-        name: 'His name was Robert Paulson',
-        digestId: digestId,
-        family: 'GitHub'
       };
 
       var inboxAddedEvent = {
@@ -180,7 +180,21 @@ describe('inboxesController', function() {
           done();
         });
       });
-    })
+    });
+
+    describe('and a failure occurs when posting to eventstore', function() {
+
+      before(function() {
+        eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem', null);
+      });
+
+      it('it should send back an apprpriate error response', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
+          done();
+        })
+      });
+    });
   });
 
   describe('when posting to an inbox', function() {

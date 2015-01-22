@@ -54,8 +54,11 @@
       };
 
       eventStore.streams.post(args, function(error, resp) {
-        if (error) {
-          // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
+        if(error) {
+            console.log(error);
+            res.status(500).json({
+              errors: 'We had an internal problem. Please retry your request. Error: ' + error
+            });
         } else {
           var hypermedia = hypermediaResponse.inboxes.POST(protocol,
             host, inboxAddedEvent.data.inboxId);
