@@ -173,6 +173,13 @@ describe('inboxesController', function() {
           done();
         });
       });
+
+      it('it should set the Location response header to the newly created digest', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.get('Location').should.equal(hypermediaResponse._links.self.href);
+          done();
+        });
+      });
     })
   });
 
