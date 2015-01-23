@@ -31,12 +31,16 @@ var chai = require('chai'),
   translator = {
     translatePush: sinon.stub()
   },
+  validator = {
+    isUUID: sinon.stub()
+  },
   controller = proxyquire('../../api/inboxesController', {
     './hypermediaResponse': hypermediaResponseStub,
     './sanitizer': sanitizer,
     './events/inboxAdded': inboxAdded,
     './helpers/eventStoreClient': eventStoreClient,
-    './translators/githubTranslator': translator
+    './translators/githubTranslator': translator,
+    'validator': validator
   });
 
 chai.use(sinonChai);
@@ -232,80 +236,80 @@ describe('inboxesController', function() {
       }
     };
 
-    before(function() {
-      translator.translatePush.returns(translatorEvent);
-      translatorEvent = JSON.stringify(translatorEvent);
-    });
+    describe('with a valid inboxId', function() {
 
-    beforeEach(function() {
-      eventStoreClient.projection.getState.callsArgWith(1, null, {
-        body: JSON.stringify({
-          digestId: digestId
-        }),
-        statusCode: 200
+      before(function() {
+        translator.translatePush.returns(translatorEvent);
+        translatorEvent = JSON.stringify(translatorEvent);
+        validator.isUUID.returns(true);
       });
-    });
 
-    it('it should call the translator with the correct params', function(done) {
-      postInbox(inboxPayload, function(err, res) {
-        translator.translatePush.should.have.been.calledWith(inboxPayload, digestId)
-        done();
-      }, null, inboxId);
-    });
-
-    it('it should post to the eventStoreClient with the correct params', function(done) {
-      postInbox(inboxPayload, function(err, res) {
-        var eventStoreClientParam1 = {
-          name: 'inboxCommits-' + inboxId,
-          events: translatorEvent
-        };
-        eventStoreClient.streams.post.should.have.been.calledWith(eventStoreClientParam1, sinon.match.any);
-        done();
-      });
-    });
-
-    it('it should have a response Content-Type of hal+json', function(done) {
-
-      postInbox(inboxPayload, function(err, res) {
-        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
-        done();
-      }, null, inboxId);
-    });
-
-    it('it should have an appropriate response message', function(done) {
-      postInbox(inboxPayload, function(err, res) {
-        res.body.message.should.equal('Your push event has been queued to be added to CommitStream.');
-        done();
-      }, null, inboxId);
-    })
-
-    // it('it should have an x-github-event header with a value of push', function(done) {
-    //   done();
-    // });
-
-
-    describe('without the x-github-event header', function() {
-      it('it should provide an appropriate response', function(done) {
-
-        var postInboxWithoutXGithubEvent = function(shouldBehaveThusly) {
-          var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
-          var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
-          var payload = {
+      beforeEach(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify({
             digestId: digestId
+          }),
+          statusCode: 200
+        });
+      });
+
+      it('it should call the translator with the correct params', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          translator.translatePush.should.have.been.calledWith(inboxPayload, digestId)
+          done();
+        }, null, inboxId);
+      });
+
+      it('it should post to the eventStoreClient with the correct params', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          var eventStoreClientParam1 = {
+            name: 'inboxCommits-' + inboxId,
+            events: translatorEvent
           };
-
-          request(app)
-            .post('/api/inboxes/' + inboxId)
-            .send(JSON.stringify(payload))
-            .type('application/json')
-            .end(shouldBehaveThusly);
-        }
-
-        postInboxWithoutXGithubEvent(function(err, res) {
-          res.body.message.should.equal('Unknown event type.');
+          eventStoreClient.streams.post.should.have.been.calledWith(eventStoreClientParam1, sinon.match.any);
           done();
         });
       });
+
+      it('it should have an appropriate response message', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.body.message.should.equal('Your push event has been queued to be added to CommitStream.');
+          done();
+        }, null, inboxId);
+      })
+
+      // it('it should have a response Content-Type of hal+json', function(done) {
+
+      //   postInbox(inboxPayload, function(err, res) {
+      //     res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+      //     done();
+      //   }, null, inboxId);
+      // });
+
+      describe('without the x-github-event header', function() {
+        it('it should provide an appropriate response', function(done) {
+
+          var postInboxWithoutXGithubEvent = function(shouldBehaveThusly) {
+            var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
+            var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+            var payload = {
+              digestId: digestId
+            };
+
+            request(app)
+              .post('/api/inboxes/' + inboxId)
+              .send(JSON.stringify(payload))
+              .type('application/json')
+              .end(shouldBehaveThusly);
+          }
+
+          postInboxWithoutXGithubEvent(function(err, res) {
+            res.body.message.should.equal('Unknown event type.');
+            done();
+          });
+        });
+      });
+
     });
   });
 
@@ -314,6 +318,11 @@ describe('inboxesController', function() {
     var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
 
     describe('with an invalid, non-uuid inboxes identifier', function() {
+
+      before(function() {
+        validator.isUUID.returns(false);
+      })
+
       function get(shouldBehaveThusly) {
         getInbox('/api/inboxes/not_a_uuid', shouldBehaveThusly);
       }
@@ -334,6 +343,10 @@ describe('inboxesController', function() {
     });
 
     describe('with a valid, uuid inbox identifier', function() {
+
+      before(function() {
+        validator.isUUID.returns(true);
+      })
 
       beforeEach(function() {
         eventStoreClient.projection.getState.callsArgWith(1, null, {
@@ -467,10 +480,6 @@ describe('inboxesController', function() {
 
     });
 
-  });
-  it('it should have a response Content-Type of hal+json', function(done) {
-    // return false;
-    done();
   });
 
 
