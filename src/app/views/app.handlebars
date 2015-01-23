@@ -106,6 +106,7 @@
 
   function configureModel(model) {
     model.noCommits = model.commits.length < 1;
+    model.protocol = '{{{protocol}}}';
     model.resourcePath = '{{{resourcePath}}}';
     model.lastPage = false;
     if (!model._links || !model._links.next) {
