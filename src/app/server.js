@@ -56,6 +56,7 @@ app.get('/app', function(req, res) {
   var key = req.query.key;
 
   res.render('app', {
+    protocol: protocol,
     apiUrl: protocol + '://' + host + '/api/query?key=' + key + '&workitem=',
     assetDetailTemplateUrl: protocol + '://' + host + '/',
     resourcePath: protocol + '://' + host + '/'
