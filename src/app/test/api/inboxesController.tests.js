@@ -296,6 +296,13 @@ describe('inboxesController', function() {
         }, null, inboxId);
       })
 
+      it('it should reply with Pong when passed a x-github-event header of ping', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.body.message.should.equal('Pong.');
+          done();
+        }, null, inboxId, 'ping');
+      })
+
       // it('it should have a response Content-Type of hal+json', function(done) {
 
       //   postInbox(inboxPayload, function(err, res) {
