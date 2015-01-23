@@ -103,7 +103,6 @@
                   });
                 } else {
                   console.log('Posted to eventstore.');
-                  console.log(response.statusCode);
                   res.json({
                     message: 'Your push event has been queued to be added to CommitStream.'
                   });

@@ -243,9 +243,7 @@ describe('inboxesController', function() {
         translatorEvent = JSON.stringify(translatorEvent);
         validator.isUUID.returns(true);
         eventStoreClient.streams.post.callsArgWith(1, null, 'Everything is OK.')
-      });
 
-      beforeEach(function() {
         eventStoreClient.projection.getState.callsArgWith(1, null, {
           body: JSON.stringify({
             digestId: digestId
@@ -319,7 +317,7 @@ describe('inboxesController', function() {
       //   }, null, inboxId);
       // });
 
-      describe('without the x-github-event header', function() {
+      describe('but without the x-github-event header', function() {
         it('it should provide an appropriate response', function(done) {
 
           var postInboxWithoutXGithubEvent = function(shouldBehaveThusly) {
@@ -362,6 +360,19 @@ describe('inboxesController', function() {
           });
         });
       });
+
+      describe('but with an error returned from getting the digest id', function() {
+        before(function() {
+          eventStoreClient.projection.getState.callsArgWith(1, 'Houston we have a problem', null);
+        })
+
+        it('it should report the error it received to the client.', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.body.message.should.equal('Houston we have a problem');
+            done();
+          });
+        })
+      })
     });
 
     describe('with an invalid inboxId', function() {
