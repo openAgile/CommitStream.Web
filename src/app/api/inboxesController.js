@@ -112,7 +112,7 @@
               });
             } else {
               res.json({
-                message: 'Unknown event type.'
+                message: 'Unknown event type for x-github-event header : ' + req.headers['x-github-event']
               });
             }
           } else {

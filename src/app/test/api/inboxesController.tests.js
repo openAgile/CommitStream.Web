@@ -303,6 +303,14 @@ describe('inboxesController', function() {
         }, null, inboxId, 'ping');
       })
 
+      it('it should reply with a meaningful message when passed an unrecognized x-github-event header', function(done) {
+        var eventType = 'unrecognizedEventType';
+        postInbox(inboxPayload, function(err, res) {
+          res.body.message.should.equal('Unknown event type for x-github-event header : ' + eventType);
+          done();
+        }, null, inboxId, eventType);
+      })
+
       // it('it should have a response Content-Type of hal+json', function(done) {
 
       //   postInbox(inboxPayload, function(err, res) {
