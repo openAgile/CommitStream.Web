@@ -253,6 +253,23 @@ describe('inboxesController', function() {
         });
       });
 
+      it('it should call eventStoreClient to get the Parent DigestId for this inbox', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+            name: sinon.match.any,
+            partition: 'inbox-' + inboxId
+          }, sinon.match.any);
+          done();
+        }, null, inboxId);
+      });
+
+      it('should validate the inbox id with the correct params', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          validator.isUUID.should.have.been.calledWith(inboxId);
+          done();
+        }, null, inboxId);
+      });
+
       it('it should call the translator with the correct params', function(done) {
         postInbox(inboxPayload, function(err, res) {
           translator.translatePush.should.have.been.calledWith(inboxPayload, digestId)
