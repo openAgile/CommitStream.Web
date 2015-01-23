@@ -219,6 +219,20 @@ describe('inboxesController', function() {
         });
       });
     });
+
+    describe('and validate reports an error', function() {
+      before(function() {
+        sanitizer.sanitize.returns([]);
+        inboxAdded.validate.returns('Houston, we have a problem.');
+      });
+
+      it('an appropriate error message is sent', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.body.errors.should.equal('Houston, we have a problem.');
+          done();
+        });
+      });
+    });
   });
 
   describe('when posting to an inbox (/api/inboxes/:uuid)', function() {
