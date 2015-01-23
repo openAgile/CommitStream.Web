@@ -54,11 +54,11 @@
       };
 
       eventStore.streams.post(args, function(error, resp) {
-        if(error) {
-            console.log(error);
-            res.status(500).json({
-              errors: 'We had an internal problem. Please retry your request. Error: ' + error
-            });
+        if (error) {
+          console.log(error);
+          res.status(500).json({
+            errors: 'We had an internal problem. Please retry your request. Error: ' + error
+          });
         } else {
           var hypermedia = hypermediaResponse.inboxes.POST(protocol,
             host, inboxAddedEvent.data.inboxId);
@@ -89,7 +89,8 @@
 
               var events = translator.translatePush(req.body, digestId);
 
-              var e = JSON.stringify(events)
+              var e = JSON.stringify(events);
+
               eventStore.streams.post({
                 name: 'inboxCommits-' + req.params.uuid,
                 events: e
