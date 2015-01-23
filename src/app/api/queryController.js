@@ -6,8 +6,8 @@
   uuid = require('uuid-v4'),
   Cache = require('ttl-cache');
   
-  function buildUri(guid, parms) {
-    return config.serverBaseUrl + '/api/query?key=' + parms.key + '&workitem=' + parms.workitem + '&page=' + guid;
+  function buildUri(protocol, host, guid, parms) {
+    return protocol + '://' + host + '/api/query?key=' + parms.key + '&workitem=' + parms.workitem + '&page=' + guid;
   }
 
 
@@ -35,6 +35,10 @@
     });
 
     app.get("/api/query", function(req, res) {
+
+      var protocol = config.protocol || req.protocol;
+      var host = req.get('host');
+ 
       if (req.query.workitem) {
 
         var stream;
@@ -96,8 +100,8 @@
             //TODO: check all of them, not just the third one
             if (links[3].relation == 'next') {
               cache.set(guid, links[3].uri);
-              var next = buildUri(guid, req.query);
-              var previous = buildUri(req.query.page, req.query);
+              var next = buildUri(protocol, host, guid, req.query);
+              var previous = buildUri(protocol, host, req.query.page, req.query);
               result._links = {
                 next: next
               };

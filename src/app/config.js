@@ -16,14 +16,12 @@
 
   config.protocol = nconf.get('protocol') || null;
   config.apiKey = nconf.get('apiKey') || '';
-  config.serverBaseUrl = nconf.get('serverBaseUrl') || 'http://localhost:' + config.port;
   config.eventStoreUser = nconf.get('eventStoreUser') || '';
   config.eventStorePassword = nconf.get('eventStorePassword') || '';
   config.eventStoreBaseUrl = nconf.get('eventStoreBaseUrl') || 'http://localhost:2113';
   config.eventStoreAssetStreamUrl = config.eventStoreBaseUrl + '/streams/asset-';
   config.eventStoreAllowSelfSignedCert = nconf.get('eventStoreAllowSelfSignedCert') === 'true';
   config.eventStoreAssetQueryParams = nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
-  config.assetDetailTemplateUrl = nconf.get('assetDetailTemplateUrl') || config.serverBaseUrl + ':' + config.port + '/assetDetailCommits.html';
   var notSet = nconf.get('production') == undefined;
   config.production = nconf.get('production') === 'true' || notSet;
 })(module.exports);
