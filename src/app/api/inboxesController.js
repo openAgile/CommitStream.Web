@@ -73,7 +73,9 @@
 
     app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {
       if (!validator.isUUID(req.params.uuid)) {
-        res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid inbox identifier.');
+        res.status(400).json({
+          message: 'The value ' + req.params.uuid + ' is not recognized as a valid inbox identifier.'
+        });
       } else {
         getPartitionState('inbox', req.params.uuid, function(error, response) {
           if (!error && response.statusCode == 200) {

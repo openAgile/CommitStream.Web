@@ -342,35 +342,45 @@ describe('inboxesController', function() {
           });
         });
       });
+
+      describe('but with an error returned from eventStoreClient.streams.post', function() {
+        before(function() {
+          eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem.', null);
+        });
+
+        it('it should send back an appropriate error response', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem.');
+            done();
+          });
+        });
+
+        it('it should send back an appropriate error status code of 500', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.status.should.equal(500);
+            done();
+          });
+        });
+      });
     });
 
-    describe('but with an error returned from eventStoreClient.streams.post', function() {
+    describe('with an invalid inboxId', function() {
       before(function() {
-        translator.translatePush.returns(translatorEvent);
-        translatorEvent = JSON.stringify(translatorEvent);
-        validator.isUUID.returns(true);
-        eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem.', null);
-
-        eventStoreClient.projection.getState.callsArgWith(1, null, {
-          body: JSON.stringify({
-            digestId: digestId
-          }),
-          statusCode: 200
-        });
+        validator.isUUID.returns(false);
       });
 
-      it('it should send back an appropriate error response', function(done) {
+      it('it should respond with a statusCode of 400.', function(done) {
         postInbox(inboxPayload, function(err, res) {
-          res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem.');
+          res.status.should.equal(400);
           done();
-        });
+        }, null, 'not_a_uuid');
       });
 
-      it('it should send back an appropriate error status code of 500', function(done) {
+      it('it should respond with a meaningful error message.', function(done) {
         postInbox(inboxPayload, function(err, res) {
-          res.status.should.equal(500);
+          res.body.message.should.equal('The value not_a_uuid is not recognized as a valid inbox identifier.');
           done();
-        });
+        }, null, 'not_a_uuid');
       });
     });
   });
