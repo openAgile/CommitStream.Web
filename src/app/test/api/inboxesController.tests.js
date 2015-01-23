@@ -205,14 +205,14 @@ describe('inboxesController', function() {
         sanitizer.sanitize.returns('Houston, we have a problem');
       });
 
-      it('when santize returns an error it gives an appropriate error message', function(done) {
+      it('an appropriate error message is sent', function(done) {
         postInboxCreate(payload, function(err, res) {
           res.body.errors.should.equal('Houston, we have a problem');
           done();
         });
       });
 
-      it('when santize returns an error it gives an appropriate response code', function(done) {
+      it('an appropriate response code is sent', function(done) {
         postInboxCreate(payload, function(err, res) {
           res.statusCode.should.equal(400);
           done();
