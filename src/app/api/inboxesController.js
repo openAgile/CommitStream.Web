@@ -96,7 +96,9 @@
                 events: e
               }, function(error, response) {
                 if (error) {
-                  console.log(error);
+                  res.status(500).json({
+                    errors: 'We had an internal problem. Please retry your request. Error: ' + error
+                  });
                 } else {
                   console.log('Posted to eventstore.');
                   console.log(response.statusCode);

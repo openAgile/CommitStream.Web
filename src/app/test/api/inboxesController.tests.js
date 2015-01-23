@@ -192,7 +192,7 @@ describe('inboxesController', function() {
         eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem', null);
       });
 
-      it('it should send back an apprpriate error response', function(done) {
+      it('it should send back an appropriate error response', function(done) {
         postInboxCreate(payload, function(err, res) {
           res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
           done();
@@ -342,7 +342,36 @@ describe('inboxesController', function() {
           });
         });
       });
+    });
 
+    describe('but with an error returned from eventStoreClient.streams.post', function() {
+      before(function() {
+        translator.translatePush.returns(translatorEvent);
+        translatorEvent = JSON.stringify(translatorEvent);
+        validator.isUUID.returns(true);
+        eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem.', null);
+
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify({
+            digestId: digestId
+          }),
+          statusCode: 200
+        });
+      });
+
+      it('it should send back an appropriate error response', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem.');
+          done();
+        });
+      });
+
+      it('it should send back an appropriate error status code of 500', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.status.should.equal(500);
+          done();
+        });
+      });
     });
   });
 
