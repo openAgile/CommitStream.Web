@@ -242,6 +242,7 @@ describe('inboxesController', function() {
         translator.translatePush.returns(translatorEvent);
         translatorEvent = JSON.stringify(translatorEvent);
         validator.isUUID.returns(true);
+        eventStoreClient.streams.post.callsArgWith(1, null, 'Everything is OK.')
       });
 
       beforeEach(function() {
