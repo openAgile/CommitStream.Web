@@ -170,11 +170,13 @@ describe('hypermediaResponse', function() {
     var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var family = 'GitHub';
+    var name = 'Drive faster than fast';
 
     var dataObject = {
       inboxId: inboxId,
       digestId: digestId,
-      family: family
+      family: family,
+      name: name
     };
     var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', dataObject);
 
@@ -231,6 +233,10 @@ describe('hypermediaResponse', function() {
 
     it('should have a property of family showing the version control system type.', function() {
       hypermedia.should.have.property('family', family);
+    });
+
+    it('should have a property for the name of the inbox.', function() {
+      hypermedia.should.have.property('name', name);
     });
   })
 

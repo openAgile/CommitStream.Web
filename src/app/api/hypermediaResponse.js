@@ -91,7 +91,8 @@
         }
       },
       "digestId": dataObject.digestId,
-      "family": dataObject.family
+      "family": dataObject.family,
+      "name": dataObject.name
     };
   }
 
