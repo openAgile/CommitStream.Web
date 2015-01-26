@@ -168,10 +168,33 @@ describe('hypermediaResponse', function() {
 
   describe('when contructing a hypermedia response for getting information about an inbox', function() {
     var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
-    var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', {});
+    var dataObject = {
+      inboxId: inboxId
+    };
+    var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', dataObject);
 
     it('it should have links to other resources', function() {
       hypermedia.should.include.key('_links');
+    });
+
+    it('it should have self a link to itself', function() {
+      hypermedia._links.should.include.key('self')
+    });
+
+    it('the self link href should be a valid URL', function() {
+      var selfLink = hypermedia._links['self'];
+      validator.isURL(selfLink.href).should.be.true;
+    });
+
+    it('the self link href should contain the id of the inbox', function() {
+      var selfLink = hypermedia._links.self;
+      var selfLinkParts = selfLink.href.split('/');
+      var id = selfLinkParts[selfLinkParts.length - 1];
+      id.should.equal(inboxId);
+    });
+
+    it('it\'s self link should reference the inbox.', function() {
+      hypermedia._links['self'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId);
     });
   })
 

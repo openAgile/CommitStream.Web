@@ -78,7 +78,9 @@
   hypermediaResponse.inboxes.uuid.GET = function(protocol, host, dataObject) {
     return {
       "_links": {
-
+        "self": {
+          "href": protocol + "://" + host + "/api/inboxes/" + dataObject.inboxId
+        }
       }
     };
   }
