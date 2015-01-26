@@ -171,7 +171,7 @@ describe('hypermediaResponse', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var family = 'GitHub';
     var name = 'Drive faster than fast';
-    var url = 'http://github.com/somewhere'
+    var url = 'http://github.com/somewhere';
 
     var dataObject = {
       inboxId: inboxId,

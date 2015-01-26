@@ -18,8 +18,12 @@ var chai = require('chai'),
   },
   hypermediaResponseStub = {
     inboxes: {
-      POST: sinon.stub()
-    }
+      POST: sinon.stub(),
+      uuid: {
+        GET: sinon.stub()
+      }
+    },
+
   },
   inboxAdded = {
     validate: sinon.stub(),
@@ -441,15 +445,22 @@ describe('inboxesController', function() {
 
     describe('with a valid, uuid inbox identifier', function() {
 
+      var protocol = 'http';
+
+      var responseFromEventStoreForInbox = {
+        digestId: digestId,
+        family: 'GitHub',
+        name: 'Drive faster than fast',
+        url: 'http://github.com/somewhere'
+      };
+
       before(function() {
         validator.isUUID.returns(true);
       })
 
       beforeEach(function() {
         eventStoreClient.projection.getState.callsArgWith(1, null, {
-          body: JSON.stringify({
-            digestId: digestId
-          }),
+          body: JSON.stringify(responseFromEventStoreForInbox),
           statusCode: 200
         });
       });
@@ -467,6 +478,17 @@ describe('inboxesController', function() {
           done();
         });
       });
+
+      it('asks for the appropriate hypermedia response', function(done) {
+        var hypermediaParams = _.extend({
+          inboxId: inboxId
+        }, responseFromEventStoreForInbox);
+
+        get(function(err, res) {
+          hypermediaResponseStub.inboxes.uuid.GET.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
+          done();
+        })
+      })
 
       it('it returns a 200 status code', function(done) {
         get(function(err, res) {

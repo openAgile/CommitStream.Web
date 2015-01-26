@@ -145,23 +145,17 @@
             var protocol = config.protocol || req.protocol;
             var host = req.get('host');
             var data = JSON.parse(resp.body);
-            var hypermedia = {
-              "_links": {
-                "self": {
-                  "href": protocol + "://" + host + "/api/inboxes/" + req.params.uuid
-                },
-                "inboxes": {
-                  "href": protocol + "://" + host + "/api/inboxes"
-                },
-                "digest-parent": {
-                  "href": protocol + "://" + host + "/api/digests/" + data.digestId
-                }
-              }
-            };
-            hypermedia.digestId = data.digestId;
-            hypermedia.family = data.family;
-            hypermedia.name = data.name;
-            hypermedia.url = data.url;
+
+            var hypermediaParams = {
+              inboxId: req.params.uuid,
+              digestId: data.digestId,
+              family: data.family,
+              name: data.name,
+              url: data.url
+            }
+
+            var hypermedia = hypermediaResponse.inboxes.uuid.GET(protocol, host, hypermediaParams);
+
             res.set('Content-Type', 'application/hal+json; charset=utf-8');
             res.status(200).send(hypermedia);
           }
