@@ -12,7 +12,7 @@
         "inbox-create": {
           "href": protocol + "://" + host + "/api/inboxes",
           "method": "POST",
-          "title": "Endpoint for creating an inbox for a repository on digest " + digestId
+          "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
         }
       },
       "digestId": digestId
@@ -31,7 +31,7 @@
         "inbox-create": {
           "href": protocol + "://" + host + "/api/inboxes",
           "method": "POST",
-          "title": "Endpoint for creating an inbox for a repository on digest " + digestId
+          "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
         }
       }
     };
@@ -80,6 +80,11 @@
       "_links": {
         "self": {
           "href": protocol + "://" + host + "/api/inboxes/" + dataObject.inboxId
+        },
+        "inboxes": {
+          "href": protocol + "://" + host + "/api/inboxes",
+          "method": "POST",
+          "title": "Endpoint for creating an inbox for a repository on a digest."
         }
       }
     };

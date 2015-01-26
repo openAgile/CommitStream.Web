@@ -196,6 +196,19 @@ describe('hypermediaResponse', function() {
     it('it\'s self link should reference the inbox.', function() {
       hypermedia._links['self'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId);
     });
+
+    it('it should include a link to the inboxes resource for creating an inbox', function() {
+      console.log(hypermedia._links['self'])
+      hypermedia._links['inboxes'].should.have.property('href', 'http://localhost/api/inboxes');
+    });
+
+    it('it should include the method for interfacing with the inbox creation endpoint.', function() {
+      hypermedia._links['inboxes'].should.have.property('method', 'POST');
+    });
+
+    it('it should include a title property containing information for interfacing with the inbox creation endpoint.', function() {
+      hypermedia._links['inboxes'].should.have.property('title', 'Endpoint for creating an inbox for a repository on a digest.');
+    });
   })
 
 });
