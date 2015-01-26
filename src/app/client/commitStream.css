@@ -1108,3 +1108,7 @@ div.window .remaining .more {
 .inline-asset-detail div.window > ol, div.window > ol {
   padding: 0 .8em .8em .8em;
 }
+
+.commitStream-TR-panel {
+  display: block;
+}
