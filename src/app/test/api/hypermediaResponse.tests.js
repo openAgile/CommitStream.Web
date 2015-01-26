@@ -168,8 +168,10 @@ describe('hypermediaResponse', function() {
 
   describe('when contructing a hypermedia response for getting information about an inbox', function() {
     var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
+    var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var dataObject = {
-      inboxId: inboxId
+      inboxId: inboxId,
+      digestId: digestId
     };
     var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', dataObject);
 
@@ -208,6 +210,16 @@ describe('hypermediaResponse', function() {
 
     it('it should include a title property containing information for interfacing with the inbox creation endpoint.', function() {
       hypermedia._links['inboxes'].should.have.property('title', 'Endpoint for creating an inbox for a repository on a digest.');
+    });
+
+    it('it should contain a link to the parent digest for the inbox', function() {
+      hypermedia._links['digest-parent'].should.have.property('href', 'http://localhost/api/digests/' + digestId);
+    });
+
+    it('the digest-parent link href should be a valid URL', function() {
+      var digestParentLink = hypermedia._links['digest-parent']['href'];
+      console.log(digestParentLink)
+      validator.isURL(digestParentLink).should.be.true;
     });
   })
 
