@@ -89,7 +89,9 @@
         "digest-parent": {
           "href": protocol + "://" + host + "/api/digests/" + dataObject.digestId
         }
-      }
+      },
+      "digestId": dataObject.digestId,
+      "family": dataObject.family
     };
   }
 
