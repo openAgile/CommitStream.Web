@@ -16,7 +16,7 @@
         }
       },
       "digestId": digestId
-    }
+    };
   };
 
   hypermediaResponse.digestGET = function(protocol, host, digestId, data) {
@@ -62,6 +62,8 @@
   // halResponse.addLink(key, value), which removes the need to name them specifically.
 
   hypermediaResponse.inboxes = {};
+  hypermediaResponse.inboxes.uuid = {};
+
   hypermediaResponse.inboxes.POST = function(protocol, host, inboxId) {
     return {
       "_links": {
@@ -70,7 +72,15 @@
         }
       },
       "inboxId": inboxId
-    }
+    };
+  }
+
+  hypermediaResponse.inboxes.uuid.GET = function(protocol, host, dataObject) {
+    return {
+      "_links": {
+
+      }
+    };
   }
 
 })(module.exports)
