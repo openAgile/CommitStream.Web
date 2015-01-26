@@ -171,12 +171,14 @@ describe('hypermediaResponse', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var family = 'GitHub';
     var name = 'Drive faster than fast';
+    var url = 'http://github.com/somewhere'
 
     var dataObject = {
       inboxId: inboxId,
       digestId: digestId,
       family: family,
-      name: name
+      name: name,
+      url: url
     };
     var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', dataObject);
 
@@ -237,6 +239,10 @@ describe('hypermediaResponse', function() {
 
     it('should have a property for the name of the inbox.', function() {
       hypermedia.should.have.property('name', name);
+    });
+
+    it('should have a property for the url of the remote repository pointing to this inbox.', function() {
+      hypermedia.should.have.property('url', url);
     });
   })
 

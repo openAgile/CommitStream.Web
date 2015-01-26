@@ -92,7 +92,8 @@
       },
       "digestId": dataObject.digestId,
       "family": dataObject.family,
-      "name": dataObject.name
+      "name": dataObject.name,
+      "url": dataObject.url
     };
   }
 
