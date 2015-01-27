@@ -107,7 +107,7 @@ describe('api/query after POST', function() {
         var actual = JSON.parse(res.body);
         actual.commits[0].timeFormatted = "X months ago";
         var expected = JSON.parse("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"timeFormatted\":\"X months ago\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");
-        actual.should.deep.equal(expected);        
+        actual.should.equal(expected);        
         done();
       });
     }, 3000);
