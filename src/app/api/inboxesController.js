@@ -72,21 +72,33 @@
     });
 
     app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {
+
+      var responseData = {};
+
       if (!validator.isUUID(req.params.uuid)) {
-        res.status(400).json({
+
+        responseData = {
           message: 'The value ' + req.params.uuid + ' is not recognized as a valid inbox identifier.'
-        });
+        };
+
+        res.status(400);
+
       } else {
         getPartitionState('inbox', req.params.uuid, function(error, response) {
+
           if (!error && response.statusCode == 200) {
+
             var digestId = JSON.parse(response.body).digestId;
 
             res.set('Content-Type', 'application/json');
+
             //TODO: all this logic, yikes!
             if (!req.headers.hasOwnProperty('x-github-event')) {
-              res.json({
+
+              responseData = {
                 message: 'Unknown event type.'
-              });
+              };
+
             } else if (req.headers['x-github-event'] == 'push') {
 
               var events = translator.translatePush(req.body, digestId);
@@ -98,34 +110,37 @@
                 events: e
               }, function(error, response) {
                 if (error) {
-                  res.status(500).json({
+                  responseData = {
                     errors: 'We had an internal problem. Please retry your request. Error: ' + error
-                  });
+                  };
+
+                  res.status(500);
                 } else {
                   console.log('Posted to eventstore.');
-                  res.json({
+
+                  responseData = {
                     message: 'Your push event has been queued to be added to CommitStream.'
-                  });
+                  };
                 }
               });
 
             } else if (req.headers['x-github-event'] == 'ping') {
-              res.json({
+              responseData = {
                 message: 'Pong.'
-              });
+              };
             } else {
-              res.json({
+              responseData = {
                 message: 'Unknown event type for x-github-event header : ' + req.headers['x-github-event']
-              });
+              };
             }
           } else {
-            res.json({
+            responseData = {
               message: error
-            });
+            };
           }
-          res.end();
         });
       }
+      res.send(responseData);
     })
 
     app.get('/api/inboxes/:uuid', function(req, res, next) {
