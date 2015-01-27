@@ -22,7 +22,8 @@
                 },
                 html_url: aCommit.url,
                 repository: repository,
-                branch: branch
+                branch: branch,
+                originalMessage: aCommit
             };
             return {
                 eventId: uuid(),
