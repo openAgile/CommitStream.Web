@@ -100,6 +100,10 @@
 
             } else if (req.headers['x-github-event'] == 'push') {
 
+              var protocol = config.protocol || req.protocol;
+              var host = req.get('host');
+              var inboxId = req.params.uuid;
+
               var events = translator.translatePush(req.body, digestId);
 
               var e = JSON.stringify(events);
@@ -115,11 +119,17 @@
 
                   res.status(500);
                 } else {
-                  console.log('Posted to eventstore.');
-                  res.set('Content-Type', 'application/hal+json');
-                  responseData = {
-                    message: 'Your push event has been queued to be added to CommitStream.'
+
+                  var hypermediaData = {
+                    inboxId: inboxId,
+                    digestId: digestId
                   };
+
+                  responseData = hypermediaResponse.inboxes.uuid.POST(protocol, host, hypermediaData);
+
+                  res.set('Content-Type', 'application/hal+json');
+
+                  console.log('Posted to eventstore.');
                 }
               });
 

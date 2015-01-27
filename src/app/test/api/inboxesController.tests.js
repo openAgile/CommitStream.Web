@@ -20,7 +20,8 @@ var chai = require('chai'),
     inboxes: {
       POST: sinon.stub(),
       uuid: {
-        GET: sinon.stub()
+        GET: sinon.stub(),
+        POST: sinon.stub()
       }
     },
 
@@ -236,6 +237,8 @@ describe('inboxesController', function() {
   describe('when posting to an inbox (/api/inboxes/:uuid)', function() {
     var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
     var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+    var protocol = 'http';
+    var host = 'localhost';
 
     var inboxPayload = {};
 
@@ -249,6 +252,17 @@ describe('inboxesController', function() {
     };
 
     describe('with a valid inboxId', function() {
+      var hypermedia = {
+        "_links": {
+          "self": {
+            "href": protocol + "://" + host + "/api/inboxes/" + inboxId
+          },
+          "digest-parent": {
+            "href": protocol + "://" + host + "/api/digests/" + digestId
+          }
+        },
+        "message": "Your push event has been queued to be added to CommitStream."
+      };
 
       before(function() {
         translator.translatePush.returns(translatorEvent);
@@ -262,6 +276,8 @@ describe('inboxesController', function() {
           }),
           statusCode: 200
         });
+
+        hypermediaResponseStub.inboxes.uuid.POST.returns(hypermedia);
       });
 
       it('it should call eventStoreClient to get the Parent DigestId for this inbox', function(done) {
@@ -295,6 +311,18 @@ describe('inboxesController', function() {
             events: translatorEvent
           };
           eventStoreClient.streams.post.should.have.been.calledWith(eventStoreClientParam1, sinon.match.any);
+          done();
+        });
+      });
+
+      it('asks for the appropriate hypermedia response', function(done) {
+        var hypermediaParams = {
+          inboxId: inboxId,
+          digestId: digestId
+        };
+
+        postInbox(inboxPayload, function(err, res) {
+          hypermediaResponseStub.inboxes.uuid.POST.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
           done();
         });
       });
