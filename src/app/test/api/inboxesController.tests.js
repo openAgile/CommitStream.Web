@@ -59,26 +59,20 @@ var getInbox = function(path, shouldBehaveThusly) {
 }
 
 var postInboxCreate = function(payload, shouldBehaveThusly, contentType) {
-  if (!contentType) {
-    contentType = 'application/json';
-  }
   request(app)
     .post('/api/inboxes')
     .send(JSON.stringify(payload))
-    .type(contentType)
+    .type(contentType || 'application/json')
     .end(shouldBehaveThusly);
 };
 
 
 var postInbox = function(payload, shouldBehaveThusly, contentType, inboxUuid, xGithubEventValue) {
-  if (!contentType) {
-    contentType = 'application/json';
-  }
   request(app)
-    .post('/api/inboxes/' + inboxUuid)
+    .post('/api/inboxes/' + inboxUuid || 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf')
     .set('x-github-event', xGithubEventValue || 'push')
     .send(JSON.stringify(payload))
-    .type(contentType)
+    .type(contentType || 'application/json')
     .end(shouldBehaveThusly);
 };
 
@@ -312,21 +306,6 @@ describe('inboxesController', function() {
         }, null, inboxId);
       })
 
-      it('it should reply with Pong when passed a x-github-event header of ping', function(done) {
-        postInbox(inboxPayload, function(err, res) {
-          res.body.message.should.equal('Pong.');
-          done();
-        }, null, inboxId, 'ping');
-      })
-
-      it('it should reply with a meaningful message when passed an unrecognized x-github-event header', function(done) {
-        var eventType = 'unrecognizedEventType';
-        postInbox(inboxPayload, function(err, res) {
-          res.body.message.should.equal('Unknown event type for x-github-event header : ' + eventType);
-          done();
-        }, null, inboxId, eventType);
-      })
-
       // it('it should have a response Content-Type of hal+json', function(done) {
 
       //   postInbox(inboxPayload, function(err, res) {
@@ -335,25 +314,64 @@ describe('inboxesController', function() {
       //   }, null, inboxId);
       // });
 
+      describe('but with an unrecognized x-github-event-header', function() {
+        var eventType = 'unrecognizedEventType';
+        it('it should reply with a meaningful message.', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.body.message.should.equal('Unknown event type for x-github-event header : ' + eventType);
+            done();
+          }, null, inboxId, eventType);
+        });
+
+        it('it should have a response Content-Type of application/json', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.get('Content-Type').should.equal('application/json; charset=utf-8');
+            done();
+          }, null, inboxId, eventType);
+        });
+      })
+
+      describe('but with an x-github-event-header of ping', function() {
+        it('it should reply with Pong', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.body.message.should.equal('Pong.');
+            done();
+          }, null, inboxId, 'ping');
+        })
+
+        it('it should have a response Content-Type of application/json', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.get('Content-Type').should.equal('application/json; charset=utf-8');
+            done();
+          }, null, inboxId, 'ping');
+        });
+      })
+
       describe('but without the x-github-event header', function() {
+        var postInboxWithoutXGithubEvent = function(shouldBehaveThusly) {
+          var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
+          var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
+          var payload = {
+            digestId: digestId
+          };
+
+          request(app)
+            .post('/api/inboxes/' + inboxId)
+            .send(JSON.stringify(payload))
+            .type('application/json')
+            .end(shouldBehaveThusly);
+        }
+
         it('it should provide an appropriate response', function(done) {
-
-          var postInboxWithoutXGithubEvent = function(shouldBehaveThusly) {
-            var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
-            var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
-            var payload = {
-              digestId: digestId
-            };
-
-            request(app)
-              .post('/api/inboxes/' + inboxId)
-              .send(JSON.stringify(payload))
-              .type('application/json')
-              .end(shouldBehaveThusly);
-          }
-
           postInboxWithoutXGithubEvent(function(err, res) {
             res.body.message.should.equal('Unknown event type.');
+            done();
+          });
+        });
+
+        it('it should have a response Content-Type of application/json', function(done) {
+          postInboxWithoutXGithubEvent(function(err, res) {
+            res.get('Content-Type').should.equal('application/json; charset=utf-8');
             done();
           });
         });
@@ -367,6 +385,13 @@ describe('inboxesController', function() {
         it('it should send back an appropriate error response', function(done) {
           postInbox(inboxPayload, function(err, res) {
             res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem.');
+            done();
+          }, null, inboxId);
+        });
+
+        it('it should have a response Content-Type of application/json', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.get('Content-Type').should.equal('application/json; charset=utf-8');
             done();
           });
         });
@@ -389,7 +414,14 @@ describe('inboxesController', function() {
             res.body.message.should.equal('Houston we have a problem');
             done();
           });
-        })
+        });
+
+        it('it should have a response Content-Type of application/json', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.get('Content-Type').should.equal('application/json; charset=utf-8');
+            done();
+          });
+        });
       })
     });
 
@@ -408,6 +440,13 @@ describe('inboxesController', function() {
       it('it should respond with a meaningful error message.', function(done) {
         postInbox(inboxPayload, function(err, res) {
           res.body.message.should.equal('The value not_a_uuid is not recognized as a valid inbox identifier.');
+          done();
+        }, null, 'not_a_uuid');
+      });
+
+      it('it should have a response Content-Type of application/json', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.get('Content-Type').should.equal('application/json; charset=utf-8');
           done();
         }, null, 'not_a_uuid');
       });

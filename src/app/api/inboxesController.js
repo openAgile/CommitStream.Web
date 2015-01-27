@@ -74,6 +74,7 @@
     app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {
 
       var responseData = {};
+      res.set('Content-Type', 'application/json');
 
       if (!validator.isUUID(req.params.uuid)) {
 
@@ -89,8 +90,6 @@
           if (!error && response.statusCode == 200) {
 
             var digestId = JSON.parse(response.body).digestId;
-
-            res.set('Content-Type', 'application/json');
 
             //TODO: all this logic, yikes!
             if (!req.headers.hasOwnProperty('x-github-event')) {
