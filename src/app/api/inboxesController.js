@@ -116,7 +116,7 @@
                   res.status(500);
                 } else {
                   console.log('Posted to eventstore.');
-
+                  res.set('Content-Type', 'application/hal+json');
                   responseData = {
                     message: 'Your push event has been queued to be added to CommitStream.'
                   };

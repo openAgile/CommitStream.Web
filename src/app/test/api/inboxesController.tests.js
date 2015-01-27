@@ -192,7 +192,7 @@ describe('inboxesController', function() {
 
       it('it should send back an appropriate error response', function(done) {
         postInboxCreate(payload, function(err, res) {
-          res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
+          JSON.parse(res.text).errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
           done();
         });
       });
@@ -205,7 +205,7 @@ describe('inboxesController', function() {
 
       it('an appropriate error message is sent', function(done) {
         postInboxCreate(payload, function(err, res) {
-          res.body.errors.should.equal('Houston, we have a problem');
+          JSON.parse(res.text).errors.should.equal('Houston, we have a problem');
           done();
         });
       });
@@ -226,7 +226,7 @@ describe('inboxesController', function() {
 
       it('an appropriate error message is sent', function(done) {
         postInboxCreate(payload, function(err, res) {
-          res.body.errors.should.equal('Houston, we have a problem.');
+          JSON.parse(res.text).errors.should.equal('Houston, we have a problem.');
           done();
         });
       });
@@ -301,24 +301,25 @@ describe('inboxesController', function() {
 
       it('it should have an appropriate response message', function(done) {
         postInbox(inboxPayload, function(err, res) {
-          res.body.message.should.equal('Your push event has been queued to be added to CommitStream.');
+          var parsedResponse = JSON.parse(res.text);
+          parsedResponse.message.should.equal('Your push event has been queued to be added to CommitStream.');
           done();
         }, null, inboxId);
       })
 
-      // it('it should have a response Content-Type of hal+json', function(done) {
+      it('it should have a response Content-Type of hal+json', function(done) {
 
-      //   postInbox(inboxPayload, function(err, res) {
-      //     res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
-      //     done();
-      //   }, null, inboxId);
-      // });
+        postInbox(inboxPayload, function(err, res) {
+          res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        }, null, inboxId);
+      });
 
       describe('but with an unrecognized x-github-event-header', function() {
         var eventType = 'unrecognizedEventType';
         it('it should reply with a meaningful message.', function(done) {
           postInbox(inboxPayload, function(err, res) {
-            res.body.message.should.equal('Unknown event type for x-github-event header : ' + eventType);
+            JSON.parse(res.text).message.should.equal('Unknown event type for x-github-event header : ' + eventType);
             done();
           }, null, inboxId, eventType);
         });
@@ -334,7 +335,7 @@ describe('inboxesController', function() {
       describe('but with an x-github-event-header of ping', function() {
         it('it should reply with Pong', function(done) {
           postInbox(inboxPayload, function(err, res) {
-            res.body.message.should.equal('Pong.');
+            JSON.parse(res.text).message.should.equal('Pong.');
             done();
           }, null, inboxId, 'ping');
         })
@@ -364,7 +365,7 @@ describe('inboxesController', function() {
 
         it('it should provide an appropriate response', function(done) {
           postInboxWithoutXGithubEvent(function(err, res) {
-            res.body.message.should.equal('Unknown event type.');
+            JSON.parse(res.text).message.should.equal('Unknown event type.');
             done();
           });
         });
@@ -384,7 +385,7 @@ describe('inboxesController', function() {
 
         it('it should send back an appropriate error response', function(done) {
           postInbox(inboxPayload, function(err, res) {
-            res.body.errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem.');
+            JSON.parse(res.text).errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem.');
             done();
           }, null, inboxId);
         });
@@ -411,7 +412,7 @@ describe('inboxesController', function() {
 
         it('it should report the error it received to the client.', function(done) {
           postInbox(inboxPayload, function(err, res) {
-            res.body.message.should.equal('Houston we have a problem');
+            JSON.parse(res.text).message.should.equal('Houston we have a problem');
             done();
           });
         });
@@ -439,7 +440,7 @@ describe('inboxesController', function() {
 
       it('it should respond with a meaningful error message.', function(done) {
         postInbox(inboxPayload, function(err, res) {
-          res.body.message.should.equal('The value not_a_uuid is not recognized as a valid inbox identifier.');
+          JSON.parse(res.text).message.should.equal('The value not_a_uuid is not recognized as a valid inbox identifier.');
           done();
         }, null, 'not_a_uuid');
       });
