@@ -221,7 +221,7 @@ describe('githubTranslator', function() {
     var actual = githubTranslator.translatePush(pushEventMessageWithOneCommit);
 
     it('should match the expected translation', function() {      
-      actual.should.deep.equal(expected);
+      actual.should.equal(expected);
     });
   });
 });
