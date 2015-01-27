@@ -1088,6 +1088,7 @@ div.window .remaining .more {
   .commitStream-TR-panel .csMessage {
     padding-left: 20px; 
     color:#8c8c8c;
+    white-space: pre-wrap;
   }	
   .commitStream-TR-panel .side-panel-scrollable {
     top: 63px;
