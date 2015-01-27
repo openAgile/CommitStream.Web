@@ -165,6 +165,33 @@ describe('hypermediaResponse', function() {
     });
 
   });
+  describe('when contructing a hypermedia response after pushing an event into an inbox', function() {
+    var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
+    var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
+
+    var dataObject = {
+      inboxId: inboxId,
+      digestId: digestId
+    };
+
+    var hypermedia = hypermediaResponse.inboxes.uuid.POST('http', 'localhost', dataObject);
+
+    it('it should have links to other resources.', function() {
+      hypermedia.should.include.key('_links');
+    });
+
+    it('it\'s self link should reference the inbox.', function() {
+      hypermedia._links['self'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId);
+    });
+
+    it('it should contain a link to the parent digest for the inbox.', function() {
+      hypermedia._links['digest-parent'].should.have.property('href', 'http://localhost/api/digests/' + digestId);
+    });
+
+    it('should have an appropriately worded message property.', function() {
+      hypermedia.should.have.property('message', 'Your push event has been queued to be added to CommitStream.');
+    });
+  });
 
   describe('when contructing a hypermedia response for getting information about an inbox', function() {
     var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';

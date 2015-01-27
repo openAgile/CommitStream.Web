@@ -97,4 +97,18 @@
     };
   }
 
+  hypermediaResponse.inboxes.uuid.POST = function(protocol, host, dataObject) {
+    return {
+      "_links": {
+        "self": {
+          "href": protocol + "://" + host + "/api/inboxes/" + dataObject.inboxId
+        },
+        "digest-parent": {
+          "href": protocol + "://" + host + "/api/digests/" + dataObject.digestId
+        }
+      },
+      "message": "Your push event has been queued to be added to CommitStream."
+    };
+  }
+
 })(module.exports)
