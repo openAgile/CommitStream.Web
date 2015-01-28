@@ -83,6 +83,7 @@
         };
 
         res.status(400);
+        res.send(responseData);
 
       } else {
         getPartitionState('inbox', req.params.uuid, function(error, response) {
@@ -98,6 +99,7 @@
                 message: 'Unknown event type.'
               };
 
+              res.send(responseData);
             } else if (req.headers['x-github-event'] == 'push') {
 
               var protocol = config.protocol || req.protocol;
@@ -132,25 +134,29 @@
 
                   console.log('Posted to eventstore.');
                 }
+
+                res.send(responseData);
               });
 
             } else if (req.headers['x-github-event'] == 'ping') {
               responseData = {
                 message: 'Pong.'
               };
+              res.send(responseData);
             } else {
               responseData = {
                 message: 'Unknown event type for x-github-event header : ' + req.headers['x-github-event']
               };
+              res.send(responseData);
             }
           } else {
             responseData = {
               message: error
             };
+            res.send(responseData);
           }
         });
       }
-      res.send(responseData);
     })
 
     app.get('/api/inboxes/:uuid', function(req, res, next) {
