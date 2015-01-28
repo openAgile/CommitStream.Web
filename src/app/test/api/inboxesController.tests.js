@@ -280,6 +280,14 @@ describe('inboxesController', function() {
         hypermediaResponseStub.inboxes.uuid.POST.returns(hypermedia);
       });
 
+
+      it('it should send back an appropriate error status code of 201', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.status.should.equal(201);
+          done();
+        });
+      });
+
       it('it should call eventStoreClient to get the Parent DigestId for this inbox', function(done) {
         postInbox(inboxPayload, function(err, res) {
           eventStoreClient.projection.getState.should.have.been.calledWith({
