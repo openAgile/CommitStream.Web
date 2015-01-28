@@ -279,7 +279,7 @@ describe('api/query before POST', function() {
 });
 
 describe('api/inboxes', function() {
-  it(urlToPushCommitToInbox1 + ' should accept a valid payload and return a 200 OK response.', function(done) {
+  it(urlToPushCommitToInbox1 + ' should accept a valid payload and return a 201 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInbox1 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -290,12 +290,12 @@ describe('api/inboxes', function() {
       body: JSON.stringify(commitInbox1)
     }, function(err, res, body) {
       should.not.exist(err);
-      res.statusCode.should.equal(200);
+      res.statusCode.should.equal(201);
       res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
       done();
     });
   });
-  it(urlToPushCommitToInbox2 + ' should accept a valid payload and return a 200 OK response.', function(done) {
+  it(urlToPushCommitToInbox2 + ' should accept a valid payload and return a 201 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInbox2 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -306,12 +306,12 @@ describe('api/inboxes', function() {
       body: JSON.stringify(commitInbox2)
     }, function(err, res, body) {
       should.not.exist(err);
-      res.statusCode.should.equal(200);
+      res.statusCode.should.equal(201);
       res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
       done();
     });
   });
-  it(urlToPushCommitToInbox2 + ' should accept a valid payload with no mention of a workitem and return a 200 OK response.', function(done) {
+  it(urlToPushCommitToInbox2 + ' should accept a valid payload with no mention of a workitem and return a 201 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInbox2 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -322,12 +322,12 @@ describe('api/inboxes', function() {
       body: JSON.stringify(commitInbox2WithOutMention)
     }, function(err, res, body) {
       should.not.exist(err);
-      res.statusCode.should.equal(200);
+      res.statusCode.should.equal(201);
       res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
       done();
     });
   });
-  it(urlToPushCommitToInboxA + 'should accept a valid payload and return a 200 OK response.', function(done) {
+  it(urlToPushCommitToInboxA + 'should accept a valid payload and return a 201 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInboxA + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -338,7 +338,7 @@ describe('api/inboxes', function() {
       body: JSON.stringify(commitInboxA)
     }, function(err, res, body) {
       should.not.exist(err);
-      res.statusCode.should.equal(200);
+      res.statusCode.should.equal(201);
       res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
       done();
     });
