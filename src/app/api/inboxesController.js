@@ -48,27 +48,41 @@
 
       var inboxAddedEvent = inboxAdded.create(req.body.digestId, req.body.family, req.body.name, req.body.url);
 
-      var args = {
-        name: 'inboxes',
-        events: JSON.stringify([inboxAddedEvent])
-      };
-
-      eventStore.streams.post(args, function(error, resp) {
-        if (error) {
-          console.log(error);
+      getPartitionState('inbox', req.params.uuid, function(err, resp) {
+        if (err) {
           res.status(500).json({
-            errors: 'We had an internal problem. Please retry your request. Error: ' + error
+            'error': 'There was an internal error when trying to process your request.'
+          });
+        } else if (!resp.body || resp.body.length < 1) {
+          res.status(404).json({
+            'error': 'Could not find a digest with id ' + req.body.digestId + '.'
           });
         } else {
-          var hypermedia = hypermediaResponse.inboxes.POST(protocol,
-            host, inboxAddedEvent.data.inboxId);
 
-          res.location(hypermedia._links.self.href);
-          res.set('Content-Type', 'application/hal+json');
-          res.status(201);
-          res.send(hypermedia);
+          var args = {
+            name: 'inboxes',
+            events: JSON.stringify([inboxAddedEvent])
+          };
+
+          eventStore.streams.post(args, function(error, resp) {
+            if (error) {
+              console.log(error);
+              res.status(500).json({
+                errors: 'We had an internal problem. Please retry your request. Error: ' + error
+              });
+            } else {
+              var hypermedia = hypermediaResponse.inboxes.POST(protocol,
+                host, inboxAddedEvent.data.inboxId);
+
+              res.location(hypermedia._links.self.href);
+              res.set('Content-Type', 'application/hal+json');
+              res.status(201);
+              res.send(hypermedia);
+            }
+          });
         }
       });
+
     });
 
     app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {

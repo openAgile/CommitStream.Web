@@ -172,20 +172,33 @@ describe('inboxesController', function() {
         });
       });
 
+      describe('but with illegal content in the name field', function() {
+        before(function() {
+          sanitizer.sanitize.returns(['error']);
+        })
 
-      it('should clean the name field for illegal content', function(done) {
-        postInboxCreate(payload, function() {
-          sanitizer.sanitize.should.have.been.calledWith('inbox', payload, ['name']);
-          done();
-        });
-      });
-
-      it('should validate the payload against an inboxAdded schema', function(done) {
-        postInboxCreate(payload, function() {
-          inboxAdded.validate.should.have.been.calledWith(payload);
-          done();
+        it('should call sanitizer.sanitize with correct parameters.', function(done) {
+          postInboxCreate(payload, function() {
+            sanitizer.sanitize.should.have.been.calledWith('inbox', payload, ['name']);
+            done();
+          });
         });
       })
+
+      describe('but with a schema violation', function() {
+        before(function() {
+          sanitizer.sanitize.returns([]);
+          inboxAdded.validate.returns(['error']);
+        })
+
+        it('should validate the payload against an inboxAdded schema', function(done) {
+          postInboxCreate(payload, function() {
+            inboxAdded.validate.should.have.been.calledWith(payload);
+            done();
+          });
+        })
+      })
+
 
       it('it should have a response Content-Type of hal+json', function(done) {
         postInboxCreate(payload, function(err, res) {
@@ -214,6 +227,38 @@ describe('inboxesController', function() {
           done();
         });
       });
+    });
+
+    describe('for a non-existant digestId', function() {
+
+      var nonExistantDigestId = 'dbb47eec-514c-441d-bb15-b7d6d3d2153c';
+
+      before(function() {
+        // eventStoreClient.projection.getState.callsArgWith(1, null, {
+        //   body: JSON.stringify({
+        //     digestId: digestId
+        //   }),
+        //   statusCode: 200
+        // });
+      })
+
+      it('should reject request and return a 400 status code.', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.statusCode.should.equal(400);
+          done();
+        }, 'application/jackson');
+      });
+
+      it('should call eventStore.projection.getState with the appropriate parameters', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+            name: sinon.match.any,
+            partition: 'digest-' + nonExistantDigestId
+          }, sinon.match.any);
+          done();
+        });
+      });
+
     });
 
     describe('and failures occur when posting to eventstore', function() {
