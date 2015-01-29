@@ -97,12 +97,26 @@ describe('inboxesController', function() {
         }, 'application/jackson');
       });
 
-      it('it should reject the request and explain that only application/json is accepted.', function(done) {
+      it('it should reject the request and explain that only application/json is accepted when sending unsupported Content-Type.', function(done) {
         postInboxCreate(payload, function(err, res) {
           res.text.should.equal('When creating an inbox, you must send a Content-Type: application/json header.');
           done();
         }, 'application/jackson');
       });
+
+      it('it should reject the request and explain that only application/json is accepted when not setting Content-Type', function(done) {
+        var postInboxCreateNoContentType = function(payload, shouldBehaveThusly, contentType) {
+          request(app)
+            .post('/api/inboxes')
+            .send(JSON.stringify(payload))
+            .end(shouldBehaveThusly);
+        };
+
+        postInboxCreateNoContentType(payload, function(err, res) {
+          res.text.should.equal('When creating an inbox, you must send a Content-Type: application/json header.');
+          done();
+        });
+      })
     });
 
     describe('with a valid payload', function() {
@@ -141,6 +155,23 @@ describe('inboxesController', function() {
       beforeEach(function() {
         eventStoreClient.streams.post.callsArgWith(1, null, "unused response");
       });
+
+      describe('but an unsupported Content-Type header', function() {
+        it('it should reject the request and explain that only application/json is accepted.', function(done) {
+          postInboxCreate(payload, function(err, res) {
+            res.text.should.equal('When creating an inbox, you must send a Content-Type: application/json header.');
+            done();
+          }, 'application/jackson');
+        });
+
+        it('should reject request and return a 415 status code.', function(done) {
+          postInboxCreate(payload, function(err, res) {
+            res.statusCode.should.equal(415);
+            done();
+          }, 'application/jackson');
+        });
+      });
+
 
       it('should clean the name field for illegal content', function(done) {
         postInboxCreate(payload, function() {
