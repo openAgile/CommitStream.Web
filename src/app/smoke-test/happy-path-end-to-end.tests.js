@@ -130,14 +130,14 @@ var urlToPushCommitToInbox2 = undefined;
 var urlToPushCommitToInboxA = undefined;
 
 describe('you need a digest to associate to the inboxes that will be created', function() {
-  it('should return error message with 401 Unauthorized response when request is made without a key.', function(done){
+  it('should return error message with 401 Unauthorized response when request is made without a key.', function(done) {
     request({
       uri: "http://localhost:6565/api/digest?workitem=S-11111",
-        method: "POST",
-        body: JSON.stringify({
-          description: "Digest 1"
-        })
-      }, function(err, res, body) {
+      method: "POST",
+      body: JSON.stringify({
+        description: "Digest 1"
+      })
+    }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(401);
       res.body.should.equal('API key parameter missing or invalid');
@@ -148,11 +148,11 @@ describe('you need a digest to associate to the inboxes that will be created', f
   it('should return error when request is made with incorrect key.', function(done) {
     request({
       uri: "http://localhost:6565/api/digest?key=S-11111",
-        method: "POST",
-        body: JSON.stringify({
-          description: "Digest 1"
-        })
-      }, function(err, res, body) {
+      method: "POST",
+      body: JSON.stringify({
+        description: "Digest 1"
+      })
+    }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(401);
       res.body.should.equal('API key parameter missing or invalid');
@@ -279,7 +279,7 @@ describe('api/query before POST', function() {
 });
 
 describe('api/inboxes', function() {
-  it(urlToPushCommitToInbox1 + ' should accept a valid payload and return a 201 OK response.', function(done) {
+  it('the first inbox should accept a valid payload and return a 201 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInbox1 + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -291,7 +291,7 @@ describe('api/inboxes', function() {
     }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(201);
-      res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
+      JSON.parse(res.body).message.should.equal('Your push event has been queued to be added to CommitStream.')
       done();
     });
   });
@@ -380,11 +380,11 @@ describe('api/query after POST', function() {
   it('should accept a valid payload and return commit details for the specified workitem.', function(done) {
     this.timeout(5000);
 
-    setTimeout(function () {
+    setTimeout(function() {
       request({
         uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=S-11111",
-          method: "GET"
-        }, function(err, res, body) {
+        method: "GET"
+      }, function(err, res, body) {
         should.not.exist(err);
         res.statusCode.should.equal(200);
 
@@ -399,7 +399,7 @@ describe('api/query after POST', function() {
         })
 
         cleanedBody = JSON.stringify(cleanedBody);
-        cleanedBody.should.equal("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"shawnmarie\",\"sha1Partial\":\"b42c28\",\"action\":\"committed\",\"message\":\"S-11111 Updated Happy Path Validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/b42c285e1506edac965g92573a2121700fc92f8b\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified UI validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"laureanoremedi\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 initial Commit to backend functionality!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");        
+        cleanedBody.should.equal("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"shawnmarie\",\"sha1Partial\":\"b42c28\",\"action\":\"committed\",\"message\":\"S-11111 Updated Happy Path Validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/b42c285e1506edac965g92573a2121700fc92f8b\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified UI validations!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"},{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"author\":\"laureanoremedi\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 initial Commit to backend functionality!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");
         done();
       });
     }, 3000);
@@ -408,8 +408,8 @@ describe('api/query after POST', function() {
   it('should return empty commits when request is made with correct key but incorrect workitem.', function(done) {
     request({
       uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=11111",
-        method: "GET"
-      }, function(err, res, body) {
+      method: "GET"
+    }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(200);
       res.body.should.equal('{"commits":[]}');
@@ -420,8 +420,8 @@ describe('api/query after POST', function() {
   it('should return error message when request is made with correct key but no workitem.', function(done) {
     request({
       uri: "http://localhost:6565/api/query?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
-        method: "GET"
-      }, function(err, res, body) {
+      method: "GET"
+    }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(400);
       res.body.should.equal('{"error":"Parameter workitem is required"}');
