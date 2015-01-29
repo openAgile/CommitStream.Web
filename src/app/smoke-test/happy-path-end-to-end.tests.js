@@ -327,7 +327,7 @@ describe('api/inboxes', function() {
       done();
     });
   });
-  it(urlToPushCommitToInboxA + 'should accept a valid payload and return a 201 OK response.', function(done) {
+  it('The third inbox should accept a valid payload and return a 201 OK response.', function(done) {
     request({
       uri: urlToPushCommitToInboxA + "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7",
       method: "POST",
@@ -339,7 +339,7 @@ describe('api/inboxes', function() {
     }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(201);
-      res.body.should.equal('{"message":"Your push event has been queued to be added to CommitStream."}')
+      JSON.parse(res.body).message.should.equal('Your push event has been queued to be added to CommitStream.')
       done();
     });
   });
