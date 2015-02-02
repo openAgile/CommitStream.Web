@@ -154,6 +154,41 @@ describe('inboxesController', function() {
 
       beforeEach(function() {
         eventStoreClient.streams.post.callsArgWith(1, null, "unused response");
+
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify({
+            digestId: digestId
+          }),
+          statusCode: 200
+        });
+      });
+
+      it('it should have a response Content-Type of hal+json', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        });
+      });
+
+      it('it should use proper arguments when creating hypermedia.', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(protocol, sinon.match.any, inboxAddedEvent.data.inboxId);
+          done();
+        });
+      });
+
+      it('it should have a response code of 201 created', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.status.should.equal(201);
+          done();
+        });
+      });
+
+      it('it should set the Location response header to the newly created digest', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.get('Location').should.equal(hypermediaResponse._links.self.href);
+          done();
+        });
       });
 
       describe('but an unsupported Content-Type header', function() {
@@ -198,35 +233,6 @@ describe('inboxesController', function() {
           });
         })
       })
-
-
-      it('it should have a response Content-Type of hal+json', function(done) {
-        postInboxCreate(payload, function(err, res) {
-          res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
-          done();
-        });
-      });
-
-      it('it should use proper arguments when creating hypermedia.', function(done) {
-        postInboxCreate(payload, function(err, res) {
-          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(protocol, sinon.match.any, inboxAddedEvent.data.inboxId);
-          done();
-        });
-      });
-
-      it('it should have a response code of 201 created', function(done) {
-        postInboxCreate(payload, function(err, res) {
-          res.status.should.equal(201);
-          done();
-        });
-      });
-
-      it('it should set the Location response header to the newly created digest', function(done) {
-        postInboxCreate(payload, function(err, res) {
-          res.get('Location').should.equal(hypermediaResponse._links.self.href);
-          done();
-        });
-      });
     });
 
     describe('for a non-existant digestId', function() {
