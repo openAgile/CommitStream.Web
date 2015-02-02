@@ -233,6 +233,22 @@ describe('inboxesController', function() {
           });
         })
       })
+
+      describe('and failures occur when posting to eventstore', function() {
+
+        beforeEach(function() {
+          eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem', null);
+          sanitizer.sanitize.returns([]);
+          inboxAdded.validate.returns([]);
+        });
+
+        it('it should send back an appropriate error response', function(done) {
+          postInboxCreate(payload, function(err, res) {
+            JSON.parse(res.text).errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
+            done();
+          });
+        });
+      });
     });
 
     describe('for a non-existant digestId', function() {
@@ -265,20 +281,6 @@ describe('inboxesController', function() {
         });
       });
 
-    });
-
-    describe('and failures occur when posting to eventstore', function() {
-
-      before(function() {
-        eventStoreClient.streams.post.callsArgWith(1, 'Houston, we have a problem', null);
-      });
-
-      it('it should send back an appropriate error response', function(done) {
-        postInboxCreate(payload, function(err, res) {
-          JSON.parse(res.text).errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
-          done();
-        });
-      });
     });
 
     describe('and santize reports an error', function() {
