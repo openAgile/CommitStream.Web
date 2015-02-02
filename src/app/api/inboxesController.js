@@ -48,7 +48,9 @@
 
       var inboxAddedEvent = inboxAdded.create(req.body.digestId, req.body.family, req.body.name, req.body.url);
 
-      getPartitionState('inbox', req.params.uuid, function(err, resp) {
+
+
+      getPartitionState('digest', req.body.digestId, function(err, resp) {
         if (err) {
           res.status(500).json({
             'error': 'There was an internal error when trying to process your request.'
@@ -213,6 +215,11 @@
         name: name,
         partition: name + '-' + uuid
       }, function(err, resp) {
+        // console.log('getPartitionState err 000000000000000000000000')
+        // consloe.log(err)
+        // console.log('getPartitionState resp 000000000000000000000000')
+        // consloe.log(resp)
+
         callback(err, resp);
       });
     }

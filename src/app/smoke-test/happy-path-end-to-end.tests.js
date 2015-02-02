@@ -194,7 +194,11 @@ describe('you need a digest to associate to the inboxes that will be created', f
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
-      urlToPushCommitToInbox1 = JSON.parse(body)._links['self'].href;
+      console.log('------------------res.text--------------------')
+      console.log(res.text)
+      console.log('---------------------body-------------------------')
+      console.log(body)
+      urlToPushCommitToInbox1 = JSON.parse(res.text)._links['self'].href;
       inboxIdCreated.should.exist;
       done();
     });
