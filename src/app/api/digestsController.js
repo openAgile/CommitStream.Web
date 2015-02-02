@@ -118,6 +118,25 @@
         });
       }
     });
-  }
 
+    app.get('/api/digests/:uuid/inboxes', function(req, res, next) {
+      if (!validator.isUUID(req.params.uuid)) {
+        res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
+      } else {
+        eventStore.projection.getState({ name: 'inboxes-for-digest', partition: 'digestInbox-' + req.params.uuid }, function(err, resp) {
+          if (err) {
+            res.status(500).json({'error': 'There was an internal error when trying to process your request'});
+          } else if (!resp.body || resp.body.length < 1) {
+            res.status(404).json({'error': 'Could not find a digest with id ' + req.params.uuid});
+          } else { // all good
+            var protocol = config.protocol || req.protocol;
+            var host = req.get('host');
+            var data = JSON.parse(resp.body);
+            res.set('Content-Type', 'application/hal+json; charset=utf-8');
+            res.json(data);
+          }
+        });
+      }
+    });
+  };
 })(module.exports);
