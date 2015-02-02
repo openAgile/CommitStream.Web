@@ -234,7 +234,6 @@ describe('hypermediaResponse', function() {
     });
 
     it('it should include a link to the inboxes resource for creating an inbox.', function() {
-      console.log(hypermedia._links['self'])
       hypermedia._links['inboxes'].should.have.property('href', 'http://localhost/api/inboxes');
     });
 
@@ -252,7 +251,6 @@ describe('hypermediaResponse', function() {
 
     it('the digest-parent link href should be a valid URL.', function() {
       var digestParentLink = hypermedia._links['digest-parent']['href'];
-      console.log(digestParentLink)
       validator.isURL(digestParentLink).should.be.true;
     });
 
