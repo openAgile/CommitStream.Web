@@ -112,7 +112,7 @@ describe('api/query after POST', function() {
         var actual = JSON.parse(res.body);
         actual.commits[0].timeFormatted = "X months ago";
         var expected = JSON.parse("{\"commits\":[{\"commitDate\":\"2014-10-03T15:57:14-03:00\",\"timeFormatted\":\"X months ago\",\"author\":\"kunzimariano\",\"sha1Partial\":\"d31d17\",\"action\":\"committed\",\"message\":\"S-11111 Modified!\",\"commitHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/commit/d31d174f0495feaf876e92573a2121700fd81e7a\",\"repo\":\"kunzimariano/CommitService.DemoRepo\",\"branch\":\"master\",\"branchHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo/tree/master\",\"repoHref\":\"https://github.com/kunzimariano/CommitService.DemoRepo\"}]}");
-        actual.should.deep.equal(expected);        
+        actual.should.deep.equal(expected);
         done();
       });
     }, 3000);
@@ -146,6 +146,16 @@ describe('api/query after POST', function() {
 
 describe('ACL settings', function() {
 
+  var opt;
+  beforeEach(function() {
+    opt = {
+      url: 'http://localhost:2113/streams/some-stream',
+      headers: {
+        'Accept': 'application/json'
+      }
+    }
+  });
+
   function getAuthHeader(username, password) {
     return 'Basic ' + new Buffer(username + ':' + password).toString('base64');
   }
@@ -155,15 +165,6 @@ describe('ACL settings', function() {
     username: 'admin',
     password: 'changeit'
   });
-  var opt;
-  before(function() {
-    opt = {
-      url: 'http://localhost:2113/streams/some-stream',
-      headers: {
-        'Accept': 'application/json'
-      }
-    }
-  })
 
   it('should create a new stream before changing the ACL settings.', function(done) {
     var e = [{
@@ -193,6 +194,7 @@ describe('ACL settings', function() {
   });
 
   it('should get a 201 after changing the ACL settings.', function(done) {
+
     var aclOptions = {
       "$userStreamAcl": {
         "$r": "$admins",
@@ -213,7 +215,7 @@ describe('ACL settings', function() {
     var settingsOpt = {
       url: 'http://localhost:2113/streams/$settings',
       headers: {
-        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',
+        'Authorization': getAuthHeader('admin', 'changeit'),
         'ES-EventType': 'SettingsUpdated',
         'ES-EventId': uuid(),
         'Content-Type': 'application/json'
@@ -262,7 +264,7 @@ describe('ACL settings', function() {
       done();
     });
   });
-  
+
   it('should return 401 when attempting to login with correct user and incorrect password.', function(done) {
     opt.headers.Authorization = getAuthHeader('admin', 'changenothing');
     request.get(opt, function(error, response) {
@@ -271,6 +273,7 @@ describe('ACL settings', function() {
       done();
     });
   });
+
   it('should return 503 when attempting to login with incorrect user and correct password.', function(done) {
     opt.headers.Authorization = getAuthHeader('fakeuser', 'changeit');
     request.get(opt, function(error, response) {
@@ -279,7 +282,4 @@ describe('ACL settings', function() {
       done();
     });
   });
-
 });
-
-
