@@ -48,8 +48,6 @@
 
       var inboxAddedEvent = inboxAdded.create(req.body.digestId, req.body.family, req.body.name, req.body.url);
 
-
-
       getPartitionState('digest', req.body.digestId, function(err, resp) {
         if (err) {
           res.status(500).json({
@@ -215,11 +213,6 @@
         name: name,
         partition: name + '-' + uuid
       }, function(err, resp) {
-        // console.log('getPartitionState err 000000000000000000000000')
-        // consloe.log(err)
-        // console.log('getPartitionState resp 000000000000000000000000')
-        // consloe.log(resp)
-
         callback(err, resp);
       });
     }

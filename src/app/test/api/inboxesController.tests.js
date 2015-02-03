@@ -255,31 +255,34 @@ describe('inboxesController', function() {
 
       var nonExistantDigestId = 'dbb47eec-514c-441d-bb15-b7d6d3d2153c';
 
-      before(function() {
-        // eventStoreClient.projection.getState.callsArgWith(1, null, {
-        //   body: JSON.stringify({
-        //     digestId: digestId
-        //   }),
-        //   statusCode: 200
-        // });
+      beforeEach(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: {
+            ''
+          },
+          statusCode: 200
+        });
+
+        sanitizer.sanitize.returns([]);
+        inboxAdded.validate.returns([]);
       })
 
-      it('should reject request and return a 400 status code.', function(done) {
+      it('should reject request and return a 404 status code.', function(done) {
         postInboxCreate(payload, function(err, res) {
-          res.statusCode.should.equal(400);
-          done();
-        }, 'application/jackson');
-      });
-
-      it('should call eventStore.projection.getState with the appropriate parameters', function(done) {
-        postInboxCreate(payload, function(err, res) {
-          eventStoreClient.projection.getState.should.have.been.calledWith({
-            name: sinon.match.any,
-            partition: 'digest-' + nonExistantDigestId
-          }, sinon.match.any);
+          res.statusCode.should.equal(404);
           done();
         });
       });
+
+      // it('should call eventStore.projection.getState with the appropriate parameters', function(done) {
+      //   postInboxCreate(payload, function(err, res) {
+      //     eventStoreClient.projection.getState.should.have.been.calledWith({
+      //       name: sinon.match.any,
+      //       partition: 'digest-' + nonExistantDigestId
+      //     }, sinon.match.any);
+      //     done();
+      //   });
+      // });
 
     });
 
