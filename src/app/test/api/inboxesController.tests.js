@@ -367,7 +367,7 @@ describe('inboxesController', function() {
       });
 
 
-      it('it should send back an appropriate error status code of 201', function(done) {
+      it('it should send back an appropriate created status code of 201', function(done) {
         postInbox(inboxPayload, function(err, res) {
           res.status.should.equal(201);
           done();
