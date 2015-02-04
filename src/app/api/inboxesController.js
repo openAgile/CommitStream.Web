@@ -53,7 +53,7 @@
           res.status(500).json({
             'error': 'There was an internal error when trying to process your request.'
           });
-        } else if (!resp.body || resp.body.length < 1) {
+        } else if (!resp.body || !resp.body.length) {
           res.status(404).json({
             'error': 'Could not find a digest with id ' + req.body.digestId + '.'
           });

@@ -257,9 +257,7 @@ describe('inboxesController', function() {
 
       beforeEach(function() {
         eventStoreClient.projection.getState.callsArgWith(1, null, {
-          body: {
-            ''
-          },
+          body: {},
           statusCode: 200
         });
 
