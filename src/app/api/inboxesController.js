@@ -87,6 +87,13 @@
 
     app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {
 
+      var contentType = req.get('Content-Type');
+
+      if (!contentType || contentType.toLowerCase() !== 'application/json') {
+        res.status(415).send('When posting to an inbox, you must send a Content-Type: application/json header.');
+        return;
+      }
+
       var responseData = {};
       res.set('Content-Type', 'application/json');
 

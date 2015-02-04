@@ -366,6 +366,13 @@ describe('inboxesController', function() {
         hypermediaResponseStub.inboxes.uuid.POST.returns(hypermedia);
       });
 
+      it('it should reject the request and explain that only application/json is accepted when sending unsupported Content-Type.', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.text.should.equal('When posting to an inbox, you must send a Content-Type: application/json header.');
+          done();
+        }, 'application/jackson');
+      });
+
 
       it('it should send back an appropriate created status code of 201', function(done) {
         postInbox(inboxPayload, function(err, res) {
