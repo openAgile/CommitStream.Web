@@ -254,13 +254,15 @@ describe('inboxesController', function() {
     describe('for a non-existant digestId', function() {
 
       var nonExistantDigestId = 'dbb47eec-514c-441d-bb15-b7d6d3d2153c';
+      var payload = {
+        digestId: nonExistantDigestId
+      }
 
-      beforeEach(function() {
+      before(function() {
         eventStoreClient.projection.getState.callsArgWith(1, null, {
           body: {},
           statusCode: 200
         });
-
         sanitizer.sanitize.returns([]);
         inboxAdded.validate.returns([]);
       })
@@ -272,16 +274,15 @@ describe('inboxesController', function() {
         });
       });
 
-      // it('should call eventStore.projection.getState with the appropriate parameters', function(done) {
-      //   postInboxCreate(payload, function(err, res) {
-      //     eventStoreClient.projection.getState.should.have.been.calledWith({
-      //       name: sinon.match.any,
-      //       partition: 'digest-' + nonExistantDigestId
-      //     }, sinon.match.any);
-      //     done();
-      //   });
-      // });
-
+      it('should call eventStore.projection.getState with the appropriate parameters', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          eventStoreClient.projection.getState.should.have.been.calledWith({
+            name: sinon.match.any,
+            partition: 'digest-' + nonExistantDigestId
+          }, sinon.match.any);
+          done();
+        });
+      });
     });
 
     describe('and santize reports an error', function() {
