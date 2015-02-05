@@ -412,7 +412,7 @@ describe('api/query after POST', function() {
     }, function(err, res, body) {
       should.not.exist(err);
       res.statusCode.should.equal(200);
-      res.body.should.equal('{"commits":[]}');
+      res.body.should.equal('{"commits":[],"_links":{}}');
       done();
     })
   });
