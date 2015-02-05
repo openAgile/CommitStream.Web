@@ -168,7 +168,7 @@
               responseData = {
                 message: 'Unknown event type for x-github-event header : ' + req.headers['x-github-event']
               };
-              res.send(responseData);
+              res.status(400).send(responseData);
             }
           } else {
             responseData = {

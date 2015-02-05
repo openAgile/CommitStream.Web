@@ -460,7 +460,12 @@ describe('inboxesController', function() {
           }, null, inboxId, eventType);
         });
 
-        it('it should have a response code of ')
+        it('it should have a response code of 400 (Bad Request)', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.status.should.equal(400);
+            done();
+          }, null, inboxId, eventType);
+        });
       })
 
       describe('but with an x-github-event-header of ping', function() {
