@@ -677,6 +677,7 @@ describe('api/digests/<digestId>/inboxes', function() {
         var expected = getExpectedResponse(digestIdCreated, inboxGUIDs);
         var actual = JSON.parse(res.body);
         actual.should.deep.equal(expected);
+        done();
       });
   });
 });
