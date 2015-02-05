@@ -570,3 +570,46 @@ describe('ACL settings', function() {
   });
 
 });
+
+describe('api/digests/<digestId>/inboxes', function() {
+  var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
+  var inboxesToCreate = ["Inbox1", "Inbox2"];
+  var inboxesCreated = [];
+
+  before(function(done) {    
+    request({
+      uri: "http://localhost:6565/api/digests" + key,
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({description: "Digest with Inboxes"})
+    }, function(err, res, body) {
+      var digestData = JSON.parse(body);
+      var digestIdCreated = digestData.digestId;
+      var urlToCreateInbox = digestData._links['inbox-create'].href;
+
+      inboxesToCreate.forEach(function(inbox) {
+        request({
+          uri: urlToCreateInbox + key,
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify({
+            name: inbox,
+            digestId: digestIdCreated,
+            family: "GitHub"
+          })
+        }, function(err, res, body) {
+          inboxesCreated.push(JSON.parse(body));
+          if (inboxesCreated.length === inboxesToCreate.length) done();
+        });
+      });
+    });
+  });
+
+  it('created 2 inboxes', function() {
+    inboxesCreated.length.should.equal(2);
+  });
+});
