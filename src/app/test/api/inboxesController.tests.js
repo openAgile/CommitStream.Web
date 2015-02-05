@@ -90,7 +90,7 @@ describe('inboxesController', function() {
 
     describe('with an unsupported or missing Content-Type header', function() {
       var payload = {};
-      it('should reject request and return a 415 status code.', function(done) {
+      it('should reject request and return a 415 status code (Unsupported Media Type).', function(done) {
         postInboxCreate(payload, function(err, res) {
           res.statusCode.should.equal(415);
           done();
@@ -199,7 +199,7 @@ describe('inboxesController', function() {
           }, 'application/jackson');
         });
 
-        it('should reject request and return a 415 status code.', function(done) {
+        it('should reject request and return a 415 status code (Unsupported Media Type).', function(done) {
           postInboxCreate(payload, function(err, res) {
             res.statusCode.should.equal(415);
             done();
@@ -459,6 +459,8 @@ describe('inboxesController', function() {
             done();
           }, null, inboxId, eventType);
         });
+
+        it('it should have a response code of ')
       })
 
       describe('but with an x-github-event-header of ping', function() {
