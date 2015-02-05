@@ -495,11 +495,34 @@ describe('digestsController', function() {
 
   describe('when requesting inboxes for a given digest', function() {
 
-    describe('when inboxes-for-digest projection returns an empty result', function() {
-      var uuid = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';      
-      var err;
-      var res;
+    var uuid = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
+    var err;
+    var res;
+
+    describe('with an invalid, non-uuid digest identifier', function() {
       before(function(done) {
+        uuid = 'not_a_uuid';
+        getDigest('/api/digests/' + uuid + '/inboxes', function(_err, _res) {
+          err = _err;
+          res = _res;
+          done();
+        });
+      });
+
+      it('it returns a 400 status code', function() {
+        res.statusCode.should.equal(400);
+      });
+
+      it('it returns a meaningful error message', function() {
+        res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
+      });
+
+    });
+
+    describe('when inboxes-for-digest projection returns an empty result', function() {
+
+      before(function(done) {
+        uuid = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
         eventStoreClient.projection.getState = sinon.stub();
         eventStoreClient.projection.getState.callsArgWith(1, null, {
           body: ''
@@ -514,9 +537,9 @@ describe('digestsController', function() {
 
       it('calls eventStore.projection.getState with correct parameters', function() {
         eventStoreClient.projection.getState.should.have.been.calledWith({
-            name: 'inboxes-for-digest',
-            partition: 'digestInbox-' + uuid
-          }, sinon.match.any);
+          name: 'inboxes-for-digest',
+          partition: 'digestInbox-' + uuid
+        }, sinon.match.any);
       });
 
       it('it returns a 400 status code', function() {
