@@ -489,8 +489,7 @@ describe('inboxesController', function() {
             done();
           }, null, inboxId, 'ping');
         });
-
-      })
+      });
 
       describe('but without the x-github-event header', function() {
         var postInboxWithoutXGithubEvent = function(shouldBehaveThusly) {
@@ -517,6 +516,13 @@ describe('inboxesController', function() {
         it('it should have a response Content-Type of application/json', function(done) {
           postInboxWithoutXGithubEvent(function(err, res) {
             res.get('Content-Type').should.equal('application/json; charset=utf-8');
+            done();
+          });
+        });
+
+        it('it should have a response code of 400 (Bad Request)', function(done) {
+          postInboxWithoutXGithubEvent(function(err, res) {
+            res.status.should.equal(400);
             done();
           });
         });

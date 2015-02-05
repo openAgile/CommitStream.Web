@@ -120,7 +120,7 @@
                 message: 'Unknown event type.'
               };
 
-              res.send(responseData);
+              res.status(400).send(responseData);
             } else if (req.headers['x-github-event'] == 'push') {
 
               var protocol = config.protocol || req.protocol;
