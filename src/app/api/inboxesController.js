@@ -174,11 +174,11 @@
             responseData = {
               message: error
             };
-            res.send(responseData);
+            res.status(500).send(responseData);
           }
         });
       }
-    })
+    });
 
     app.get('/api/inboxes/:uuid', function(req, res, next) {
       if (!validator.isUUID(req.params.uuid)) {

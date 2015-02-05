@@ -560,6 +560,13 @@ describe('inboxesController', function() {
           eventStoreClient.projection.getState.callsArgWith(1, 'Houston we have a problem', null);
         })
 
+        it('it should send back an appropriate error status code of 500 (Internal Server Error)', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.status.should.equal(500);
+            done();
+          });
+        });
+
         it('it should report the error it received to the client.', function(done) {
           postInbox(inboxPayload, function(err, res) {
             JSON.parse(res.text).message.should.equal('Houston we have a problem');
