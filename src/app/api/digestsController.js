@@ -188,8 +188,8 @@
               'error': 'There was an internal error when trying to process your request'
             });
           } else if (!resp.body || resp.body.length < 1) {
-            res.status(404).json({
-              'error': 'Could not find a digest with id ' + req.params.uuid
+            res.status(400).json({
+              'error': 'Could not find a digest with id ' + req.params.uuid + ', or found no inboxes associated with the digest.'
             });
           } else { // all good
             var state = JSON.parse(resp.body);

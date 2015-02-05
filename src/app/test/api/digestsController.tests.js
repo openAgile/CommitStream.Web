@@ -493,7 +493,44 @@ describe('digestsController', function() {
     });
   });
 
-  describe('when requesting a list of digests', function() {
+  describe('when requesting inboxes for a given digest', function() {
+
+    describe('when inboxes-for-digest projection returns an empty result', function() {
+      var uuid = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';      
+      var err;
+      var res;
+      before(function(done) {
+        eventStoreClient.projection.getState = sinon.stub();
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: ''
+        });
+
+        getDigest('/api/digests/' + uuid + '/inboxes', function(_err, _res) {
+          err = _err;
+          res = _res;
+          done();
+        });
+      });
+
+      it('calls eventStore.projection.getState with correct parameters', function() {
+        eventStoreClient.projection.getState.should.have.been.calledWith({
+            name: 'inboxes-for-digest',
+            partition: 'digestInbox-' + uuid
+          }, sinon.match.any);
+      });
+
+      it('it returns a 400 status code', function() {
+        res.statusCode.should.equal(400);
+      });
+
+      it('it returns a meaningful error message', function() {
+        res.text.should.equal(JSON.stringify({'error':'Could not find a digest with id ' + uuid + ', or found no inboxes associated with the digest.'}));
+      });
+
+      it('returns a Content-Type of application/json', function() {
+        res.get('Content-Type').should.equal('application/json; charset=utf-8');
+      });
+    });
 
   });
 
