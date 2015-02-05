@@ -164,7 +164,46 @@ HttpPrefixes:
 ```
    * Verify that EventStore now operates only over https:// and not http://
 
-###Open the necessary ports so EventStore can be seen from the outside###
+### Update default ACLs for user streams in EventStore
+
+Using curl, the script to create the $settings stream is:
+
+```
+$ curl -i -d @settings.json "http://localhost:2113/streams/%24settings" -u admin:<PASSWORD> -H "Content-Type: application/json" -H "ES-EventType: SettingsUpdated" -H "ES-EventId: SOMEG_GUID_HERE"
+``` 
+ You can get a new unique GUID from https://www.uuidgenerator.net/
+ 
+And where settings.json is:
+ 
+```json
+{
+  "$userStreamAcl" : {
+  "$r" : "$admins",
+  "$w" : "$admins",
+  "$d" : "$admins",
+  "$mr" : "$admins",
+  "$mw" : "$admins"
+  },
+  "$systemStreamAcl" : {
+  "$r" : "$admins",
+  "$w" : "$admins",
+  "$d" : "$admins",
+  "$mr" : "$admins",
+  "$mw" : "$admins"
+  }
+}
+```
+The command to test in curl is:
+ 
+`$ curl -v https://localhost:2113/streams/github-events --insecure -u admin:<PASSWORD> -H "Accept: application/json"`
+ 
+And to test without auth just drop the -u parameter:
+ 
+`$ curl -v https://localhost:2113/streams/github-events --insecure -H "Accept: application/json"`
+ 
+`--insecure` is only because we self-signed the SSL cert.
+
+### Open the necessary ports so EventStore can be seen from the outside###
 
 * In the azure portal go to the endpoints tab of your VM.
 * Add port 2113 and label it `EventStore`.
