@@ -128,11 +128,11 @@
     return (!model || !model.commits);
   }
 
-  function getUrlToQuery(commitStreamDomId, workitem) {
+  function getUrlToQuery(commitStreamDomId, digestId, workitem) {
     if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
       return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
     } else if (workitem) {
-      return '{{{apiUrl}}}' + workitem;
+      return '{{{apiUrl}}}' + '&digestId=' + digestId + '&workitem=' + workitem;
     } else {
       throw 'It was not possible to get the url to query.'
     }
@@ -198,7 +198,7 @@
   // Put a commitStream object in the global space
   if (!window.CommitStream) {
     window.CommitStream = {
-      commitsDisplay: function(commitStreamDomId, workitem, errorHandler) {
+      commitsDisplay: function(commitStreamDomId, digestId, workitem, errorHandler) {
         try {
           var queryCallBack = function(commitStreamDomId, model) {
             if (thereAreNoCommits(model)) {
@@ -212,7 +212,7 @@
             }
           }
 
-          var url = getUrlToQuery(commitStreamDomId, workitem);
+          var url = getUrlToQuery(commitStreamDomId, digestId, workitem);
 
           queryCommitStreamRefresh = function() {
             queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
