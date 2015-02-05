@@ -575,7 +575,7 @@ describe('api/digests/<digestId>/inboxes', function() {
 
   var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
   var digestIdCreated;
-  var inboxesToCreate = ["Inbox 1", "Inbox 2"];
+  var inboxesToCreate = ["Inbox 11", "Inbox 22"];
   var inboxGUIDs = [];
 
   function getExpectedResponse(digestId, inboxGUIDs) {
@@ -607,7 +607,7 @@ describe('api/digests/<digestId>/inboxes', function() {
           },
           "inboxId": inboxGUIDs[0],
           "family": "GitHub",
-          "name": "Inbox 1"
+          "name": "Inbox 11"
         }, {
           "_links": {
             "self": {
@@ -620,7 +620,7 @@ describe('api/digests/<digestId>/inboxes', function() {
           },
           "inboxId": inboxGUIDs[1],
           "family": "GitHub",
-          "name": "Inbox 2"
+          "name": "Inbox 22"
         }]
       }
     }
@@ -659,10 +659,6 @@ describe('api/digests/<digestId>/inboxes', function() {
         });
       });
     });
-  });
-
-  it('created 2 inboxes', function() {
-    inboxGUIDs.length.should.equal(2);
   });
 
   it('should return the expected response body.', function(done) {

@@ -121,53 +121,61 @@
     });
 
     app.get('/api/digests/:uuid/inboxes', function(req, res, next) {
-      function createHALResponse(digestId, inboxGUIDs) {
-        return {
+
+      function href(path) {
+        var protocol = config.protocol || req.protocol;
+        var host = req.get('host');
+        return protocol + "://" + host + path;
+      }
+
+      function createHyperMediaResponse(digestId, state) {
+        var inboxIds = _.keys(state.inboxes);
+
+        var response = {
           "_links": {
             "self": {
-              "href": "http://localhost:6565/api/digests/" + digestId + "/inboxes",
+              "href": href("/api/digests/" + digestId + "/inboxes"),
             },
             "digest": {
-              "href": "http://localhost:6565/api/digests/" + digestId
+              "href": href("/api/digests/" + digestId)
             },
             "inbox-create": {
-              "href": "http://localhost:6565/api/inboxes",
+              "href": href("/api/inboxes"),
               "method": "POST",
               "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
             }
           },
-          "count": 2,
+          "count": inboxIds.length,
           "_embedded": {
-            "inboxes": [{
-              "_links": {
-                "self": {
-                  "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[0]
-                },
-                "inbox-commits": {
-                  "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[0] + "/commits",
-                  "method": "POST"
-                }
-              },
-              "inboxId": inboxGUIDs[0],
-              "family": "GitHub",
-              "name": "Inbox 1"
-            }, {
-              "_links": {
-                "self": {
-                  "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[1]
-                },
-                "inbox-commits": {
-                  "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[1] + "/commits",
-                  "method": "POST"
-                }
-              },
-              "inboxId": inboxGUIDs[1],
-              "family": "GitHub",
-              "name": "Inbox 2"
-            }]
+            "inboxes": []
           }
+        };
+
+        function createInboxHyperMediaResult(inbox) {
+          var result = {
+            "_links": {
+              "self": {
+                "href": href("/api/inboxes/" + inbox.inboxId)
+              },
+              "inbox-commits": {
+                "href": href("/api/inboxes/" + inbox.inboxId + "/commits"),
+                "method": "POST"
+              }
+            }
+          };
+
+          result = _.extend(result, _.omit(inbox, 'digestId'));
+
+          return result;         
         }
+
+        inboxIds.forEach(function(inboxId) {
+          response._embedded.inboxes.push(createInboxHyperMediaResult(state.inboxes[inboxId]));
+        });
+
+        return response;
       }
+
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
       } else {
@@ -184,13 +192,10 @@
               'error': 'Could not find a digest with id ' + req.params.uuid
             });
           } else { // all good
-            var protocol = config.protocol || req.protocol;
-            var host = req.get('host');
-            var data = JSON.parse(resp.body);
-            var ids = _.keys(data.inboxes);
-            var halResponse = createHALResponse(req.params.uuid, ids);
+            var state = JSON.parse(resp.body);
+            var hypermediaResponse = JSON.stringify(createHyperMediaResponse(req.params.uuid, state));
             res.set('Content-Type', 'application/hal+json; charset=utf-8');
-            res.json(halResponse);
+            res.send(hypermediaResponse);
           }
         });
       }
