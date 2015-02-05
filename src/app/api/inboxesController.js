@@ -163,7 +163,7 @@
               responseData = {
                 message: 'Pong.'
               };
-              res.send(responseData);
+              res.status(200).send(responseData);
             } else {
               responseData = {
                 message: 'Unknown event type for x-github-event header : ' + req.headers['x-github-event']

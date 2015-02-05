@@ -482,6 +482,14 @@ describe('inboxesController', function() {
             done();
           }, null, inboxId, 'ping');
         });
+
+        it('it should have a response code of 200 (OK)', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            res.status.should.equal(200);
+            done();
+          }, null, inboxId, 'ping');
+        });
+
       })
 
       describe('but without the x-github-event header', function() {
