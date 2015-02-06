@@ -51,7 +51,8 @@ var postDigest = function(payload, shouldBehaveThusly, contentType) {
 };
 
 var getDigest = function(path, shouldBehaveThusly) {
-  request(app)
+  var superTest = request(app);
+  superTest
     .get(path)
     .end(shouldBehaveThusly);
 }
@@ -495,14 +496,14 @@ describe('digestsController', function() {
 
   describe('when requesting inboxes for a given digest', function() {
 
-    var uuid = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
+    var digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
     var err;
     var res;
 
     describe('with an invalid, non-uuid digest identifier', function() {
       before(function(done) {
-        uuid = 'not_a_uuid';
-        getDigest('/api/digests/' + uuid + '/inboxes', function(_err, _res) {
+        digestId = 'not_a_uuid';
+        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
           err = _err;
           res = _res;
           done();
@@ -519,26 +520,57 @@ describe('digestsController', function() {
 
     });
 
-    describe('when inboxes-for-digest projection returns an empty result', function() {
+    describe('when inboxes-for-digest projection returns an error', function() {
 
       before(function(done) {
-        uuid = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
+        digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
         eventStoreClient.projection.getState = sinon.stub();
-        eventStoreClient.projection.getState.callsArgWith(1, null, {
-          body: ''
-        });
+        eventStoreClient.projection.getState.callsArgWith(1, 'blow up!', null);
 
-        getDigest('/api/digests/' + uuid + '/inboxes', function(_err, _res) {
+        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
           err = _err;
           res = _res;
           done();
         });
       });
 
-      it('calls eventStore.projection.getState with correct parameters', function() {
+      it('it calls eventStore.projection.getState with correct parameters', function() {
         eventStoreClient.projection.getState.should.have.been.calledWith({
           name: 'inboxes-for-digest',
-          partition: 'digestInbox-' + uuid
+          partition: 'digestInbox-' + digestId
+        }, sinon.match.any);
+      });
+
+      it('it returns a 500 status code', function() {
+        res.statusCode.should.equal(500);
+      });
+
+      it('it returns a meaningful error message', function() {
+        res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
+      });
+
+    });    
+
+    describe('when inboxes-for-digest projection returns an empty result', function() {
+
+      before(function(done) {
+        digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
+        eventStoreClient.projection.getState = sinon.stub();
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: ''
+        });
+
+        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
+          err = _err;
+          res = _res;
+          done();
+        });
+      });
+
+      it('it calls eventStore.projection.getState with correct parameters', function() {
+        eventStoreClient.projection.getState.should.have.been.calledWith({
+          name: 'inboxes-for-digest',
+          partition: 'digestInbox-' + digestId
         }, sinon.match.any);
       });
 
@@ -547,14 +579,120 @@ describe('digestsController', function() {
       });
 
       it('it returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({'error':'Could not find a digest with id ' + uuid + ', or found no inboxes associated with the digest.'}));
+        res.text.should.equal(JSON.stringify({'error':'Could not find a digest with id ' + digestId + ', or found no inboxes associated with the digest.'}));
       });
 
-      it('returns a Content-Type of application/json', function() {
+      it('it returns a Content-Type of application/json', function() {
         res.get('Content-Type').should.equal('application/json; charset=utf-8');
       });
     });
 
+    describe('when inboxes-for-digest projection returns a valid state', function() {
+      var inbox1Id = '4e045ad2-0c62-410e-a39d-bd5e85a5f059';
+      var inbox2Id = '2aa7c387-f7f5-407e-b43e-06e8d3da6d71'
+      var inbox1Name = 'Hey hey inbox';
+      var inbox2Name = 'Yo yo inbox';
+
+      before(function(done) {
+        digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
+        
+        var state = {
+          'inboxes': {}
+        };
+
+        state.inboxes[inbox1Id] = {
+          inboxId: inbox1Id,
+          name: inbox1Name,
+          family: 'GitHub',
+          digestId: digestId
+        };
+
+        state.inboxes[inbox2Id] = {
+          inboxId: inbox2Id,
+          name: inbox2Name,
+          family: 'GitHub',
+          digestId: digestId
+        };
+
+        eventStoreClient.projection.getState = sinon.stub();
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify(state)
+        });
+
+        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
+          err = _err;
+          res = _res;
+          done();
+        });
+      });
+
+      it('it calls eventStore.projection.getState with correct parameters', function() {
+        eventStoreClient.projection.getState.should.have.been.calledWith({
+          name: 'inboxes-for-digest',
+          partition: 'digestInbox-' + digestId
+        }, sinon.match.any);
+      });
+
+      it('it returns a 200 status code', function() {
+        res.statusCode.should.equal(200);
+      });
+
+      it('it returns Content-Type hal+json', function() {
+        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+      });
+
+      it('it returns a HAL formatted response', function() {
+
+        var expected = {
+          "_links": {
+            "self": {
+              "href": "/api/digests/" + digestId + "/inboxes",
+            },
+            "digest": {
+              "href": "/api/digests/" + digestId
+            },
+            "inbox-create": {
+              "href": "/api/inboxes",
+              "method": "POST",
+              "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
+            }
+          },
+          "count": 2,
+          "_embedded": {
+            "inboxes": [{
+              "_links": {
+                "self": {
+                  "href": "/api/inboxes/" + inbox1Id
+                },
+                "inbox-commits": {
+                  "href": "/api/inboxes/" + inbox1Id + "/commits",
+                  "method": "POST"
+                }
+              },
+              "inboxId": inbox1Id,
+              "family": "GitHub",
+              "name": "Hey hey inbox"
+            }, {
+              "_links": {
+                "self": {
+                  "href": "/api/inboxes/" + inbox2Id
+                },
+                "inbox-commits": {
+                  "href": "/api/inboxes/" + inbox2Id + "/commits",
+                  "method": "POST"
+                }
+              },
+              "inboxId": inbox2Id,
+              "family": "GitHub",
+              "name": "Yo yo inbox"
+            }]
+          }
+        };
+        var rx = /http:\/\/127\.0\.0\.1\:\d+/g;
+        var body = res.text.replace(rx, '');
+        JSON.parse(body).should.deep.equal(expected);
+      });
+    });
   });
 
 });
