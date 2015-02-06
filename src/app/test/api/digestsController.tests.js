@@ -497,18 +497,18 @@ describe('digestsController', function() {
   describe('/api/digests/<digestId>/inboxes -- when requesting inboxes for a given digest', function() {
 
     var digestId,
+        digest,
         err,
-        res,
-        digest;
+        res;
 
     function reset() {
       digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf',
-      err = undefined,
-      res = undefined,
       digest = {
         digestId: digestId,
         description: 'Digest with Inboxes'
-      };
+      },
+      err = undefined,
+      res = undefined,
       eventStoreClient.projection.getState = sinon.stub();
     }    
 
@@ -525,7 +525,6 @@ describe('digestsController', function() {
       var rx = /http:\/\/127\.0\.0\.1\:\d+/g;
       return text.replace(rx, '');
     }
-
 
     describe('with an invalid, non-uuid digest identifier it', function() {
       before(function(done) {
