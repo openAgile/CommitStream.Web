@@ -662,6 +662,7 @@ describe('api/digests/<digestId>/inboxes', function() {
   });
 
   it('should return the expected response body.', function(done) {
+    setTimeout(function() {
     request.get({
         uri: "http://localhost:6565/api/digests/" + digestIdCreated + "/inboxes" + key,
         method: "POST",
@@ -669,11 +670,12 @@ describe('api/digests/<digestId>/inboxes', function() {
           "content-type": "application/json"
         }
       },
-      function(err, res) {
+      function(err, res) {        
         var expected = getExpectedResponse(digestIdCreated, inboxGUIDs);
         var actual = JSON.parse(res.body);
-        actual.should.deep.equal(expected);
+        JSON.stringify(actual).should.equal(JSON.stringify(expected));
         done();
       });
+    }, 5);
   });
 });
