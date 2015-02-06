@@ -494,96 +494,166 @@ describe('digestsController', function() {
     });
   });
 
-  describe('when requesting inboxes for a given digest', function() {
+  describe('/api/digests/<digestId>/inboxes -- when requesting inboxes for a given digest', function() {
 
-    var digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
-    var err;
-    var res;
+    var digestId,
+        err,
+        res,
+        digest;
 
-    describe('with an invalid, non-uuid digest identifier', function() {
+    function reset() {
+      digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf',
+      err,
+      res,
+      digest = {
+        digestId: digestId,
+        description: 'Digest with Inboxes'
+      };
+      eventStoreClient.projection.getState = sinon.stub();
+    }    
+
+    function get(done, _digestId) {
+      if (_digestId === undefined) _digestId = digestId;
+      getDigest('/api/digests/' + _digestId + '/inboxes', function(_err, _res) {        
+        err = _err;
+        res = _res;
+        done();
+      });
+    }
+
+    function normalizeHrefs(text) {
+      var rx = /http:\/\/127\.0\.0\.1\:\d+/g;
+      return text.replace(rx, '');
+    }
+
+    describe('with an invalid, non-uuid digest identifier it', function() {
       before(function(done) {
-        digestId = 'not_a_uuid';
-        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
-          err = _err;
-          res = _res;
-          done();
-        });
+        reset();
+        get(done, 'not_a_uuid');
       });
 
-      it('it returns a 400 status code', function() {
+      it('returns a 400 status code', function() {
         res.statusCode.should.equal(400);
       });
 
-      it('it returns a meaningful error message', function() {
+      it('returns a meaningful error message', function() {
         res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
+      });
+    });
+
+    describe('when digest projection returns an error it', function() {
+      before(function(done) {
+        reset(); 
+        eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, 'blow up!', null);
+        get(done);
+      });
+
+      it('returns a 500 status code', function() {
+        res.statusCode.should.equal(500);
+      });
+
+      it('returns a meaningful error message', function() {
+        res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
+      });
+    });
+
+    describe('when inboxes-for-digest projection returns an error it', function() {
+
+      before(function(done) {
+        reset();
+        eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, {
+          body: JSON.stringify(digest)
+        });        
+        eventStoreClient.projection.getState.onSecondCall().callsArgWith(1, 'blow up!', null);
+        get(done);
+      });
+
+      it('calls eventStore.projection.getState to find the digest', function() {
+        eventStoreClient.projection.getState.firstCall.should.have.been.calledWith({
+          name: 'digest',
+          partition: 'digest-' + digestId
+        }, sinon.match.func);
+      });
+
+      it('calls eventStore.projection.getState to get the inboxes', function() {
+        eventStoreClient.projection.getState.secondCall.should.have.been.calledWith({
+          name: 'inboxes-for-digest',
+          partition: 'digestInbox-' + digestId
+        }, sinon.match.func);
+      });
+
+      it('returns a 500 status code', function() {
+        res.statusCode.should.equal(500);
+      });
+
+      it('returns a meaningful error message', function() {
+        res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
       });
 
     });
 
-    describe('when inboxes-for-digest projection returns an error', function() {
+    describe('when inboxes-for-digest projection returns an empty result it', function() {
+      var expected;
 
       before(function(done) {
-        digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
-        eventStoreClient.projection.getState = sinon.stub();
-        eventStoreClient.projection.getState.callsArgWith(1, 'blow up!', null);
-
-        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
-          err = _err;
-          res = _res;
-          done();
-        });
-      });
-
-      it('it calls eventStore.projection.getState with correct parameters', function() {
-        eventStoreClient.projection.getState.should.have.been.calledWith({
-          name: 'inboxes-for-digest',
-          partition: 'digestInbox-' + digestId
-        }, sinon.match.any);
-      });
-
-      it('it returns a 500 status code', function() {
-        res.statusCode.should.equal(500);
-      });
-
-      it('it returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
-      });
-
-    });    
-
-    describe('when inboxes-for-digest projection returns an empty result', function() {
-
-      before(function(done) {
-        digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
-        eventStoreClient.projection.getState = sinon.stub();
-        eventStoreClient.projection.getState.callsArgWith(1, null, {
+        reset();
+        eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, {
+          body: JSON.stringify(digest)
+        });        
+        eventStoreClient.projection.getState.onSecondCall().callsArgWith(1, null, {
           body: ''
         });
-
-        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
-          err = _err;
-          res = _res;
-          done();
-        });
+        expected = {
+          "_links": {
+            "self": {
+              "href": "/api/digests/" + digestId + "/inboxes",
+            },
+            "digest": {
+              "href": "/api/digests/" + digestId
+            },
+            "inbox-create": {
+              "href": "/api/inboxes",
+              "method": "POST",
+              "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
+            }
+          },
+          "count": 0,
+          "digest": {
+            "digestId": digestId,
+            "description": digest.description
+          },
+          "_embedded": {
+            "inboxes": []
+          }
+        };        
+        get(done);
       });
 
-      it('it calls eventStore.projection.getState with correct parameters', function() {
-        eventStoreClient.projection.getState.should.have.been.calledWith({
+      it('calls eventStore.projection.getState to find the digest', function() {
+        eventStoreClient.projection.getState.firstCall.should.have.been.calledWith({
+          name: 'digest',
+          partition: 'digest-' + digestId
+        }, sinon.match.func);
+      });
+
+      it('calls eventStore.projection.getState to get the inboxes', function() {
+        eventStoreClient.projection.getState.secondCall.should.have.been.calledWith({
           name: 'inboxes-for-digest',
           partition: 'digestInbox-' + digestId
-        }, sinon.match.any);
+        }, sinon.match.func);
       });
 
-      it('it returns a 400 status code', function() {
-        res.statusCode.should.equal(400);
+      it('returns a 200 status code', function() {
+        res.statusCode.should.equal(200);
       });
 
-      it('it returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({'error':'Could not find a digest with id ' + digestId + ', or found no inboxes associated with the digest.'}));
+      it('returns Content-Type hal+json', function() {
+        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
       });
 
-      it('it returns a Content-Type of application/json', function() {
-        res.get('Content-Type').should.equal('application/json; charset=utf-8');
+      it('returns a HAL formatted response with no inboxes', function() {
+        var body = normalizeHrefs(res.text)
+        JSON.parse(body).should.deep.equal(expected);        
       });
     });
 
@@ -594,8 +664,7 @@ describe('digestsController', function() {
       var inbox2Name = 'Yo yo inbox';
 
       before(function(done) {
-        digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
-        
+        reset();
         var state = {
           'inboxes': {}
         };
@@ -615,34 +684,38 @@ describe('digestsController', function() {
         };
 
         eventStoreClient.projection.getState = sinon.stub();
-        eventStoreClient.projection.getState.callsArgWith(1, null, {
+        eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, {
+          body: JSON.stringify(digest)
+        });
+        eventStoreClient.projection.getState.onSecondCall().callsArgWith(1, null, {
           body: JSON.stringify(state)
         });
-
-        getDigest('/api/digests/' + digestId + '/inboxes', function(_err, _res) {
-          err = _err;
-          res = _res;
-          done();
-        });
+        get(done);
       });
 
-      it('it calls eventStore.projection.getState with correct parameters', function() {
-        eventStoreClient.projection.getState.should.have.been.calledWith({
+      it('calls eventStore.projection.getState to find the digest', function() {
+        eventStoreClient.projection.getState.firstCall.should.have.been.calledWith({
+          name: 'digest',
+          partition: 'digest-' + digestId
+        }, sinon.match.any);
+      });
+
+      it('calls eventStore.projection.getState to get the inboxes', function() {
+        eventStoreClient.projection.getState.secondCall.should.have.been.calledWith({
           name: 'inboxes-for-digest',
           partition: 'digestInbox-' + digestId
         }, sinon.match.any);
       });
 
-      it('it returns a 200 status code', function() {
+      it('returns a 200 status code', function() {
         res.statusCode.should.equal(200);
       });
 
-      it('it returns Content-Type hal+json', function() {
+      it('returns Content-Type hal+json', function() {
         res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
       });
 
-      it('it returns a HAL formatted response', function() {
-
+      it('returns a HAL formatted response', function() {
         var expected = {
           "_links": {
             "self": {
@@ -658,6 +731,10 @@ describe('digestsController', function() {
             }
           },
           "count": 2,
+          "digest": {
+            "digestId": digestId,
+            "description": digest.description
+          },
           "_embedded": {
             "inboxes": [{
               "_links": {
@@ -687,12 +764,10 @@ describe('digestsController', function() {
               "name": "Yo yo inbox"
             }]
           }
-        };
-        var rx = /http:\/\/127\.0\.0\.1\:\d+/g;
-        var body = res.text.replace(rx, '');
+        };        
+        var body = normalizeHrefs(res.text);
         JSON.parse(body).should.deep.equal(expected);
       });
     });
   });
-
 });

@@ -128,24 +128,28 @@
         return protocol + "://" + host + path;
       }
 
-      function createHyperMediaResponse(digestId, state) {
+      function createHyperMediaResponse(digest, state) {
         var inboxIds = _.keys(state.inboxes);
 
         var response = {
           "_links": {
             "self": {
-              "href": href("/api/digests/" + digestId + "/inboxes"),
+              "href": href("/api/digests/" + digest.digestId + "/inboxes"),
             },
             "digest": {
-              "href": href("/api/digests/" + digestId)
+              "href": href("/api/digests/" + digest.digestId)
             },
             "inbox-create": {
               "href": href("/api/inboxes"),
               "method": "POST",
-              "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
+              "title": "Endpoint for creating an inbox for a repository on digest " + digest.digestId + "."
             }
           },
           "count": inboxIds.length,
+          "digest": {
+            "description": digest.description,
+            "digestId": digest.digestId
+          },
           "_embedded": {
             "inboxes": []
           }
@@ -176,26 +180,44 @@
         return response;
       }
 
+      var digest;
+
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
       } else {
         eventStore.projection.getState({
-          name: 'inboxes-for-digest',
-          partition: 'digestInbox-' + req.params.uuid
+          name: 'digest',
+          partition: 'digest-' + req.params.uuid
         }, function(err, resp) {
           if (err) {
             res.status(500).json({
               'error': 'There was an internal error when trying to process your request.'
             });
           } else if (!resp.body || resp.body.length < 1) {
-            res.status(400).json({
-              'error': 'Could not find a digest with id ' + req.params.uuid + ', or found no inboxes associated with the digest.'
+            res.status(404).json({
+              'error': 'Could not find a digest with id ' + req.params.uuid
             });
-          } else { // all good
-            var state = JSON.parse(resp.body);
-            var hypermediaResponse = JSON.stringify(createHyperMediaResponse(req.params.uuid, state));
-            res.set('Content-Type', 'application/hal+json; charset=utf-8');
-            res.send(hypermediaResponse);
+          } else { // We found a digest, so attempt to get inboxes for the digest
+            digest = JSON.parse(resp.body);
+            eventStore.projection.getState({
+              name: 'inboxes-for-digest',
+              partition: 'digestInbox-' + digest.digestId
+            }, function(err, resp) {
+              if (err) {
+                res.status(500).json({
+                  'error': 'There was an internal error when trying to process your request.'
+                });
+              } else if (!resp.body || resp.body.length < 1) {
+                var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, {inboxes:{}}));
+                res.set('Content-Type', 'application/hal+json; charset=utf-8');
+                res.send(hypermediaResponse);                  
+              } else { // all good
+                var state = JSON.parse(resp.body);
+                var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, state));
+                res.set('Content-Type', 'application/hal+json; charset=utf-8');
+                res.send(hypermediaResponse);
+              }
+            });
           }
         });
       }
