@@ -183,7 +183,7 @@
       var digest;
 
       if (!validator.isUUID(req.params.uuid)) {
-        res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
+        res.status(400).json({error: 'The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.'});
       } else {
         eventStore.projection.getState({
           name: 'digest',
@@ -195,7 +195,7 @@
             });
           } else if (!resp.body || resp.body.length < 1) {
             res.status(404).json({
-              'error': 'Could not find a digest with id ' + req.params.uuid
+              'error': 'Could not find a digest with id ' + req.params.uuid + '.'
             });
           } else { // We found a digest, so attempt to get inboxes for the digest
             digest = JSON.parse(resp.body);
