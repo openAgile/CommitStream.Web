@@ -503,8 +503,8 @@ describe('digestsController', function() {
 
     function reset() {
       digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf',
-      err,
-      res,
+      err = undefined,
+      res = undefined,
       digest = {
         digestId: digestId,
         description: 'Digest with Inboxes'
@@ -525,6 +525,7 @@ describe('digestsController', function() {
       var rx = /http:\/\/127\.0\.0\.1\:\d+/g;
       return text.replace(rx, '');
     }
+
 
     describe('with an invalid, non-uuid digest identifier it', function() {
       before(function(done) {
@@ -580,7 +581,7 @@ describe('digestsController', function() {
 
     describe('when digest projection returns an error it', function() {
       before(function(done) {
-        reset(); 
+        reset();
         eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, 'blow up!', null);
         get(done);
       });
