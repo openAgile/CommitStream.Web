@@ -71,8 +71,15 @@ describe('queryController', function() {
   });
 
   describe('when I issue a query with a workitem=all as a parameter for default pageSize', function() {
+    var body = {
+      entries: [],
+      links: [{}, {}, {}, {
+        relation: 'next'
+      }]
+    };
+
     var mockData = {
-      body: '{ "entries": [] }'
+      body: JSON.stringify(body)
     };
 
     beforeEach(function() {
