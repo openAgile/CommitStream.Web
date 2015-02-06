@@ -1,11 +1,11 @@
 var chai = require('chai'),
-  should = chai.should(),
-  proxyquire = require('proxyquire'),
-  sinon = require('sinon'),
-  uuidStub = sinon.stub(),
-  githubTranslator = proxyquire('../../../api/translators/githubTranslator', {
-    'uuid-v4': uuidStub    
-  });
+    should = chai.should(),
+    proxyquire = require('proxyquire'),
+    sinon = require('sinon'),
+    uuidStub = sinon.stub(),
+    githubTranslator = proxyquire('../../../api/translators/githubTranslator', {
+        'uuid-v4': uuidStub
+    });
 
 // Test data:
 
@@ -186,42 +186,47 @@ var pushEventMessageWithOneCommit = {
 };
 
 describe('githubTranslator', function() {
-  var eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
-  uuidStub.returns(eventId);
+    var eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
+    uuidStub.returns(eventId);
 
-  describe('when translating a push event that contains one commit', function() {
-    var expected = [{
-      eventId: eventId,
-      eventType: "github-event",
-      data: {
-        sha: "3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
-        commit: {
-          author: {
-            "name": "kunzimariano",
-            "email": "kunzi.mariano@gmail.com",
-            "username": "kunzimariano"
-          },
-          committer: {
-            name: "kunzimariano",
-            email: "kunzi.mariano@gmail.com",
-            date: "2015-01-19T17:00:17-03:00"
-          },
-          message: "Renamed templates. S-51083"
-        },
-        html_url: "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
-        repository: {
-          id: 23838815,
-          name: "CommitStream.Web"
-        },
-        branch: "teamRoomUX2_S-51083",
-        originalMessage: pushEventMessageWithOneCommit.commits[0]
-      }
-    }];
+    var digestId = 'cd0b1089-7d6d-435a-adf2-125209b1c2c8';
 
-    var actual = githubTranslator.translatePush(pushEventMessageWithOneCommit);
+    describe('when translating a push event that contains one commit', function() {
+        var expected = [{
+            eventId: eventId,
+            eventType: "GitHubCommitReceived",
+            data: {
+                sha: "3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+                commit: {
+                    author: {
+                        "name": "kunzimariano",
+                        "email": "kunzi.mariano@gmail.com",
+                        "username": "kunzimariano"
+                    },
+                    committer: {
+                        name: "kunzimariano",
+                        email: "kunzi.mariano@gmail.com",
+                        date: "2015-01-19T17:00:17-03:00"
+                    },
+                    message: "Renamed templates. S-51083"
+                },
+                html_url: "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+                repository: {
+                    id: 23838815,
+                    name: "CommitStream.Web"
+                },
+                branch: "teamRoomUX2_S-51083",
+                originalMessage: pushEventMessageWithOneCommit.commits[0]
+            },
+            metadata: {
+                digestId: digestId
+            }
+        }];
 
-    it('should match the expected translation', function() {      
-      actual.should.deep.equal(expected);
+        var actual = githubTranslator.translatePush(pushEventMessageWithOneCommit, digestId);
+
+        it('should match the expected translation', function() {
+            actual.should.deep.equal(expected);
+        });
     });
-  });
 });

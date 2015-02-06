@@ -16,5 +16,5 @@ describe('projection to partitioner', function () {
     it('should have 3 events corrupted for the error stream', function (done) {
         assert.equal(getStream('github-events-error').length, 3);
         done();
-    });       
+    });
 });

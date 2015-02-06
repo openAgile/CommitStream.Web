@@ -5,7 +5,7 @@ var chai = require('chai'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
 describe('hypermediaResponse', function() {
-  describe('when constructing a hypermedia response for digest', function() {
+  describe('when constructing a hypermedia response for digest POST', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
     var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestId);
 
@@ -20,8 +20,8 @@ describe('hypermediaResponse', function() {
     }
 
     it('the self link href should be a valid URL', function() {
-        var selfLink = hypermedia._links['self'];
-        validator.isURL(selfLink.href).should.be.true;
+      var selfLink = hypermedia._links['self'];
+      validator.isURL(selfLink.href).should.be.true;
     });
 
     it('it should have links to other resources', function() {
@@ -40,8 +40,12 @@ describe('hypermediaResponse', function() {
       id.should.equal(digestId);
     });
 
+    it('should contain the id of the digest as a property', function() {
+      hypermedia.digestId.should.equal(digestId);
+    });
+
     it('it\'s self link should reference the digest created.', function() {
-      hypermedia._links['self'].should.have.property('href','http://localhost/api/digests/' + digestId);
+      hypermedia._links['self'].should.have.property('href', 'http://localhost/api/digests/' + digestId);
     });
 
     it('should have a link to get all digests', function() {
@@ -49,14 +53,17 @@ describe('hypermediaResponse', function() {
     });
 
     it('the digests link should be a valid URL', function() {
-        var link = hypermedia._links['digests'];
-        validator.isURL(link.href).should.be.true;
+      var link = hypermedia._links['digests'];
+      validator.isURL(link.href).should.be.true;
     });
   });
 
   describe('when constructing a hypermedia response for digest GET', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
-    var data = { "description": "BalZac!", "digestId": digestId };
+    var data = {
+      "description": "BalZac!",
+      "digestId": digestId
+    };
     var hypermedia = hypermediaResponse.digestGET('http', 'localhost', digestId, data);
 
     // helpers
@@ -70,8 +77,8 @@ describe('hypermediaResponse', function() {
     }
 
     it('the self link href should be a valid URL', function() {
-        var selfLink = hypermedia._links['self'];
-        validator.isURL(selfLink.href).should.be.true;  
+      var selfLink = hypermedia._links['self'];
+      validator.isURL(selfLink.href).should.be.true;
     });
 
     it('it should have links to other resources', function() {
@@ -91,7 +98,7 @@ describe('hypermediaResponse', function() {
     });
 
     it('it\'s self link should reference the digest.', function() {
-      hypermedia._links['self'].should.have.property('href','http://localhost/api/digests/' + digestId);
+      hypermedia._links['self'].should.have.property('href', 'http://localhost/api/digests/' + digestId);
     });
 
     it('should have a link to get all digests', function() {
@@ -99,8 +106,8 @@ describe('hypermediaResponse', function() {
     });
 
     it('the digests link should be a valid URL', function() {
-        var link = hypermedia._links['digests'];
-        validator.isURL(link.href).should.be.true;
+      var link = hypermedia._links['digests'];
+      validator.isURL(link.href).should.be.true;
     });
 
     it('should embed the description property that was passed', function() {
@@ -111,87 +118,157 @@ describe('hypermediaResponse', function() {
     it('should embed the digestId property that was passed', function() {
       hypermedia.should.include.key('digestId');
       hypermedia.digestId.should.equal(data.digestId);
-    });    
+    });
 
   });
 
+  describe('when constructing a hypermedia response for inbox creation', function() {
+    var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
+    var hypermedia = hypermediaResponse.inboxes.POST('http', 'localhost', inboxId);
 
-    // inbox-create link
-    // it('it should link to an inbox resource to create an inbox', function() {
-    //   hypermedia._links.should.include.key('inbox-create')
-    // });
+    // helpers
+    function getLinkForRel(rel) {
+      return hypermedia._links[rel];
+    }
 
-    // it('it should have an HTTP POST verb to create the inbox', function() {
-    //   hypermedia._links['inbox-create'].should.have.property('method', 'POST');
-    // });
+    function linkShouldExistWithProperty(rel, property, value) {
+      var link = getLinkForRel(rel);
+      link.should.have.property(property, value);
+    }
 
-    // it('it should have a reference to the inbox create resource', function() {
-    //   hypermedia._links['inbox-create'].should.have.property('href', 'http://localhost/api/digests/' + digestId +'/inbox');
-    // });
+    it('it should have links to other resources', function() {
+      hypermedia.should.include.key('_links');
+    });
 
-    // it('the link for inbox creation should have a description', function() {
-    //   hypermedia._links['inbox-create'].should.have.property('title', 'Endpoint for creating an inbox for a repository on digest ' + digestId);
-    // });
+    it('it should have self a link to itself', function() {
+      hypermedia._links.should.include.key('self')
+    });
 
-    // it('the inbox creation href should be a valid URL', function() {
-    //     var inboxCreateLink = hypermedia._links['inbox-create'];
-    //     validator.isURL(inboxCreateLink.href).should.be.true;
-    // });
+    it('the self link href should be a valid URL', function() {
+      var selfLink = hypermedia._links['self'];
+      validator.isURL(selfLink.href).should.be.true;
+    });
 
-//   describe('when constructing a hypermedia response for inbox', function() {
-//     var hypermedia = hypermediaResponse.inbox('http', 'localhost', '7f74aa58-74e0-11e4-b116-123b93f75cba');
+    it('the self link href should contain the id of the inbox', function() {
+      var selfLink = hypermedia._links.self;
+      var selfLinkParts = selfLink.href.split('/');
+      var id = selfLinkParts[selfLinkParts.length - 1];
+      id.should.equal(inboxId);
+    });
 
-//     it('should have an href to the digest form', function() {
-//       var link = _.find(hypermedia._links, function(element) { return element.rel === 'digest-form'; });
-//       link.href.should.equal('http://localhost/api/digest/new');
-//     });
+    it('it\'s self link should reference the inbox.', function() {
+      hypermedia._links['self'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId);
+    });
 
-//     it('inboxUrl should be a valid URI', function() {
-//         validator.isURL(hypermedia.inboxUrl).should.be.true;
-//     });
+    it('the inboxId property should exist ', function() {
+      hypermedia.should.have.property('inboxId', inboxId);
+    });
 
-//     it('should have an id to identify the inbox', function() {
-//       hypermedia.should.have.property('id');
-//     });
+  });
+  describe('when contructing a hypermedia response after pushing an event into an inbox', function() {
+    var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
+    var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
 
-//     it('id for a inbox should be a valid uuid', function() {
-//       validator.isUUID(hypermedia.id).should.be.true;
-//     });
+    var dataObject = {
+      inboxId: inboxId,
+      digestId: digestId
+    };
 
-//     it('inboxUrl should contain the id of the inbox', function() {
-//       var inboxUrlParts = hypermedia.inboxUrl.split('/');
-//       var id = inboxUrlParts[inboxUrlParts.length - 1];
-//       id.should.equal(hypermedia.id);
-//     });
+    var hypermedia = hypermediaResponse.inboxes.uuid.POST('http', 'localhost', dataObject);
 
-//     it('should have links to other resources', function() {
-//       hypermedia.should.include.key('_links');
-//     });
+    it('it should have links to other resources.', function() {
+      hypermedia.should.include.key('_links');
+    });
 
-//     it('it should have a link to itself', function() {
-//       var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
-//       selfLink.should.have.property('rel', 'self');
-//     });
+    it('it\'s self link should reference the inbox.', function() {
+      hypermedia._links['self'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId);
+    });
 
-//     it('it\'s self link should be to the appropriate href.', function() {
-//       var selfLink = _.find(hypermedia._links, function(element) { return element.rel === 'self'; });
-//       selfLink.should.have.property('href','http://localhost/api/inbox');
-//     } );
+    it('it should contain a link to the parent digest for the inbox.', function() {
+      hypermedia._links['digest-parent'].should.have.property('href', 'http://localhost/api/digests/' + digestId);
+    });
 
-//     // digest-form
-//     it('should link to an digest form', function() {
-//       var link = _.find(hypermedia._links, function(element) { return element.rel === 'digest-form'; });
-//       link.should.have.property('rel', 'digest-form');
-//     });
+    it('should have an appropriately worded message property.', function() {
+      hypermedia.should.have.property('message', 'Your push event has been queued to be added to CommitStream.');
+    });
+  });
 
-//     it('should have an HTTP GET verb to interract with the digest form ', function() {
-//       var link = _.find(hypermedia._links, function(element) { return element.rel === 'digest-form'; });
-//       link.should.have.property('method', 'GET');
-//     });
+  describe('when contructing a hypermedia response for getting information about an inbox', function() {
+    var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
+    var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
+    var family = 'GitHub';
+    var name = 'Drive faster than fast';
+    var url = 'http://github.com/somewhere';
 
-//     it('link for digest form should have a description', function() {
-//       var link = _.find(hypermedia._links, function(element) { return element.rel === 'digest-form'; });
-//       link.should.have.property('description', 'Navigate to form for creating digest for a group of inboxes');
-//     })
-//   })
-})
+    var dataObject = {
+      inboxId: inboxId,
+      digestId: digestId,
+      family: family,
+      name: name,
+      url: url
+    };
+    var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', dataObject);
+
+    it('it should have links to other resources.', function() {
+      hypermedia.should.include.key('_links');
+    });
+
+    it('it should have self a link to itself.', function() {
+      hypermedia._links.should.include.key('self')
+    });
+
+    it('the self link href should be a valid URL.', function() {
+      var selfLink = hypermedia._links['self'];
+      validator.isURL(selfLink.href).should.be.true;
+    });
+
+    it('the self link href should contain the id of the inbox.', function() {
+      var selfLink = hypermedia._links.self;
+      var selfLinkParts = selfLink.href.split('/');
+      var id = selfLinkParts[selfLinkParts.length - 1];
+      id.should.equal(inboxId);
+    });
+
+    it('it\'s self link should reference the inbox.', function() {
+      hypermedia._links['self'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId);
+    });
+
+    it('it should include a link to the inboxes resource for creating an inbox.', function() {
+      hypermedia._links['inboxes'].should.have.property('href', 'http://localhost/api/inboxes');
+    });
+
+    it('it should include the method for interfacing with the inbox creation endpoint.', function() {
+      hypermedia._links['inboxes'].should.have.property('method', 'POST');
+    });
+
+    it('it should include a title property containing information for interfacing with the inbox creation endpoint.', function() {
+      hypermedia._links['inboxes'].should.have.property('title', 'Endpoint for creating an inbox for a repository on a digest.');
+    });
+
+    it('it should contain a link to the parent digest for the inbox.', function() {
+      hypermedia._links['digest-parent'].should.have.property('href', 'http://localhost/api/digests/' + digestId);
+    });
+
+    it('the digest-parent link href should be a valid URL.', function() {
+      var digestParentLink = hypermedia._links['digest-parent']['href'];
+      validator.isURL(digestParentLink).should.be.true;
+    });
+
+    it('the digestId property should exist to show the digest associated with this inbox.', function() {
+      hypermedia.should.have.property('digestId', digestId);
+    });
+
+    it('should have a property of family showing the version control system type.', function() {
+      hypermedia.should.have.property('family', family);
+    });
+
+    it('should have a property for the name of the inbox.', function() {
+      hypermedia.should.have.property('name', name);
+    });
+
+    it('should have a property for the url of the remote repository pointing to this inbox.', function() {
+      hypermedia.should.have.property('url', url);
+    });
+  })
+
+});

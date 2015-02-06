@@ -1,7 +1,7 @@
 (function(controller) {
   var config = require('../config'),
     gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
-    es = require('./helpers/eventStoreClient');
+    es = require('./helpers/eventStoreClient'),
   _ = require('underscore'),
   uuid = require('uuid-v4'),
   Cache = require('ttl-cache');
@@ -43,7 +43,7 @@
 
         var stream;
         if (req.query.workitem.toLowerCase() === 'all') {
-          stream = 'github-events';
+          stream = 'digestCommits-' + req.query.digestId;
         } else {
           stream = 'asset-' + req.query.workitem;
         }

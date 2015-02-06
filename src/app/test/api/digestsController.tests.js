@@ -7,11 +7,11 @@ var chai = require('chai'),
   _ = require('underscore'),
   request = require('supertest'),
   proxyquire = require('proxyquire').noPreserveCache();
-  /* We must provide some dummy values here for the module: */
-  config = require ('../../config');
-  config.eventStorePassword = '123';
-  config.eventStoreUser = 'admin';
-  config.eventStoreBaseUrl = 'http://nothing:7887';
+/* We must provide some dummy values here for the module: */
+config = require('../../config');
+config.eventStorePassword = '123';
+config.eventStoreUser = 'admin';
+config.eventStoreBaseUrl = 'http://nothing:7887';
 
 var hypermediaResponseStub = {
     digestPOST: sinon.stub(),
@@ -28,20 +28,18 @@ var hypermediaResponseStub = {
       getState: sinon.stub()
     }
   },
-  controller = proxyquire('../../api/digestsController',
-    {
-      './hypermediaResponse' : hypermediaResponseStub,
-      './events/digestAdded' : digestAdded,
-      './helpers/eventStoreClient': eventStoreClient
-    }
-  );
+  controller = proxyquire('../../api/digestsController', {
+    './hypermediaResponse': hypermediaResponseStub,
+    './events/digestAdded': digestAdded,
+    './helpers/eventStoreClient': eventStoreClient
+  });
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
 
 controller.init(app);
 
-function postDigest(payload, shouldBehaveThusly, contentType) {
+var postDigest = function(payload, shouldBehaveThusly, contentType) {
   if (!contentType) {
     contentType = 'application/json';
   }
@@ -52,13 +50,13 @@ function postDigest(payload, shouldBehaveThusly, contentType) {
     .end(shouldBehaveThusly);
 };
 
-function getDigest(path, shouldBehaveThusly) {
+var getDigest = function(path, shouldBehaveThusly) {
   request(app)
     .get(path)
     .end(shouldBehaveThusly);
 }
 
-describe('digestsController', function () {
+describe('digestsController', function() {
 
   describe('when creating a digest', function() {
     var hypermediaResponse;
@@ -83,7 +81,9 @@ describe('digestsController', function () {
 
       hypermediaResponse = {
         "_links": {
-          "self" : { "href": protocol + "://" + host + "/api/digests/" + digestId }
+          "self": {
+            "href": protocol + "://" + host + "/api/digests/" + digestId
+          }
         }
       };
 
@@ -96,8 +96,10 @@ describe('digestsController', function () {
     });
 
     describe('with an unsupported or missing Content-Type header', function() {
-      var data = { description: 'Just your average run-of-the-mill description up in this.' };
-      it('should reject request and return a 415 status code.', function(done) {
+      var data = {
+        description: 'Just your average run-of-the-mill description up in this.'
+      };
+      it('should reject request and return a 415 status code (Unsupported Media Type).', function(done) {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(415);
           done();
@@ -114,7 +116,9 @@ describe('digestsController', function () {
     });
 
     describe('with a Content-Type: aPpLiCation/JSON (weird case) header', function() {
-      var data = { description: 'Just your average run-of-the-mill description up in this.' };
+      var data = {
+        description: 'Just your average run-of-the-mill description up in this.'
+      };
       it('should accept the request and return a 201 status code.', function(done) {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(201);
@@ -125,7 +129,9 @@ describe('digestsController', function () {
     });
 
     describe('with a script tag in the description', function() {
-      var data = { description: '<script>var x = 123; alert(x);</script>' };
+      var data = {
+        description: '<script>var x = 123; alert(x);</script>'
+      };
       it('it should reject the request and return a 400 status code.', function(done) {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(400);
@@ -142,7 +148,9 @@ describe('digestsController', function () {
     });
 
     describe('with HTML tags in the description', function() {
-      var data = { description: 'Hey there <b>Bold!</b> and <i><u>italicized and underlined</u></i>' };
+      var data = {
+        description: 'Hey there <b>Bold!</b> and <i><u>italicized and underlined</u></i>'
+      };
       it('it should reject the request request and return a 400 status code.', function(done) {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(400);
@@ -162,7 +170,9 @@ describe('digestsController', function () {
 
       describe('where description is an empty string', function() {
         it('it should reject a request and return a 400 status code.', function(done) {
-          var data = { description: '' };
+          var data = {
+            description: ''
+          };
           postDigest(data, function(err, res) {
             res.statusCode.should.equal(400);
             done();
@@ -170,7 +180,9 @@ describe('digestsController', function () {
         });
 
         it('it should reject a request and return a meaningful error message.', function(done) {
-          var data = { description: '' };
+          var data = {
+            description: ''
+          };
           postDigest(data, function(err, res) {
             res.text.should.equal('A digest description must contain a value.');
             done();
@@ -180,7 +192,9 @@ describe('digestsController', function () {
 
       describe('where description is null as a value', function() {
         it('it should reject a request and return a 400 status code.', function(done) {
-          var data = { description: null };
+          var data = {
+            description: null
+          };
           postDigest(data, function(err, res) {
             res.statusCode.should.equal(400);
             done();
@@ -188,7 +202,9 @@ describe('digestsController', function () {
         });
 
         it('should reject a request and return a meaningful error message.', function(done) {
-          var data = { description: null };
+          var data = {
+            description: null
+          };
           postDigest(data, function(err, res) {
             res.text.should.equal('A digest description must not be null.');
             done();
@@ -197,7 +213,9 @@ describe('digestsController', function () {
       });
 
       describe('where description does not exist in the json payload', function() {
-        var data = { notdescription: 'I am not the description property you deserve.' };
+        var data = {
+          notdescription: 'I am not the description property you deserve.'
+        };
         it('should reject a request and return a 400 status code.', function(done) {
           postDigest(data, function(err, res) {
             res.statusCode.should.equal(400);
@@ -217,7 +235,9 @@ describe('digestsController', function () {
     });
 
     describe('with a description greater than 140 characters', function() {
-      var data = { description: Array(142).join('.') };
+      var data = {
+        description: Array(142).join('.')
+      };
       it('it should reject a request and return a 400 status code.', function(done) {
         postDigest(data, function(err, res) {
           res.statusCode.should.equal(400);
@@ -235,14 +255,18 @@ describe('digestsController', function () {
     });
 
     it('it should use proper arguments when creating hypermedia.', function(done) {
-      postDigest({ description: 'Yay!'}, function(err, res) {
+      postDigest({
+        description: 'Yay!'
+      }, function(err, res) {
         hypermediaResponseStub.digestPOST.should.have.been.calledWith(protocol, sinon.match.any, digestAddedEvent.data.digestId);
         done();
       });
     });
 
     it('it should create the DigestAdded event.', function(done) {
-      var digestDescription = { description: 'myfirstdigest' };
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
       postDigest(digestDescription, function(err, res) {
         digestAdded.create.should.have.been.calledWith(digestDescription.description);
         done();
@@ -250,7 +274,9 @@ describe('digestsController', function () {
     });
 
     it('it should have a response Content-Type of hal+json', function(done) {
-      var digestDescription = { description: 'myfirstdigest' };
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
       postDigest(digestDescription, function(err, res) {
         res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
         done();
@@ -258,7 +284,9 @@ describe('digestsController', function () {
     });
 
     it('it should set the Location response header to the newly created digest', function(done) {
-      var digestDescription = { description: 'myfirstdigest' };
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
       postDigest(digestDescription, function(err, res) {
         res.get('Location').should.equal(hypermediaResponse._links.self.href);
         done();
@@ -266,7 +294,9 @@ describe('digestsController', function () {
     });
 
     it('it should have a response code of 201 created', function(done) {
-      var digestDescription = { description: 'myfirstdigest' };
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
       postDigest(digestDescription, function(err, res) {
         res.status.should.equal(201);
         done();
@@ -293,15 +323,15 @@ describe('digestsController', function () {
 
       it('it returns a 400 status code', function(done) {
         get(function(err, res) {
-            res.statusCode.should.equal(400);
-            done();
+          res.statusCode.should.equal(400);
+          done();
         });
       });
 
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
-            res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
-            done();
+          res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
+          done();
         });
       });
     });
@@ -309,7 +339,10 @@ describe('digestsController', function () {
     describe('with a valid, uuid digest identifier', function() {
 
       var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
-      var data = { "description": "BalZac!", "digestId": uuid };
+      var data = {
+        "description": "BalZac!",
+        "digestId": uuid
+      };
 
       beforeEach(function() {
         hypermediaResponseStub.digestGET = sinon.stub();
@@ -327,9 +360,9 @@ describe('digestsController', function () {
       it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
           eventStoreClient.projection.getState.should.have.been.calledWith({
-              name: sinon.match.any,
-              partition: 'digest-' + uuid
-            }, sinon.match.any);
+            name: sinon.match.any,
+            partition: 'digest-' + uuid
+          }, sinon.match.any);
           done();
         });
       });
@@ -345,8 +378,8 @@ describe('digestsController', function () {
 
       it('it returns a 200 status code', function(done) {
         get(function(err, res) {
-            res.statusCode.should.equal(200);
-            done();
+          res.statusCode.should.equal(200);
+          done();
         });
       });
 
@@ -378,17 +411,17 @@ describe('digestsController', function () {
       it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
           eventStoreClient.projection.getState.should.have.been.calledWith({
-              name: sinon.match.any,
-              partition: 'digest-' + uuid
-            }, sinon.match.any);
+            name: sinon.match.any,
+            partition: 'digest-' + uuid
+          }, sinon.match.any);
           done();
         });
       });
 
       it('it returns a 404 status code', function(done) {
         get(function(err, res) {
-            res.statusCode.should.equal(404);
-            done();
+          res.statusCode.should.equal(404);
+          done();
         });
       });
 
@@ -401,7 +434,9 @@ describe('digestsController', function () {
 
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
-          res.text.should.equal(JSON.stringify({'error': 'Could not find a digest with id ' + uuid}));
+          res.text.should.equal(JSON.stringify({
+            'error': 'Could not find a digest with id ' + uuid
+          }));
           done();
         });
       });
@@ -425,17 +460,17 @@ describe('digestsController', function () {
       it('calls eventStore.projection.getState with correct parameters', function(done) {
         get(function(err, res) {
           eventStoreClient.projection.getState.should.have.been.calledWith({
-              name: sinon.match.any,
-              partition: 'digest-' + uuid
-            }, sinon.match.any);
+            name: sinon.match.any,
+            partition: 'digest-' + uuid
+          }, sinon.match.any);
           done();
         });
       });
 
       it('it returns a 500 status code', function(done) {
         get(function(err, res) {
-            res.statusCode.should.equal(500);
-            done();
+          res.statusCode.should.equal(500);
+          done();
         });
       });
 
@@ -448,7 +483,9 @@ describe('digestsController', function () {
 
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
-          res.text.should.equal(JSON.stringify({'error': 'There was an internal error when trying to process your request'}));
+          res.text.should.equal(JSON.stringify({
+            'error': 'There was an internal error when trying to process your request'
+          }));
           done();
         });
       });
