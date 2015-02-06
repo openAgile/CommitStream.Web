@@ -594,6 +594,10 @@ describe('api/digests/<digestId>/inboxes', function() {
         }
       },
       "count": 2,
+      "digest": {
+        "description": "Digest with Inboxes",
+        "digestId": digestId
+      },
       "_embedded": {
         "inboxes": [{
           "_links": {
