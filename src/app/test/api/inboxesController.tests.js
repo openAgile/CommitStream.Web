@@ -285,6 +285,40 @@ describe('inboxesController', function() {
       });
     });
 
+    describe('and an error occurs from eventstore when looking up a digest', function() {
+      var digestId = 'dbb47eec-514c-441d-bb15-b7d6d3d2153c';
+      var payload = {
+        digestId: digestId
+      }
+
+      before(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, 'error', {});
+        sanitizer.sanitize.returns([]);
+        inboxAdded.validate.returns([]);
+      })
+
+      it('a status code of 500 Internal Error should be reported.', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.statusCode.should.equal(500);
+          done();
+        });
+      });
+
+      it('it should send an appropriate error message.', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          JSON.parse(res.text).error.should.equal('There was an internal error when trying to process your request.');
+          done();
+        });
+      });
+
+      it('it should have an application/json content-type', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          res.get('Content-Type').should.equal('application/json; charset=utf-8');
+          done();
+        });
+      });
+    });
+
     describe('and santize reports an error', function() {
       before(function() {
         sanitizer.sanitize.returns('Houston, we have a problem');
