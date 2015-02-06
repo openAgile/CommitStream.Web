@@ -185,7 +185,7 @@
         }, function(err, resp) {
           if (err) {
             res.status(500).json({
-              'error': 'There was an internal error when trying to process your request'
+              'error': 'There was an internal error when trying to process your request.'
             });
           } else if (!resp.body || resp.body.length < 1) {
             res.status(400).json({
