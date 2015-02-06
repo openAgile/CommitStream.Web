@@ -536,10 +536,47 @@ describe('digestsController', function() {
         res.statusCode.should.equal(400);
       });
 
+      it('returns a Content-Type of application/json', function() {
+        res.get('Content-Type').should.equal('application/json; charset=utf-8');
+      });      
+
       it('returns a meaningful error message', function() {
-        res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
+        res.text.should.equal(JSON.stringify({error:'The value "not_a_uuid" is not recognized as a valid digest identifier.'}));
       });
     });
+
+    describe('with a valid, uuid that does not match a real digest it', function() {
+      var myDigestId = 'e9cc02aa-feff-439c-ba44-2d1391cee60a';
+
+      before(function(done) {
+        reset();
+        eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, 
+          JSON.stringify({
+            body: ''
+          })
+        );
+        get(done, myDigestId);
+      });
+      
+      it('calls eventStore.projection.getState to find the digest', function() {
+        eventStoreClient.projection.getState.firstCall.should.have.been.calledWith({
+          name: 'digest',
+          partition: 'digest-' + myDigestId
+        }, sinon.match.func);
+      });        
+
+      it('returns a 404 status code', function() {
+        res.statusCode.should.equal(404);
+      });
+
+      it('returns a Content-Type of application/json', function() {
+        res.get('Content-Type').should.equal('application/json; charset=utf-8');
+      });
+
+      it('returns a meaningful error message', function() {
+        res.text.should.equal(JSON.stringify({error:'Could not find a digest with id ' + myDigestId + '.'}));
+      });
+    });    
 
     describe('when digest projection returns an error it', function() {
       before(function(done) {
@@ -551,6 +588,10 @@ describe('digestsController', function() {
       it('returns a 500 status code', function() {
         res.statusCode.should.equal(500);
       });
+
+      it('returns a Content-Type of application/json', function() {
+        res.get('Content-Type').should.equal('application/json; charset=utf-8');
+      });      
 
       it('returns a meaningful error message', function() {
         res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
@@ -585,6 +626,10 @@ describe('digestsController', function() {
       it('returns a 500 status code', function() {
         res.statusCode.should.equal(500);
       });
+
+      it('returns a Content-Type of application/json', function() {
+        res.get('Content-Type').should.equal('application/json; charset=utf-8');
+      });      
 
       it('returns a meaningful error message', function() {
         res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
