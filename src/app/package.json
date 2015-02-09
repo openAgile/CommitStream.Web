@@ -40,6 +40,7 @@
     "start": "node server.js",
     "test": "mocha -u exports -R spec test/**/*tests.js",
     "smoke": "mocha -u exports -R spec smoke-test/**/*tests.js",
+    "smoke-happy-path": "mocha -u exports -R spec smoke-test/happy-path-end-to-end.tests.js",
     "jenkins-test": "mocha -u exports -R tap test/**/*tests.js",
     "jenkins-smoke": "mocha -u exports -R tap smoke-test/smoke.tests.js",
     "jenkins-smoke-happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js"

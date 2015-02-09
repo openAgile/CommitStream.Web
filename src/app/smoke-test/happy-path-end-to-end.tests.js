@@ -576,9 +576,9 @@ describe('api/digests/<digestId>/inboxes', function() {
   var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
   var digestIdCreated;
   var inboxesToCreate = ["Inbox 11", "Inbox 22"];
-  var inboxGUIDs = [];
+  var inboxMap = {};
 
-  function getExpectedResponse(digestId, inboxGUIDs) {
+  function getExpectedResponse(digestId, inboxMap) {
     return {
       "_links": {
         "self": {
@@ -602,27 +602,27 @@ describe('api/digests/<digestId>/inboxes', function() {
         "inboxes": [{
           "_links": {
             "self": {
-              "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[0]
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 11']
             },
             "inbox-commits": {
-              "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[0] + "/commits",
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 11'] + "/commits",
               "method": "POST"
             }
           },
-          "inboxId": inboxGUIDs[0],
+          "inboxId": inboxMap['Inbox 11'],
           "family": "GitHub",
           "name": "Inbox 11"
         }, {
           "_links": {
             "self": {
-              "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[1]
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 22']
             },
             "inbox-commits": {
-              "href": "http://localhost:6565/api/inboxes/" + inboxGUIDs[1] + "/commits",
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 22'] + "/commits",
               "method": "POST"
             }
           },
-          "inboxId": inboxGUIDs[1],
+          "inboxId": inboxMap['Inbox 22'],
           "family": "GitHub",
           "name": "Inbox 22"
         }]
@@ -658,8 +658,8 @@ describe('api/digests/<digestId>/inboxes', function() {
             family: "GitHub"
           })
         }, function(err, res, body) {
-          inboxGUIDs.push(JSON.parse(body).inboxId);
-          if (inboxGUIDs.length === inboxesToCreate.length) done();
+          inboxMap[inbox] = JSON.parse(body).inboxId; 
+          if (_.keys(inboxMap).length === inboxesToCreate.length) done();
         });
       });
     });
@@ -675,9 +675,13 @@ describe('api/digests/<digestId>/inboxes', function() {
         }
       },
       function(err, res) {        
-        var expected = getExpectedResponse(digestIdCreated, inboxGUIDs);
+        var expected = getExpectedResponse(digestIdCreated, inboxMap);
         var actual = JSON.parse(res.body);
-        JSON.stringify(actual).should.equal(JSON.stringify(expected));
+        if (actual._embedded.inboxes[0].name === 'Inbox 22') {
+          expected._embedded.inboxes = expected._embedded.inboxes.reverse();
+        }
+        actual.should.deep.equal(expected);
+        //JSON.stringify(actual).should.equal(JSON.stringify(expected));
         done();
       });
     }, 5);
