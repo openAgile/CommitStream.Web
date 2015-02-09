@@ -704,11 +704,11 @@ describe('api/digests GET', function() {
         "digests": [{
           "_links": {
             "self": {
-              "href": "http://localhost:6565/api/digests/" + digestMap['First Digest']
+              "href": "http://localhost:6565/api/digests/" + digestMap['Third Digest']
             }
           },
-          "digestId": digestMap['First Digest'],
-          "description": "First Digest"
+          "digestId": digestMap['Third Digest'],
+          "description": "Third Digest"
         }, {
           "_links": {
             "self": {
@@ -720,11 +720,11 @@ describe('api/digests GET', function() {
         }, {
           "_links": {
             "self": {
-              "href": "http://localhost:6565/api/digests/" + digestMap['Third Digest']
+              "href": "http://localhost:6565/api/digests/" + digestMap['First Digest']
             }
           },
-          "digestId": digestMap['Third Digest'],
-          "description": "Third Digest"
+          "digestId": digestMap['First Digest'],
+          "description": "First Digest"
         }]
       }
     }
@@ -732,10 +732,7 @@ describe('api/digests GET', function() {
 
   before(function(done) {
     this.timeout(4000);
-    var index = 0;
-
     function digestCreate(index) {
-      console.log("Called digestCreate:" + index);
       var digest = digestsToCreate[index];
       request({
         uri: "http://localhost:6565/api/digests" + key,
@@ -744,23 +741,28 @@ describe('api/digests GET', function() {
           "content-type": "application/json"
         },
         body: JSON.stringify({
-          description: "Digest with Inboxes"
+          description: digest
         })
       }, function(err, res, body) {
         var digestData = JSON.parse(body);
         digestIdCreated = digestData.digestId;
         digestMap[digest] = digestIdCreated;
-        console.log(digestMap);
         if (_.keys(digestMap).length === digestsToCreate.length) {
           done();
         } else {
-          index++;
-          if (index < digestsToCreate.length) digestCreate(index)
-          else done();
+          if (index + 1 < digestsToCreate.length) digestCreate(index + 1);
         }
       });
     }
-    digestCreate(0);
+    request({
+      uri: "http://localhost:2113/streams/digests",
+      headers: {
+        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',        
+      },
+      method: 'DELETE'
+    }, function(err, res) {
+      digestCreate(0);
+    });
   });
 
   it('should return the expected response body.', function(done) {

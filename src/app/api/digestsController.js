@@ -226,16 +226,22 @@
     app.get('/api/digests', bodyParser.json(), function(req, res) {
       eventStore.streams.get({
         name: 'digests'
-      }, function(err, res) {
-        var b = JSON.parse(res.body);
-        var digests = _.map(b.entries, function(entry){
-          return entry.content.data;
-        });
+      }, function(err, resp) {
+        if (err) {
+          res.status(500).json({
+            'error': 'There was an internal error when trying to process your request'            
+          });
+        }
+        else {
+          var data = JSON.parse(resp.body);
+          var digests = _.map(data.entries, function(entry){
+            return entry.content.data;
+          });
+          var response = hypermediaResponse.digests.GET(req, digests);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        }
       });
-
-      var foo = hypermediaResponse.digests.GET(req, digests);
-      console.log(foo);
-      res.send(foo);
     });
   }
 

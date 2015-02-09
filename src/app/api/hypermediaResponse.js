@@ -58,7 +58,7 @@
     var response = {
       "_links": {
         "self": {
-          "href": href("/api/digests/", req)
+          "href": href("/api/digests", req)
         }
       },
       "count": digests.length,
