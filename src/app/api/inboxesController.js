@@ -153,8 +153,6 @@
                   res.set('Content-Type', 'application/hal+json');
                   res.location(responseData._links['query-digest'].href);
                   res.status(201);
-
-                  console.log('Posted to eventstore.');
                 }
 
                 res.send(responseData);
