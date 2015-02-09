@@ -32,6 +32,9 @@
           "href": protocol + "://" + host + "/api/inboxes",
           "method": "POST",
           "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
+        },
+        "inboxes": {
+          "href": protocol + "://" + host + "/api/digests/" + digestId + "/inboxes"
         }
       }
     };

@@ -570,3 +570,119 @@ describe('ACL settings', function() {
   });
 
 });
+
+describe('api/digests/<digestId>/inboxes', function() {
+
+  var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
+  var digestIdCreated;
+  var inboxesToCreate = ["Inbox 11", "Inbox 22"];
+  var inboxMap = {};
+
+  function getExpectedResponse(digestId, inboxMap) {
+    return {
+      "_links": {
+        "self": {
+          "href": "http://localhost:6565/api/digests/" + digestId + "/inboxes",
+        },
+        "digest": {
+          "href": "http://localhost:6565/api/digests/" + digestId
+        },
+        "inbox-create": {
+          "href": "http://localhost:6565/api/inboxes",
+          "method": "POST",
+          "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
+        }
+      },
+      "count": 2,
+      "digest": {
+        "description": "Digest with Inboxes",
+        "digestId": digestId
+      },
+      "_embedded": {
+        "inboxes": [{
+          "_links": {
+            "self": {
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 11']
+            },
+            "inbox-commits": {
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 11'] + "/commits",
+              "method": "POST"
+            }
+          },
+          "inboxId": inboxMap['Inbox 11'],
+          "family": "GitHub",
+          "name": "Inbox 11"
+        }, {
+          "_links": {
+            "self": {
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 22']
+            },
+            "inbox-commits": {
+              "href": "http://localhost:6565/api/inboxes/" + inboxMap['Inbox 22'] + "/commits",
+              "method": "POST"
+            }
+          },
+          "inboxId": inboxMap['Inbox 22'],
+          "family": "GitHub",
+          "name": "Inbox 22"
+        }]
+      }
+    }
+  }
+
+  before(function(done) {
+    request({
+      uri: "http://localhost:6565/api/digests" + key,
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        description: "Digest with Inboxes"
+      })
+    }, function(err, res, body) {
+      var digestData = JSON.parse(body);
+      digestIdCreated = digestData.digestId;
+      var urlToCreateInbox = digestData._links['inbox-create'].href;
+
+      inboxesToCreate.forEach(function(inbox) {
+        request({
+          uri: urlToCreateInbox + key,
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify({
+            name: inbox,
+            digestId: digestIdCreated,
+            family: "GitHub"
+          })
+        }, function(err, res, body) {
+          inboxMap[inbox] = JSON.parse(body).inboxId; 
+          if (_.keys(inboxMap).length === inboxesToCreate.length) done();
+        });
+      });
+    });
+  });
+
+  it('should return the expected response body.', function(done) {
+    setTimeout(function() {
+    request.get({
+        uri: "http://localhost:6565/api/digests/" + digestIdCreated + "/inboxes" + key,
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        }
+      },
+      function(err, res) {        
+        var expected = getExpectedResponse(digestIdCreated, inboxMap);
+        var actual = JSON.parse(res.body);
+        if (actual._embedded.inboxes[0].name === 'Inbox 22') {
+          expected._embedded.inboxes = expected._embedded.inboxes.reverse();
+        }
+        actual.should.deep.equal(expected);
+        done();
+      });
+    }, 5);
+  });
+});
