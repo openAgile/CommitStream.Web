@@ -568,7 +568,6 @@ describe('ACL settings', function() {
       done();
     });
   });
-
 });
 
 describe('api/digests/<digestId>/inboxes', function() {
@@ -685,4 +684,99 @@ describe('api/digests/<digestId>/inboxes', function() {
         });
     }, 5);
   });
+});
+
+describe('api/digests GET', function() {
+
+  var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
+  var digestMap = {};
+  var digestsToCreate = ['First Digest', 'Second Digest', 'Third Digest'];
+
+  function getExpectedResponse(digestMap) {
+    return {
+      "_links": {
+        "self": {
+          "href": "http://localhost:6565/api/digests",
+        }
+      },
+      "count": 3,
+      "_embedded": {
+        "digests": [{
+          "_links": {
+            "self": {
+              "href": "http://localhost:6565/api/digests/" + digestMap['First Digest']
+            }
+          },
+          "digestId": digestMap['First Digest'],
+          "description": "First Digest"
+        }, {
+          "_links": {
+            "self": {
+              "href": "http://localhost:6565/api/digests/" + digestMap['Second Digest']
+            }
+          },
+          "digestId": digestMap['Second Digest'],
+          "description": "Second Digest"
+        }, {
+          "_links": {
+            "self": {
+              "href": "http://localhost:6565/api/digests/" + digestMap['Third Digest']
+            }
+          },
+          "digestId": digestMap['Third Digest'],
+          "description": "Third Digest"
+        }]
+      }
+    }
+  }
+
+  before(function(done) {
+    var index = 0;
+
+    function digestCreate(index) {
+      console.log("Called digestCreate:" + index);
+      var digest = digestsToCreate[index];
+      request({
+        uri: "http://localhost:6565/api/digests" + key,
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({
+          description: "Digest with Inboxes"
+        })
+      }, function(err, res, body) {
+        var digestData = JSON.parse(body);
+        digestIdCreated = digestData.digestId;
+        digestMap[digest] = digestIdCreated;
+        console.log(digestMap);
+        if (_.keys(digestMap).length === digestsToCreate.length) {
+          done();
+        } else {
+          index++;
+          if (index < digestsToCreate.length) digestCreate(index)
+          else done();
+        }
+      });
+    }
+    digestCreate(0);
+  });
+
+  it('should return the expected response body.', function(done) {
+    setTimeout(function() {
+      request.get({
+        uri: "http://localhost:6565/api/digests" + key,
+        method: "GET",
+        headers: {
+          "content-type": "application/json"
+        }
+      }, function(err, res) {
+        var expected = getExpectedResponse(digestMap);
+        var actual = JSON.parse(res.body);
+        actual.should.deep.equal(expected);
+        done();
+      });
+    }, 5);
+  });
+
 });

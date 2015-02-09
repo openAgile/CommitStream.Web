@@ -223,4 +223,9 @@
       }
     });
   };
+    app.get('/api/digests', bodyParser.json(), function(req, res) {
+      res.send('{"awesome":"cool"}');
+    });
+  }
+
 })(module.exports);
