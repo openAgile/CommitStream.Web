@@ -731,6 +731,7 @@ describe('api/digests GET', function() {
   }
 
   before(function(done) {
+    this.timeout(4000);
     var index = 0;
 
     function digestCreate(index) {

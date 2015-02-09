@@ -224,7 +224,18 @@
     });
   };
     app.get('/api/digests', bodyParser.json(), function(req, res) {
-      res.send('{"awesome":"cool"}');
+      eventStore.streams.get({
+        name: 'digests'
+      }, function(err, res) {
+        var b = JSON.parse(res.body);
+        var digests = _.map(b.entries, function(entry){
+          return entry.content.data;
+        });
+      });
+
+      var foo = hypermediaResponse.digests.GET(req, digests);
+      console.log(foo);
+      res.send(foo);
     });
   }
 
