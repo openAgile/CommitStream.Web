@@ -4,7 +4,7 @@ This document describes the manual steps necessary to configure a CommitStream i
 
 ## Create a new virtual machine to host EventStore from a saved image
 
-Normall, you can just clone the base virtual machine image that already has EventStore loaded. However, to create a virtual machine from scratch, see the section **How to create a virtual machine to host EventStore from scratch** below.
+Normally, you can just clone the base virtual machine image that already has EventStore loaded. However, to create a virtual machine from scratch, see the section **How to create a virtual machine to host EventStore from scratch** below.
 
 TODO: create a clean baseline that doesn't have existing events in it
 
