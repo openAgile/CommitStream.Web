@@ -824,51 +824,50 @@ describe('digestsController', function() {
   describe('/api/digests -- when requesting the endpoint for a list of digests', function() {
     var error, response;
 
-    function get() {
+    function get(done) {
       getDigest('/api/digests', function(err, res) {
         error = err;
         response = res;
+        done();
       });
     }
 
-    describe('digests stream returns a valid state', function() {
+    describe('and digests stream returns a valid state', function() {
 
-      var fakeData = {
-        entries: [{
-          content: {
-            data: {
-              digestId: 'da998e7c-5b09-4f47-ac7f-63f93695a2ef',
-              description: 'A Digest'
+      before(function(done) {
+        var fakeData = {
+          entries: [{
+            content: {
+              data: {
+                digestId: 'da998e7c-5b09-4f47-ac7f-63f93695a2ef',
+                description: 'A Digest'
+              }
             }
-          }
-        }]
-      };
+          }]
+        };
 
-      eventStoreClient.streams.get = sinon.stub();
-      eventStoreClient.streams.get.callsArgWith(1, null, {
-        body: JSON.stringify(fakeData)
+        eventStoreClient.streams.get = sinon.stub();
+        eventStoreClient.streams.get.callsArgWith(1, null, {
+          body: JSON.stringify(fakeData)
+        });
+        get(done);
       });
 
-      get();
-
-      it('calls eventStore.streams.get to find the streams', function(done) {
+      it('calls eventStore.streams.get to find the digests', function() {
         eventStoreClient.streams.get.should.have.been.calledWith({
           name: 'digests'
         }, sinon.match.func);
-        done();
       });
 
-      it('returns a 200 status code', function(done) {
+      it('returns a 200 status code', function() {
         response.statusCode.should.equal(200);
-        done();
       });
 
-      it('returns Content-Type hal+json', function(done) {
+      it('returns Content-Type hal+json', function() {
         response.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
-        done();
       });
 
-      it('returns a HAL formatted response', function(done) {
+      it('returns a HAL formatted response', function() {
 
         var expected = {
           '_links': {
@@ -892,10 +891,39 @@ describe('digestsController', function() {
 
         var body = normalizeHrefs(response.text);
         JSON.parse(body).should.deep.equal(expected);
-        done();
+      });
+    });
+
+    describe('and digest stream returns an error', function() {
+
+      before(function(done) {
+        eventStoreClient.streams.get = sinon.stub();
+        eventStoreClient.streams.get.callsArgWith(1, '{ some: "error"}', undefined);
+        get(done);
+      });
+
+      it('calls eventStore.streams.get to find the digests', function() {
+        eventStoreClient.streams.get.should.have.been.calledWith({
+          name: 'digests'
+        }, sinon.match.func);
+      });
+
+      it('returns a 500 status code', function() {
+        response.statusCode.should.equal(500);
+      });
+
+      it('returns a Content-Type of application/json', function() {
+        response.get('Content-Type').should.equal('application/json; charset=utf-8');
+      });
+
+      it('returns a meaningful error message', function() {
+        response.text.should.equal(JSON.stringify({
+          'error': 'There was an internal error when trying to process your request.'
+        }));
       });
 
     });
+
   });
 
 });
