@@ -80,9 +80,6 @@ git push origin devopsheros
 
 ## Create the Azure web site to host the customer instance
 * Create a new web site in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `devopsheroscs`
-* Configure the site to publish from source control and select [https://github.com/openAgile/CommitStream.Web](openAgile/CommitStream.Web) on the `devopsheros` branch
-  * **Note:** If you need access to the repo ask Josh in HipChat
-* Verify that the deployment worked in the web site details view
 * Configure the site's App Settings so that it knows where to find its EventStore instance with these settings
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
@@ -92,7 +89,10 @@ git push origin devopsheros
 	* eventStoreUser `admin`
 	* eventStorePassword: `<eventStorePassword GUID>`
 	* eventStoreAllowSelfSignedCert: `true`
-* Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
+* From the site's Dashboard, select **Set up deployment from source control**, and choose GitHub, then after authorizing, select [https://github.com/openAgile/CommitStream.Web](openAgile/CommitStream.Web) on the `devopsheros` branch
+  * **Note:** If you need access to the repo ask Josh in HipChat
+  * Verify that the deployment worked in the web site details view
+  * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
 ##  Configure VersionOne instance
 
