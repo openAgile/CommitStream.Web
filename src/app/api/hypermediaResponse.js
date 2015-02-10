@@ -84,16 +84,10 @@
         "self": {
           "href": protocol + "://" + host + "/api/inboxes/" + dataObject.inboxId
         },
-        "inboxes": {
-          "href": protocol + "://" + host + "/api/inboxes",
-          "method": "POST",
-          "title": "Endpoint for creating an inbox for a repository on a digest."
-        },
         "digest-parent": {
           "href": protocol + "://" + host + "/api/digests/" + dataObject.digestId
         }
       },
-      "digestId": dataObject.digestId,
       "family": dataObject.family,
       "name": dataObject.name,
       "url": dataObject.url
