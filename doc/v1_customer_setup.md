@@ -19,6 +19,7 @@ TODO: create a clean baseline that doesn't have existing events in it
 * Region: `US East 2`
 * Add a firewall port named `eventstore` with private and public TCP ports for `2113`.
 * Finally, leave VM Agent checked for `The VM agent that supports extensions is already installed.`
+* Click the **Complete** checkmark to start the new VM
 
 ### Important: Add the VM to the exclusion list for the Azure Instances Stopper Jenkins job
 * Go to [https://ci-server/job/Azure%20VM%20Instances%20Stopper/](https://ci-server/job/Azure%20VM%20Instances%20Stopper/)
