@@ -12,7 +12,7 @@ TODO: create a clean baseline that doesn't have existing events in it
 
 ![VM from gallery](https://s3.amazonaws.com/uploads.hipchat.com/12722/130235/xabinc0jrpxk0HV/VM%20from%20gallery.png)
 
-* In the wizard, for **Choose an Image**, first pick **MY IMAGES**, and then select `v1cs-se-20150115-58600` and press next
+* In the wizard, for **Choose an Image**, first pick **MY IMAGES**, and then select `v1cs-se-base` and press next
 * Specify a **machine name**, starting with `v1cs-`. Example, for a customer named `devopsheros`, name it `v1cs-devopsheros`
 * Tier: `Standard`
 * Size: `A2 3.5 GB`
