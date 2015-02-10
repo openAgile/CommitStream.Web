@@ -60,7 +60,7 @@ HttpPrefixes:
  - https://localhost:2113/
  - https://v1cs-se.cloudapp.net:2113/
 ```
-* If you are resetting an existing instance, now try to access EventStore normally at https://localhost:2113. If it does not respond, you may need to reset the EventStore service by opening **Powershell As Administrator** and typing: `nssm restart eventstore`.
+* If you are resetting an existing instance, now try to access EventStore normally at [https://localhost:2113](https://localhost:2113). If it does not respond, you may need to reset the EventStore service by opening **Powershell As Administrator** and typing: `nssm restart eventstore`.
 * Otherwise, keep reading to set up the new GitHub branch and Azure Web Site for the new customer.
 
 ## Create code branch for the customer instance
