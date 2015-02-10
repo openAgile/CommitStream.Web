@@ -8,7 +8,7 @@ var chai = require('chai'),
   request = require('supertest'),
   proxyquire = require('proxyquire').noPreserveCache();
 /* We must provide some dummy values here for the module: */
-config = require('../../config');
+var config = require('../../config');
 config.eventStorePassword = '123';
 config.eventStoreUser = 'admin';
 config.eventStoreBaseUrl = 'http://nothing:7887';
@@ -22,7 +22,8 @@ var hypermediaResponseStub = {
   },
   eventStoreClient = {
     streams: {
-      post: sinon.stub()
+      post: sinon.stub(),
+      get: sinon.stub()
     },
     projection: {
       getState: sinon.stub()
@@ -49,13 +50,13 @@ var postDigest = function(payload, shouldBehaveThusly, contentType) {
     .type(contentType)
     .end(shouldBehaveThusly);
 };
-
+//TODO: could we change the name?
 var getDigest = function(path, shouldBehaveThusly) {
   var superTest = request(app);
   superTest
     .get(path)
     .end(shouldBehaveThusly);
-}
+};
 
 describe('digestsController', function() {
 
@@ -113,7 +114,6 @@ describe('digestsController', function() {
           done();
         }, 'application/jackson');
       });
-
     });
 
     describe('with a Content-Type: aPpLiCation/JSON (weird case) header', function() {
@@ -126,7 +126,6 @@ describe('digestsController', function() {
           done();
         }, 'aPpLiCation/JSON');
       });
-
     });
 
     describe('with a script tag in the description', function() {
@@ -232,12 +231,11 @@ describe('digestsController', function() {
         });
 
       });
-
     });
 
     describe('with a description greater than 140 characters', function() {
       var data = {
-        description: Array(142).join('.')
+        description: new Array(142).join('.')
       };
       it('it should reject a request and return a 400 status code.', function(done) {
         postDigest(data, function(err, res) {
@@ -252,9 +250,9 @@ describe('digestsController', function() {
           done();
         });
       });
-
     });
 
+    //TODO: shouldn't this be inside another describe?
     it('it should use proper arguments when creating hypermedia.', function(done) {
       postDigest({
         description: 'Yay!'
@@ -303,7 +301,6 @@ describe('digestsController', function() {
         done();
       });
     });
-
   });
 
   /********************************************
@@ -494,36 +491,36 @@ describe('digestsController', function() {
     });
   });
 
+  function normalizeHrefs(text) {
+    var rx = /http:\/\/127\.0\.0\.1\:\d+/g;
+    return text.replace(rx, '');
+  }
+
   describe('/api/digests/<digestId>/inboxes -- when requesting inboxes for a given digest', function() {
 
     var digestId,
-        digest,
-        err,
-        res;
+      digest,
+      err,
+      res;
 
     function reset() {
-      digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf',
+      digestId = 'ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf';
       digest = {
         digestId: digestId,
         description: 'Digest with Inboxes'
-      },
-      err = undefined,
-      res = undefined,
+      };
+      err = undefined;
+      res = undefined;
       eventStoreClient.projection.getState = sinon.stub();
-    }    
+    }
 
     function get(done, _digestId) {
       if (_digestId === undefined) _digestId = digestId;
-      getDigest('/api/digests/' + _digestId + '/inboxes', function(_err, _res) {        
+      getDigest('/api/digests/' + _digestId + '/inboxes', function(_err, _res) {
         err = _err;
         res = _res;
         done();
       });
-    }
-
-    function normalizeHrefs(text) {
-      var rx = /http:\/\/127\.0\.0\.1\:\d+/g;
-      return text.replace(rx, '');
     }
 
     describe('with an invalid, non-uuid digest identifier it', function() {
@@ -538,10 +535,12 @@ describe('digestsController', function() {
 
       it('returns a Content-Type of application/json', function() {
         res.get('Content-Type').should.equal('application/json; charset=utf-8');
-      });      
+      });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({error:'The value "not_a_uuid" is not recognized as a valid digest identifier.'}));
+        res.text.should.equal(JSON.stringify({
+          error: 'The value "not_a_uuid" is not recognized as a valid digest identifier.'
+        }));
       });
     });
 
@@ -550,20 +549,20 @@ describe('digestsController', function() {
 
       before(function(done) {
         reset();
-        eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, 
+        eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null,
           JSON.stringify({
             body: ''
           })
         );
         get(done, myDigestId);
       });
-      
+
       it('calls eventStore.projection.getState to find the digest', function() {
         eventStoreClient.projection.getState.firstCall.should.have.been.calledWith({
           name: 'digest',
           partition: 'digest-' + myDigestId
         }, sinon.match.func);
-      });        
+      });
 
       it('returns a 404 status code', function() {
         res.statusCode.should.equal(404);
@@ -574,9 +573,11 @@ describe('digestsController', function() {
       });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({error:'Could not find a digest with id ' + myDigestId + '.'}));
+        res.text.should.equal(JSON.stringify({
+          error: 'Could not find a digest with id ' + myDigestId + '.'
+        }));
       });
-    });    
+    });
 
     describe('when digest projection returns an error it', function() {
       before(function(done) {
@@ -591,10 +592,12 @@ describe('digestsController', function() {
 
       it('returns a Content-Type of application/json', function() {
         res.get('Content-Type').should.equal('application/json; charset=utf-8');
-      });      
+      });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
+        res.text.should.equal(JSON.stringify({
+          'error': 'There was an internal error when trying to process your request.'
+        }));
       });
     });
 
@@ -604,7 +607,7 @@ describe('digestsController', function() {
         reset();
         eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, {
           body: JSON.stringify(digest)
-        });        
+        });
         eventStoreClient.projection.getState.onSecondCall().callsArgWith(1, 'blow up!', null);
         get(done);
       });
@@ -629,10 +632,12 @@ describe('digestsController', function() {
 
       it('returns a Content-Type of application/json', function() {
         res.get('Content-Type').should.equal('application/json; charset=utf-8');
-      });      
+      });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({'error':'There was an internal error when trying to process your request.'}));
+        res.text.should.equal(JSON.stringify({
+          'error': 'There was an internal error when trying to process your request.'
+        }));
       });
 
     });
@@ -644,7 +649,7 @@ describe('digestsController', function() {
         reset();
         eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, {
           body: JSON.stringify(digest)
-        });        
+        });
         eventStoreClient.projection.getState.onSecondCall().callsArgWith(1, null, {
           body: ''
         });
@@ -670,7 +675,7 @@ describe('digestsController', function() {
           "_embedded": {
             "inboxes": []
           }
-        };        
+        };
         get(done);
       });
 
@@ -698,7 +703,7 @@ describe('digestsController', function() {
 
       it('returns a HAL formatted response with no inboxes', function() {
         var body = normalizeHrefs(res.text)
-        JSON.parse(body).should.deep.equal(expected);        
+        JSON.parse(body).should.deep.equal(expected);
       });
     });
 
@@ -809,10 +814,88 @@ describe('digestsController', function() {
               "name": "Yo yo inbox"
             }]
           }
-        };        
+        };
         var body = normalizeHrefs(res.text);
         JSON.parse(body).should.deep.equal(expected);
       });
     });
   });
+
+  describe('/api/digests -- when requesting the endpoint for a list of digests', function() {
+    var error, response;
+
+    function get() {
+      getDigest('/api/digests', function(err, res) {
+        error = err;
+        response = res;
+      });
+    }
+
+    describe('digests stream returns a valid state', function() {
+
+      var fakeData = {
+        entries: [{
+          content: {
+            data: {
+              digestId: 'da998e7c-5b09-4f47-ac7f-63f93695a2ef',
+              description: 'A Digest'
+            }
+          }
+        }]
+      };
+
+      eventStoreClient.streams.get = sinon.stub();
+      eventStoreClient.streams.get.callsArgWith(1, null, {
+        body: JSON.stringify(fakeData)
+      });
+
+      get();
+
+      it('calls eventStore.streams.get to find the streams', function(done) {
+        eventStoreClient.streams.get.should.have.been.calledWith({
+          name: 'digests'
+        }, sinon.match.func);
+        done();
+      });
+
+      it('returns a 200 status code', function(done) {
+        response.statusCode.should.equal(200);
+        done();
+      });
+
+      it('returns Content-Type hal+json', function(done) {
+        response.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+        done();
+      });
+
+      it('returns a HAL formatted response', function(done) {
+
+        var expected = {
+          '_links': {
+            'self': {
+              'href': '/api/digests'
+            }
+          },
+          'count': 1,
+          '_embedded': {
+            'digests': [{
+              '_links': {
+                'self': {
+                  'href': '/api/digests/da998e7c-5b09-4f47-ac7f-63f93695a2ef'
+                }
+              },
+              digestId: 'da998e7c-5b09-4f47-ac7f-63f93695a2ef',
+              description: 'A Digest'
+            }]
+          }
+        }
+
+        var body = normalizeHrefs(response.text);
+        JSON.parse(body).should.deep.equal(expected);
+        done();
+      });
+
+    });
+  });
+
 });
