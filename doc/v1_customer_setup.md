@@ -135,7 +135,8 @@ Substitute the real repo for `openAgile/CommitStream.Web` in the address below:
 
 ### Important: Add the VM to the exclusion list for the Azure Instances Stopper Jenkins job
 * Go to [https://ci-server/job/Azure%20VM%20Instances%20Stopper/](https://ci-server/job/Azure%20VM%20Instances%20Stopper/)
-* Under **Build** modify the `Stop-AllAzureInstances @("sqlSandbox*","v1commitstream","VmTFS2013","v1cs-test")` by adding `,"devopsheros"` to the list.
+* Click Configure to get into the configuration options
+* Under the **Build** section modify the `Stop-AllAzureInstances @("sqlSandbox*","v1commitstream","VmTFS2013","v1cs-test")` by adding `,"devopsheros"` to the list.
 
 ###Set up EventStore to use https###
 * Assuming you followed the script linked above, you should have installed Chocolatey. Now install the Windows 8 SDK with: `choco install windows-8-1-sdk`
