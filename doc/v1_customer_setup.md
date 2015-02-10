@@ -170,7 +170,7 @@ HttpPrefixes:
 Using curl, the script to create the $settings stream is:
 
 ```
-$ curl -i -d @settings.json "http://localhost:2113/streams/%24settings" -u admin:<PASSWORD> -H "Content-Type: application/json" -H "ES-EventType: SettingsUpdated" -H "ES-EventId: SOMEG_GUID_HERE"
+$ curl -i -d @settings.json "https://localhost:2113/streams/%24settings" -u admin:PASSWORD -H "Content-Type: application/json" -H "ES-EventType: SettingsUpdated" -H "ES-EventId: SOME_GUID_HERE"
 ``` 
  You can get a new unique GUID from https://www.uuidgenerator.net/
  
