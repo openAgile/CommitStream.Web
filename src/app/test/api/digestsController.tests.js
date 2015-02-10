@@ -924,6 +924,24 @@ describe('digestsController', function() {
 
     });
 
+    describe('and there are no digests', function() {
+
+      before(function(done) {
+        eventStoreClient.streams.get = sinon.stub();
+        eventStoreClient.streams.get.callsArgWith(1, null, {
+          statusCode: 404
+        });
+        get(done);
+      });
+
+      it('returns an empty array in the digests property of the JSON object', function() {
+        var body = JSON.parse(response.text);
+        body._embedded.digests.should.deep.equal([]);
+      });
+
+
+    });
+
   });
 
 });

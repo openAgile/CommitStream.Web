@@ -61,7 +61,7 @@
           "href": href("/api/digests", req)
         }
       },
-      "count": digests.length,
+      "count": digests ? digests.length : 0,
       "_embedded": {
         "digests": []
       }
@@ -79,9 +79,11 @@
       }
     }
 
-    digests.forEach(function(d) {
-      response._embedded.digests.push(createDigestHyperMediaResult(d));
-    });
+    if (digests) {
+      digests.forEach(function(d) {
+        response._embedded.digests.push(createDigestHyperMediaResult(d));
+      });
+    }
 
     return response;
   }

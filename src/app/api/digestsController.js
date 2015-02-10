@@ -183,7 +183,9 @@
       var digest;
 
       if (!validator.isUUID(req.params.uuid)) {
-        res.status(400).json({error: 'The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.'});
+        res.status(400).json({
+          error: 'The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.'
+        });
       } else {
         eventStore.projection.getState({
           name: 'digest',
@@ -208,7 +210,9 @@
                   'error': 'There was an internal error when trying to process your request.'
                 });
               } else if (!resp.body || resp.body.length < 1) {
-                var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, {inboxes:{}}));
+                var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, {
+                  inboxes: {}
+                }));
                 res.set('Content-Type', 'application/hal+json; charset=utf-8');
                 res.send(hypermediaResponse);
               } else { // all good
@@ -231,6 +235,10 @@
           res.status(500).json({
             'error': 'There was an internal error when trying to process your request.'
           });
+        } else if (resp.statusCode == 404) {
+          var response = hypermediaResponse.digests.GET(req);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
         } else {
           var data = JSON.parse(resp.body);
           var digests = _.map(data.entries, function(entry) {
