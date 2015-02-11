@@ -94,6 +94,106 @@ git push origin devopsheros
   * Verify that the deployment worked in the web site details view
   * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
+## Create one or more Digests and at one Inbox for each GitHub repository you want to send messages to CommitStream
+
+### Using [curl](http://curl.haxx.se/) or another equivalent HTTP client, execute the following to create a new Digest:
+
+```shell
+curl -i -X POST \
+  -H "Content-Type:application/json" \
+  -d \
+'{
+ "description": "My First Digest"
+}' \
+'http://localhost:6565/api/digests?key=<apiKey GUID>'
+```
+
+Here's a complete example where the apiKey is specified:
+
+```shell
+curl -i -X POST \
+  -H "Content-Type:application/json" \
+  -d \
+'{
+ "description": "My First Digest"
+}' \
+'http://localhost:6565/api/digests?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7'
+```
+
+Expect a response like:
+
+```json
+{
+    "_links": {
+        "self": {
+            "href": "http://localhost:6565/api/digests/f575d8df-681b-4a0d-aa9d-a42e97d1b2f1"
+        },
+        "digests": {
+            "href": "http://localhost:6565/api/digests"
+        },
+        "inbox-create": {
+            "href": "http://localhost:6565/api/inboxes",
+            "method": "POST",
+            "title": "Endpoint for creating an inbox for a repository on digest f575d8df-681b-4a0d-aa9d-a42e97d1b2f1."
+        }
+    },
+    "digestId": "f575d8df-681b-4a0d-aa9d-a42e97d1b2f1"
+}
+```
+Copy the **digestid** property to your clipboard to use in the next step.
+
+### Create an Inbox for each GitHub repository that you want to send messages to CommitStream by executing the following:
+
+```shell
+curl -i -X POST \
+  -H "Content-Type:application/json" \
+  -d \
+'{
+ "digestId": "<digestId>",
+ "family": "GitHub",
+ "name": "<Inbox name>",
+ "url": "<GitHub repository URL>"
+}' \
+'http://localhost:6565/api/inboxes?key=<apiKey>'
+```
+
+Complete example:
+
+```shell
+curl -i -X POST \
+  -H "Content-Type:application/json" \
+  -d \
+'{
+ "digestId": "f575d8df-681b-4a0d-aa9d-a42e97d1b2f1",
+ "family": "GitHub",
+ "name": "My First Inbox",
+ "url": "http://github.com/somewhere"
+}' \
+'http://localhost:6565/api/inboxes?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7'
+```
+
+Expect a response like:
+
+```json
+{
+    "_links": {
+        "self": {
+            "href": "http://localhost:6565/api/inboxes/f83e0382-b0b4-483a-bb0d-d1a9efe64fd8"
+        }
+    },
+    "inboxId": "f83e0382-b0b4-483a-bb0d-d1a9efe64fd8"
+}
+```
+[Add a Webhook](https://developer.github.com/webhooks/) in the GitHub repository's settings that uses the `_links.self.href` URL with the `?key=<apiKey>` parameter tacked onto the end. Note that if your repository were named **http://github.com/somewhere**, you'll find the Webhooks page at [http://github.com/somewhere/settings/hooks](http://github.com/somewhere/settings/hooks)
+
+Format:
+
+`http://localhost:6565/api/inboxes/<inboxId>?key=<apiKey>`
+
+Complete Example:
+
+`http://localhost:6565/api/inboxes/f83e0382-b0b4-483a-bb0d-d1a9efe64fd8?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7`
+
 ##  Configure VersionOne instance
 
 At this time, configuration in VersionOne is manually applied to the `user.config` file. It uses three settings. The longer-term goal is that the first two of these will enable fine-grained control from both the V1 hosting side and the customer admin side.
@@ -115,7 +215,7 @@ Substitute the real repo for `openAgile/CommitStream.Web` in the address below:
 
 * Navigate to [https://github.com/openAgile/CommitStream.Web/settings/hooks](https://github.com/openAgile/CommitStream.Web/settings/hooks]
 * Add a new Web hook with:
-  * Payload url: `https://devopsheroscs.azurewebsites.net/api/listenerWebhook?key=<apiKey GUID>`
+  * Payload url: `https://devopsheroscs.azurewebsites.net/api/listener?key=<apiKey GUID>`
   * Content type: `application/json`
   * Secret: leave blank
   * Which events would you like to trigger this webhook?: `Just the push event`
