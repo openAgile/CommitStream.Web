@@ -6,13 +6,11 @@ This document describes the manual steps necessary to configure a CommitStream i
 
 Normally, you can just clone the base virtual machine image that already has EventStore loaded. However, to create a virtual machine from scratch, see the section **How to create a virtual machine to host EventStore from scratch** below.
 
-TODO: create a clean baseline that doesn't have existing events in it
-
 * Start creating a new Virtual Machine and select **From gallery**, like so:
 
 ![VM from gallery](https://s3.amazonaws.com/uploads.hipchat.com/12722/130235/xabinc0jrpxk0HV/VM%20from%20gallery.png)
 
-* In the wizard, for **Choose an Image**, first pick **MY IMAGES**, and then select `v1cs-se-base` and press next
+* In the wizard, for **Choose an Image**, first pick **MY IMAGES**, and then select `v1cs-base` and press next
 * Specify a **machine name**, starting with `v1cs-`. Example, for a customer named `devopsheros`, name it `v1cs-devopsheros`
 * Tier: `Standard`
 * Size: `A2 3.5 GB`
