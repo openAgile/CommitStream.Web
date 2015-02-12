@@ -944,7 +944,7 @@ describe('digestsController', function() {
         response.statusCode.should.equal(200);
       });
 
-      it('returns a Content-Type of application/json', function() {
+      it('returns a Content-Type of application/hal+json; charset=utf-8', function() {
         response.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
       });
 
@@ -952,6 +952,12 @@ describe('digestsController', function() {
         var body = JSON.parse(response.text);
         body._embedded.digests.should.deep.equal([]);
       });
+
+      it('returns a JSON body with a zero count property', function() {
+        var body = JSON.parse(response.text);
+        body.count.should.equal(0);
+      });
+
     });
 
   });
