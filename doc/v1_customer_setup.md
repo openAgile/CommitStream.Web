@@ -84,17 +84,17 @@ git push origin devopsheros
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
 	* protocol : `https`
-	* apiKey: `<apiKey GUID>`
+	* apiKey: `apiKey`
 	* eventStoreBaseUrl: `https://devopsheroscs.cloudapp.net:2113`
 	* eventStoreUser `admin`
-	* eventStorePassword: `<eventStorePassword GUID>`
+	* eventStorePassword: `eventStorePassword`
 	* eventStoreAllowSelfSignedCert: `true`
 * From the site's Dashboard, select **Set up deployment from source control**, and choose GitHub, then after authorizing, select [https://github.com/openAgile/CommitStream.Web](openAgile/CommitStream.Web) on the `devopsheros` branch
   * **Note:** If you need access to the repo ask Josh in HipChat
   * Verify that the deployment worked in the web site details view
-  * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=<apiKey GUID>&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
+  * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=apiKey&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
-## Create one or more Digests and at one Inbox for each GitHub repository you want to send messages to CommitStream
+## Create a Digest and Inboxes the GitHub repositories you want to send messages to CommitStream (f
 
 ### Using [curl](http://curl.haxx.se/) or another equivalent HTTP client, execute the following to create a new Digest:
 
@@ -105,7 +105,7 @@ curl -i -X POST \
 '{
  "description": "My First Digest"
 }' \
-'http://localhost:6565/api/digests?key=<apiKey GUID>'
+'http://localhost:6565/api/digests?key=apiKey'
 ```
 
 Here's a complete example where the apiKey is specified:
@@ -149,12 +149,12 @@ curl -i -X POST \
   -H "Content-Type:application/json" \
   -d \
 '{
- "digestId": "<digestId>",
+ "digestId": "digestId",
  "family": "GitHub",
- "name": "<Inbox name>",
- "url": "<GitHub repository URL>"
+ "name": "Inbox name",
+ "url": "GitHub repository URL"
 }' \
-'http://localhost:6565/api/inboxes?key=<apiKey>'
+'http://localhost:6565/api/inboxes?key=apiKey'
 ```
 
 Complete example:
@@ -184,15 +184,29 @@ Expect a response like:
     "inboxId": "f83e0382-b0b4-483a-bb0d-d1a9efe64fd8"
 }
 ```
-[Add a Webhook](https://developer.github.com/webhooks/) in the GitHub repository's settings that uses the `_links.self.href` URL with the `?key=<apiKey>` parameter tacked onto the end. Note that if your repository were named **http://github.com/somewhere**, you'll find the Webhooks page at [http://github.com/somewhere/settings/hooks](http://github.com/somewhere/settings/hooks)
+#### Add a Webhook to the GitHub repository to configure it to send messages to the Inbox
 
-Format:
+GitHub has a feature called Webhooks which allow you to instruct a GitHub repository to send messages in response to events out to remote HTTP servers. This is how GitHub integrates with CommitStream. Technical documentation about Webhooks [is available here](https://developer.github.com/webhooks/) in GitHub's help pages.
 
-`http://localhost:6565/api/inboxes/<inboxId>?key=<apiKey>`
+* Copy the URL from the API response in the `_links.self.href` property and tack on the correct `?key=apiKey` parameter to the end.
+  * Format: `http://localhost:6565/api/inboxes/inboxId?key=apiKey`
+  * Complete example: `http://localhost:6565/api/inboxes/f83e0382-b0b4-483a-bb0d-d1a9efe64fd8?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7`
+* Go to the Webhooks settings page for your repository. Note that if your repository were named **http://github.com/somewhere**, you'll find the Webhooks page at [http://github.com/somewhere/settings/hooks](http://github.com/somewhere/settings/hooks)
+* Click **Add webhook**, and specify these parameters:
+  * Payload url: `http://localhost:6565/api/inboxes/inboxId?key=apiKey`
+  * Content type: `application/json`
+  * Secret: leave blank
+  * Which events would you like to trigger this webhook?: `Just the push event`
+  * Check the Active checkbox
 
-Complete Example:
-
-`http://localhost:6565/api/inboxes/f83e0382-b0b4-483a-bb0d-d1a9efe64fd8?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7`
+##### Verify integration by pushing a commit into the GitHub repository and view it in CommitStream 
+  
+* Now if you make a commit to that repository and mention a workitem that exists in your instance, like `S-01022`, then you should now be able to see this appear at [http://localhost:6565?key=apiKey&workitem=S-0122](http://localhost:6565?key=apiKey&workitem=S-01022).
+  * Complete example: [http://localhost:6565?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=S-01022](http://localhost:6565?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=S-01022)
+* If you mention a different workitem, you can correspondingly view that workitem's stream by changing the **workitem** parameter value.
+* And, to see the workitems for **all mentioned workitems**, then use this URL which includes the **digestId**: [http://localhost:6565?key=apiKey&workitem=all&digestId=digestId](http://localhost:6565?key=apiKey&workitem=all&digestId=digestId)
+  * Complete example: [http://localhost:6565?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=all&digestId=f575d8df-681b-4a0d-aa9d-a42e97d1b2f1](http://localhost:6565?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7&workitem=all&digestId=f575d8df-681b-4a0d-aa9d-a42e97d1b2f1)
+* To make this appear in a VersionOne instance within the sidepanel of a workitem detail view and in a TeamRoom, see the **Configure VersionOne instance** section below.
 
 ##  Configure VersionOne instance
 
@@ -203,24 +217,9 @@ At this time, configuration in VersionOne is manually applied to the `user.confi
 	<!-- CommitStream settings -->
 	<add key="CommitStream.Availability" value= "available" />--><!-- unavailable|available -->
 	<add key="CommitStream.Toggle" value="on" /> --><!-- or off|on -->
-	<add key="CommitStream.AppUrl" value="https://devopsheroscs.azurewebsites.net/app?key=<apiKey GUID>" />
+	<add key="CommitStream.AppUrl" value="https://devopsheroscs.azurewebsites.net/app?key=apiKey" />
 ```	
 * Verify that the integration loads by browsing to the customer's V1 instance and opening any asset detail lightbox. The CommitStream icon should be visible below the ActivityStream one, and when you click it, it should respond with a heading and a message about no commits found. This is fine since no commits have been pushed to the system yet. **But, there should not be an error message.**
-
-## Configure a GitHub repository to send events to the Azure web site
-
-This step is also manual for now. Customers will have to do this for their own GitHub resositories.
-
-Substitute the real repo for `openAgile/CommitStream.Web` in the address below:
-
-* Navigate to [https://github.com/openAgile/CommitStream.Web/settings/hooks](https://github.com/openAgile/CommitStream.Web/settings/hooks]
-* Add a new Web hook with:
-  * Payload url: `https://devopsheroscs.azurewebsites.net/api/listener?key=<apiKey GUID>`
-  * Content type: `application/json`
-  * Secret: leave blank
-  * Which events would you like to trigger this webhook?: `Just the push event`
-  * Check the Active checkbox
-* Now if you make a commit to that repository and mention a workitem that exists in your instance, like `S-01022`, then when you view that workitem in the VersionOne instance, you should see it in the sidepanel.
 
 ## How to create a virtual machine to host EventStore from scratch
 
@@ -297,7 +296,7 @@ And where settings.json is:
 ```
 The command to test in curl is:
  
-`$ curl -v https://localhost:2113/streams/github-events --insecure -u admin:<PASSWORD> -H "Accept: application/json"`
+`$ curl -v https://localhost:2113/streams/github-events --insecure -u admin:PASSWORD -H "Accept: application/json"`
  
 And to test without auth just drop the -u parameter:
  
