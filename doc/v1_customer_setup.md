@@ -94,7 +94,7 @@ git push origin devopsheros
   * Verify that the deployment worked in the web site details view
   * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=apiKey&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
-## Create a Digest and Inboxes the GitHub repositories you want to send messages to CommitStream (f
+## Create a Digest and Inboxes the GitHub repositories you want to send messages to CommitStream
 
 ### Using [curl](http://curl.haxx.se/) or another equivalent HTTP client, execute the following to create a new Digest:
 
