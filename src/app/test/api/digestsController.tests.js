@@ -934,12 +934,24 @@ describe('digestsController', function() {
         get(done);
       });
 
+      it('calls eventStore.streams.get to find the digests', function() {
+        eventStoreClient.streams.get.should.have.been.calledWith({
+          name: 'digests'
+        }, sinon.match.func);
+      });
+
+      it('returns a 200 status code', function() {
+        response.statusCode.should.equal(200);
+      });
+
+      it('returns a Content-Type of application/json', function() {
+        response.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+      });
+
       it('returns an empty array in the digests property of the JSON object', function() {
         var body = JSON.parse(response.text);
         body._embedded.digests.should.deep.equal([]);
       });
-
-
     });
 
   });
