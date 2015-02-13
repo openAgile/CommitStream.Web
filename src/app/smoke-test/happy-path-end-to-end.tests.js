@@ -196,7 +196,7 @@ describe('you need a digest to associate to the inboxes that will be created', f
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
-      urlToPushCommitToInbox1 = JSON.parse(body)._links['self'].href;
+      urlToPushCommitToInbox1 = JSON.parse(body)._links['add-commit'].href;
       inboxIdCreated.should.exist;
       done();
     });
@@ -216,7 +216,7 @@ describe('you need a digest to associate to the inboxes that will be created', f
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
-      urlToPushCommitToInbox2 = JSON.parse(body)._links['self'].href;
+      urlToPushCommitToInbox2 = JSON.parse(body)._links['add-commit'].href;
       inboxIdCreated.should.exist;
       done();
     });
@@ -259,7 +259,7 @@ describe('need a second digest for same workitem', function() {
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
-      urlToPushCommitToInboxA = JSON.parse(body)._links['self'].href;
+      urlToPushCommitToInboxA = JSON.parse(body)._links['add-commit'].href;
       inboxIdCreated.should.exist;
       done();
     });
