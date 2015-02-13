@@ -164,6 +164,10 @@ describe('hypermediaResponse', function() {
       hypermedia.should.have.property('inboxId', inboxId);
     });
 
+    it('it should have a reference to a resource to post commits to', function() {
+      hypermedia._links['add-commit'].should.have.property('href', 'http://localhost/api/inboxes/' + inboxId + '/commits')
+    });
+
   });
   describe('when contructing a hypermedia response after pushing an event into an inbox', function() {
     var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
