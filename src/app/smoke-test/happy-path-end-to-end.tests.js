@@ -658,7 +658,7 @@ describe('api/digests/<digestId>/inboxes', function() {
             family: "GitHub"
           })
         }, function(err, res, body) {
-          inboxMap[inbox] = JSON.parse(body).inboxId; 
+          inboxMap[inbox] = JSON.parse(body).inboxId;
           if (_.keys(inboxMap).length === inboxesToCreate.length) done();
         });
       });
@@ -667,22 +667,22 @@ describe('api/digests/<digestId>/inboxes', function() {
 
   it('should return the expected response body.', function(done) {
     setTimeout(function() {
-    request.get({
-        uri: "http://localhost:6565/api/digests/" + digestIdCreated + "/inboxes" + key,
-        method: "POST",
-        headers: {
-          "content-type": "application/json"
-        }
-      },
-      function(err, res) {        
-        var expected = getExpectedResponse(digestIdCreated, inboxMap);
-        var actual = JSON.parse(res.body);
-        if (actual._embedded.inboxes[0].name === 'Inbox 22') {
-          expected._embedded.inboxes = expected._embedded.inboxes.reverse();
-        }
-        actual.should.deep.equal(expected);
-        done();
-      });
+      request.get({
+          uri: "http://localhost:6565/api/digests/" + digestIdCreated + "/inboxes" + key,
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          }
+        },
+        function(err, res) {
+          var expected = getExpectedResponse(digestIdCreated, inboxMap);
+          var actual = JSON.parse(res.body);
+          if (actual._embedded.inboxes[0].name === 'Inbox 22') {
+            expected._embedded.inboxes = expected._embedded.inboxes.reverse();
+          }
+          actual.should.deep.equal(expected);
+          done();
+        });
     }, 5);
   });
 });

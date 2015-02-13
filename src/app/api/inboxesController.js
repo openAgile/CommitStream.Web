@@ -85,7 +85,7 @@
 
     });
 
-    app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {
+    app.post('/api/inboxes/:uuid/commits', bodyParser.json(), function(req, res, next) {
 
       var contentType = req.get('Content-Type');
 

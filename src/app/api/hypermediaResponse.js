@@ -72,6 +72,9 @@
       "_links": {
         "self": {
           "href": protocol + "://" + host + "/api/inboxes/" + inboxId
+        },
+        "add-commit": {
+          "href": protocol + "://" + host + "/api/inboxes/" + inboxId + "/commits"
         }
       },
       "inboxId": inboxId
