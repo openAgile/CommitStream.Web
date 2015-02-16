@@ -421,6 +421,13 @@ describe('inboxesController', function() {
         });
       });
 
+      it('it should have a location header set with a place to query for that commit added.', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          res.get('Location').should.equal('http://localhost/api/query?digestId=' + digestId + '&workitem=all');
+          done();
+        });
+      });
+
       it('it should call eventStoreClient to get the Parent DigestId for this inbox', function(done) {
         postInbox(inboxPayload, function(err, res) {
           eventStoreClient.projection.getState.should.have.been.calledWith({
