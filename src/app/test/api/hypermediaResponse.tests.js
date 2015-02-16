@@ -178,7 +178,7 @@ describe('hypermediaResponse', function() {
       digestId: digestId
     };
 
-    var hypermedia = hypermediaResponse.inboxes.uuid.POST('http', 'localhost', dataObject);
+    var hypermedia = hypermediaResponse.inboxes.uuid.commits.POST('http', 'localhost', dataObject);
 
     it('it should have links to other resources.', function() {
       hypermedia.should.include.key('_links');
@@ -194,6 +194,10 @@ describe('hypermediaResponse', function() {
 
     it('should have an appropriately worded message property.', function() {
       hypermedia.should.have.property('message', 'Your push event has been queued to be added to CommitStream.');
+    });
+
+    it('it should contain a link to query the associated digest.', function() {
+      hypermedia._links['query-digest'].should.have.property('href', 'http://localhost/api/query?digestId=' + digestId + '&workitem=all');
     });
   });
 

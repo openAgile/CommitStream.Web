@@ -21,7 +21,9 @@ var chai = require('chai'),
       POST: sinon.stub(),
       uuid: {
         GET: sinon.stub(),
-        POST: sinon.stub()
+        commits: {
+          POST: sinon.stub()
+        }
       }
     },
 
@@ -380,6 +382,9 @@ describe('inboxesController', function() {
           },
           "digest-parent": {
             "href": protocol + "://" + host + "/api/digests/" + digestId
+          },
+          "query-digest": {
+            "href": protocol + "://" + host + "/api/query?digestId=" + digestId + "&workitem=all"
           }
         },
         "message": "Your push event has been queued to be added to CommitStream."
@@ -398,7 +403,7 @@ describe('inboxesController', function() {
           statusCode: 200
         });
 
-        hypermediaResponseStub.inboxes.uuid.POST.returns(hypermedia);
+        hypermediaResponseStub.inboxes.uuid.commits.POST.returns(hypermedia);
       });
 
       it('it should reject the request and explain that only application/json is accepted when sending unsupported Content-Type.', function(done) {
@@ -458,7 +463,7 @@ describe('inboxesController', function() {
         };
 
         postInbox(inboxPayload, function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.POST.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
           done();
         });
       });

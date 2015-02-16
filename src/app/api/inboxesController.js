@@ -148,7 +148,7 @@
                     digestId: digestId
                   };
 
-                  responseData = hypermediaResponse.inboxes.uuid.POST(protocol, host, hypermediaData);
+                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(protocol, host, hypermediaData);
 
                   res.set('Content-Type', 'application/hal+json');
                   res.status(201);
