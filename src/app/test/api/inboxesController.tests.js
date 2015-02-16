@@ -69,8 +69,9 @@ var postInboxCreate = function(payload, shouldBehaveThusly, contentType) {
 
 
 var postInbox = function(payload, shouldBehaveThusly, contentType, inboxUuid, xGithubEventValue) {
+  var postUrl = '/api/inboxes/' + (inboxUuid || 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf') + '/commits';
   request(app)
-    .post('/api/inboxes/' + inboxUuid || 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf')
+    .post(postUrl)
     .set('x-github-event', xGithubEventValue || 'push')
     .send(JSON.stringify(payload))
     .type(contentType || 'application/json')
@@ -354,7 +355,7 @@ describe('inboxesController', function() {
     });
   });
 
-  describe('when posting to an inbox (/api/inboxes/:uuid)', function() {
+  describe('when posting to an inbox (/api/inboxes/:uuid/commits)', function() {
     var inboxId = 'c347948f-e1d0-4cd7-9341-f0f6ef5289bf';
     var digestId = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
     var protocol = 'http';
@@ -534,7 +535,7 @@ describe('inboxesController', function() {
           };
 
           request(app)
-            .post('/api/inboxes/' + inboxId)
+            .post('/api/inboxes/' + inboxId + '/commits')
             .send(JSON.stringify(payload))
             .type('application/json')
             .end(shouldBehaveThusly);
