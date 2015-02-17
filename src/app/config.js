@@ -24,4 +24,5 @@
   config.eventStoreAssetQueryParams = nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
   var notSet = nconf.get('production') == undefined;
   config.production = nconf.get('production') === 'true' || notSet;
+  config.controllerResponseDelay = nconf.get('controllerResponseDelay') || 1000;
 })(module.exports);

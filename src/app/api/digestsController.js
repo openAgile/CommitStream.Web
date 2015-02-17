@@ -86,7 +86,7 @@
 
           setTimeout(function() {
             res.send(hypermedia);
-          }, 1000);
+          }, config.controllerResponseDelay);
 
         }
       });
