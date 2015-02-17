@@ -4,10 +4,14 @@ var chai = require('chai'),
   _ = require('underscore'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
+function href(path) {
+  return "http://localhost" + path;
+}
+
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest POST', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
-    var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestId);
+    var hypermedia = hypermediaResponse.digestPOST(href, digestId);
 
     // helpers
     function getLinkForRel(rel) {
@@ -64,7 +68,7 @@ describe('hypermediaResponse', function() {
       "description": "BalZac!",
       "digestId": digestId
     };
-    var hypermedia = hypermediaResponse.digestGET('http', 'localhost', digestId, data);
+    var hypermedia = hypermediaResponse.digestGET(href, digestId, data);
 
     // helpers
     function getLinkForRel(rel) {

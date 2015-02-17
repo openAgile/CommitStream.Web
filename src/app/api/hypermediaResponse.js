@@ -8,17 +8,17 @@
     return protocol + "://" + host + path;
   }
 
-  hypermediaResponse.digestPOST = function(protocol, host, digestId) {
+  hypermediaResponse.digestPOST = function(href, digestId) {
     return {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/digests/" + digestId
+          "href": href("/api/digests/" + digestId)
         },
         "digests": {
-          "href": protocol + "://" + host + "/api/digests"
+          "href": href("/api/digests")
         },
         "inbox-create": {
-          "href": protocol + "://" + host + "/api/inboxes",
+          "href": href("/api/inboxes"),
           "method": "POST",
           "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
         }
@@ -27,22 +27,22 @@
     };
   };
 
-  hypermediaResponse.digestGET = function(protocol, host, digestId, data) {
+  hypermediaResponse.digestGET = function(href, digestId, data) {
     var response = {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/digests/" + digestId
+          "href": href("/api/digests/" + digestId)
         },
         "digests": {
-          "href": protocol + "://" + host + "/api/digests"
+          "href": href("/api/digests")
         },
         "inbox-create": {
-          "href": protocol + "://" + host + "/api/inboxes",
+          "href": href("/api/inboxes"),
           "method": "POST",
           "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
         },
         "inboxes": {
-          "href": protocol + "://" + host + "/api/digests/" + digestId + "/inboxes"
+          "href": href("/api/digests/" + digestId + "/inboxes")
         }
       }
     };

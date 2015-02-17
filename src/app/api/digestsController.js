@@ -34,8 +34,7 @@
         return;
       }
 
-      var protocol = config.protocol || req.protocol;
-      var host = req.get('host');
+      var href = urls.href(req);
 
       var originalDescription = req.body.description;
 
@@ -78,8 +77,8 @@
         if (error) {
           // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
         } else {
-          var hypermedia = hypermediaResponse.digestPOST(protocol,
-            host, digestAddedEvent.data.digestId);
+          var hypermedia = hypermediaResponse.digestPOST(href,
+            digestAddedEvent.data.digestId);
 
           res.location(hypermedia._links.self.href);
           res.set('Content-Type', 'application/hal+json');
@@ -94,6 +93,7 @@
     });
 
     app.get('/api/digests/:uuid', function(req, res, next) {
+      var href = urls.href(req);
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
       } else {
@@ -110,10 +110,8 @@
               'error': 'Could not find a digest with id ' + req.params.uuid
             });
           } else { // all good
-            var protocol = config.protocol || req.protocol;
-            var host = req.get('host');
             var data = JSON.parse(resp.body);
-            var response = hypermediaResponse.digestGET(protocol, host, data.digestId, data);
+            var response = hypermediaResponse.digestGET(href, data.digestId, data);
             res.set('Content-Type', 'application/hal+json; charset=utf-8');
             res.send(response);
           }
