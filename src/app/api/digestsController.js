@@ -8,6 +8,7 @@
     eventStore = require('./helpers/eventStoreClient'),
     bodyParser = require('body-parser'),
     sanitize = require('sanitize-html'),
+    urls = require('./urls'),
     _ = require('underscore');
 
   digestsController.init = function(app) {
@@ -121,12 +122,7 @@
     });
 
     app.get('/api/digests/:uuid/inboxes', function(req, res, next) {
-
-      function href(path) {
-        var protocol = config.protocol || req.protocol;
-        var host = req.get('host');
-        return protocol + "://" + host + path;
-      }
+      var href = urls.href(req);
 
       function createHyperMediaResponse(digest, state) {
         var inboxIds = _.keys(state.inboxes);
