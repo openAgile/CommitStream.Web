@@ -1,5 +1,13 @@
 (function(hypermediaResponse) {
 
+  var config = require('../config');
+
+  function href(path, req) {
+    var protocol = config.protocol || req.protocol;
+    var host = req.get('host');
+    return protocol + "://" + host + path;
+  }
+
   hypermediaResponse.digestPOST = function(protocol, host, digestId) {
     return {
       "_links": {
@@ -44,6 +52,41 @@
 
     return response;
   };
+
+  hypermediaResponse.digests = {};
+  hypermediaResponse.digests.GET = function(req, digests) {
+    var response = {
+      "_links": {
+        "self": {
+          "href": href("/api/digests", req)
+        }
+      },
+      "count": digests ? digests.length : 0,
+      "_embedded": {
+        "digests": []
+      }
+    }
+
+    function createDigestHyperMediaResult(digest) {
+      return {
+        "_links": {
+          "self": {
+            "href": href("/api/digests/" + digest.digestId, req)
+          }
+        },
+        "digestId": digest.digestId,
+        "description": digest.description
+      }
+    }
+
+    if (digests) {
+      digests.forEach(function(d) {
+        response._embedded.digests.push(createDigestHyperMediaResult(d));
+      });
+    }
+
+    return response;
+  }
 
   // These are difficult to name. Here are some ideas
   // For an endpoint like: /api/digests/id/inbox/id

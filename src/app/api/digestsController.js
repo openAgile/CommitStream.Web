@@ -170,7 +170,7 @@
 
           result = _.extend(result, _.omit(inbox, 'digestId'));
 
-          return result;         
+          return result;
         }
 
         inboxIds.forEach(function(inboxId) {
@@ -183,7 +183,9 @@
       var digest;
 
       if (!validator.isUUID(req.params.uuid)) {
-        res.status(400).json({error: 'The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.'});
+        res.status(400).json({
+          error: 'The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.'
+        });
       } else {
         eventStore.projection.getState({
           name: 'digest',
@@ -208,9 +210,11 @@
                   'error': 'There was an internal error when trying to process your request.'
                 });
               } else if (!resp.body || resp.body.length < 1) {
-                var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, {inboxes:{}}));
+                var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, {
+                  inboxes: {}
+                }));
                 res.set('Content-Type', 'application/hal+json; charset=utf-8');
-                res.send(hypermediaResponse);                  
+                res.send(hypermediaResponse);
               } else { // all good
                 var state = JSON.parse(resp.body);
                 var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, state));
@@ -222,5 +226,30 @@
         });
       }
     });
+
+    app.get('/api/digests', bodyParser.json(), function(req, res) {
+      eventStore.streams.get({
+        name: 'digests'
+      }, function(err, resp) {
+        if (err) {
+          res.status(500).json({
+            'error': 'There was an internal error when trying to process your request.'
+          });
+        } else if (resp.statusCode == 404) {
+          var response = hypermediaResponse.digests.GET(req);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        } else {
+          var data = JSON.parse(resp.body);
+          var digests = _.map(data.entries, function(entry) {
+            return entry.content.data;
+          });
+          var response = hypermediaResponse.digests.GET(req, digests);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        }
+      });
+    });
+
   };
 })(module.exports);
