@@ -66,12 +66,17 @@
 
   hypermediaResponse.inboxes = {};
   hypermediaResponse.inboxes.uuid = {};
+  hypermediaResponse.inboxes.uuid.commits = {};
+
 
   hypermediaResponse.inboxes.POST = function(protocol, host, inboxId) {
     return {
       "_links": {
         "self": {
           "href": protocol + "://" + host + "/api/inboxes/" + inboxId
+        },
+        "add-commit": {
+          "href": protocol + "://" + host + "/api/inboxes/" + inboxId + "/commits"
         }
       },
       "inboxId": inboxId
@@ -94,7 +99,7 @@
     };
   }
 
-  hypermediaResponse.inboxes.uuid.POST = function(protocol, host, dataObject) {
+  hypermediaResponse.inboxes.uuid.commits.POST = function(protocol, host, dataObject) {
     return {
       "_links": {
         "self": {
@@ -102,6 +107,9 @@
         },
         "digest-parent": {
           "href": protocol + "://" + host + "/api/digests/" + dataObject.digestId
+        },
+        "query-digest": {
+          "href": protocol + "://" + host + "/api/query?digestId=" + dataObject.digestId + "&workitem=all"
         }
       },
       "message": "Your push event has been queued to be added to CommitStream."

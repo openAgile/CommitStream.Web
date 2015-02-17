@@ -196,7 +196,7 @@ describe('you need a digest to associate to the inboxes that will be created', f
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
-      urlToPushCommitToInbox1 = JSON.parse(body)._links['self'].href;
+      urlToPushCommitToInbox1 = JSON.parse(body)._links['add-commit'].href;
       inboxIdCreated.should.exist;
       done();
     });
@@ -216,7 +216,7 @@ describe('you need a digest to associate to the inboxes that will be created', f
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
-      urlToPushCommitToInbox2 = JSON.parse(body)._links['self'].href;
+      urlToPushCommitToInbox2 = JSON.parse(body)._links['add-commit'].href;
       inboxIdCreated.should.exist;
       done();
     });
@@ -259,7 +259,7 @@ describe('need a second digest for same workitem', function() {
     }, function(err, res, body) {
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
-      urlToPushCommitToInboxA = JSON.parse(body)._links['self'].href;
+      urlToPushCommitToInboxA = JSON.parse(body)._links['add-commit'].href;
       inboxIdCreated.should.exist;
       done();
     });
@@ -658,7 +658,7 @@ describe('api/digests/<digestId>/inboxes', function() {
             family: "GitHub"
           })
         }, function(err, res, body) {
-          inboxMap[inbox] = JSON.parse(body).inboxId; 
+          inboxMap[inbox] = JSON.parse(body).inboxId;
           if (_.keys(inboxMap).length === inboxesToCreate.length) done();
         });
       });
@@ -667,22 +667,22 @@ describe('api/digests/<digestId>/inboxes', function() {
 
   it('should return the expected response body.', function(done) {
     setTimeout(function() {
-    request.get({
-        uri: "http://localhost:6565/api/digests/" + digestIdCreated + "/inboxes" + key,
-        method: "POST",
-        headers: {
-          "content-type": "application/json"
-        }
-      },
-      function(err, res) {        
-        var expected = getExpectedResponse(digestIdCreated, inboxMap);
-        var actual = JSON.parse(res.body);
-        if (actual._embedded.inboxes[0].name === 'Inbox 22') {
-          expected._embedded.inboxes = expected._embedded.inboxes.reverse();
-        }
-        actual.should.deep.equal(expected);
-        done();
-      });
+      request.get({
+          uri: "http://localhost:6565/api/digests/" + digestIdCreated + "/inboxes" + key,
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          }
+        },
+        function(err, res) {
+          var expected = getExpectedResponse(digestIdCreated, inboxMap);
+          var actual = JSON.parse(res.body);
+          if (actual._embedded.inboxes[0].name === 'Inbox 22') {
+            expected._embedded.inboxes = expected._embedded.inboxes.reverse();
+          }
+          actual.should.deep.equal(expected);
+          done();
+        });
     }, 5);
   });
 });

@@ -85,7 +85,7 @@
 
     });
 
-    app.post('/api/inboxes/:uuid', bodyParser.json(), function(req, res, next) {
+    app.post('/api/inboxes/:uuid/commits', bodyParser.json(), function(req, res, next) {
 
       var contentType = req.get('Content-Type');
 
@@ -148,9 +148,10 @@
                     digestId: digestId
                   };
 
-                  responseData = hypermediaResponse.inboxes.uuid.POST(protocol, host, hypermediaData);
+                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(protocol, host, hypermediaData);
 
                   res.set('Content-Type', 'application/hal+json');
+                  res.location(responseData._links['query-digest'].href);
                   res.status(201);
 
                   console.log('Posted to eventstore.');
