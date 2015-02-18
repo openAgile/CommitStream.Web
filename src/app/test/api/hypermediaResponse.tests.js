@@ -128,7 +128,7 @@ describe('hypermediaResponse', function() {
 
   describe('when constructing a hypermedia response for inbox creation', function() {
     var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
-    var hypermedia = hypermediaResponse.inboxes.POST('http', 'localhost', inboxId);
+    var hypermedia = hypermediaResponse.inboxes.POST(href, inboxId);
 
     // helpers
     function getLinkForRel(rel) {

@@ -9,7 +9,8 @@
     sanitize = require('./sanitizer').sanitize,
     request = require('request'),
     hypermediaResponse = require('./hypermediaResponse'),
-    translator = require('./translators/githubTranslator');
+    translator = require('./translators/githubTranslator'),
+    urls = require('./urls');
 
   inboxesController.init = function(app) {
 
@@ -21,8 +22,7 @@
         return;
       }
 
-      var protocol = config.protocol || req.protocol;
-      var host = req.get('host');
+      var href = urls.href(req);
 
       function hasErrors(errors) {
         return errors.length > 0;
@@ -71,8 +71,8 @@
                 errors: 'We had an internal problem. Please retry your request. Error: ' + error
               });
             } else {
-              var hypermedia = hypermediaResponse.inboxes.POST(protocol,
-                host, inboxAddedEvent.data.inboxId);
+              var hypermedia = hypermediaResponse.inboxes.POST(href,
+                inboxAddedEvent.data.inboxId);
 
               res.location(hypermedia._links.self.href);
               res.set('Content-Type', 'application/hal+json');

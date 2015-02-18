@@ -112,14 +112,14 @@
   hypermediaResponse.inboxes.uuid.commits = {};
 
 
-  hypermediaResponse.inboxes.POST = function(protocol, host, inboxId) {
+  hypermediaResponse.inboxes.POST = function(href, inboxId) {
     return {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/inboxes/" + inboxId
+          "href": href("/api/inboxes/" + inboxId)
         },
         "add-commit": {
-          "href": protocol + "://" + host + "/api/inboxes/" + inboxId + "/commits"
+          "href": href("/api/inboxes/" + inboxId + "/commits")
         }
       },
       "inboxId": inboxId

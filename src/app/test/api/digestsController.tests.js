@@ -362,9 +362,6 @@ describe('digestsController', function() {
 
   describe('when requesting a digest', function() {
 
-    var protocol = 'http';
-    var host = 'localhost';
-
     describe('with an invalid, non-uuid digest identifier', function() {
       function get(shouldBehaveThusly) {
         getDigest('/api/digests/not_a_uuid', shouldBehaveThusly);
