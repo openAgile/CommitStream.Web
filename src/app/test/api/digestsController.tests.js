@@ -102,7 +102,7 @@ describe('digestsController', function() {
         postDigest({
           description: 'Yay!'
         }, function(err, res) {
-          hypermediaResponseStub.digestPOST.should.have.been.calledWith(protocol, sinon.match.any, digestAddedEvent.data.digestId);
+          hypermediaResponseStub.digestPOST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
           done();
         });
       });
