@@ -11,7 +11,7 @@ function href(path) {
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest POST', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
-    var hypermedia = hypermediaResponse.digestPOST(href, digestId);
+    var hypermedia = hypermediaResponse.digests.POST(href, digestId);
 
     // helpers
     function getLinkForRel(rel) {

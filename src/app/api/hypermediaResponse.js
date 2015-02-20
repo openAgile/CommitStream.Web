@@ -8,7 +8,8 @@
     return protocol + "://" + host + path;
   }
 
-  hypermediaResponse.digestPOST = function(href, digestId) {
+  hypermediaResponse.digests = {};
+  hypermediaResponse.digests.POST = function(href, digestId) {
     return {
       "_links": {
         "self": {
@@ -53,12 +54,11 @@
     return response;
   };
 
-  hypermediaResponse.digests = {};
-  hypermediaResponse.digests.GET = function(req, digests) {
+  hypermediaResponse.digests.GET = function(href, digests) {
     var response = {
       "_links": {
         "self": {
-          "href": href("/api/digests", req)
+          "href": href("/api/digests")
         }
       },
       "count": digests ? digests.length : 0,
@@ -71,7 +71,7 @@
       return {
         "_links": {
           "self": {
-            "href": href("/api/digests/" + digest.digestId, req)
+            "href": href("/api/digests/" + digest.digestId)
           }
         },
         "digestId": digest.digestId,

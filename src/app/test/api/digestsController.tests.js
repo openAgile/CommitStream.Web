@@ -14,8 +14,11 @@ config.eventStoreUser = 'admin';
 config.eventStoreBaseUrl = 'http://nothing:7887';
 
 var hypermediaResponseStub = {
-    digestPOST: sinon.stub(),
-    digestGET: sinon.stub()
+    digestGET: sinon.stub(),
+    digests: {
+      POST: sinon.stub(),
+      GET: sinon.stub()
+    },
   },
   digestAdded = {
     create: sinon.stub()
@@ -90,7 +93,7 @@ describe('digestsController', function() {
       };
 
       digestAdded.create.returns(digestAddedEvent);
-      hypermediaResponseStub.digestPOST.returns(hypermediaResponse);
+      hypermediaResponseStub.digests.POST.returns(hypermediaResponse);
     });
 
     beforeEach(function() {
@@ -102,7 +105,7 @@ describe('digestsController', function() {
         postDigest({
           description: 'Yay!'
         }, function(err, res) {
-          hypermediaResponseStub.digestPOST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
+          hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
           done();
         });
       });
@@ -308,7 +311,7 @@ describe('digestsController', function() {
       postDigest({
         description: 'Yay!'
       }, function(err, res) {
-        hypermediaResponseStub.digestPOST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
+        hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
         done();
       });
     });
@@ -413,7 +416,7 @@ describe('digestsController', function() {
         });
       });
 
-      it('calls hypermediaResponse.digestPOST with correct parameters', function(done) {
+      it('calls hypermediaResponse.digestGET with correct parameters', function(done) {
         get(function(err, res) {
           hypermediaResponseStub.digestGET.should.have.been.calledWith(
             sinon.match.func, uuid, data
@@ -908,6 +911,8 @@ describe('digestsController', function() {
       });
 
       it('returns a 200 status code', function() {
+        console.log('CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY ')
+        console.log(response.text)
         response.statusCode.should.equal(200);
       });
 
@@ -936,8 +941,9 @@ describe('digestsController', function() {
             }]
           }
         }
-
+        console.log(response.text);
         var body = normalizeHrefs(response.text);
+        console.log(body)
         JSON.parse(body).should.deep.equal(expected);
       });
     });
