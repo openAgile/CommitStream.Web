@@ -54,7 +54,9 @@
     return response;
   };
 
-  hypermediaResponse.digests.GET = function(href, digests) {
+
+  hypermediaResponse.digestsGET = function(href, digests) {
+
     var response = {
       "_links": {
         "self": {

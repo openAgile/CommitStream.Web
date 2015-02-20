@@ -17,8 +17,7 @@ var hypermediaResponseStub = {
     digestGET: sinon.stub(),
     digests: {
       POST: sinon.stub(),
-      GET: sinon.stub()
-    },
+    }
   },
   digestAdded = {
     create: sinon.stub()
@@ -32,11 +31,18 @@ var hypermediaResponseStub = {
       getState: sinon.stub()
     }
   },
-  controller = proxyquire('../../api/digestsController', {
-    './hypermediaResponse': hypermediaResponseStub,
-    './events/digestAdded': digestAdded,
-    './helpers/eventStoreClient': eventStoreClient
-  });
+  urls = {
+    href: function(path) {
+      return function(path) {
+        return "http://localhost/" + path;
+      };
+    }
+  }
+controller = proxyquire('../../api/digestsController', {
+  './hypermediaResponse': hypermediaResponseStub,
+  './events/digestAdded': digestAdded,
+  './helpers/eventStoreClient': eventStoreClient
+});
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
@@ -911,8 +917,6 @@ describe('digestsController', function() {
       });
 
       it('returns a 200 status code', function() {
-        console.log('CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY CORY ')
-        console.log(response.text)
         response.statusCode.should.equal(200);
       });
 
@@ -941,9 +945,7 @@ describe('digestsController', function() {
             }]
           }
         }
-        console.log(response.text);
         var body = normalizeHrefs(response.text);
-        console.log(body)
         JSON.parse(body).should.deep.equal(expected);
       });
     });

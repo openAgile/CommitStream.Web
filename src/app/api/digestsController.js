@@ -93,7 +93,6 @@
     });
 
     app.get('/api/digests/:uuid', function(req, res, next) {
-      console.log('55555555555555555555555555')
       var href = urls.href(req);
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
@@ -229,13 +228,11 @@
         name: 'digests'
       }, function(err, resp) {
         if (err) {
-          console.log('NOPE HERE NOPE HERE NOPE HERE NOPE HERE NOPE HERE NOPE HERE ')
           res.status(500).json({
             'error': 'There was an internal error when trying to process your request.'
           });
         } else if (resp.statusCode == 404) {
-          console.log('YOU ARE HERE YOU ARE HERE YOU ARE HERE YOU ARE HERE YOU ARE HERE ')
-          var response = hypermediaResponse.digests.GET(href);
+          var response = hypermediaResponse.digestsGET(href);
           res.set('Content-Type', 'application/hal+json; charset=utf-8');
           res.send(response);
         } else {
@@ -243,7 +240,7 @@
           var digests = _.map(data.entries, function(entry) {
             return entry.content.data;
           });
-          var response = hypermediaResponse.digests.GET(href, digests);
+          var response = hypermediaResponse.digestsGET(href, digests);
           res.set('Content-Type', 'application/hal+json; charset=utf-8');
           res.send(response);
         }
