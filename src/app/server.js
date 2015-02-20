@@ -57,6 +57,7 @@ app.get('/app', function(req, res) {
 
   res.render('app', {
     apiUrl: protocol + '://' + host + '/api/query?key=' + key,
+    protocol: protocol,
     resourcePath: protocol + '://' + host + '/'
   });
 });
