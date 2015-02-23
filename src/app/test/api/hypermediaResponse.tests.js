@@ -182,7 +182,7 @@ describe('hypermediaResponse', function() {
       digestId: digestId
     };
 
-    var hypermedia = hypermediaResponse.inboxes.uuid.commits.POST('http', 'localhost', dataObject);
+    var hypermedia = hypermediaResponse.inboxes.uuid.commits.POST(href, dataObject);
 
     it('it should have links to other resources.', function() {
       hypermedia.should.include.key('_links');
