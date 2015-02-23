@@ -2,12 +2,6 @@
 
   var config = require('../config');
 
-  function href(path, req) {
-    var protocol = config.protocol || req.protocol;
-    var host = req.get('host');
-    return protocol + "://" + host + path;
-  }
-
   hypermediaResponse.digests = {};
   hypermediaResponse.digests.POST = function(href, digestId) {
     return {
