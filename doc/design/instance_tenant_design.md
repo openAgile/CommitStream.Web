@@ -24,9 +24,9 @@ Then, API routes now need to take the InstanceId into account, like:
 ## Changes needed to routes to incorporate InstanceId
 
 PUT `/api/:instanceId` : Create a new instance (New idea)
-	Notes: only with the appropriate "admin key" can this operation succeed. If the an instanceId already exists then don't overwrite.
+  Notes: only with the appropriate "admin key" can this operation succeed. If the an instanceId already exists then don't overwrite.
 
-GET	`/api/:instanceId` : Get details of an instance
+GET `/api/:instanceId` : Get details of an instance
 
 GET `/api/:instanceId/digests` : List all digests for this instance
 
@@ -49,7 +49,7 @@ GET `/api/:instanceId/inboxes/:uuid/commits` : Get all commits associated with a
 ## TODO: refine route and domain concepts below
 
 GET `/api/:instanceId/commits/tags/:tagValue`: Get all commits matching a given tag value (Replaces `/api/query?workitem=:workitem`)
-	Example: GET `/api/qwer12345/commits?tags=S-12345`, : This will be used by the Workitem sidebar panel to fetch commits "tagged" with a particular workitem mention pattern
+  Example: GET `/api/qwer12345/commits?tags=S-12345`, : This will be used by the Workitem sidebar panel to fetch commits "tagged" with a particular workitem mention pattern
 
 ### Blue Sky
 
@@ -58,7 +58,7 @@ Customers have asked to be able to get roll up of a story and its child items in
 Given a story with number S-12345, VersionOne can query for its child items and then post a query to CommitStream, something like:
 
 POST `/api/:instanceId/commits/query?tags=S-12345,T-00001,T-00002,AT-00001,AT-00002,D-00009,D-00010`
-	- Redirect to query URL
+  - Redirect to query URL
 
 # Authentication and Authorization
 
@@ -74,8 +74,8 @@ Then validate that `abcde09876` is the correct key for the instanceId of `qwer12
 * Modify the middleware [apikey.js](../../src/app/apikey.js) which performs the config check to query EventStore (or some other credential cache) to match the key against the instance. This likely will mean that a stateful projection at `instance-qwer12345` returns a state like:
 ```json
 {
-	"instanceId": "qwer12345",
-	"apiKey": "abcde09876"
+  "instanceId": "qwer12345",
+  "apiKey": "abcde09876"
 }
 ```
 * The ACL for the projection `instance-qwer12345` should be readable only by system admins
@@ -85,14 +85,14 @@ Note that if we need to support the ability to modify the apiKey for a given ins
   For example, when creating an `inbox`, we would specify metadata like so:
   ```json
 {
-	"digestId": "digestId-goes-here", // as before
-		"$acl" : {
-			"$w"  : ["qwer12345", "$admins"],
-			"$r"  : ["qwer12345", "$admins"],
-			"$d"  : "$admins",
-			"$mw" : "$admins",
-			"$mr" : "$admins"
-	}
+  "digestId": "digestId-goes-here", // as before
+    "$acl" : {
+      "$w"  : ["qwer12345", "$admins"],
+      "$r"  : ["qwer12345", "$admins"],
+      "$d"  : "$admins",
+      "$mw" : "$admins",
+      "$mr" : "$admins"
+  }
 }
   ```
 
@@ -100,25 +100,27 @@ Note that if we need to support the ability to modify the apiKey for a given ins
 
 This is the most fun part of all, naturally.
 
+## Current projections
+
 Thinking about the current flow in the system, we start with creating a digest. Of course, the normal flow will soon be for an instance to be created. But, starting where we are now:
 
 `POST api/digests` creates a `DigestAdded` event in the `digests` stream.
 
-## digests-by-id
+### digests-by-id
 
 This projection listens on the `digests` stream and links to a virtual stream named `digest-:digestId`:
 
 ```javascript
 var callback = function (state, ev) {
-	linkTo('digest-' + ev.data.digestId, ev);
+  linkTo('digest-' + ev.data.digestId, ev);
 };
 
 fromStream('digests').when({ 
-	'DigestAdded': callback 
+  'DigestAdded': callback 
 });
 ```
 
-## digest
+### digest
 
 The `digest` projection listens on the `digest-` category and then creates a stateful partition for the `digestId`, currently paying attention only to `DigestAdded` events:
 
@@ -137,7 +139,7 @@ fromCategory('digest')
 
 This allows us to query the "current state" of this digest's properties at the `projection/digest/state?partition=digests-:digestId`.
 
-## inboxes-by-id
+### inboxes-by-id
 
 Then a client addes an inbox to a digest with an `InboxAdded` event posted to the `inboxes` stream.
 
@@ -145,21 +147,21 @@ This projection listens to that stream, and similarly to for digests above, it l
 
 ```javascript
 var callback = function (state, ev) {
-	linkTo('inbox-' + ev.data.inboxId, ev);
+  linkTo('inbox-' + ev.data.inboxId, ev);
 };
 
 fromStream('inboxes').when({ 
-	'InboxAdded': callback 
+  'InboxAdded': callback 
 });
 ```
 
-## inbox
+### inbox
 
 Similar to how the `digest` projection works, the `inbox` projection listens on the `inbox-` category and then creates a stateful partition for the `inboxId`, currently paying attention only to `InboxAdded` events:
 
 This allows us to query the "current state" of this inbox's properties at the `projection/inbox/state?partition=inbox-:inboxId`.
 
-```javascript			
+```javascript     
 fromCategory('inbox')
 .foreachStream()
 .when({
@@ -169,7 +171,7 @@ fromCategory('inbox')
 });
 ```
 
-## Commits posted to an `inboxCommits-:inboxId` stream
+### Commits posted to an `inboxCommits-:inboxId` stream
 
 At this point, VCS systems, like GitHub, can send commit messages to CommitStream, and CommitStream will post them into a stream named after the `inboxId`. Because each `InboxAdded` event contains the `digestId` for the parent `digest`, when CommitStream creates a `GitHubCommitReceived` event, it enriches this event with the `digestId` inside the `metadata` of the EventStore event. This results in events within an inbox's stream that look like this:
 
@@ -201,14 +203,14 @@ Data
     ]
   }
 }
-				
+        
 Metdata
 {
   "digestId": "a62d2e19-895d-4ce5-a0c5-e61157e7a9f2"
 }
 ```
 
-## partionate-with-or-without-mention
+### partionate-with-or-without-mention
 
 Now that commits exist within one or more streams inside the category of `inboxCommits-`, another critical projection can observe these commits and produce virtual streams needed by the next downstream projection. This first one simply divides commits into two streams, one for commits that have a message matching the VersionOne workitem mention pattern, and one for those that do not:
 
@@ -235,7 +237,7 @@ fromCategory('inboxCommits')
   .whenAny(callback);
 ```
 
-## by-asset
+### by-asset
 
 This projection observes the `mention-with` virtual stream populated by the previous projection and links out to 1 - N virtual streams for matched mentions. For example, if a commit message contains: 
 
@@ -254,8 +256,8 @@ var getAssets = function (message) {
 var callback = function (state, ev) {
     var assets = getAssets(ev.data.commit.message);
     assets.forEach(function(asset) {
-    	asset = asset.toUpperCase();
-    	linkTo('asset-' + asset, ev);
+      asset = asset.toUpperCase();
+      linkTo('asset-' + asset, ev);
     });
 };
 
@@ -265,7 +267,7 @@ fromStream('mention-with')
 
 
 
-## inboxCommits-to-digestCommits
+### inboxCommits-to-digestCommits
 
 In order to aggregate commits made to individual `inboxes` up the higher level of `digest`, there is one more projection which utilizes the `metadata` to facilitate this, linking every commit across the entire category of `inboxCommits` into the rightful `digestCommits-:digestId` virtual stream:
 
@@ -281,7 +283,7 @@ fromCategory('inboxCommits').when({
 });
 ```
 
-## digestInbox
+### digestInbox
 
 We also need a stream to represent the relationship between a `digest` and its child `inboxes`. This stream listens to the `inboxes` stream and links each `InboxAdded` to a virtual stream named `digesstInbox-:digestId` to achieve this:
 
@@ -297,7 +299,7 @@ fromStream('inboxes').when({
 });
 ```
 
-## inboxes-for-digest
+### inboxes-for-digest
 
 Lastly, in order to query for the total number of inboxes that belong to a given digest, we have a state-keeping projection that updates a state object per `digestId` that observes the `digestInbox` category like so:
 
@@ -315,3 +317,18 @@ fromCategory('digestInbox')
 ```
 
 Similar to other stateful projections, this lets us query for all the `inboxes` that belong to a `digest` by hitting `/projection/inboxes-for-digest/state?partition=digestInbox-:digestId`.
+
+## Projection changes
+
+Outline:
+* Incorporate `instanceId` into the `DigestAdded` event to facilitate 
+  * Needed to support `/api/:instanceId/digests` in replacement of `/api/digests`
+* Incorporate `instanceId` into each translated Commit's metadata, similar to how `digestId` is added now.
+  * Even with the relationship between `digest` and `instanceId` existing inside events for `DigestAdded`, we still should add this seemingly redundant info into the Commit metadata because it will aid the creation of **instance-specific** workitem resolution, since workitem numbers are NOT unique across different VersionOne instances. The resulting metadata will be like:
+  ```json
+{
+  "digestId": "digestId-goes-here",
+  "instanceId": "qwer-12345"
+}
+  ```
+* Modify the `by-asset` projection such that it links to virtual streams resolvable to an instance. Example: instead of just `asset-S-11233`, link to `instance_qwer12345_asset-S-11233`, using **underscore characters** to avoid an artifical category boundary. This will allow that when requests come in at `/api/:instanceId/commits?tags=S-11233` (or whatever route we settle on), that the service can easily construct the stream name via the ambient information.
