@@ -189,8 +189,6 @@
               'error': 'Could not find an inbox with id ' + req.params.uuid
             });
           } else { // all good
-            var protocol = config.protocol || req.protocol;
-            var host = req.get('host');
             var data = JSON.parse(resp.body);
 
             var hypermediaParams = {
@@ -201,7 +199,7 @@
               url: data.url
             }
 
-            var hypermedia = hypermediaResponse.inboxes.uuid.GET(protocol, host, hypermediaParams);
+            var hypermedia = hypermediaResponse.inboxes.uuid.GET(urls.href(req), hypermediaParams);
 
             res.set('Content-Type', 'application/hal+json; charset=utf-8');
             res.status(200).send(hypermedia);

@@ -42,7 +42,7 @@ var chai = require('chai'),
     isUUID: sinon.stub()
   },
   urls = {
-      href: sinon.spy()
+    href: sinon.spy()
   },
   controller = proxyquire('../../api/inboxesController', {
     './hypermediaResponse': hypermediaResponseStub,
@@ -493,10 +493,10 @@ describe('inboxesController', function() {
       });
 
       it('it should call urls.href once.', function(done) {
-         postInbox(inboxPayload, function(err, res) {
-           urls.href.should.have.been.calledOnce;
-           done();
-         });
+        postInbox(inboxPayload, function(err, res) {
+          urls.href.should.have.been.calledOnce;
+          done();
+        });
       });
 
       it('it should have an appropriate response message', function(done) {
@@ -731,6 +731,8 @@ describe('inboxesController', function() {
           body: JSON.stringify(responseFromEventStoreForInbox),
           statusCode: 200
         });
+
+        urls.href = sinon.spy();
       });
 
       function get(shouldBehaveThusly) {
@@ -747,16 +749,23 @@ describe('inboxesController', function() {
         });
       });
 
-      it('asks for the appropriate hypermedia response', function(done) {
+      it('an appropriate hypermedia response is requested', function(done) {
         var hypermediaParams = _.extend({
           inboxId: inboxId
         }, responseFromEventStoreForInbox);
 
         get(function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.GET.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.GET.should.have.been.calledWith(sinon.match.any, hypermediaParams);
           done();
-        })
-      })
+        });
+      });
+
+      it('it should call urls.href once.', function(done) {
+        get(function(err, res) {
+          urls.href.should.have.been.calledOnce;
+          done();
+        });
+      });
 
       it('it returns a 200 status code', function(done) {
         get(function(err, res) {
@@ -771,7 +780,6 @@ describe('inboxesController', function() {
           done();
         });
       });
-
     });
 
     describe('with a valid, uuid that does not match a real inbox', function() {
