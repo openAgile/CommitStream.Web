@@ -74,11 +74,11 @@ Then validate that `abcde09876` is the correct key for the instanceId of `qwer12
 * Modify the middleware [../../src/app/apikey.js](apikey.js) which performs the config check to query EventStore (or some other credential cache) to match the key against the instance. This likely will mean that a stateful projection at `instance-qwer` returns a state like:
 ```json
 {
-	"instanceId": "qwer",
+	"instanceId": "qwer12345",
 	"apiKey": "abcde09876"
 }
 ```
-* The ACL for the projection `instance-qwer` should be readable only by system admins
+* The ACL for the projection `instance-qwer12345` should be readable only by system admins
 Note that if we need to support the ability to modify the apiKey for a given instance, then this stateful projection should update its state in accordance. This would be the case when a customer loses control of a repository, an employee becomes disgruntled who has access to some repositories, or other security reasons.
 * Create an internal EventStore user per instance that has the same password as the apiKey and is used by the `eventstore-client` instance when communicating with EventStore.
   * ACLs for all streams created by this user should be limited to this user and $admins
