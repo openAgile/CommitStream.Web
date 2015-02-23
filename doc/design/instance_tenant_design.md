@@ -21,6 +21,11 @@ Then, API routes now need to take the InstanceId into account, like:
 
 # Changes needed to routes to incorporate InstanceId
 
+PUT `/api/:instanceId` : Create a new instance (New idea)
+	Notes: only with the appropriate "admin key" can this operation succeed. If the an instanceId already exists then don't overwrite.
+
+GET	`/api/:instanceId` : Get details of an instance
+
 GET `/api/:instanceId/digests` : List all digests for this instance
 
 POST `/api/:instanceId/digests` : Create a new digest
