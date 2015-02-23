@@ -117,7 +117,7 @@
             if (!req.headers.hasOwnProperty('x-github-event')) {
 
               responseData = {
-                message: 'Unknown event type.'
+                errors: 'Unknown event type. Please include an x-github-event header.'
               };
 
               res.status(400).send(responseData);

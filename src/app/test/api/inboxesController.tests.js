@@ -555,7 +555,7 @@ describe('inboxesController', function() {
 
         it('it should provide an appropriate response', function(done) {
           postInboxWithoutXGithubEvent(function(err, res) {
-            JSON.parse(res.text).message.should.equal('Unknown event type.');
+            JSON.parse(res.text).errors.should.equal('Unknown event type. Please include an x-github-event header.');
             done();
           });
         });
