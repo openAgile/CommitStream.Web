@@ -123,8 +123,6 @@
               res.status(400).send(responseData);
             } else if (req.headers['x-github-event'] == 'push') {
 
-              var protocol = config.protocol || req.protocol;
-              var host = req.get('host');
               var inboxId = req.params.uuid;
 
               var events = translator.translatePush(req.body, digestId);
@@ -148,7 +146,7 @@
                     digestId: digestId
                   };
 
-                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(protocol, host, hypermediaData);
+                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(urls.href(req), hypermediaData);
 
                   res.set('Content-Type', 'application/hal+json');
                   res.location(responseData._links['query-digest'].href);

@@ -470,7 +470,7 @@ describe('inboxesController', function() {
         };
 
         postInbox(inboxPayload, function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(sinon.match.func, hypermediaParams);
           done();
         });
       });
