@@ -41,13 +41,17 @@ var chai = require('chai'),
   validator = {
     isUUID: sinon.stub()
   },
+  urls = {
+      href: sinon.spy()
+  },
   controller = proxyquire('../../api/inboxesController', {
     './hypermediaResponse': hypermediaResponseStub,
     './sanitizer': sanitizer,
     './events/inboxAdded': inboxAdded,
     './helpers/eventStoreClient': eventStoreClient,
     './translators/githubTranslator': translator,
-    'validator': validator
+    'validator': validator,
+    './urls': urls
   });
 
 chai.use(sinonChai);
@@ -164,6 +168,8 @@ describe('inboxesController', function() {
           }),
           statusCode: 200
         });
+
+        urls.href = sinon.spy();
       });
 
       it('it should have a response Content-Type of hal+json', function(done) {
@@ -175,7 +181,14 @@ describe('inboxesController', function() {
 
       it('it should use proper arguments when creating hypermedia.', function(done) {
         postInboxCreate(payload, function(err, res) {
-          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(sinon.match.func, inboxAddedEvent.data.inboxId);
+          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(sinon.match.any, inboxAddedEvent.data.inboxId);
+          done();
+        });
+      });
+
+      it('it should call urls.href once.', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          urls.href.should.have.been.calledOnce;
           done();
         });
       });
@@ -406,6 +419,10 @@ describe('inboxesController', function() {
         hypermediaResponseStub.inboxes.uuid.commits.POST.returns(hypermedia);
       });
 
+      beforeEach(function() {
+        urls.href = sinon.spy();
+      });
+
       it('it should reject the request and explain that only application/json is accepted when sending unsupported Content-Type.', function(done) {
         postInbox(inboxPayload, function(err, res) {
           res.text.should.equal('When posting to an inbox, you must send a Content-Type: application/json header.');
@@ -470,9 +487,16 @@ describe('inboxesController', function() {
         };
 
         postInbox(inboxPayload, function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(sinon.match.func, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(sinon.match.any, hypermediaParams);
           done();
         });
+      });
+
+      it('it should call urls.href once.', function(done) {
+         postInbox(inboxPayload, function(err, res) {
+           urls.href.should.have.been.calledOnce;
+           done();
+         });
       });
 
       it('it should have an appropriate response message', function(done) {

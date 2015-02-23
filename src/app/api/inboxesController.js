@@ -22,8 +22,6 @@
         return;
       }
 
-      var href = urls.href(req);
-
       function hasErrors(errors) {
         return errors.length > 0;
       }
@@ -71,7 +69,7 @@
                 errors: 'We had an internal problem. Please retry your request. Error: ' + error
               });
             } else {
-              var hypermedia = hypermediaResponse.inboxes.POST(href,
+              var hypermedia = hypermediaResponse.inboxes.POST(urls.href(req),
                 inboxAddedEvent.data.inboxId);
 
               res.location(hypermedia._links.self.href);
