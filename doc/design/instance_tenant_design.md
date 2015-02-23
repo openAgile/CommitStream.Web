@@ -71,7 +71,7 @@ Then validate that `abcde09876` is the correct key for the instanceId of `qwer12
 
 ## TODO
 
-* Modify the middleware [../../src/app/apikey.js](apikey.js) which performs the config check to query EventStore (or some other credential cache) to match the key against the instance. This likely will mean that a stateful projection at `instance-qwer` returns a state like:
+* Modify the middleware [apikey.js](../../src/app/apikey.js) which performs the config check to query EventStore (or some other credential cache) to match the key against the instance. This likely will mean that a stateful projection at `instance-qwer` returns a state like:
 ```json
 {
 	"instanceId": "qwer12345",
