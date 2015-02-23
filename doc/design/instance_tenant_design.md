@@ -39,21 +39,18 @@ POST `/api/:instanceId/inboxes/:uuid/commits` : Post commit messages to an inbox
 
 GET `/api/:instanceId/inboxes/:uuid/commits` : Get all commits associated with an inbox (New idea)
 
-TODO: refine route and domain concepts below
+## TODO: refine route and domain concepts below
 
 GET `/api/:instanceId/commits/tags/:tagValue`: Get all commits matching a given tag value (Replaces `/api/query?workitem=:workitem`)
 	Example: GET `/api/qwer12345/commits?tags=S-12345`, : This will be used by the Workitem sidebar panel to fetch commits "tagged" with a particular workitem mention pattern
 
-Blue Sky:
+## Blue Sky
 
 Customers have asked to be able to get roll up of a story and its child items in the workitem sidepanel.
 
 Given a story with number S-12345, VersionOne can query for its child items and then post a query to CommitStream, something like:
 
-POST /api/:instanceId/commits/query?tags=S-12345,T-00001,T-00002,AT-00001,AT-00002,D-00009,D-00010
+POST `/api/:instanceId/commits/query?tags=S-12345,T-00001,T-00002,AT-00001,AT-00002,D-00009,D-00010`
 	- Redirect to query URL
-
-
-
 
 
