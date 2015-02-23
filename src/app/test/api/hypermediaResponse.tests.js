@@ -219,7 +219,7 @@ describe('hypermediaResponse', function() {
       name: name,
       url: url
     };
-    var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', dataObject);
+    var hypermedia = hypermediaResponse.inboxes.uuid.GET(href, dataObject);
 
     it('it should have links to other resources.', function() {
       hypermedia.should.include.key('_links');

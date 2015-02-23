@@ -128,14 +128,14 @@
     };
   }
 
-  hypermediaResponse.inboxes.uuid.GET = function(protocol, host, dataObject) {
+  hypermediaResponse.inboxes.uuid.GET = function(href, dataObject) {
     return {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/inboxes/" + dataObject.inboxId
+          "href": href("/api/inboxes/" + dataObject.inboxId)
         },
         "digest-parent": {
-          "href": protocol + "://" + host + "/api/digests/" + dataObject.digestId
+          "href": href("/api/digests/" + dataObject.digestId)
         }
       },
       "family": dataObject.family,
