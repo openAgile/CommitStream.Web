@@ -691,6 +691,8 @@ describe('api/digests GET', function() {
   var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
   var digestMap = {};
   var digestsToCreate = ['First Digest', 'Second Digest', 'Third Digest'];
+  var commitStreamdigestsUrl = "http://localhost:6565/api/digests";
+  var eventStoreDigestsStreamUrl = "http://localhost:2113/streams/digests";
 
   function getExpectedResponse(digestMap) {
     return {
@@ -732,10 +734,12 @@ describe('api/digests GET', function() {
 
   before(function(done) {
     this.timeout(4000);
+
     function digestCreate(index) {
       var digest = digestsToCreate[index];
+
       request({
-        uri: "http://localhost:6565/api/digests" + key,
+        uri: commitStreamdigestsUrl + key,
         method: "POST",
         headers: {
           "content-type": "application/json"
@@ -754,10 +758,11 @@ describe('api/digests GET', function() {
         }
       });
     }
+
     request({
-      uri: "http://localhost:2113/streams/digests",
+      uri: eventStoreDigestsStreamUrl,
       headers: {
-        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',        
+        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',
       },
       method: 'DELETE'
     }, function(err, res) {
@@ -768,7 +773,7 @@ describe('api/digests GET', function() {
   it('should return the expected response body.', function(done) {
     setTimeout(function() {
       request.get({
-        uri: "http://localhost:6565/api/digests" + key,
+        uri: commitStreamdigestsUrl + key,
         method: "GET",
         headers: {
           "content-type": "application/json"
