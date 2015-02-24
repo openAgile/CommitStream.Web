@@ -792,7 +792,7 @@ describe('api/digests GET', function() {
 
 });
 
-describe('api/inboxes/ GET', function() {
+describe('api/inboxes/:uuid GET', function() {
   var key = undefined;
   var expected = undefined;
 
