@@ -128,6 +128,7 @@ var digestIdA = undefined;
 var urlToCreateInbox = undefined;
 var urlToCreateInboxA = undefined;
 var urlToPushCommitToInbox1 = undefined;
+var urlToGetInbox1Info = undefined;
 var urlToPushCommitToInbox2 = undefined;
 var urlToPushCommitToInboxA = undefined;
 
@@ -197,6 +198,8 @@ describe('you need a digest to associate to the inboxes that will be created', f
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
       urlToPushCommitToInbox1 = JSON.parse(body)._links['add-commit'].href;
+      urlToGetInbox1Info = JSON.parse(body)._links['self'].href;
+
       inboxIdCreated.should.exist;
       done();
     });
@@ -785,6 +788,43 @@ describe('api/digests GET', function() {
         done();
       });
     }, 5);
+  });
+
+});
+
+describe('api/inboxes/ GET', function() {
+  var key = undefined;
+  var expected = undefined;
+
+  before(function() {
+    key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
+    expected = {
+      "_links": {
+        "self": {
+          "href": urlToGetInbox1Info
+        },
+        "digest-parent": {
+          "href": "http:\/\/localhost:6565\/api\/digests\/" + digestId
+        }
+      },
+      "family": "GitHub",
+      "name": "Inbox 1"
+    };
+  });
+
+  it('it should return the expected response body', function(done) {
+
+    request.get({
+      uri: urlToGetInbox1Info + key,
+      method: "GET",
+      headers: {
+        "content-type": "application/json"
+      }
+    }, function(err, res) {
+      var actual = JSON.parse(res.body);
+      actual.should.deep.equal(expected);
+      done();
+    });
   });
 
 });
