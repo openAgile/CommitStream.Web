@@ -33,3 +33,6 @@ node_modules
 
 # Generated test directory
 __tests__
+
+# WebStorm IDE
+.idea

@@ -9,7 +9,8 @@
     sanitize = require('./sanitizer').sanitize,
     request = require('request'),
     hypermediaResponse = require('./hypermediaResponse'),
-    translator = require('./translators/githubTranslator');
+    translator = require('./translators/githubTranslator'),
+    urls = require('./urls');
 
   inboxesController.init = function(app) {
 
@@ -20,9 +21,6 @@
         res.status(415).send('When creating an inbox, you must send a Content-Type: application/json header.');
         return;
       }
-
-      var protocol = config.protocol || req.protocol;
-      var host = req.get('host');
 
       function hasErrors(errors) {
         return errors.length > 0;
@@ -71,8 +69,8 @@
                 errors: 'We had an internal problem. Please retry your request. Error: ' + error
               });
             } else {
-              var hypermedia = hypermediaResponse.inboxes.POST(protocol,
-                host, inboxAddedEvent.data.inboxId);
+              var hypermedia = hypermediaResponse.inboxes.POST(urls.href(req),
+                inboxAddedEvent.data.inboxId);
 
               res.location(hypermedia._links.self.href);
               res.set('Content-Type', 'application/hal+json');
@@ -123,8 +121,6 @@
               res.status(400).send(responseData);
             } else if (req.headers['x-github-event'] == 'push') {
 
-              var protocol = config.protocol || req.protocol;
-              var host = req.get('host');
               var inboxId = req.params.uuid;
 
               var events = translator.translatePush(req.body, digestId);
@@ -148,7 +144,7 @@
                     digestId: digestId
                   };
 
-                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(protocol, host, hypermediaData);
+                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(urls.href(req), hypermediaData);
 
                   res.set('Content-Type', 'application/hal+json');
                   res.location(responseData._links['query-digest'].href);
@@ -193,8 +189,6 @@
               'error': 'Could not find an inbox with id ' + req.params.uuid
             });
           } else { // all good
-            var protocol = config.protocol || req.protocol;
-            var host = req.get('host');
             var data = JSON.parse(resp.body);
 
             var hypermediaParams = {
@@ -205,7 +199,7 @@
               url: data.url
             }
 
-            var hypermedia = hypermediaResponse.inboxes.uuid.GET(protocol, host, hypermediaParams);
+            var hypermedia = hypermediaResponse.inboxes.uuid.GET(urls.href(req), hypermediaParams);
 
             res.set('Content-Type', 'application/hal+json; charset=utf-8');
             res.status(200).send(hypermedia);

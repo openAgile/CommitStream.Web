@@ -128,6 +128,7 @@ var digestIdA = undefined;
 var urlToCreateInbox = undefined;
 var urlToCreateInboxA = undefined;
 var urlToPushCommitToInbox1 = undefined;
+var urlToGetInbox1Info = undefined;
 var urlToPushCommitToInbox2 = undefined;
 var urlToPushCommitToInboxA = undefined;
 
@@ -197,6 +198,8 @@ describe('you need a digest to associate to the inboxes that will be created', f
       should.not.exist(err);
       var inboxIdCreated = JSON.parse(body).inboxId;
       urlToPushCommitToInbox1 = JSON.parse(body)._links['add-commit'].href;
+      urlToGetInbox1Info = JSON.parse(body)._links['self'].href;
+
       inboxIdCreated.should.exist;
       done();
     });
@@ -691,6 +694,8 @@ describe('api/digests GET', function() {
   var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
   var digestMap = {};
   var digestsToCreate = ['First Digest', 'Second Digest', 'Third Digest'];
+  var commitStreamdigestsUrl = "http://localhost:6565/api/digests";
+  var eventStoreDigestsStreamUrl = "http://localhost:2113/streams/digests";
 
   function getExpectedResponse(digestMap) {
     return {
@@ -732,10 +737,12 @@ describe('api/digests GET', function() {
 
   before(function(done) {
     this.timeout(4000);
+
     function digestCreate(index) {
       var digest = digestsToCreate[index];
+
       request({
-        uri: "http://localhost:6565/api/digests" + key,
+        uri: commitStreamdigestsUrl + key,
         method: "POST",
         headers: {
           "content-type": "application/json"
@@ -754,10 +761,11 @@ describe('api/digests GET', function() {
         }
       });
     }
+
     request({
-      uri: "http://localhost:2113/streams/digests",
+      uri: eventStoreDigestsStreamUrl,
       headers: {
-        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',        
+        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',
       },
       method: 'DELETE'
     }, function(err, res) {
@@ -768,7 +776,7 @@ describe('api/digests GET', function() {
   it('should return the expected response body.', function(done) {
     setTimeout(function() {
       request.get({
-        uri: "http://localhost:6565/api/digests" + key,
+        uri: commitStreamdigestsUrl + key,
         method: "GET",
         headers: {
           "content-type": "application/json"
@@ -780,6 +788,43 @@ describe('api/digests GET', function() {
         done();
       });
     }, 5);
+  });
+
+});
+
+describe('api/inboxes/:uuid GET', function() {
+  var key = undefined;
+  var expected = undefined;
+
+  before(function() {
+    key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
+    expected = {
+      "_links": {
+        "self": {
+          "href": urlToGetInbox1Info
+        },
+        "digest-parent": {
+          "href": "http:\/\/localhost:6565\/api\/digests\/" + digestId
+        }
+      },
+      "family": "GitHub",
+      "name": "Inbox 1"
+    };
+  });
+
+  it('it should return the expected response body', function(done) {
+
+    request.get({
+      uri: urlToGetInbox1Info + key,
+      method: "GET",
+      headers: {
+        "content-type": "application/json"
+      }
+    }, function(err, res) {
+      var actual = JSON.parse(res.body);
+      actual.should.deep.equal(expected);
+      done();
+    });
   });
 
 });

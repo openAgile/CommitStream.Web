@@ -94,7 +94,7 @@
   }
 
   function getTemplate(template, cb, errorHandler) {
-    var tmplUrl = '{{{assetDetailTemplateUrl}}}' + template;
+    var tmplUrl = '{{{resourcePath}}}' + template;
     $.get(tmplUrl).done(cb).fail(errorHandler);
   }
 

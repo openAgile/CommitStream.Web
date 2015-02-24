@@ -8,6 +8,7 @@
     eventStore = require('./helpers/eventStoreClient'),
     bodyParser = require('body-parser'),
     sanitize = require('sanitize-html'),
+    urls = require('./urls'),
     _ = require('underscore');
 
   digestsController.init = function(app) {
@@ -33,8 +34,7 @@
         return;
       }
 
-      var protocol = config.protocol || req.protocol;
-      var host = req.get('host');
+      var href = urls.href(req);
 
       var originalDescription = req.body.description;
 
@@ -77,8 +77,8 @@
         if (error) {
           // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
         } else {
-          var hypermedia = hypermediaResponse.digestPOST(protocol,
-            host, digestAddedEvent.data.digestId);
+          var hypermedia = hypermediaResponse.digests.POST(href,
+            digestAddedEvent.data.digestId);
 
           res.location(hypermedia._links.self.href);
           res.set('Content-Type', 'application/hal+json');
@@ -86,13 +86,14 @@
 
           setTimeout(function() {
             res.send(hypermedia);
-          }, 1000);
+          }, config.controllerResponseDelay);
 
         }
       });
     });
 
     app.get('/api/digests/:uuid', function(req, res, next) {
+      var href = urls.href(req);
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
       } else {
@@ -109,10 +110,8 @@
               'error': 'Could not find a digest with id ' + req.params.uuid
             });
           } else { // all good
-            var protocol = config.protocol || req.protocol;
-            var host = req.get('host');
             var data = JSON.parse(resp.body);
-            var response = hypermediaResponse.digestGET(protocol, host, data.digestId, data);
+            var response = hypermediaResponse.digestGET(href, data.digestId, data);
             res.set('Content-Type', 'application/hal+json; charset=utf-8');
             res.send(response);
           }
@@ -121,12 +120,7 @@
     });
 
     app.get('/api/digests/:uuid/inboxes', function(req, res, next) {
-
-      function href(path) {
-        var protocol = config.protocol || req.protocol;
-        var host = req.get('host');
-        return protocol + "://" + host + path;
-      }
+      var href = urls.href(req);
 
       function createHyperMediaResponse(digest, state) {
         var inboxIds = _.keys(state.inboxes);
@@ -228,6 +222,8 @@
     });
 
     app.get('/api/digests', bodyParser.json(), function(req, res) {
+      var href = urls.href(req);
+
       eventStore.streams.get({
         name: 'digests'
       }, function(err, resp) {
@@ -236,7 +232,7 @@
             'error': 'There was an internal error when trying to process your request.'
           });
         } else if (resp.statusCode == 404) {
-          var response = hypermediaResponse.digests.GET(req);
+          var response = hypermediaResponse.digestsGET(href);
           res.set('Content-Type', 'application/hal+json; charset=utf-8');
           res.send(response);
         } else {
@@ -244,7 +240,7 @@
           var digests = _.map(data.entries, function(entry) {
             return entry.content.data;
           });
-          var response = hypermediaResponse.digests.GET(req, digests);
+          var response = hypermediaResponse.digestsGET(href, digests);
           res.set('Content-Type', 'application/hal+json; charset=utf-8');
           res.send(response);
         }

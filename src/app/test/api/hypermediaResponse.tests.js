@@ -4,10 +4,14 @@ var chai = require('chai'),
   _ = require('underscore'),
   hypermediaResponse = require('../../api/hypermediaResponse');
 
+function href(path) {
+  return "http://localhost" + path;
+}
+
 describe('hypermediaResponse', function() {
   describe('when constructing a hypermedia response for digest POST', function() {
     var digestId = '7f74aa58-74e0-11e4-b116-123b93f75cba';
-    var hypermedia = hypermediaResponse.digestPOST('http', 'localhost', digestId);
+    var hypermedia = hypermediaResponse.digests.POST(href, digestId);
 
     // helpers
     function getLinkForRel(rel) {
@@ -64,7 +68,7 @@ describe('hypermediaResponse', function() {
       "description": "BalZac!",
       "digestId": digestId
     };
-    var hypermedia = hypermediaResponse.digestGET('http', 'localhost', digestId, data);
+    var hypermedia = hypermediaResponse.digestGET(href, digestId, data);
 
     // helpers
     function getLinkForRel(rel) {
@@ -124,7 +128,7 @@ describe('hypermediaResponse', function() {
 
   describe('when constructing a hypermedia response for inbox creation', function() {
     var inboxId = '0971bdd5-7030-4ffe-ad15-eceb4eea086f';
-    var hypermedia = hypermediaResponse.inboxes.POST('http', 'localhost', inboxId);
+    var hypermedia = hypermediaResponse.inboxes.POST(href, inboxId);
 
     // helpers
     function getLinkForRel(rel) {
@@ -178,7 +182,7 @@ describe('hypermediaResponse', function() {
       digestId: digestId
     };
 
-    var hypermedia = hypermediaResponse.inboxes.uuid.commits.POST('http', 'localhost', dataObject);
+    var hypermedia = hypermediaResponse.inboxes.uuid.commits.POST(href, dataObject);
 
     it('it should have links to other resources.', function() {
       hypermedia.should.include.key('_links');
@@ -215,7 +219,7 @@ describe('hypermediaResponse', function() {
       name: name,
       url: url
     };
-    var hypermedia = hypermediaResponse.inboxes.uuid.GET('http', 'localhost', dataObject);
+    var hypermedia = hypermediaResponse.inboxes.uuid.GET(href, dataObject);
 
     it('it should have links to other resources.', function() {
       hypermedia.should.include.key('_links');

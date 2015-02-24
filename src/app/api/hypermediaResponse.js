@@ -2,23 +2,18 @@
 
   var config = require('../config');
 
-  function href(path, req) {
-    var protocol = config.protocol || req.protocol;
-    var host = req.get('host');
-    return protocol + "://" + host + path;
-  }
-
-  hypermediaResponse.digestPOST = function(protocol, host, digestId) {
+  hypermediaResponse.digests = {};
+  hypermediaResponse.digests.POST = function(href, digestId) {
     return {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/digests/" + digestId
+          "href": href("/api/digests/" + digestId)
         },
         "digests": {
-          "href": protocol + "://" + host + "/api/digests"
+          "href": href("/api/digests")
         },
         "inbox-create": {
-          "href": protocol + "://" + host + "/api/inboxes",
+          "href": href("/api/inboxes"),
           "method": "POST",
           "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
         }
@@ -27,22 +22,22 @@
     };
   };
 
-  hypermediaResponse.digestGET = function(protocol, host, digestId, data) {
+  hypermediaResponse.digestGET = function(href, digestId, data) {
     var response = {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/digests/" + digestId
+          "href": href("/api/digests/" + digestId)
         },
         "digests": {
-          "href": protocol + "://" + host + "/api/digests"
+          "href": href("/api/digests")
         },
         "inbox-create": {
-          "href": protocol + "://" + host + "/api/inboxes",
+          "href": href("/api/inboxes"),
           "method": "POST",
           "title": "Endpoint for creating an inbox for a repository on digest " + digestId + "."
         },
         "inboxes": {
-          "href": protocol + "://" + host + "/api/digests/" + digestId + "/inboxes"
+          "href": href("/api/digests/" + digestId + "/inboxes")
         }
       }
     };
@@ -53,12 +48,13 @@
     return response;
   };
 
-  hypermediaResponse.digests = {};
-  hypermediaResponse.digests.GET = function(req, digests) {
+
+  hypermediaResponse.digestsGET = function(href, digests) {
+
     var response = {
       "_links": {
         "self": {
-          "href": href("/api/digests", req)
+          "href": href("/api/digests")
         }
       },
       "count": digests ? digests.length : 0,
@@ -71,7 +67,7 @@
       return {
         "_links": {
           "self": {
-            "href": href("/api/digests/" + digest.digestId, req)
+            "href": href("/api/digests/" + digest.digestId)
           }
         },
         "digestId": digest.digestId,
@@ -112,28 +108,28 @@
   hypermediaResponse.inboxes.uuid.commits = {};
 
 
-  hypermediaResponse.inboxes.POST = function(protocol, host, inboxId) {
+  hypermediaResponse.inboxes.POST = function(href, inboxId) {
     return {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/inboxes/" + inboxId
+          "href": href("/api/inboxes/" + inboxId)
         },
         "add-commit": {
-          "href": protocol + "://" + host + "/api/inboxes/" + inboxId + "/commits"
+          "href": href("/api/inboxes/" + inboxId + "/commits")
         }
       },
       "inboxId": inboxId
     };
   }
 
-  hypermediaResponse.inboxes.uuid.GET = function(protocol, host, dataObject) {
+  hypermediaResponse.inboxes.uuid.GET = function(href, dataObject) {
     return {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/inboxes/" + dataObject.inboxId
+          "href": href("/api/inboxes/" + dataObject.inboxId)
         },
         "digest-parent": {
-          "href": protocol + "://" + host + "/api/digests/" + dataObject.digestId
+          "href": href("/api/digests/" + dataObject.digestId)
         }
       },
       "family": dataObject.family,
@@ -142,17 +138,17 @@
     };
   }
 
-  hypermediaResponse.inboxes.uuid.commits.POST = function(protocol, host, dataObject) {
+  hypermediaResponse.inboxes.uuid.commits.POST = function(href, dataObject) {
     return {
       "_links": {
         "self": {
-          "href": protocol + "://" + host + "/api/inboxes/" + dataObject.inboxId
+          "href": href("/api/inboxes/" + dataObject.inboxId)
         },
         "digest-parent": {
-          "href": protocol + "://" + host + "/api/digests/" + dataObject.digestId
+          "href": href("/api/digests/" + dataObject.digestId)
         },
         "query-digest": {
-          "href": protocol + "://" + host + "/api/query?digestId=" + dataObject.digestId + "&workitem=all"
+          "href": href("/api/query?digestId=" + dataObject.digestId + "&workitem=all")
         }
       },
       "message": "Your push event has been queued to be added to CommitStream."

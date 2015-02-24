@@ -14,8 +14,10 @@ config.eventStoreUser = 'admin';
 config.eventStoreBaseUrl = 'http://nothing:7887';
 
 var hypermediaResponseStub = {
-    digestPOST: sinon.stub(),
-    digestGET: sinon.stub()
+    digestGET: sinon.stub(),
+    digests: {
+      POST: sinon.stub(),
+    }
   },
   digestAdded = {
     create: sinon.stub()
@@ -29,11 +31,18 @@ var hypermediaResponseStub = {
       getState: sinon.stub()
     }
   },
-  controller = proxyquire('../../api/digestsController', {
-    './hypermediaResponse': hypermediaResponseStub,
-    './events/digestAdded': digestAdded,
-    './helpers/eventStoreClient': eventStoreClient
-  });
+  urls = {
+    href: function(path) {
+      return function(path) {
+        return "http://localhost/" + path;
+      };
+    }
+  }
+controller = proxyquire('../../api/digestsController', {
+  './hypermediaResponse': hypermediaResponseStub,
+  './events/digestAdded': digestAdded,
+  './helpers/eventStoreClient': eventStoreClient
+});
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
@@ -90,11 +99,62 @@ describe('digestsController', function() {
       };
 
       digestAdded.create.returns(digestAddedEvent);
-      hypermediaResponseStub.digestPOST.returns(hypermediaResponse);
+      hypermediaResponseStub.digests.POST.returns(hypermediaResponse);
     });
 
     beforeEach(function() {
       eventStoreClient.streams.post.callsArgWith(1, null, "ignored response");
+    });
+
+    describe('with valid inputs', function() {
+      it('it should use proper arguments when creating hypermedia.', function(done) {
+        postDigest({
+          description: 'Yay!'
+        }, function(err, res) {
+          hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
+          done();
+        });
+      });
+
+      it('it should create the DigestAdded event.', function(done) {
+        var digestDescription = {
+          description: 'myfirstdigest'
+        };
+        postDigest(digestDescription, function(err, res) {
+          digestAdded.create.should.have.been.calledWith(digestDescription.description);
+          done();
+        });
+      });
+
+      it('it should have a response Content-Type of hal+json', function(done) {
+        var digestDescription = {
+          description: 'myfirstdigest'
+        };
+        postDigest(digestDescription, function(err, res) {
+          res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+          done();
+        });
+      });
+
+      it('it should set the Location response header to the newly created digest', function(done) {
+        var digestDescription = {
+          description: 'myfirstdigest'
+        };
+        postDigest(digestDescription, function(err, res) {
+          res.get('Location').should.equal(hypermediaResponse._links.self.href);
+          done();
+        });
+      });
+
+      it('it should have a response code of 201 created', function(done) {
+        var digestDescription = {
+          description: 'myfirstdigest'
+        };
+        postDigest(digestDescription, function(err, res) {
+          res.status.should.equal(201);
+          done();
+        });
+      });
     });
 
     describe('with an unsupported or missing Content-Type header', function() {
@@ -257,7 +317,7 @@ describe('digestsController', function() {
       postDigest({
         description: 'Yay!'
       }, function(err, res) {
-        hypermediaResponseStub.digestPOST.should.have.been.calledWith(protocol, sinon.match.any, digestAddedEvent.data.digestId);
+        hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
         done();
       });
     });
@@ -311,9 +371,6 @@ describe('digestsController', function() {
 
   describe('when requesting a digest', function() {
 
-    var protocol = 'http';
-    var host = 'localhost';
-
     describe('with an invalid, non-uuid digest identifier', function() {
       function get(shouldBehaveThusly) {
         getDigest('/api/digests/not_a_uuid', shouldBehaveThusly);
@@ -365,10 +422,10 @@ describe('digestsController', function() {
         });
       });
 
-      it('calls hypermediaResponse.digestPOST with correct parameters', function(done) {
+      it('calls hypermediaResponse.digestGET with correct parameters', function(done) {
         get(function(err, res) {
           hypermediaResponseStub.digestGET.should.have.been.calledWith(
-            protocol, sinon.match.any, uuid, data
+            sinon.match.func, uuid, data
           );
           done();
         });
@@ -888,7 +945,6 @@ describe('digestsController', function() {
             }]
           }
         }
-
         var body = normalizeHrefs(response.text);
         JSON.parse(body).should.deep.equal(expected);
       });

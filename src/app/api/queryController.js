@@ -2,10 +2,10 @@
   var config = require('../config'),
     gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
     es = require('./helpers/eventStoreClient'),
-  _ = require('underscore'),
-  uuid = require('uuid-v4'),
-  Cache = require('ttl-cache');
-  
+    _ = require('underscore'),
+    uuid = require('uuid-v4'),
+    Cache = require('ttl-cache');
+
   function buildUri(protocol, host, guid, parms) {
     return protocol + '://' + host + '/api/query?key=' + parms.key + '&workitem=' + parms.workitem + '&page=' + guid;
   }
@@ -36,9 +36,13 @@
 
     app.get("/api/query", function(req, res) {
 
+      // NOTE: Was going to pull the usage of protocol and host out of here
+      //       and use our urls module, but we have been talking about pulling this
+      //       controller apart and placing the resposibilities into other controllers
+      //       so rather than refactor it, I decided to just wait until that work happens.
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
- 
+
       if (req.query.workitem) {
 
         var stream;
@@ -78,7 +82,7 @@
         }
 
         var pageSize = getConvertedPageSizeOrDefault(req.query);
-        
+
 
         var page = cache.get(req.query.page);
 

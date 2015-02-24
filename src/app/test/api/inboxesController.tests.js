@@ -41,13 +41,17 @@ var chai = require('chai'),
   validator = {
     isUUID: sinon.stub()
   },
+  urls = {
+    href: sinon.stub()
+  },
   controller = proxyquire('../../api/inboxesController', {
     './hypermediaResponse': hypermediaResponseStub,
     './sanitizer': sanitizer,
     './events/inboxAdded': inboxAdded,
     './helpers/eventStoreClient': eventStoreClient,
     './translators/githubTranslator': translator,
-    'validator': validator
+    'validator': validator,
+    './urls': urls
   });
 
 chai.use(sinonChai);
@@ -164,6 +168,10 @@ describe('inboxesController', function() {
           }),
           statusCode: 200
         });
+
+        urls.href = sinon.stub();
+
+        urls.href.returns(function() {});
       });
 
       it('it should have a response Content-Type of hal+json', function(done) {
@@ -175,7 +183,14 @@ describe('inboxesController', function() {
 
       it('it should use proper arguments when creating hypermedia.', function(done) {
         postInboxCreate(payload, function(err, res) {
-          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(protocol, sinon.match.any, inboxAddedEvent.data.inboxId);
+          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(sinon.match.func, inboxAddedEvent.data.inboxId);
+          done();
+        });
+      });
+
+      it('it should call urls.href once.', function(done) {
+        postInboxCreate(payload, function(err, res) {
+          urls.href.should.have.been.calledOnce;
           done();
         });
       });
@@ -403,7 +418,13 @@ describe('inboxesController', function() {
           statusCode: 200
         });
 
-        hypermediaResponseStub.inboxes.uuid.commits.POST.returns(hypermedia);
+        hypermediaResponseStub.inboxes.uuid.commits.POST.returns(hypermedia)
+
+      });
+
+      beforeEach(function() {
+        urls.href = sinon.stub();
+        urls.href.returns(function() {});
       });
 
       it('it should reject the request and explain that only application/json is accepted when sending unsupported Content-Type.', function(done) {
@@ -470,7 +491,14 @@ describe('inboxesController', function() {
         };
 
         postInbox(inboxPayload, function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(sinon.match.func, hypermediaParams);
+          done();
+        });
+      });
+
+      it('it should call urls.href once.', function(done) {
+        postInbox(inboxPayload, function(err, res) {
+          urls.href.should.have.been.calledOnce;
           done();
         });
       });
@@ -707,6 +735,9 @@ describe('inboxesController', function() {
           body: JSON.stringify(responseFromEventStoreForInbox),
           statusCode: 200
         });
+
+        urls.href = sinon.stub();
+        urls.href.returns(function() {});
       });
 
       function get(shouldBehaveThusly) {
@@ -718,21 +749,28 @@ describe('inboxesController', function() {
           eventStoreClient.projection.getState.should.have.been.calledWith({
             name: sinon.match.any,
             partition: 'inbox-' + inboxId
-          }, sinon.match.any);
+          }, sinon.match.func);
           done();
         });
       });
 
-      it('asks for the appropriate hypermedia response', function(done) {
+      it('an appropriate hypermedia response is requested', function(done) {
         var hypermediaParams = _.extend({
           inboxId: inboxId
         }, responseFromEventStoreForInbox);
 
         get(function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.GET.should.have.been.calledWith(protocol, sinon.match.any, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.GET.should.have.been.calledWith(sinon.match.func, hypermediaParams);
           done();
-        })
-      })
+        });
+      });
+
+      it('it should call urls.href once.', function(done) {
+        get(function(err, res) {
+          urls.href.should.have.been.calledOnce;
+          done();
+        });
+      });
 
       it('it returns a 200 status code', function(done) {
         get(function(err, res) {
@@ -747,7 +785,6 @@ describe('inboxesController', function() {
           done();
         });
       });
-
     });
 
     describe('with a valid, uuid that does not match a real inbox', function() {
