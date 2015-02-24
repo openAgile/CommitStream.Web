@@ -42,7 +42,7 @@ var chai = require('chai'),
     isUUID: sinon.stub()
   },
   urls = {
-    href: sinon.spy()
+    href: sinon.stub()
   },
   controller = proxyquire('../../api/inboxesController', {
     './hypermediaResponse': hypermediaResponseStub,
@@ -169,7 +169,9 @@ describe('inboxesController', function() {
           statusCode: 200
         });
 
-        urls.href = sinon.spy();
+        urls.href = sinon.stub();
+
+        urls.href.returns(function() {});
       });
 
       it('it should have a response Content-Type of hal+json', function(done) {
@@ -181,7 +183,7 @@ describe('inboxesController', function() {
 
       it('it should use proper arguments when creating hypermedia.', function(done) {
         postInboxCreate(payload, function(err, res) {
-          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(sinon.match.any, inboxAddedEvent.data.inboxId);
+          hypermediaResponseStub.inboxes.POST.should.have.been.calledWith(sinon.match.func, inboxAddedEvent.data.inboxId);
           done();
         });
       });
@@ -416,11 +418,13 @@ describe('inboxesController', function() {
           statusCode: 200
         });
 
-        hypermediaResponseStub.inboxes.uuid.commits.POST.returns(hypermedia);
+        hypermediaResponseStub.inboxes.uuid.commits.POST.returns(hypermedia)
+
       });
 
       beforeEach(function() {
-        urls.href = sinon.spy();
+        urls.href = sinon.stub();
+        urls.href.returns(function() {});
       });
 
       it('it should reject the request and explain that only application/json is accepted when sending unsupported Content-Type.', function(done) {
@@ -487,7 +491,7 @@ describe('inboxesController', function() {
         };
 
         postInbox(inboxPayload, function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(sinon.match.any, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.commits.POST.should.have.been.calledWith(sinon.match.func, hypermediaParams);
           done();
         });
       });
@@ -732,7 +736,8 @@ describe('inboxesController', function() {
           statusCode: 200
         });
 
-        urls.href = sinon.spy();
+        urls.href = sinon.stub();
+        urls.href.returns(function() {});
       });
 
       function get(shouldBehaveThusly) {
@@ -755,7 +760,7 @@ describe('inboxesController', function() {
         }, responseFromEventStoreForInbox);
 
         get(function(err, res) {
-          hypermediaResponseStub.inboxes.uuid.GET.should.have.been.calledWith(sinon.match.any, hypermediaParams);
+          hypermediaResponseStub.inboxes.uuid.GET.should.have.been.calledWith(sinon.match.func, hypermediaParams);
           done();
         });
       });
