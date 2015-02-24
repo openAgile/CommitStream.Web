@@ -135,6 +135,7 @@ var urlToPushCommitToInboxA = undefined;
 describe('you need a digest to associate to the inboxes that will be created', function() {
   it('should return error message with 401 Unauthorized response when request is made without a key.', function(done) {
     request({
+      //TODO: should this uri be api/digests?
       uri: "http://localhost:6565/api/digest?workitem=S-11111",
       method: "POST",
       body: JSON.stringify({
@@ -150,6 +151,7 @@ describe('you need a digest to associate to the inboxes that will be created', f
 
   it('should return error when request is made with incorrect key.', function(done) {
     request({
+      //TODO: should this uri be api/digests?
       uri: "http://localhost:6565/api/digest?key=S-11111",
       method: "POST",
       body: JSON.stringify({
@@ -690,57 +692,95 @@ describe('api/digests/<digestId>/inboxes', function() {
 });
 
 describe('api/digests GET', function() {
-
   var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
-  var digestMap = {};
-  var digestsToCreate = ['First Digest', 'Second Digest', 'Third Digest'];
+  
+  before(function(done) {
+    request({
+      uri: "http://localhost:2113/streams/digests",
+      headers: {
+        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',        
+      },
+      method: 'DELETE'
+    }, function(err, res) {
+      done();
+    });
+  });
+
+  it('should return an empty array for no digests created.', function(done) {
+    setTimeout(function() {
+      request.get({
+        uri: "http://localhost:6565/api/digests" + key,
+        method: "GET",
+        headers: {
+          "content-type": "application/json"
+        }
+      }, function(err, res) {
+        var expected = {
+          "_links": {
+          "self": {
+            "href": "http://localhost:6565/api/digests",
+            }
+          },
+          "count": 0,
+          "_embedded": {
+            "digests": []
+          }
+        };
+        var actual = JSON.parse(res.body);
+        actual.should.deep.equal(expected);
+        done();
+      });
+    }, 0);
+  });
+
+  describe('when 3 digests are available: ', function() {
+    var key = "?key=32527e4a-e5ac-46f5-9bad-2c9b7d607bd7";
+    var digestMap = {};
+    var digestsToCreate = ['First Digest', 'Second Digest', 'Third Digest'];
   var commitStreamdigestsUrl = "http://localhost:6565/api/digests";
   var eventStoreDigestsStreamUrl = "http://localhost:2113/streams/digests";
 
-  function getExpectedResponse(digestMap) {
-    return {
-      "_links": {
-        "self": {
-          "href": "http://localhost:6565/api/digests",
+    function getExpectedResponse(digestMap) {
+       return {
+        "_links": {
+          "self": {
+            "href": "http://localhost:6565/api/digests",
+          }
+        },
+        "count": 3,
+        "_embedded": {
+          "digests": [{
+            "_links": {
+              "self": {
+                "href": "http://localhost:6565/api/digests/" + digestMap['Third Digest']
+              }
+            },
+            "digestId": digestMap['Third Digest'],
+            "description": "Third Digest"
+          }, {
+            "_links": {
+              "self": {
+                "href": "http://localhost:6565/api/digests/" + digestMap['Second Digest']
+              }
+            },
+            "digestId": digestMap['Second Digest'],
+            "description": "Second Digest"
+          }, {
+            "_links": {
+              "self": {
+                "href": "http://localhost:6565/api/digests/" + digestMap['First Digest']
+              }
+            },
+            "digestId": digestMap['First Digest'],
+            "description": "First Digest"
+          }]
         }
-      },
-      "count": 3,
-      "_embedded": {
-        "digests": [{
-          "_links": {
-            "self": {
-              "href": "http://localhost:6565/api/digests/" + digestMap['Third Digest']
-            }
-          },
-          "digestId": digestMap['Third Digest'],
-          "description": "Third Digest"
-        }, {
-          "_links": {
-            "self": {
-              "href": "http://localhost:6565/api/digests/" + digestMap['Second Digest']
-            }
-          },
-          "digestId": digestMap['Second Digest'],
-          "description": "Second Digest"
-        }, {
-          "_links": {
-            "self": {
-              "href": "http://localhost:6565/api/digests/" + digestMap['First Digest']
-            }
-          },
-          "digestId": digestMap['First Digest'],
-          "description": "First Digest"
-        }]
       }
     }
-  }
 
-  before(function(done) {
-    this.timeout(4000);
 
-    function digestCreate(index) {
+    function digestCreate(index, done) {
       var digest = digestsToCreate[index];
-
       request({
         uri: commitStreamdigestsUrl + key,
         method: "POST",
@@ -757,24 +797,18 @@ describe('api/digests GET', function() {
         if (_.keys(digestMap).length === digestsToCreate.length) {
           done();
         } else {
-          if (index + 1 < digestsToCreate.length) digestCreate(index + 1);
+          if (index + 1 < digestsToCreate.length) digestCreate(index + 1, done);
         }
       });
     }
 
-    request({
-      uri: eventStoreDigestsStreamUrl,
-      headers: {
-        'Authorization': 'Basic YWRtaW46Y2hhbmdlaXQ=',
-      },
-      method: 'DELETE'
-    }, function(err, res) {
-      digestCreate(0);
-    });
-  });
 
-  it('should return the expected response body.', function(done) {
-    setTimeout(function() {
+      uri: "http://localhost:2113/streams/digests",
+    before(function(done) {
+      digestCreate(0, done);
+    });
+
+    it('should return a response body with 3 digests, when 3 are available.', function(done) {
       request.get({
         uri: commitStreamdigestsUrl + key,
         method: "GET",
@@ -787,9 +821,8 @@ describe('api/digests GET', function() {
         actual.should.deep.equal(expected);
         done();
       });
-    }, 5);
+    });
   });
-
 });
 
 describe('api/inboxes/:uuid GET', function() {
