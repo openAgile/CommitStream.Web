@@ -749,7 +749,7 @@ describe('inboxesController', function() {
           eventStoreClient.projection.getState.should.have.been.calledWith({
             name: sinon.match.any,
             partition: 'inbox-' + inboxId
-          }, sinon.match.any);
+          }, sinon.match.func);
           done();
         });
       });
