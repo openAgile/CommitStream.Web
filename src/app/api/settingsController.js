@@ -20,7 +20,10 @@
 
       var settings = getDefaultSettings();
 
-
+      // NOTE: Was going to pull the usage of protocol and host out of here
+      //       and use our urls module, but we are currently in discovery of
+      //       multitenant work and that will most likely impact this controller's
+      //       future. Waiting to see what will happen rather that refactor unneccessarily.
       var protocol = config.protocol || req.protocol;
       var host = req.get('host');
 
