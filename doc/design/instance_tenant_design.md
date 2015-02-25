@@ -210,7 +210,7 @@ Metdata
 }
 ```
 
-### partionate-with-or-without-mention
+### partitionate-with-or-without-mention
 
 Now that commits exist within one or more streams inside the category of `inboxCommits-`, another critical projection can observe these commits and produce virtual streams needed by the next downstream projection. This first one simply divides commits into two streams, one for commits that have a message matching the VersionOne workitem mention pattern, and one for those that do not:
 
