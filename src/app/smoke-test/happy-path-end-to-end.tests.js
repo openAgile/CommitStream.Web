@@ -849,10 +849,7 @@ describe('api/inboxes/:uuid GET', function() {
 
     request.get({
       uri: urlToGetInbox1Info + key,
-      method: "GET",
-      headers: {
-        "content-type": "application/json"
-      }
+      method: "GET"
     }, function(err, res) {
       var actual = JSON.parse(res.body);
       actual.should.deep.equal(expected);
