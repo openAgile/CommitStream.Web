@@ -34,7 +34,7 @@ When Azure restarts a Virtual Machine or creates a new machine from a clone, you
 
 ![INTERNAL IP ADDRESS](https://s3.amazonaws.com/uploads.hipchat.com/12722/130235/MDrjM4yaRysPuAQ/INTERNAL%20IP%20ADDRESS.png)
 
-* Click the **Connect** link to open a Remote Desktop connection to the system. Use the standard Azure VM login credentials -- ask in openAgile on HipChat to find these.
+* Click the **Connect** link to open a Remote Desktop connection to the system. Use the standard Azure VM login credentials -- ask in openAgile on Slack to find these.
 * From the desktop of the machine, open the file `C:\Program Files\eventstore\config.yml` with Notepad.
 * Modify the file to have the correct `INTERNAL IP ADDRESS` for the `ExtIp` value:
 
