@@ -1,0 +1,3046 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.7" jmeter="2.12 r1636949">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Stress Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="apiKey" elementType="Argument">
+            <stringProp name="Argument.name">apiKey</stringProp>
+            <stringProp name="Argument.value">32527e4a-e5ac-46f5-9bad-2c9b7d607bd7</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">v1cs-stress.azurewebsites.net</stringProp>
+        <stringProp name="HTTPSampler.port"></stringProp>
+        <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+        <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        <stringProp name="HTTPSampler.protocol">https</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+        <stringProp name="HTTPSampler.path"></stringProp>
+        <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+      </ConfigTestElement>
+      <hashTree/>
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Headers" enabled="true">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">Content-Type</stringProp>
+            <stringProp name="Header.value">application/json</stringProp>
+          </elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Run" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">50</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">60</stringProp>
+        <longProp name="ThreadGroup.start_time">1425916130000</longProp>
+        <longProp name="ThreadGroup.end_time">1425916130000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Instance - HTTP Request" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;instanceId&quot;: &quot;${__UUID}&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/api/instances?apiKey=${apiKey}</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="digest-create-url - jp@gc - JSON Path Extractor" enabled="true">
+            <stringProp name="VAR">digest-create-url</stringProp>
+            <stringProp name="JSONPATH">$._links[&apos;digest-create&apos;].href</stringProp>
+            <stringProp name="DEFAULT"></stringProp>
+            <stringProp name="VARIABLE"></stringProp>
+            <stringProp name="SUBJECT">BODY</stringProp>
+          </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+          <hashTree/>
+          <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="instanceApiKey - jp@gc - JSON Path Extractor" enabled="true">
+            <stringProp name="VAR">instanceAPIKey</stringProp>
+            <stringProp name="JSONPATH">$.apiKey</stringProp>
+            <stringProp name="DEFAULT"></stringProp>
+            <stringProp name="VARIABLE"></stringProp>
+            <stringProp name="SUBJECT">BODY</stringProp>
+          </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+          <hashTree/>
+          <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="instanceId" enabled="true">
+            <stringProp name="VAR">instanceId</stringProp>
+            <stringProp name="JSONPATH">$.instanceId</stringProp>
+            <stringProp name="DEFAULT"></stringProp>
+            <stringProp name="VARIABLE"></stringProp>
+            <stringProp name="SUBJECT">BODY</stringProp>
+          </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+          <hashTree/>
+        </hashTree>
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="false">
+          <doubleProp>
+            <name>throughput</name>
+            <value>1.0</value>
+            <savedValue>0.0</savedValue>
+          </doubleProp>
+          <intProp name="calcMode">0</intProp>
+        </ConstantThroughputTimer>
+        <hashTree/>
+        <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
+          <boolProp name="displayJMeterProperties">false</boolProp>
+          <boolProp name="displayJMeterVariables">true</boolProp>
+          <boolProp name="displaySamplerProperties">true</boolProp>
+          <boolProp name="displaySystemProperties">false</boolProp>
+        </DebugPostProcessor>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Digest Two - HTTP Request" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;description&quot;: &quot;Second digest.&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"></stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">${digest-create-url}?apiKey=${instanceAPIKey}</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer - Delay" enabled="true">
+          <stringProp name="ConstantTimer.delay">500</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Digest Create - Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">true</boolProp>
+          <stringProp name="LoopController.loops">2</stringProp>
+        </LoopController>
+        <hashTree>
+          <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Digest Create Counter" enabled="true">
+            <stringProp name="CounterConfig.start">1</stringProp>
+            <stringProp name="CounterConfig.end">2</stringProp>
+            <stringProp name="CounterConfig.incr">1</stringProp>
+            <stringProp name="CounterConfig.name">digestCounter</stringProp>
+            <stringProp name="CounterConfig.format"></stringProp>
+            <boolProp name="CounterConfig.per_user">false</boolProp>
+          </CounterConfig>
+          <hashTree/>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Digest - HTTP Request" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&#xd;
+  &quot;description&quot;: &quot;Digest ${digestCounter}.&quot;&#xd;
+}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
+            <stringProp name="HTTPSampler.port"></stringProp>
+            <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+            <stringProp name="HTTPSampler.response_timeout"></stringProp>
+            <stringProp name="HTTPSampler.protocol"></stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+            <stringProp name="HTTPSampler.path">${digest-create-url}?apiKey=${instanceAPIKey}</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.monitor">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="inbox-create-url" enabled="true">
+              <stringProp name="VAR">inbox-create-url</stringProp>
+              <stringProp name="JSONPATH">$._links[&apos;inbox-create&apos;].href</stringProp>
+              <stringProp name="DEFAULT"></stringProp>
+              <stringProp name="VARIABLE"></stringProp>
+              <stringProp name="SUBJECT">BODY</stringProp>
+            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+            <hashTree/>
+            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="digestId" enabled="true">
+              <stringProp name="VAR">digestId</stringProp>
+              <stringProp name="JSONPATH">$.digestId</stringProp>
+              <stringProp name="DEFAULT"></stringProp>
+              <stringProp name="VARIABLE"></stringProp>
+              <stringProp name="SUBJECT">BODY</stringProp>
+            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+            <hashTree/>
+          </hashTree>
+          <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySamplerProperties">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugPostProcessor>
+          <hashTree/>
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Inbox Create - Loop Controller" enabled="true">
+            <boolProp name="LoopController.continue_forever">true</boolProp>
+            <stringProp name="LoopController.loops">10</stringProp>
+          </LoopController>
+          <hashTree>
+            <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Inbox Create Counter" enabled="true">
+              <stringProp name="CounterConfig.start">1</stringProp>
+              <stringProp name="CounterConfig.end">10</stringProp>
+              <stringProp name="CounterConfig.incr">1</stringProp>
+              <stringProp name="CounterConfig.name">inboxCounter</stringProp>
+              <stringProp name="CounterConfig.format"></stringProp>
+              <boolProp name="CounterConfig.per_user">false</boolProp>
+            </CounterConfig>
+            <hashTree/>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Inbox - HTTP Request" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+  &quot;name&quot;: &quot;Inbox ${inboxCounter}&quot;,&#xd;
+  &quot;family&quot;: &quot;GitHub&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain"></stringProp>
+              <stringProp name="HTTPSampler.port"></stringProp>
+              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+              <stringProp name="HTTPSampler.response_timeout"></stringProp>
+              <stringProp name="HTTPSampler.protocol"></stringProp>
+              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+              <stringProp name="HTTPSampler.path">${inbox-create-url}?apiKey=${instanceAPIKey}</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.monitor">false</boolProp>
+              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="add-commit-url - jp@gc - JSON Path Extractor" enabled="true">
+                <stringProp name="VAR">add-commit-url</stringProp>
+                <stringProp name="JSONPATH">$._links[&apos;add-commit&apos;].href</stringProp>
+                <stringProp name="DEFAULT"></stringProp>
+                <stringProp name="VARIABLE"></stringProp>
+                <stringProp name="SUBJECT">BODY</stringProp>
+              </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+              <hashTree/>
+            </hashTree>
+            <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+              <boolProp name="LoopController.continue_forever">true</boolProp>
+              <stringProp name="LoopController.loops">10</stringProp>
+            </LoopController>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="" elementType="Header">
+                    <stringProp name="Header.name">x-github-event</stringProp>
+                    <stringProp name="Header.value">push</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="StoryId - Random Variable" enabled="true">
+                <stringProp name="maximumValue">99999</stringProp>
+                <stringProp name="minimumValue">1</stringProp>
+                <stringProp name="outputFormat">S-00000</stringProp>
+                <boolProp name="perThread">true</boolProp>
+                <stringProp name="randomSeed"></stringProp>
+                <stringProp name="variableName">StoryId</stringProp>
+              </RandomVariableConfig>
+              <hashTree/>
+              <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
+                <doubleProp>
+                  <name>throughput</name>
+                  <value>30.0</value>
+                  <savedValue>0.0</savedValue>
+                </doubleProp>
+                <intProp name="calcMode">0</intProp>
+              </ConstantThroughputTimer>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post to Inbox - HTTP Request" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;ref&quot;: &quot;refs/heads/v1cs-dev-staging&quot;,&#xd;
+  &quot;before&quot;: &quot;0757545c34c4381b744004d653cdd52911844615&quot;,&#xd;
+  &quot;after&quot;: &quot;cdf77aa9f5b33323f5cd63b8ed43ad59715c4754&quot;,&#xd;
+  &quot;created&quot;: false,&#xd;
+  &quot;deleted&quot;: false,&#xd;
+  &quot;forced&quot;: false,&#xd;
+  &quot;base_ref&quot;: null,&#xd;
+  &quot;compare&quot;: &quot;https://github.com/openAgile/CommitStream.Web/compare/0757545c34c4...cdf77aa9f5b3&quot;,&#xd;
+  &quot;commits&quot;: [{&#xd;
+    &quot;id&quot;: &quot;fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Capture the original commit message for additional data for future stories.\n\nAdded initial test case for githubTranslator module.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T11:52:31-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Handle smoke test 3 months / 4 months error (at least temporarily) with deep.equal\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:04:51-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:56:39-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:57:20-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added back .deep \n\nNote: for some tests using just .equals will work, but ONLY if the data inside the object doesn&apos;t exactly match. When the data inside the objects does exactly match, it appears that .equals then fails it because they do not point to the same object in memory. I guess.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T13:07:00-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;,&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #44 from openAgile/capture_entire_commmit_message\n\nCapture entire commmit message&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-29T14:56:42-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;,&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added tests for ACL and authorized login attempts\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-02T15:49:52-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Changed before for beforeEach.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:05:00-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #46 from openAgile/access_with_authorization_header\n\nMerge access_with_authorization_header into develop&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:13:30-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added ACL info\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-05T09:50:04-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;doc/v1_customer_setup.md&quot;&#xd;
+    ]&#xd;
+  }],&#xd;
+  &quot;repository&quot;: {&#xd;
+    &quot;id&quot;: 23838815,&#xd;
+    &quot;name&quot;: &quot;CommitStream.Web&quot;,&#xd;
+    &quot;full_name&quot;: &quot;openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;owner&quot;: {&#xd;
+      &quot;name&quot;: &quot;openAgile&quot;,&#xd;
+      &quot;email&quot;: null&#xd;
+    },&#xd;
+    &quot;private&quot;: false,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;description&quot;: &quot;CommitStream Web Server&quot;,&#xd;
+    &quot;fork&quot;: false,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;forks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/forks&quot;,&#xd;
+    &quot;keys_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/keys{/key_id}&quot;,&#xd;
+    &quot;collaborators_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/collaborators{/collaborator}&quot;,&#xd;
+    &quot;teams_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/teams&quot;,&#xd;
+    &quot;hooks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/hooks&quot;,&#xd;
+    &quot;issue_events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/events{/number}&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/events&quot;,&#xd;
+    &quot;assignees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/assignees{/user}&quot;,&#xd;
+    &quot;branches_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/branches{/branch}&quot;,&#xd;
+    &quot;tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/tags&quot;,&#xd;
+    &quot;blobs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/blobs{/sha}&quot;,&#xd;
+    &quot;git_tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/tags{/sha}&quot;,&#xd;
+    &quot;git_refs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/refs{/sha}&quot;,&#xd;
+    &quot;trees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/trees{/sha}&quot;,&#xd;
+    &quot;statuses_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/statuses/{sha}&quot;,&#xd;
+    &quot;languages_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/languages&quot;,&#xd;
+    &quot;stargazers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/stargazers&quot;,&#xd;
+    &quot;contributors_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contributors&quot;,&#xd;
+    &quot;subscribers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscribers&quot;,&#xd;
+    &quot;subscription_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscription&quot;,&#xd;
+    &quot;commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/commits{/sha}&quot;,&#xd;
+    &quot;git_commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/commits{/sha}&quot;,&#xd;
+    &quot;comments_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/comments{/number}&quot;,&#xd;
+    &quot;issue_comment_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/comments/{number}&quot;,&#xd;
+    &quot;contents_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contents/{+path}&quot;,&#xd;
+    &quot;compare_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/compare/{base}...{head}&quot;,&#xd;
+    &quot;merges_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/merges&quot;,&#xd;
+    &quot;archive_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/{archive_format}{/ref}&quot;,&#xd;
+    &quot;downloads_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/downloads&quot;,&#xd;
+    &quot;issues_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues{/number}&quot;,&#xd;
+    &quot;pulls_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/pulls{/number}&quot;,&#xd;
+    &quot;milestones_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/milestones{/number}&quot;,&#xd;
+    &quot;notifications_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/notifications{?since,all,participating}&quot;,&#xd;
+    &quot;labels_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/labels{/name}&quot;,&#xd;
+    &quot;releases_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/releases{/id}&quot;,&#xd;
+    &quot;created_at&quot;: 1410275937,&#xd;
+    &quot;updated_at&quot;: &quot;2015-02-17T19:54:43Z&quot;,&#xd;
+    &quot;pushed_at&quot;: 1424447374,&#xd;
+    &quot;git_url&quot;: &quot;git://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;ssh_url&quot;: &quot;git@github.com:openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;clone_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;svn_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;homepage&quot;: &quot;&quot;,&#xd;
+    &quot;size&quot;: 5024,&#xd;
+    &quot;stargazers_count&quot;: 1,&#xd;
+    &quot;watchers_count&quot;: 1,&#xd;
+    &quot;language&quot;: &quot;JavaScript&quot;,&#xd;
+    &quot;has_issues&quot;: true,&#xd;
+    &quot;has_downloads&quot;: true,&#xd;
+    &quot;has_wiki&quot;: true,&#xd;
+    &quot;has_pages&quot;: false,&#xd;
+    &quot;forks_count&quot;: 3,&#xd;
+    &quot;mirror_url&quot;: null,&#xd;
+    &quot;open_issues_count&quot;: 1,&#xd;
+    &quot;forks&quot;: 3,&#xd;
+    &quot;open_issues&quot;: 1,&#xd;
+    &quot;watchers&quot;: 1,&#xd;
+    &quot;default_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;stargazers&quot;: 1,&#xd;
+    &quot;master_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;organization&quot;: &quot;openAgile&quot;&#xd;
+  },&#xd;
+  &quot;pusher&quot;: {&#xd;
+    &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;email&quot;: &quot;jsgough@gmail.com&quot;&#xd;
+  },&#xd;
+  &quot;organization&quot;: {&#xd;
+    &quot;login&quot;: &quot;openAgile&quot;,&#xd;
+    &quot;id&quot;: 6954603,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/orgs/openAgile&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/orgs/openAgile/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/orgs/openAgile/events&quot;,&#xd;
+    &quot;members_url&quot;: &quot;https://api.github.com/orgs/openAgile/members{/member}&quot;,&#xd;
+    &quot;public_members_url&quot;: &quot;https://api.github.com/orgs/openAgile/public_members{/member}&quot;,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/6954603?v=3&quot;,&#xd;
+    &quot;description&quot;: null&#xd;
+  },&#xd;
+  &quot;sender&quot;: {&#xd;
+    &quot;login&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;id&quot;: 1863005,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/1863005?v=3&quot;,&#xd;
+    &quot;gravatar_id&quot;: &quot;&quot;,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/users/JogoShugh&quot;,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/JogoShugh&quot;,&#xd;
+    &quot;followers_url&quot;: &quot;https://api.github.com/users/JogoShugh/followers&quot;,&#xd;
+    &quot;following_url&quot;: &quot;https://api.github.com/users/JogoShugh/following{/other_user}&quot;,&#xd;
+    &quot;gists_url&quot;: &quot;https://api.github.com/users/JogoShugh/gists{/gist_id}&quot;,&#xd;
+    &quot;starred_url&quot;: &quot;https://api.github.com/users/JogoShugh/starred{/owner}{/repo}&quot;,&#xd;
+    &quot;subscriptions_url&quot;: &quot;https://api.github.com/users/JogoShugh/subscriptions&quot;,&#xd;
+    &quot;organizations_url&quot;: &quot;https://api.github.com/users/JogoShugh/orgs&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/users/JogoShugh/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/users/JogoShugh/events{/privacy}&quot;,&#xd;
+    &quot;received_events_url&quot;: &quot;https://api.github.com/users/JogoShugh/received_events&quot;,&#xd;
+    &quot;type&quot;: &quot;User&quot;,&#xd;
+    &quot;site_admin&quot;: false&#xd;
+  }&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">${add-commit-url}?apiKey=${instanceAPIKey}</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post to Inbox - HTTP Request" enabled="true">
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;ref&quot;: &quot;refs/heads/v1cs-dev-staging&quot;,&#xd;
+  &quot;before&quot;: &quot;0757545c34c4381b744004d653cdd52911844615&quot;,&#xd;
+  &quot;after&quot;: &quot;cdf77aa9f5b33323f5cd63b8ed43ad59715c4754&quot;,&#xd;
+  &quot;created&quot;: false,&#xd;
+  &quot;deleted&quot;: false,&#xd;
+  &quot;forced&quot;: false,&#xd;
+  &quot;base_ref&quot;: null,&#xd;
+  &quot;compare&quot;: &quot;https://github.com/openAgile/CommitStream.Web/compare/0757545c34c4...cdf77aa9f5b3&quot;,&#xd;
+  &quot;commits&quot;: [{&#xd;
+    &quot;id&quot;: &quot;fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Capture the original commit message for additional data for future stories.\n\nAdded initial test case for githubTranslator module.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T11:52:31-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Handle smoke test 3 months / 4 months error (at least temporarily) with deep.equal\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:04:51-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:56:39-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:57:20-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added back .deep \n\nNote: for some tests using just .equals will work, but ONLY if the data inside the object doesn&apos;t exactly match. When the data inside the objects does exactly match, it appears that .equals then fails it because they do not point to the same object in memory. I guess.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T13:07:00-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;,&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #44 from openAgile/capture_entire_commmit_message\n\nCapture entire commmit message&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-29T14:56:42-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;,&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added tests for ACL and authorized login attempts\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-02T15:49:52-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Changed before for beforeEach.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:05:00-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #46 from openAgile/access_with_authorization_header\n\nMerge access_with_authorization_header into develop&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:13:30-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added ACL info\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-05T09:50:04-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;doc/v1_customer_setup.md&quot;&#xd;
+    ]&#xd;
+  }],&#xd;
+  &quot;repository&quot;: {&#xd;
+    &quot;id&quot;: 23838815,&#xd;
+    &quot;name&quot;: &quot;CommitStream.Web&quot;,&#xd;
+    &quot;full_name&quot;: &quot;openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;owner&quot;: {&#xd;
+      &quot;name&quot;: &quot;openAgile&quot;,&#xd;
+      &quot;email&quot;: null&#xd;
+    },&#xd;
+    &quot;private&quot;: false,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;description&quot;: &quot;CommitStream Web Server&quot;,&#xd;
+    &quot;fork&quot;: false,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;forks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/forks&quot;,&#xd;
+    &quot;keys_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/keys{/key_id}&quot;,&#xd;
+    &quot;collaborators_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/collaborators{/collaborator}&quot;,&#xd;
+    &quot;teams_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/teams&quot;,&#xd;
+    &quot;hooks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/hooks&quot;,&#xd;
+    &quot;issue_events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/events{/number}&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/events&quot;,&#xd;
+    &quot;assignees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/assignees{/user}&quot;,&#xd;
+    &quot;branches_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/branches{/branch}&quot;,&#xd;
+    &quot;tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/tags&quot;,&#xd;
+    &quot;blobs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/blobs{/sha}&quot;,&#xd;
+    &quot;git_tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/tags{/sha}&quot;,&#xd;
+    &quot;git_refs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/refs{/sha}&quot;,&#xd;
+    &quot;trees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/trees{/sha}&quot;,&#xd;
+    &quot;statuses_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/statuses/{sha}&quot;,&#xd;
+    &quot;languages_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/languages&quot;,&#xd;
+    &quot;stargazers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/stargazers&quot;,&#xd;
+    &quot;contributors_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contributors&quot;,&#xd;
+    &quot;subscribers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscribers&quot;,&#xd;
+    &quot;subscription_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscription&quot;,&#xd;
+    &quot;commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/commits{/sha}&quot;,&#xd;
+    &quot;git_commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/commits{/sha}&quot;,&#xd;
+    &quot;comments_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/comments{/number}&quot;,&#xd;
+    &quot;issue_comment_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/comments/{number}&quot;,&#xd;
+    &quot;contents_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contents/{+path}&quot;,&#xd;
+    &quot;compare_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/compare/{base}...{head}&quot;,&#xd;
+    &quot;merges_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/merges&quot;,&#xd;
+    &quot;archive_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/{archive_format}{/ref}&quot;,&#xd;
+    &quot;downloads_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/downloads&quot;,&#xd;
+    &quot;issues_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues{/number}&quot;,&#xd;
+    &quot;pulls_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/pulls{/number}&quot;,&#xd;
+    &quot;milestones_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/milestones{/number}&quot;,&#xd;
+    &quot;notifications_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/notifications{?since,all,participating}&quot;,&#xd;
+    &quot;labels_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/labels{/name}&quot;,&#xd;
+    &quot;releases_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/releases{/id}&quot;,&#xd;
+    &quot;created_at&quot;: 1410275937,&#xd;
+    &quot;updated_at&quot;: &quot;2015-02-17T19:54:43Z&quot;,&#xd;
+    &quot;pushed_at&quot;: 1424447374,&#xd;
+    &quot;git_url&quot;: &quot;git://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;ssh_url&quot;: &quot;git@github.com:openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;clone_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;svn_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;homepage&quot;: &quot;&quot;,&#xd;
+    &quot;size&quot;: 5024,&#xd;
+    &quot;stargazers_count&quot;: 1,&#xd;
+    &quot;watchers_count&quot;: 1,&#xd;
+    &quot;language&quot;: &quot;JavaScript&quot;,&#xd;
+    &quot;has_issues&quot;: true,&#xd;
+    &quot;has_downloads&quot;: true,&#xd;
+    &quot;has_wiki&quot;: true,&#xd;
+    &quot;has_pages&quot;: false,&#xd;
+    &quot;forks_count&quot;: 3,&#xd;
+    &quot;mirror_url&quot;: null,&#xd;
+    &quot;open_issues_count&quot;: 1,&#xd;
+    &quot;forks&quot;: 3,&#xd;
+    &quot;open_issues&quot;: 1,&#xd;
+    &quot;watchers&quot;: 1,&#xd;
+    &quot;default_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;stargazers&quot;: 1,&#xd;
+    &quot;master_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;organization&quot;: &quot;openAgile&quot;&#xd;
+  },&#xd;
+  &quot;pusher&quot;: {&#xd;
+    &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;email&quot;: &quot;jsgough@gmail.com&quot;&#xd;
+  },&#xd;
+  &quot;organization&quot;: {&#xd;
+    &quot;login&quot;: &quot;openAgile&quot;,&#xd;
+    &quot;id&quot;: 6954603,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/orgs/openAgile&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/orgs/openAgile/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/orgs/openAgile/events&quot;,&#xd;
+    &quot;members_url&quot;: &quot;https://api.github.com/orgs/openAgile/members{/member}&quot;,&#xd;
+    &quot;public_members_url&quot;: &quot;https://api.github.com/orgs/openAgile/public_members{/member}&quot;,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/6954603?v=3&quot;,&#xd;
+    &quot;description&quot;: null&#xd;
+  },&#xd;
+  &quot;sender&quot;: {&#xd;
+    &quot;login&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;id&quot;: 1863005,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/1863005?v=3&quot;,&#xd;
+    &quot;gravatar_id&quot;: &quot;&quot;,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/users/JogoShugh&quot;,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/JogoShugh&quot;,&#xd;
+    &quot;followers_url&quot;: &quot;https://api.github.com/users/JogoShugh/followers&quot;,&#xd;
+    &quot;following_url&quot;: &quot;https://api.github.com/users/JogoShugh/following{/other_user}&quot;,&#xd;
+    &quot;gists_url&quot;: &quot;https://api.github.com/users/JogoShugh/gists{/gist_id}&quot;,&#xd;
+    &quot;starred_url&quot;: &quot;https://api.github.com/users/JogoShugh/starred{/owner}{/repo}&quot;,&#xd;
+    &quot;subscriptions_url&quot;: &quot;https://api.github.com/users/JogoShugh/subscriptions&quot;,&#xd;
+    &quot;organizations_url&quot;: &quot;https://api.github.com/users/JogoShugh/orgs&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/users/JogoShugh/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/users/JogoShugh/events{/privacy}&quot;,&#xd;
+    &quot;received_events_url&quot;: &quot;https://api.github.com/users/JogoShugh/received_events&quot;,&#xd;
+    &quot;type&quot;: &quot;User&quot;,&#xd;
+    &quot;site_admin&quot;: false&#xd;
+  }&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">${add-commit-url}?apiKey=${instanceAPIKey}</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post to Inbox - HTTP Request" enabled="true">
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;ref&quot;: &quot;refs/heads/v1cs-dev-staging&quot;,&#xd;
+  &quot;before&quot;: &quot;0757545c34c4381b744004d653cdd52911844615&quot;,&#xd;
+  &quot;after&quot;: &quot;cdf77aa9f5b33323f5cd63b8ed43ad59715c4754&quot;,&#xd;
+  &quot;created&quot;: false,&#xd;
+  &quot;deleted&quot;: false,&#xd;
+  &quot;forced&quot;: false,&#xd;
+  &quot;base_ref&quot;: null,&#xd;
+  &quot;compare&quot;: &quot;https://github.com/openAgile/CommitStream.Web/compare/0757545c34c4...cdf77aa9f5b3&quot;,&#xd;
+  &quot;commits&quot;: [{&#xd;
+    &quot;id&quot;: &quot;fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Capture the original commit message for additional data for future stories.\n\nAdded initial test case for githubTranslator module.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T11:52:31-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Handle smoke test 3 months / 4 months error (at least temporarily) with deep.equal\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:04:51-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:56:39-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:57:20-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added back .deep \n\nNote: for some tests using just .equals will work, but ONLY if the data inside the object doesn&apos;t exactly match. When the data inside the objects does exactly match, it appears that .equals then fails it because they do not point to the same object in memory. I guess.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T13:07:00-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;,&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #44 from openAgile/capture_entire_commmit_message\n\nCapture entire commmit message&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-29T14:56:42-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;,&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added tests for ACL and authorized login attempts\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-02T15:49:52-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Changed before for beforeEach.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:05:00-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #46 from openAgile/access_with_authorization_header\n\nMerge access_with_authorization_header into develop&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:13:30-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added ACL info\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-05T09:50:04-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;doc/v1_customer_setup.md&quot;&#xd;
+    ]&#xd;
+  }],&#xd;
+  &quot;repository&quot;: {&#xd;
+    &quot;id&quot;: 23838815,&#xd;
+    &quot;name&quot;: &quot;CommitStream.Web&quot;,&#xd;
+    &quot;full_name&quot;: &quot;openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;owner&quot;: {&#xd;
+      &quot;name&quot;: &quot;openAgile&quot;,&#xd;
+      &quot;email&quot;: null&#xd;
+    },&#xd;
+    &quot;private&quot;: false,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;description&quot;: &quot;CommitStream Web Server&quot;,&#xd;
+    &quot;fork&quot;: false,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;forks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/forks&quot;,&#xd;
+    &quot;keys_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/keys{/key_id}&quot;,&#xd;
+    &quot;collaborators_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/collaborators{/collaborator}&quot;,&#xd;
+    &quot;teams_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/teams&quot;,&#xd;
+    &quot;hooks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/hooks&quot;,&#xd;
+    &quot;issue_events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/events{/number}&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/events&quot;,&#xd;
+    &quot;assignees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/assignees{/user}&quot;,&#xd;
+    &quot;branches_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/branches{/branch}&quot;,&#xd;
+    &quot;tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/tags&quot;,&#xd;
+    &quot;blobs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/blobs{/sha}&quot;,&#xd;
+    &quot;git_tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/tags{/sha}&quot;,&#xd;
+    &quot;git_refs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/refs{/sha}&quot;,&#xd;
+    &quot;trees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/trees{/sha}&quot;,&#xd;
+    &quot;statuses_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/statuses/{sha}&quot;,&#xd;
+    &quot;languages_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/languages&quot;,&#xd;
+    &quot;stargazers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/stargazers&quot;,&#xd;
+    &quot;contributors_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contributors&quot;,&#xd;
+    &quot;subscribers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscribers&quot;,&#xd;
+    &quot;subscription_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscription&quot;,&#xd;
+    &quot;commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/commits{/sha}&quot;,&#xd;
+    &quot;git_commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/commits{/sha}&quot;,&#xd;
+    &quot;comments_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/comments{/number}&quot;,&#xd;
+    &quot;issue_comment_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/comments/{number}&quot;,&#xd;
+    &quot;contents_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contents/{+path}&quot;,&#xd;
+    &quot;compare_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/compare/{base}...{head}&quot;,&#xd;
+    &quot;merges_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/merges&quot;,&#xd;
+    &quot;archive_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/{archive_format}{/ref}&quot;,&#xd;
+    &quot;downloads_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/downloads&quot;,&#xd;
+    &quot;issues_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues{/number}&quot;,&#xd;
+    &quot;pulls_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/pulls{/number}&quot;,&#xd;
+    &quot;milestones_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/milestones{/number}&quot;,&#xd;
+    &quot;notifications_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/notifications{?since,all,participating}&quot;,&#xd;
+    &quot;labels_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/labels{/name}&quot;,&#xd;
+    &quot;releases_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/releases{/id}&quot;,&#xd;
+    &quot;created_at&quot;: 1410275937,&#xd;
+    &quot;updated_at&quot;: &quot;2015-02-17T19:54:43Z&quot;,&#xd;
+    &quot;pushed_at&quot;: 1424447374,&#xd;
+    &quot;git_url&quot;: &quot;git://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;ssh_url&quot;: &quot;git@github.com:openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;clone_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;svn_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;homepage&quot;: &quot;&quot;,&#xd;
+    &quot;size&quot;: 5024,&#xd;
+    &quot;stargazers_count&quot;: 1,&#xd;
+    &quot;watchers_count&quot;: 1,&#xd;
+    &quot;language&quot;: &quot;JavaScript&quot;,&#xd;
+    &quot;has_issues&quot;: true,&#xd;
+    &quot;has_downloads&quot;: true,&#xd;
+    &quot;has_wiki&quot;: true,&#xd;
+    &quot;has_pages&quot;: false,&#xd;
+    &quot;forks_count&quot;: 3,&#xd;
+    &quot;mirror_url&quot;: null,&#xd;
+    &quot;open_issues_count&quot;: 1,&#xd;
+    &quot;forks&quot;: 3,&#xd;
+    &quot;open_issues&quot;: 1,&#xd;
+    &quot;watchers&quot;: 1,&#xd;
+    &quot;default_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;stargazers&quot;: 1,&#xd;
+    &quot;master_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;organization&quot;: &quot;openAgile&quot;&#xd;
+  },&#xd;
+  &quot;pusher&quot;: {&#xd;
+    &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;email&quot;: &quot;jsgough@gmail.com&quot;&#xd;
+  },&#xd;
+  &quot;organization&quot;: {&#xd;
+    &quot;login&quot;: &quot;openAgile&quot;,&#xd;
+    &quot;id&quot;: 6954603,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/orgs/openAgile&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/orgs/openAgile/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/orgs/openAgile/events&quot;,&#xd;
+    &quot;members_url&quot;: &quot;https://api.github.com/orgs/openAgile/members{/member}&quot;,&#xd;
+    &quot;public_members_url&quot;: &quot;https://api.github.com/orgs/openAgile/public_members{/member}&quot;,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/6954603?v=3&quot;,&#xd;
+    &quot;description&quot;: null&#xd;
+  },&#xd;
+  &quot;sender&quot;: {&#xd;
+    &quot;login&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;id&quot;: 1863005,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/1863005?v=3&quot;,&#xd;
+    &quot;gravatar_id&quot;: &quot;&quot;,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/users/JogoShugh&quot;,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/JogoShugh&quot;,&#xd;
+    &quot;followers_url&quot;: &quot;https://api.github.com/users/JogoShugh/followers&quot;,&#xd;
+    &quot;following_url&quot;: &quot;https://api.github.com/users/JogoShugh/following{/other_user}&quot;,&#xd;
+    &quot;gists_url&quot;: &quot;https://api.github.com/users/JogoShugh/gists{/gist_id}&quot;,&#xd;
+    &quot;starred_url&quot;: &quot;https://api.github.com/users/JogoShugh/starred{/owner}{/repo}&quot;,&#xd;
+    &quot;subscriptions_url&quot;: &quot;https://api.github.com/users/JogoShugh/subscriptions&quot;,&#xd;
+    &quot;organizations_url&quot;: &quot;https://api.github.com/users/JogoShugh/orgs&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/users/JogoShugh/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/users/JogoShugh/events{/privacy}&quot;,&#xd;
+    &quot;received_events_url&quot;: &quot;https://api.github.com/users/JogoShugh/received_events&quot;,&#xd;
+    &quot;type&quot;: &quot;User&quot;,&#xd;
+    &quot;site_admin&quot;: false&#xd;
+  }&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">${add-commit-url}?apiKey=${instanceAPIKey}</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post to Inbox - HTTP Request" enabled="true">
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;ref&quot;: &quot;refs/heads/v1cs-dev-staging&quot;,&#xd;
+  &quot;before&quot;: &quot;0757545c34c4381b744004d653cdd52911844615&quot;,&#xd;
+  &quot;after&quot;: &quot;cdf77aa9f5b33323f5cd63b8ed43ad59715c4754&quot;,&#xd;
+  &quot;created&quot;: false,&#xd;
+  &quot;deleted&quot;: false,&#xd;
+  &quot;forced&quot;: false,&#xd;
+  &quot;base_ref&quot;: null,&#xd;
+  &quot;compare&quot;: &quot;https://github.com/openAgile/CommitStream.Web/compare/0757545c34c4...cdf77aa9f5b3&quot;,&#xd;
+  &quot;commits&quot;: [{&#xd;
+    &quot;id&quot;: &quot;fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Capture the original commit message for additional data for future stories.\n\nAdded initial test case for githubTranslator module.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T11:52:31-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Handle smoke test 3 months / 4 months error (at least temporarily) with deep.equal\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:04:51-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:56:39-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:57:20-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added back .deep \n\nNote: for some tests using just .equals will work, but ONLY if the data inside the object doesn&apos;t exactly match. When the data inside the objects does exactly match, it appears that .equals then fails it because they do not point to the same object in memory. I guess.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T13:07:00-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;,&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #44 from openAgile/capture_entire_commmit_message\n\nCapture entire commmit message&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-29T14:56:42-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;,&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added tests for ACL and authorized login attempts\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-02T15:49:52-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Changed before for beforeEach.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:05:00-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #46 from openAgile/access_with_authorization_header\n\nMerge access_with_authorization_header into develop&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:13:30-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added ACL info\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-05T09:50:04-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;doc/v1_customer_setup.md&quot;&#xd;
+    ]&#xd;
+  }],&#xd;
+  &quot;repository&quot;: {&#xd;
+    &quot;id&quot;: 23838815,&#xd;
+    &quot;name&quot;: &quot;CommitStream.Web&quot;,&#xd;
+    &quot;full_name&quot;: &quot;openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;owner&quot;: {&#xd;
+      &quot;name&quot;: &quot;openAgile&quot;,&#xd;
+      &quot;email&quot;: null&#xd;
+    },&#xd;
+    &quot;private&quot;: false,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;description&quot;: &quot;CommitStream Web Server&quot;,&#xd;
+    &quot;fork&quot;: false,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;forks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/forks&quot;,&#xd;
+    &quot;keys_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/keys{/key_id}&quot;,&#xd;
+    &quot;collaborators_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/collaborators{/collaborator}&quot;,&#xd;
+    &quot;teams_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/teams&quot;,&#xd;
+    &quot;hooks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/hooks&quot;,&#xd;
+    &quot;issue_events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/events{/number}&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/events&quot;,&#xd;
+    &quot;assignees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/assignees{/user}&quot;,&#xd;
+    &quot;branches_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/branches{/branch}&quot;,&#xd;
+    &quot;tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/tags&quot;,&#xd;
+    &quot;blobs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/blobs{/sha}&quot;,&#xd;
+    &quot;git_tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/tags{/sha}&quot;,&#xd;
+    &quot;git_refs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/refs{/sha}&quot;,&#xd;
+    &quot;trees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/trees{/sha}&quot;,&#xd;
+    &quot;statuses_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/statuses/{sha}&quot;,&#xd;
+    &quot;languages_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/languages&quot;,&#xd;
+    &quot;stargazers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/stargazers&quot;,&#xd;
+    &quot;contributors_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contributors&quot;,&#xd;
+    &quot;subscribers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscribers&quot;,&#xd;
+    &quot;subscription_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscription&quot;,&#xd;
+    &quot;commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/commits{/sha}&quot;,&#xd;
+    &quot;git_commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/commits{/sha}&quot;,&#xd;
+    &quot;comments_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/comments{/number}&quot;,&#xd;
+    &quot;issue_comment_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/comments/{number}&quot;,&#xd;
+    &quot;contents_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contents/{+path}&quot;,&#xd;
+    &quot;compare_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/compare/{base}...{head}&quot;,&#xd;
+    &quot;merges_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/merges&quot;,&#xd;
+    &quot;archive_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/{archive_format}{/ref}&quot;,&#xd;
+    &quot;downloads_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/downloads&quot;,&#xd;
+    &quot;issues_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues{/number}&quot;,&#xd;
+    &quot;pulls_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/pulls{/number}&quot;,&#xd;
+    &quot;milestones_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/milestones{/number}&quot;,&#xd;
+    &quot;notifications_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/notifications{?since,all,participating}&quot;,&#xd;
+    &quot;labels_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/labels{/name}&quot;,&#xd;
+    &quot;releases_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/releases{/id}&quot;,&#xd;
+    &quot;created_at&quot;: 1410275937,&#xd;
+    &quot;updated_at&quot;: &quot;2015-02-17T19:54:43Z&quot;,&#xd;
+    &quot;pushed_at&quot;: 1424447374,&#xd;
+    &quot;git_url&quot;: &quot;git://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;ssh_url&quot;: &quot;git@github.com:openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;clone_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;svn_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;homepage&quot;: &quot;&quot;,&#xd;
+    &quot;size&quot;: 5024,&#xd;
+    &quot;stargazers_count&quot;: 1,&#xd;
+    &quot;watchers_count&quot;: 1,&#xd;
+    &quot;language&quot;: &quot;JavaScript&quot;,&#xd;
+    &quot;has_issues&quot;: true,&#xd;
+    &quot;has_downloads&quot;: true,&#xd;
+    &quot;has_wiki&quot;: true,&#xd;
+    &quot;has_pages&quot;: false,&#xd;
+    &quot;forks_count&quot;: 3,&#xd;
+    &quot;mirror_url&quot;: null,&#xd;
+    &quot;open_issues_count&quot;: 1,&#xd;
+    &quot;forks&quot;: 3,&#xd;
+    &quot;open_issues&quot;: 1,&#xd;
+    &quot;watchers&quot;: 1,&#xd;
+    &quot;default_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;stargazers&quot;: 1,&#xd;
+    &quot;master_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;organization&quot;: &quot;openAgile&quot;&#xd;
+  },&#xd;
+  &quot;pusher&quot;: {&#xd;
+    &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;email&quot;: &quot;jsgough@gmail.com&quot;&#xd;
+  },&#xd;
+  &quot;organization&quot;: {&#xd;
+    &quot;login&quot;: &quot;openAgile&quot;,&#xd;
+    &quot;id&quot;: 6954603,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/orgs/openAgile&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/orgs/openAgile/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/orgs/openAgile/events&quot;,&#xd;
+    &quot;members_url&quot;: &quot;https://api.github.com/orgs/openAgile/members{/member}&quot;,&#xd;
+    &quot;public_members_url&quot;: &quot;https://api.github.com/orgs/openAgile/public_members{/member}&quot;,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/6954603?v=3&quot;,&#xd;
+    &quot;description&quot;: null&#xd;
+  },&#xd;
+  &quot;sender&quot;: {&#xd;
+    &quot;login&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;id&quot;: 1863005,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/1863005?v=3&quot;,&#xd;
+    &quot;gravatar_id&quot;: &quot;&quot;,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/users/JogoShugh&quot;,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/JogoShugh&quot;,&#xd;
+    &quot;followers_url&quot;: &quot;https://api.github.com/users/JogoShugh/followers&quot;,&#xd;
+    &quot;following_url&quot;: &quot;https://api.github.com/users/JogoShugh/following{/other_user}&quot;,&#xd;
+    &quot;gists_url&quot;: &quot;https://api.github.com/users/JogoShugh/gists{/gist_id}&quot;,&#xd;
+    &quot;starred_url&quot;: &quot;https://api.github.com/users/JogoShugh/starred{/owner}{/repo}&quot;,&#xd;
+    &quot;subscriptions_url&quot;: &quot;https://api.github.com/users/JogoShugh/subscriptions&quot;,&#xd;
+    &quot;organizations_url&quot;: &quot;https://api.github.com/users/JogoShugh/orgs&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/users/JogoShugh/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/users/JogoShugh/events{/privacy}&quot;,&#xd;
+    &quot;received_events_url&quot;: &quot;https://api.github.com/users/JogoShugh/received_events&quot;,&#xd;
+    &quot;type&quot;: &quot;User&quot;,&#xd;
+    &quot;site_admin&quot;: false&#xd;
+  }&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">${add-commit-url}?apiKey=${instanceAPIKey}</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post to Inbox - HTTP Request" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;ref&quot;: &quot;refs/heads/v1cs-dev-staging&quot;,&#xd;
+  &quot;before&quot;: &quot;0757545c34c4381b744004d653cdd52911844615&quot;,&#xd;
+  &quot;after&quot;: &quot;cdf77aa9f5b33323f5cd63b8ed43ad59715c4754&quot;,&#xd;
+  &quot;created&quot;: false,&#xd;
+  &quot;deleted&quot;: false,&#xd;
+  &quot;forced&quot;: false,&#xd;
+  &quot;base_ref&quot;: null,&#xd;
+  &quot;compare&quot;: &quot;https://github.com/openAgile/CommitStream.Web/compare/0757545c34c4...cdf77aa9f5b3&quot;,&#xd;
+  &quot;commits&quot;: [{&#xd;
+    &quot;id&quot;: &quot;fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Capture the original commit message for additional data for future stories.\n\nAdded initial test case for githubTranslator module.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T11:52:31-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Handle smoke test 3 months / 4 months error (at least temporarily) with deep.equal\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:04:51-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:56:39-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:57:20-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added back .deep \n\nNote: for some tests using just .equals will work, but ONLY if the data inside the object doesn&apos;t exactly match. When the data inside the objects does exactly match, it appears that .equals then fails it because they do not point to the same object in memory. I guess.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T13:07:00-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;,&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #44 from openAgile/capture_entire_commmit_message\n\nCapture entire commmit message&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-29T14:56:42-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;,&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added tests for ACL and authorized login attempts\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-02T15:49:52-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Changed before for beforeEach.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:05:00-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #46 from openAgile/access_with_authorization_header\n\nMerge access_with_authorization_header into develop&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:13:30-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added ACL info\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-05T09:50:04-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;doc/v1_customer_setup.md&quot;&#xd;
+    ]&#xd;
+  }],&#xd;
+  &quot;repository&quot;: {&#xd;
+    &quot;id&quot;: 23838815,&#xd;
+    &quot;name&quot;: &quot;CommitStream.Web&quot;,&#xd;
+    &quot;full_name&quot;: &quot;openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;owner&quot;: {&#xd;
+      &quot;name&quot;: &quot;openAgile&quot;,&#xd;
+      &quot;email&quot;: null&#xd;
+    },&#xd;
+    &quot;private&quot;: false,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;description&quot;: &quot;CommitStream Web Server&quot;,&#xd;
+    &quot;fork&quot;: false,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;forks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/forks&quot;,&#xd;
+    &quot;keys_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/keys{/key_id}&quot;,&#xd;
+    &quot;collaborators_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/collaborators{/collaborator}&quot;,&#xd;
+    &quot;teams_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/teams&quot;,&#xd;
+    &quot;hooks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/hooks&quot;,&#xd;
+    &quot;issue_events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/events{/number}&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/events&quot;,&#xd;
+    &quot;assignees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/assignees{/user}&quot;,&#xd;
+    &quot;branches_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/branches{/branch}&quot;,&#xd;
+    &quot;tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/tags&quot;,&#xd;
+    &quot;blobs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/blobs{/sha}&quot;,&#xd;
+    &quot;git_tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/tags{/sha}&quot;,&#xd;
+    &quot;git_refs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/refs{/sha}&quot;,&#xd;
+    &quot;trees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/trees{/sha}&quot;,&#xd;
+    &quot;statuses_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/statuses/{sha}&quot;,&#xd;
+    &quot;languages_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/languages&quot;,&#xd;
+    &quot;stargazers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/stargazers&quot;,&#xd;
+    &quot;contributors_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contributors&quot;,&#xd;
+    &quot;subscribers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscribers&quot;,&#xd;
+    &quot;subscription_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscription&quot;,&#xd;
+    &quot;commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/commits{/sha}&quot;,&#xd;
+    &quot;git_commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/commits{/sha}&quot;,&#xd;
+    &quot;comments_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/comments{/number}&quot;,&#xd;
+    &quot;issue_comment_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/comments/{number}&quot;,&#xd;
+    &quot;contents_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contents/{+path}&quot;,&#xd;
+    &quot;compare_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/compare/{base}...{head}&quot;,&#xd;
+    &quot;merges_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/merges&quot;,&#xd;
+    &quot;archive_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/{archive_format}{/ref}&quot;,&#xd;
+    &quot;downloads_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/downloads&quot;,&#xd;
+    &quot;issues_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues{/number}&quot;,&#xd;
+    &quot;pulls_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/pulls{/number}&quot;,&#xd;
+    &quot;milestones_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/milestones{/number}&quot;,&#xd;
+    &quot;notifications_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/notifications{?since,all,participating}&quot;,&#xd;
+    &quot;labels_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/labels{/name}&quot;,&#xd;
+    &quot;releases_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/releases{/id}&quot;,&#xd;
+    &quot;created_at&quot;: 1410275937,&#xd;
+    &quot;updated_at&quot;: &quot;2015-02-17T19:54:43Z&quot;,&#xd;
+    &quot;pushed_at&quot;: 1424447374,&#xd;
+    &quot;git_url&quot;: &quot;git://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;ssh_url&quot;: &quot;git@github.com:openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;clone_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;svn_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;homepage&quot;: &quot;&quot;,&#xd;
+    &quot;size&quot;: 5024,&#xd;
+    &quot;stargazers_count&quot;: 1,&#xd;
+    &quot;watchers_count&quot;: 1,&#xd;
+    &quot;language&quot;: &quot;JavaScript&quot;,&#xd;
+    &quot;has_issues&quot;: true,&#xd;
+    &quot;has_downloads&quot;: true,&#xd;
+    &quot;has_wiki&quot;: true,&#xd;
+    &quot;has_pages&quot;: false,&#xd;
+    &quot;forks_count&quot;: 3,&#xd;
+    &quot;mirror_url&quot;: null,&#xd;
+    &quot;open_issues_count&quot;: 1,&#xd;
+    &quot;forks&quot;: 3,&#xd;
+    &quot;open_issues&quot;: 1,&#xd;
+    &quot;watchers&quot;: 1,&#xd;
+    &quot;default_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;stargazers&quot;: 1,&#xd;
+    &quot;master_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;organization&quot;: &quot;openAgile&quot;&#xd;
+  },&#xd;
+  &quot;pusher&quot;: {&#xd;
+    &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;email&quot;: &quot;jsgough@gmail.com&quot;&#xd;
+  },&#xd;
+  &quot;organization&quot;: {&#xd;
+    &quot;login&quot;: &quot;openAgile&quot;,&#xd;
+    &quot;id&quot;: 6954603,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/orgs/openAgile&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/orgs/openAgile/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/orgs/openAgile/events&quot;,&#xd;
+    &quot;members_url&quot;: &quot;https://api.github.com/orgs/openAgile/members{/member}&quot;,&#xd;
+    &quot;public_members_url&quot;: &quot;https://api.github.com/orgs/openAgile/public_members{/member}&quot;,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/6954603?v=3&quot;,&#xd;
+    &quot;description&quot;: null&#xd;
+  },&#xd;
+  &quot;sender&quot;: {&#xd;
+    &quot;login&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;id&quot;: 1863005,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/1863005?v=3&quot;,&#xd;
+    &quot;gravatar_id&quot;: &quot;&quot;,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/users/JogoShugh&quot;,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/JogoShugh&quot;,&#xd;
+    &quot;followers_url&quot;: &quot;https://api.github.com/users/JogoShugh/followers&quot;,&#xd;
+    &quot;following_url&quot;: &quot;https://api.github.com/users/JogoShugh/following{/other_user}&quot;,&#xd;
+    &quot;gists_url&quot;: &quot;https://api.github.com/users/JogoShugh/gists{/gist_id}&quot;,&#xd;
+    &quot;starred_url&quot;: &quot;https://api.github.com/users/JogoShugh/starred{/owner}{/repo}&quot;,&#xd;
+    &quot;subscriptions_url&quot;: &quot;https://api.github.com/users/JogoShugh/subscriptions&quot;,&#xd;
+    &quot;organizations_url&quot;: &quot;https://api.github.com/users/JogoShugh/orgs&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/users/JogoShugh/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/users/JogoShugh/events{/privacy}&quot;,&#xd;
+    &quot;received_events_url&quot;: &quot;https://api.github.com/users/JogoShugh/received_events&quot;,&#xd;
+    &quot;type&quot;: &quot;User&quot;,&#xd;
+    &quot;site_admin&quot;: false&#xd;
+  }&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">${add-commit-url}?apiKey=${instanceAPIKey}</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Post to Inbox - HTTP Request" enabled="true">
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+  &quot;ref&quot;: &quot;refs/heads/v1cs-dev-staging&quot;,&#xd;
+  &quot;before&quot;: &quot;0757545c34c4381b744004d653cdd52911844615&quot;,&#xd;
+  &quot;after&quot;: &quot;cdf77aa9f5b33323f5cd63b8ed43ad59715c4754&quot;,&#xd;
+  &quot;created&quot;: false,&#xd;
+  &quot;deleted&quot;: false,&#xd;
+  &quot;forced&quot;: false,&#xd;
+  &quot;base_ref&quot;: null,&#xd;
+  &quot;compare&quot;: &quot;https://github.com/openAgile/CommitStream.Web/compare/0757545c34c4...cdf77aa9f5b3&quot;,&#xd;
+  &quot;commits&quot;: [{&#xd;
+    &quot;id&quot;: &quot;fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Capture the original commit message for additional data for future stories.\n\nAdded initial test case for githubTranslator module.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T11:52:31-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fab4bb960001fc494ab2100bbb01138cb8889223&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Handle smoke test 3 months / 4 months error (at least temporarily) with deep.equal\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:04:51-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/fc4e913ae8c26805451d5c59b64a5f179d64ad16&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:56:39-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/657f47ea65e2ec341252583da4e33f535b2d0f7b&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Removed .deep.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T12:57:20-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/7c24a4fdd321c4a465fab87ef7b2020d3bbc67ee&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added back .deep \n\nNote: for some tests using just .equals will work, but ONLY if the data inside the object doesn&apos;t exactly match. When the data inside the objects does exactly match, it appears that .equals then fails it because they do not point to the same object in memory. I guess.\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-27T13:07:00-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/34ab55e902dedcd1a8e4b4b0c8c37cb6dd24628d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;,&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #44 from openAgile/capture_entire_commmit_message\n\nCapture entire commmit message&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-01-29T14:56:42-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/4ca1d22b48ffa68a154da96c94fe285cd3f86864&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Cory Wheeler&quot;,&#xd;
+      &quot;email&quot;: &quot;corywheeler@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;corywheeler&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+      &quot;src/app/test/api/translators/githubTranslator.tests.js&quot;&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/api/translators/githubTranslator.js&quot;,&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added tests for ACL and authorized login attempts\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-02T15:49:52-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/87ab7bcdb8358a9ae238bf7c2e4d615ca865040d&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;shawnmarie&quot;,&#xd;
+      &quot;email&quot;: &quot;shawn.abbott@versionone.com&quot;,&#xd;
+      &quot;username&quot;: &quot;shawnmarie&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Changed before for beforeEach.&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:05:00-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/ad095fd35b919721a00bea31facc96996ab38e0c&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;kunzimariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Merge pull request #46 from openAgile/access_with_authorization_header\n\nMerge access_with_authorization_header into develop&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-03T12:13:30-03:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/412933a67758da3da4c7fa9aa3bf31ddb8451b77&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Kunzi Mariano&quot;,&#xd;
+      &quot;email&quot;: &quot;kunzi.mariano@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;kunzimariano&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;src/app/smoke-test/smoke.tests.js&quot;&#xd;
+    ]&#xd;
+  }, {&#xd;
+    &quot;id&quot;: &quot;57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;distinct&quot;: false,&#xd;
+    &quot;message&quot;: &quot;${StoryId} Added ACL info\n\n&quot;,&#xd;
+    &quot;timestamp&quot;: &quot;2015-02-05T09:50:04-05:00&quot;,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web/commit/57682fde7c64b18bdc513c7f631f61b4d14f84ed&quot;,&#xd;
+    &quot;author&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;committer&quot;: {&#xd;
+      &quot;name&quot;: &quot;Josh Gough&quot;,&#xd;
+      &quot;email&quot;: &quot;jsgough@gmail.com&quot;,&#xd;
+      &quot;username&quot;: &quot;JogoShugh&quot;&#xd;
+    },&#xd;
+    &quot;added&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;removed&quot;: [&#xd;
+&#xd;
+    ],&#xd;
+    &quot;modified&quot;: [&#xd;
+      &quot;doc/v1_customer_setup.md&quot;&#xd;
+    ]&#xd;
+  }],&#xd;
+  &quot;repository&quot;: {&#xd;
+    &quot;id&quot;: 23838815,&#xd;
+    &quot;name&quot;: &quot;CommitStream.Web&quot;,&#xd;
+    &quot;full_name&quot;: &quot;openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;owner&quot;: {&#xd;
+      &quot;name&quot;: &quot;openAgile&quot;,&#xd;
+      &quot;email&quot;: null&#xd;
+    },&#xd;
+    &quot;private&quot;: false,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;description&quot;: &quot;CommitStream Web Server&quot;,&#xd;
+    &quot;fork&quot;: false,&#xd;
+    &quot;url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;forks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/forks&quot;,&#xd;
+    &quot;keys_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/keys{/key_id}&quot;,&#xd;
+    &quot;collaborators_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/collaborators{/collaborator}&quot;,&#xd;
+    &quot;teams_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/teams&quot;,&#xd;
+    &quot;hooks_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/hooks&quot;,&#xd;
+    &quot;issue_events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/events{/number}&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/events&quot;,&#xd;
+    &quot;assignees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/assignees{/user}&quot;,&#xd;
+    &quot;branches_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/branches{/branch}&quot;,&#xd;
+    &quot;tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/tags&quot;,&#xd;
+    &quot;blobs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/blobs{/sha}&quot;,&#xd;
+    &quot;git_tags_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/tags{/sha}&quot;,&#xd;
+    &quot;git_refs_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/refs{/sha}&quot;,&#xd;
+    &quot;trees_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/trees{/sha}&quot;,&#xd;
+    &quot;statuses_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/statuses/{sha}&quot;,&#xd;
+    &quot;languages_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/languages&quot;,&#xd;
+    &quot;stargazers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/stargazers&quot;,&#xd;
+    &quot;contributors_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contributors&quot;,&#xd;
+    &quot;subscribers_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscribers&quot;,&#xd;
+    &quot;subscription_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/subscription&quot;,&#xd;
+    &quot;commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/commits{/sha}&quot;,&#xd;
+    &quot;git_commits_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/git/commits{/sha}&quot;,&#xd;
+    &quot;comments_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/comments{/number}&quot;,&#xd;
+    &quot;issue_comment_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues/comments/{number}&quot;,&#xd;
+    &quot;contents_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/contents/{+path}&quot;,&#xd;
+    &quot;compare_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/compare/{base}...{head}&quot;,&#xd;
+    &quot;merges_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/merges&quot;,&#xd;
+    &quot;archive_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/{archive_format}{/ref}&quot;,&#xd;
+    &quot;downloads_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/downloads&quot;,&#xd;
+    &quot;issues_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/issues{/number}&quot;,&#xd;
+    &quot;pulls_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/pulls{/number}&quot;,&#xd;
+    &quot;milestones_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/milestones{/number}&quot;,&#xd;
+    &quot;notifications_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/notifications{?since,all,participating}&quot;,&#xd;
+    &quot;labels_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/labels{/name}&quot;,&#xd;
+    &quot;releases_url&quot;: &quot;https://api.github.com/repos/openAgile/CommitStream.Web/releases{/id}&quot;,&#xd;
+    &quot;created_at&quot;: 1410275937,&#xd;
+    &quot;updated_at&quot;: &quot;2015-02-17T19:54:43Z&quot;,&#xd;
+    &quot;pushed_at&quot;: 1424447374,&#xd;
+    &quot;git_url&quot;: &quot;git://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;ssh_url&quot;: &quot;git@github.com:openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;clone_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web.git&quot;,&#xd;
+    &quot;svn_url&quot;: &quot;https://github.com/openAgile/CommitStream.Web&quot;,&#xd;
+    &quot;homepage&quot;: &quot;&quot;,&#xd;
+    &quot;size&quot;: 5024,&#xd;
+    &quot;stargazers_count&quot;: 1,&#xd;
+    &quot;watchers_count&quot;: 1,&#xd;
+    &quot;language&quot;: &quot;JavaScript&quot;,&#xd;
+    &quot;has_issues&quot;: true,&#xd;
+    &quot;has_downloads&quot;: true,&#xd;
+    &quot;has_wiki&quot;: true,&#xd;
+    &quot;has_pages&quot;: false,&#xd;
+    &quot;forks_count&quot;: 3,&#xd;
+    &quot;mirror_url&quot;: null,&#xd;
+    &quot;open_issues_count&quot;: 1,&#xd;
+    &quot;forks&quot;: 3,&#xd;
+    &quot;open_issues&quot;: 1,&#xd;
+    &quot;watchers&quot;: 1,&#xd;
+    &quot;default_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;stargazers&quot;: 1,&#xd;
+    &quot;master_branch&quot;: &quot;develop&quot;,&#xd;
+    &quot;organization&quot;: &quot;openAgile&quot;&#xd;
+  },&#xd;
+  &quot;pusher&quot;: {&#xd;
+    &quot;name&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;email&quot;: &quot;jsgough@gmail.com&quot;&#xd;
+  },&#xd;
+  &quot;organization&quot;: {&#xd;
+    &quot;login&quot;: &quot;openAgile&quot;,&#xd;
+    &quot;id&quot;: 6954603,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/orgs/openAgile&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/orgs/openAgile/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/orgs/openAgile/events&quot;,&#xd;
+    &quot;members_url&quot;: &quot;https://api.github.com/orgs/openAgile/members{/member}&quot;,&#xd;
+    &quot;public_members_url&quot;: &quot;https://api.github.com/orgs/openAgile/public_members{/member}&quot;,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/6954603?v=3&quot;,&#xd;
+    &quot;description&quot;: null&#xd;
+  },&#xd;
+  &quot;sender&quot;: {&#xd;
+    &quot;login&quot;: &quot;JogoShugh&quot;,&#xd;
+    &quot;id&quot;: 1863005,&#xd;
+    &quot;avatar_url&quot;: &quot;https://avatars.githubusercontent.com/u/1863005?v=3&quot;,&#xd;
+    &quot;gravatar_id&quot;: &quot;&quot;,&#xd;
+    &quot;url&quot;: &quot;https://api.github.com/users/JogoShugh&quot;,&#xd;
+    &quot;html_url&quot;: &quot;https://github.com/JogoShugh&quot;,&#xd;
+    &quot;followers_url&quot;: &quot;https://api.github.com/users/JogoShugh/followers&quot;,&#xd;
+    &quot;following_url&quot;: &quot;https://api.github.com/users/JogoShugh/following{/other_user}&quot;,&#xd;
+    &quot;gists_url&quot;: &quot;https://api.github.com/users/JogoShugh/gists{/gist_id}&quot;,&#xd;
+    &quot;starred_url&quot;: &quot;https://api.github.com/users/JogoShugh/starred{/owner}{/repo}&quot;,&#xd;
+    &quot;subscriptions_url&quot;: &quot;https://api.github.com/users/JogoShugh/subscriptions&quot;,&#xd;
+    &quot;organizations_url&quot;: &quot;https://api.github.com/users/JogoShugh/orgs&quot;,&#xd;
+    &quot;repos_url&quot;: &quot;https://api.github.com/users/JogoShugh/repos&quot;,&#xd;
+    &quot;events_url&quot;: &quot;https://api.github.com/users/JogoShugh/events{/privacy}&quot;,&#xd;
+    &quot;received_events_url&quot;: &quot;https://api.github.com/users/JogoShugh/received_events&quot;,&#xd;
+    &quot;type&quot;: &quot;User&quot;,&#xd;
+    &quot;site_admin&quot;: false&#xd;
+  }&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">${add-commit-url}?apiKey=${instanceAPIKey}</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query Digest - HTTP Request" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value"></stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">/api/${instanceId}/query?apiKey=${instanceAPIKey}&amp;digestId=${digestId}&amp;workitem=ALL</stringProp>
+                <stringProp name="HTTPSampler.method">GET</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="nextdigest" enabled="true">
+                  <stringProp name="VAR">nextDigest</stringProp>
+                  <stringProp name="JSONPATH">$._links[&apos;next&apos;]</stringProp>
+                  <stringProp name="DEFAULT">&quot;&quot;</stringProp>
+                  <stringProp name="VARIABLE"></stringProp>
+                  <stringProp name="SUBJECT">BODY</stringProp>
+                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+                <hashTree/>
+                <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
+                  <boolProp name="displayJMeterProperties">false</boolProp>
+                  <boolProp name="displayJMeterVariables">true</boolProp>
+                  <boolProp name="displaySamplerProperties">true</boolProp>
+                  <boolProp name="displaySystemProperties">false</boolProp>
+                </DebugPostProcessor>
+                <hashTree/>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If nextDigest" enabled="true">
+                <stringProp name="TestPlan.comments">			</stringProp>
+                <stringProp name="IfController.condition">&quot;${nextDigest}&quot; != &quot;&quot;;</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query Digest Page2 - HTTP Request" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value"></stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain"></stringProp>
+                  <stringProp name="HTTPSampler.port"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">${nextDigest}&amp;apiKey=${instanceAPIKey}</stringProp>
+                  <stringProp name="HTTPSampler.method">GET</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.monitor">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="nextdigest2" enabled="true">
+                    <stringProp name="VAR">nextDigest2</stringProp>
+                    <stringProp name="JSONPATH">$._links[&apos;next&apos;]</stringProp>
+                    <stringProp name="DEFAULT">&quot;&quot;</stringProp>
+                    <stringProp name="VARIABLE"></stringProp>
+                    <stringProp name="SUBJECT">BODY</stringProp>
+                  </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+                  <hashTree/>
+                  <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
+                    <boolProp name="displayJMeterProperties">false</boolProp>
+                    <boolProp name="displayJMeterVariables">true</boolProp>
+                    <boolProp name="displaySamplerProperties">true</boolProp>
+                    <boolProp name="displaySystemProperties">false</boolProp>
+                  </DebugPostProcessor>
+                  <hashTree/>
+                </hashTree>
+                <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If nextDigest2" enabled="true">
+                  <stringProp name="TestPlan.comments">			</stringProp>
+                  <stringProp name="IfController.condition">&quot;${nextDigest2}&quot; != &quot;&quot;;</stringProp>
+                  <boolProp name="IfController.evaluateAll">false</boolProp>
+                </IfController>
+                <hashTree>
+                  <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query Digest Page3 - HTTP Request" enabled="true">
+                    <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                    <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                      <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                          <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                          <stringProp name="Argument.value"></stringProp>
+                          <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </elementProp>
+                    <stringProp name="HTTPSampler.domain"></stringProp>
+                    <stringProp name="HTTPSampler.port"></stringProp>
+                    <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.protocol"></stringProp>
+                    <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                    <stringProp name="HTTPSampler.path">${nextDigest2}&amp;apiKey=${instanceAPIKey}</stringProp>
+                    <stringProp name="HTTPSampler.method">GET</stringProp>
+                    <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                    <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                    <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                    <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                    <boolProp name="HTTPSampler.monitor">false</boolProp>
+                    <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  </HTTPSamplerProxy>
+                  <hashTree>
+                    <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Post Query Digest Page 3" enabled="true">
+                      <boolProp name="displayJMeterProperties">false</boolProp>
+                      <boolProp name="displayJMeterVariables">true</boolProp>
+                      <boolProp name="displaySamplerProperties">true</boolProp>
+                      <boolProp name="displaySystemProperties">false</boolProp>
+                    </DebugPostProcessor>
+                    <hashTree/>
+                  </hashTree>
+                </hashTree>
+              </hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query Workitem - HTTP Request" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value"></stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"></stringProp>
+                <stringProp name="HTTPSampler.port"></stringProp>
+                <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                <stringProp name="HTTPSampler.protocol"></stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                <stringProp name="HTTPSampler.path">/api/${instanceId}/query?apiKey=${instanceAPIKey}&amp;workitem=${StoryId}</stringProp>
+                <stringProp name="HTTPSampler.method">GET</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="moreWorkiItemCommits" enabled="true">
+                  <stringProp name="VAR">moreWorkitemCommits</stringProp>
+                  <stringProp name="JSONPATH">$._links[&apos;next&apos;]</stringProp>
+                  <stringProp name="DEFAULT">&quot;&quot;</stringProp>
+                  <stringProp name="VARIABLE"></stringProp>
+                  <stringProp name="SUBJECT">BODY</stringProp>
+                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+                <hashTree/>
+                <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
+                  <boolProp name="displayJMeterProperties">false</boolProp>
+                  <boolProp name="displayJMeterVariables">true</boolProp>
+                  <boolProp name="displaySamplerProperties">true</boolProp>
+                  <boolProp name="displaySystemProperties">false</boolProp>
+                </DebugPostProcessor>
+                <hashTree/>
+              </hashTree>
+              <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If moreWorkitemCommits" enabled="true">
+                <stringProp name="TestPlan.comments">		</stringProp>
+                <stringProp name="IfController.condition">&quot;${moreWorkitemCommits}&quot; != &quot;&quot;;</stringProp>
+                <boolProp name="IfController.evaluateAll">false</boolProp>
+              </IfController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query moreWorkitemCommits Page 2 - HTTP Request" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value"></stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain"></stringProp>
+                  <stringProp name="HTTPSampler.port"></stringProp>
+                  <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                  <stringProp name="HTTPSampler.protocol"></stringProp>
+                  <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                  <stringProp name="HTTPSampler.path">${moreWorkitemCommits}&amp;apiKey=${instanceAPIKey}</stringProp>
+                  <stringProp name="HTTPSampler.method">GET</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.monitor">false</boolProp>
+                  <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="moreWorkitemCommits2" enabled="true">
+                    <stringProp name="VAR">moreWorkitemCommits2</stringProp>
+                    <stringProp name="JSONPATH">$._links[&apos;next&apos;]</stringProp>
+                    <stringProp name="DEFAULT">&quot;&quot;</stringProp>
+                    <stringProp name="VARIABLE"></stringProp>
+                    <stringProp name="SUBJECT">BODY</stringProp>
+                  </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+                  <hashTree/>
+                  <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
+                    <boolProp name="displayJMeterProperties">false</boolProp>
+                    <boolProp name="displayJMeterVariables">true</boolProp>
+                    <boolProp name="displaySamplerProperties">true</boolProp>
+                    <boolProp name="displaySystemProperties">false</boolProp>
+                  </DebugPostProcessor>
+                  <hashTree/>
+                </hashTree>
+                <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If moreWorkitemCommits2" enabled="true">
+                  <stringProp name="IfController.condition">&quot;${moreWorkitemCommits2}&quot; != &quot;&quot;;</stringProp>
+                  <boolProp name="IfController.evaluateAll">false</boolProp>
+                </IfController>
+                <hashTree>
+                  <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query moreWorkitemCommits Page3 - HTTP Request" enabled="true">
+                    <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                    <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                      <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                          <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                          <stringProp name="Argument.value"></stringProp>
+                          <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                      </collectionProp>
+                    </elementProp>
+                    <stringProp name="HTTPSampler.domain"></stringProp>
+                    <stringProp name="HTTPSampler.port"></stringProp>
+                    <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.response_timeout"></stringProp>
+                    <stringProp name="HTTPSampler.protocol"></stringProp>
+                    <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+                    <stringProp name="HTTPSampler.path">${moreWorkitemCommits2}&amp;apiKey=${instanceAPIKey}</stringProp>
+                    <stringProp name="HTTPSampler.method">GET</stringProp>
+                    <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                    <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                    <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                    <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                    <boolProp name="HTTPSampler.monitor">false</boolProp>
+                    <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+                  </HTTPSamplerProxy>
+                  <hashTree>
+                    <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Post Query Digest Page 3" enabled="true">
+                      <boolProp name="displayJMeterProperties">false</boolProp>
+                      <boolProp name="displayJMeterVariables">true</boolProp>
+                      <boolProp name="displaySamplerProperties">true</boolProp>
+                      <boolProp name="displaySystemProperties">false</boolProp>
+                    </DebugPostProcessor>
+                    <hashTree/>
+                  </hashTree>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results - Errors" enabled="true">
+          <boolProp name="ResultCollector.error_logging">true</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>false</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <threadCounts>true</threadCounts>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results - Success" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>false</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <threadCounts>true</threadCounts>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+          <boolProp name="ResultCollector.success_only_logging">true</boolProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+      <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
+      <hashTree/>
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>false</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
