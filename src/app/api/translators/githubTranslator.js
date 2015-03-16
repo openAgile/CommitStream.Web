@@ -2,11 +2,9 @@
   var _ = require('underscore'),
     uuid = require('uuid-v4');
 
-  githubTranslator.GitHubCommitMalformedError = function(exception) {
-    return {
-      errorMessage: '',
-      originalMessage: exception
-    }
+  githubTranslator.GitHubCommitMalformedError = function(error) {
+    this.message = 'Known Error',
+    this.originalMessage = error;
   };
 
   githubTranslator.translatePush = function(pushEvent, digestId) {
@@ -45,8 +43,7 @@
       });
       return events;
     } catch (ex) {
-
-      throw new GitHubCommitMalformedError(ex);
+      throw new githubTranslator.GitHubCommitMalformedError(ex);
     }
 
   }

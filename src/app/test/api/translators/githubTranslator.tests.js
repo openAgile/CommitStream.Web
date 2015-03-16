@@ -332,7 +332,13 @@ describe('githubTranslator', function() {
   });
   describe('when translating a push event without require properties', function() {
     it('shuld raise an exception', function(done) {
-      expect(githubTranslator.translatePush(pushEventMessageWithOneCommit, digestId)).to.throw(GitHubCommitMalformedError);
+      //console.log(githubTranslator.GitHubCommitMalformedError);
+      var invokeTranslator = function() {
+        githubTranslator.translatePush(pushEventMessageWithoutRequiredProperty, digestId);
+      }
+      invokeTranslator.should.throw(githubTranslator.GitHubCommitMalformedError);
+      //githubTranslator.translatePush(pushEventMessageWithoutRequiredProperty, digestId).should.throw(Cory);
+      done();
     });
   });
 
