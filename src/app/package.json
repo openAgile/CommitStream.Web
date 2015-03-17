@@ -9,10 +9,12 @@
     "body-parser": "^1.6.3",
     "chai": "^1.10.0",
     "cors": "^2.4.1",
+    "custom-error-generator": "^7.0.0",
     "eventstore-client": "openAgile/eventstore-client",
     "express": "^4.8.3",
     "express-handlebars": "^1.1.0",
     "istanbul": "^0.3.2",
+    "jsonschema": "^1.0.0",
     "mocha": "^1.21.5",
     "mocha-tap-reporter": "^0.1.2",
     "moment": "^2.8.3",
@@ -26,12 +28,11 @@
     "sanitize-html": "^1.4.3",
     "sinon": "^1.11.1",
     "sinon-chai": "^2.6.0",
-    "ttl-cache": "^1.0.2",
     "supertest": "^0.15.0",
+    "ttl-cache": "^1.0.2",
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
-    "validator": "^3.22.1",
-    "jsonschema": "^1.0.0"
+    "validator": "^3.22.1"
   },
   "devDependencies": {
     "traceur": "^0.0.66"

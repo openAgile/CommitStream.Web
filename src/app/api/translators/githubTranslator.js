@@ -1,21 +1,18 @@
 ﻿(function(githubTranslator) {
   var _ = require('underscore'),
     util = require('util'),
-    uuid = require('uuid-v4');
+    uuid = require('uuid-v4'),
+    createCustomError = require('custom-error-generator');
 
-  githubTranslator.GitHubCommitMalformedError = function(error) {
-    if (error) {
-      Error.call(this);
-      Error.captureStackTrace(this, arguments.callee);
-      this.statusCode = 400;
-      this.originalError = error;
-      this.errors = {
-        errors: [error.toString()]
-      };
-    }
-  };
-
-  util.inherits(githubTranslator.GitHubCommitMalformedError, Error);
+  githubTranslator.GitHubCommitMalformedError = createCustomError('GitHubCommitMalformedError', null, function(error, pushEvent) {
+    this.statusCode = 400;
+    this.originalError = error;
+    this.errors = {
+      errors: [error.toString()]
+    };
+    this.message = 'un ERRoR';
+    this.pushEvent = pushEvent
+  });
 
   githubTranslator.translatePush = function(pushEvent, digestId) {
     try {
@@ -53,7 +50,8 @@
       });
       return events;
     } catch (ex) {
-      var otherEx = new githubTranslator.GitHubCommitMalformedError(ex);
+      var otherEx = new githubTranslator.GitHubCommitMalformedError(ex, pushEvent);
+      //console.log(otherEx, otherEx.originalError.stack);      
       throw otherEx;
     }
 
