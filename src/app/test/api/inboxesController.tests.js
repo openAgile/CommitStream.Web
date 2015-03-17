@@ -415,6 +415,31 @@ describe('inboxesController', function() {
       });
     });
 
+    describe('with a push event that fails for an unexpected reason', function() {
+      var ex = new Error('Other unexpected error');
+      before(function() {
+        translator.translatePush.throws(ex);
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify({
+            digestId: digestId
+          }),
+          statusCode: 200
+        });
+        validator.isUUID.returns(true);
+      });
+      it('should reject the request and explain with a proper message', function(done) {
+        var errors = {
+          errors: ['CommitStream was unable to process this request. Encountered an unexpected exception.']
+        };
+        postInbox(inboxPayload, function(err, res) {
+          res.status.should.equal(500);
+          res.text.should.equal(JSON.stringify(errors));
+          done();
+        });
+
+      });
+    });
+
     describe('with a valid inboxId', function() {
       var hypermedia = {
         "_links": {
