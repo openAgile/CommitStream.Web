@@ -129,12 +129,12 @@
                   responseData = {
                     errors: ['CommitStream was unable to process this request. Encountered the following exception while attempting to process the push event message:\n\n' + ex.errors[0]]
                   };
-                  res.status(ex.statusCode).json(responseData);
+                  return res.status(ex.statusCode).json(responseData);
                 } else {
                   responseData = {
                     errors: ['CommitStream was unable to process this request. Encountered an unexpected exception.']
                   };
-                  res.status(500).json(responseData);
+                  return res.status(500).json(responseData);
                 }
               }
 
