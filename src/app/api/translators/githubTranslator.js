@@ -7,11 +7,8 @@
   githubTranslator.GitHubCommitMalformedError = createCustomError('GitHubCommitMalformedError', null, function(error, pushEvent) {
     this.statusCode = 400;
     this.originalError = error;
-    this.errors = {
-      errors: [error.toString()]
-    };
-    this.message = 'un ERRoR';
-    this.pushEvent = pushEvent
+    this.errors = [error.toString()];
+    this.pushEvent = pushEvent;
   });
 
   githubTranslator.translatePush = function(pushEvent, digestId) {
@@ -51,7 +48,7 @@
       return events;
     } catch (ex) {
       var otherEx = new githubTranslator.GitHubCommitMalformedError(ex, pushEvent);
-      //console.log(otherEx, otherEx.originalError.stack);      
+      //console.log(otherEx, otherEx.originalError.stack);            
       throw otherEx;
     }
 

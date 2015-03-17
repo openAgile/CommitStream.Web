@@ -106,7 +106,6 @@
 
       } else {
         getPartitionState('inbox', req.params.uuid, function(error, response) {
-
           if (!error && response.statusCode == 200) {
 
             var digestId = JSON.parse(response.body).digestId;
@@ -123,7 +122,21 @@
 
               var inboxId = req.params.uuid;
 
-              var events = translator.translatePush(req.body, digestId);
+              try {
+                var events = translator.translatePush(req.body, digestId);
+              } catch (ex) {
+                if (ex instanceof translator.GitHubCommitMalformedError) {
+                  responseData = {
+                    errors: ['CommitStream was unable to process this request. Encountered the following exception while attempting to process the push event message:\n\n' + ex.errors[0]]
+                  };
+                  res.status(ex.statusCode).json(responseData);
+                } else {
+                  responseData = {
+                    errors: ['CommitStream was unable to process this request. Encountered an unexpected exception.']
+                  };
+                  res.status(500).json(responseData);
+                }
+              }
 
               var e = JSON.stringify(events);
 

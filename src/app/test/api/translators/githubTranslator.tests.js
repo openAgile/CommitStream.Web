@@ -331,8 +331,8 @@ describe('githubTranslator', function() {
     });
   });
 
-  describe('when translating a push event without require properties', function() {
-    it('shuld raise an exception', function(done) {
+  describe('when translating a push event without required properties', function() {
+    it('should raise an exception', function(done) {
       var invokeTranslator = function() {
         githubTranslator.translatePush(pushEventMessageWithoutRequiredProperty, digestId);
       }
