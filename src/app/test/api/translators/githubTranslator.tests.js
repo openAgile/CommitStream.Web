@@ -330,6 +330,7 @@ describe('githubTranslator', function() {
       actual.should.deep.equal(expected);
     });
   });
+
   describe('when translating a push event without require properties', function() {
     it('shuld raise an exception', function(done) {
       var invokeTranslator = function() {

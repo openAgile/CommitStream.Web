@@ -4,11 +4,15 @@
     uuid = require('uuid-v4');
 
   githubTranslator.GitHubCommitMalformedError = function(error) {
-    Error.call(this);
-    Error.captureStackTrace(this, arguments.callee);
-    this.statusCode = 400,
-    this.message = 'Known Error',
-    this.originalError = error;
+    if (error) {
+      Error.call(this);
+      Error.captureStackTrace(this, arguments.callee);
+      this.statusCode = 400;
+      this.originalError = error;
+      this.errors = {
+        errors: [error.toString()]
+      };
+    }
   };
 
   util.inherits(githubTranslator.GitHubCommitMalformedError, Error);
@@ -50,7 +54,6 @@
       return events;
     } catch (ex) {
       var otherEx = new githubTranslator.GitHubCommitMalformedError(ex);
-      console.log(JSON.stringify(otherEx));
       throw otherEx;
     }
 
