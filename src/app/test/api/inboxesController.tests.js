@@ -389,6 +389,57 @@ describe('inboxesController', function() {
       }
     };
 
+    describe('with a corrupted push event', function() {
+      var ex = new TypeError('Cannot read property \'id\' of undefined');
+      var gitHubCommitMalformedError = new translator.GitHubCommitMalformedError(ex);
+      before(function() {
+        translator.translatePush.throws(gitHubCommitMalformedError);
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify({
+            digestId: digestId
+          }),
+          statusCode: 200
+        });
+        validator.isUUID.returns(true);
+      });
+      it('should reject the request and explain with a proper message', function(done) {
+        var errors = {
+          errors: ['CommitStream was unable to process this request. Encountered the following exception while attempting to process the push event message:\n\nTypeError: Cannot read property \'id\' of undefined']
+        };
+        postInbox(inboxPayload, function(err, res) {
+          res.status.should.equal(400);
+          res.text.should.equal(JSON.stringify(errors));
+          done();
+        });
+
+      });
+    });
+
+    describe('with a push event that fails for an unexpected reason', function() {
+      var ex = new Error('Other unexpected error');
+      before(function() {
+        translator.translatePush.throws(ex);
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          body: JSON.stringify({
+            digestId: digestId
+          }),
+          statusCode: 200
+        });
+        validator.isUUID.returns(true);
+      });
+      it('should reject the request and explain with a proper message', function(done) {
+        var errors = {
+          errors: ['CommitStream was unable to process this request. Encountered an unexpected exception.']
+        };
+        postInbox(inboxPayload, function(err, res) {
+          res.status.should.equal(500);
+          res.text.should.equal(JSON.stringify(errors));
+          done();
+        });
+
+      });
+    });
+
     describe('with a valid inboxId', function() {
       var hypermedia = {
         "_links": {
@@ -406,6 +457,7 @@ describe('inboxesController', function() {
       };
 
       before(function() {
+        translator.translatePush = sinon.stub();
         translator.translatePush.returns(translatorEvent);
         translatorEvent = JSON.stringify(translatorEvent);
         validator.isUUID.returns(true);
@@ -583,7 +635,7 @@ describe('inboxesController', function() {
 
         it('it should provide an appropriate response', function(done) {
           postInboxWithoutXGithubEvent(function(err, res) {
-            JSON.parse(res.text).errors.should.equal('Unknown event type. Please include an x-github-event header.');
+            JSON.parse(res.text).errors.should.deep.equal(['Unknown event type. Please include an x-github-event header.']);
             done();
           });
         });

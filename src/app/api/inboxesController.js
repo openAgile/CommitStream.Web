@@ -85,6 +85,15 @@
 
     app.post('/api/inboxes/:uuid/commits', bodyParser.json(), function(req, res, next) {
 
+      //TODO: all this logic, yikes!
+      if (!req.headers.hasOwnProperty('x-github-event')) {
+
+        responseData = {
+          errors: ['Unknown event type. Please include an x-github-event header.']
+        };
+
+        return res.status(400).json(responseData);
+      }
       var contentType = req.get('Content-Type');
 
       if (!contentType || contentType.toLowerCase() !== 'application/json') {
@@ -106,53 +115,58 @@
 
       } else {
         getPartitionState('inbox', req.params.uuid, function(error, response) {
-
           if (!error && response.statusCode == 200) {
 
             var digestId = JSON.parse(response.body).digestId;
 
-            //TODO: all this logic, yikes!
-            if (!req.headers.hasOwnProperty('x-github-event')) {
-
-              responseData = {
-                errors: 'Unknown event type. Please include an x-github-event header.'
-              };
-
-              res.status(400).send(responseData);
-            } else if (req.headers['x-github-event'] == 'push') {
+            if (req.headers['x-github-event'] == 'push') {
 
               var inboxId = req.params.uuid;
 
-              var events = translator.translatePush(req.body, digestId);
+              try {
+                var events = translator.translatePush(req.body, digestId);
+                var e = JSON.stringify(events);
 
-              var e = JSON.stringify(events);
+                eventStore.streams.post({
+                  name: 'inboxCommits-' + req.params.uuid,
+                  events: e
+                }, function(error, response) {
+                  if (error) {
+                    responseData = {
+                      errors: 'We had an internal problem. Please retry your request. Error: ' + error
+                    };
 
-              eventStore.streams.post({
-                name: 'inboxCommits-' + req.params.uuid,
-                events: e
-              }, function(error, response) {
-                if (error) {
+                    res.status(500);
+                  } else {
+
+                    var hypermediaData = {
+                      inboxId: inboxId,
+                      digestId: digestId
+                    };
+
+                    responseData = hypermediaResponse.inboxes.uuid.commits.POST(urls.href(req), hypermediaData);
+
+                    res.set('Content-Type', 'application/hal+json');
+                    res.location(responseData._links['query-digest'].href);
+                    res.status(201);
+                  }
+
+                  res.send(responseData);
+                });
+
+              } catch (ex) {
+                if (ex instanceof translator.GitHubCommitMalformedError) {
                   responseData = {
-                    errors: 'We had an internal problem. Please retry your request. Error: ' + error
+                    errors: ['CommitStream was unable to process this request. Encountered the following exception while attempting to process the push event message:\n\n' + ex.errors[0]]
                   };
-
-                  res.status(500);
+                  return res.status(ex.statusCode).json(responseData);
                 } else {
-
-                  var hypermediaData = {
-                    inboxId: inboxId,
-                    digestId: digestId
+                  responseData = {
+                    errors: ['CommitStream was unable to process this request. Encountered an unexpected exception.']
                   };
-
-                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(urls.href(req), hypermediaData);
-
-                  res.set('Content-Type', 'application/hal+json');
-                  res.location(responseData._links['query-digest'].href);
-                  res.status(201);
+                  return res.status(500).json(responseData);
                 }
-
-                res.send(responseData);
-              });
+              }
 
             } else if (req.headers['x-github-event'] == 'ping') {
               responseData = {
