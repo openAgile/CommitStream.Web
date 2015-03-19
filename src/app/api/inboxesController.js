@@ -124,6 +124,35 @@
 
               try {
                 var events = translator.translatePush(req.body, digestId);
+                var e = JSON.stringify(events);
+
+                eventStore.streams.post({
+                  name: 'inboxCommits-' + req.params.uuid,
+                  events: e
+                }, function(error, response) {
+                  if (error) {
+                    responseData = {
+                      errors: 'We had an internal problem. Please retry your request. Error: ' + error
+                    };
+
+                    res.status(500);
+                  } else {
+
+                    var hypermediaData = {
+                      inboxId: inboxId,
+                      digestId: digestId
+                    };
+
+                    responseData = hypermediaResponse.inboxes.uuid.commits.POST(urls.href(req), hypermediaData);
+
+                    res.set('Content-Type', 'application/hal+json');
+                    res.location(responseData._links['query-digest'].href);
+                    res.status(201);
+                  }
+
+                  res.send(responseData);
+                });
+
               } catch (ex) {
                 if (ex instanceof translator.GitHubCommitMalformedError) {
                   responseData = {
@@ -137,35 +166,6 @@
                   return res.status(500).json(responseData);
                 }
               }
-
-              var e = JSON.stringify(events);
-
-              eventStore.streams.post({
-                name: 'inboxCommits-' + req.params.uuid,
-                events: e
-              }, function(error, response) {
-                if (error) {
-                  responseData = {
-                    errors: 'We had an internal problem. Please retry your request. Error: ' + error
-                  };
-
-                  res.status(500);
-                } else {
-
-                  var hypermediaData = {
-                    inboxId: inboxId,
-                    digestId: digestId
-                  };
-
-                  responseData = hypermediaResponse.inboxes.uuid.commits.POST(urls.href(req), hypermediaData);
-
-                  res.set('Content-Type', 'application/hal+json');
-                  res.location(responseData._links['query-digest'].href);
-                  res.status(201);
-                }
-
-                res.send(responseData);
-              });
 
             } else if (req.headers['x-github-event'] == 'ping') {
               responseData = {
