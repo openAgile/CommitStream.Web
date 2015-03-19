@@ -85,6 +85,15 @@
 
     app.post('/api/inboxes/:uuid/commits', bodyParser.json(), function(req, res, next) {
 
+      //TODO: all this logic, yikes!
+      if (!req.headers.hasOwnProperty('x-github-event')) {
+
+        responseData = {
+          errors: ['Unknown event type. Please include an x-github-event header.']
+        };
+
+        return res.status(400).json(responseData);
+      }
       var contentType = req.get('Content-Type');
 
       if (!contentType || contentType.toLowerCase() !== 'application/json') {
@@ -110,15 +119,7 @@
 
             var digestId = JSON.parse(response.body).digestId;
 
-            //TODO: all this logic, yikes!
-            if (!req.headers.hasOwnProperty('x-github-event')) {
-
-              responseData = {
-                errors: 'Unknown event type. Please include an x-github-event header.'
-              };
-
-              res.status(400).send(responseData);
-            } else if (req.headers['x-github-event'] == 'push') {
+            if (req.headers['x-github-event'] == 'push') {
 
               var inboxId = req.params.uuid;
 
