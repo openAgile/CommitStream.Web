@@ -1,10 +1,9 @@
-var assert = require('assert'),    
+var assert = require('assert'),
     gitHubEventsToApiResponse = require('../../../api/translators/gitHubEventsToApiResponse');
 
 var eventsData = {};
 
-eventsData.Single = [
-	{
+eventsData.Single = [{
     "title": "95@github-events",
     "id": "http://localhost:2113/streams/github-events/95",
     "updated": "2014-10-02T14:12:09.4125355Z",
@@ -78,20 +77,17 @@ eventsData.Single = [
                 "type": "User",
                 "site_admin": false
             },
-            "parents": [
-	        {
+            "parents": [{
                 "sha": "e3c5579002b73efc22c544622fb3156183a95a72",
                 "url": "https://api.github.com/repos/openAgile/CommitStream.Web/commits/e3c5579002b73efc22c544622fb3156183a95a72",
                 "html_url": "https://github.com/openAgile/CommitStream.Web/commit/e3c5579002b73efc22c544622fb3156183a95a72"
-            }
-	      ],
+            }],
             "stats": {
                 "total": 2,
                 "additions": 1,
                 "deletions": 1
             },
-            "files": [
-	        {
+            "files": [{
                 "sha": "408ba0915291ef916fc6949945c3e9d51a259206",
                 "filename": "client/index.html",
                 "status": "modified",
@@ -102,25 +98,25 @@ eventsData.Single = [
                 "raw_url": "https://github.com/openAgile/CommitStream.Web/raw/a90603404e4793ce9fa88a93abb4e96b89a3e9bc/client/index.html",
                 "contents_url": "https://api.github.com/repos/openAgile/CommitStream.Web/contents/client/index.html?ref=a90603404e4793ce9fa88a93abb4e96b89a3e9bc",
                 "patch": "@@ -6,7 +6,7 @@\n $(function() {\n   $.getScript('http://v1commitstream.azurewebsites.net/app.js',\n     function(data, status, jqxhr) {\n-      var assetNumber = location.search || 'S-47665';\n+      var assetNumber = location.search.substring(1) || 'S-47665';\n       CommitStream.commitsDisplay('#commits', assetNumber);\n     });\n });   "
-            }
-	      ]
+            }]
         },
         "metadata": ""
     }
-}
-];
+}];
 
-describe('gitHubEventsToApiResponse', function () {
-    describe('when 0 events present', function () {
-        it('returns an empty array', function () {
-            assert.deepEqual(gitHubEventsToApiResponse([]), { commits: [] })
+describe('gitHubEventsToApiResponse', function() {
+    describe('when 0 events present', function() {
+        it('returns an empty array', function() {
+            assert.deepEqual(gitHubEventsToApiResponse([]), {
+                commits: []
+            })
         });
     });
-    
-    describe('when 1 event present', function () {
+
+    describe('when 1 event present', function() {
         var events = eventsData.Single;
         var actual = gitHubEventsToApiResponse(events);
-        it('returns 1 mapped event', function () {
+        it('returns 1 mapped event', function() {
             assert.equal(actual.commits.length, 1);
         });
     });
