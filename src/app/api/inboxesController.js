@@ -180,9 +180,17 @@
               res.status(400).send(responseData);
             }
           } else {
+
             responseData = {
-              message: error
+              errors: [error]
             };
+
+            // If there was a problem communicating with the cluster,
+            // then we should have recieved a 408 (Request Timeout)
+            if (response && response.statusCode === 408) {
+              responseData.errors = ['The cluster is down.']
+            }
+
             res.status(500).send(responseData);
           }
         });

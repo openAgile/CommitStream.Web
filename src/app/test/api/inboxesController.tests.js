@@ -682,7 +682,7 @@ describe('inboxesController', function() {
         });
       });
 
-      describe('but with an error returned from getting the digest id', function() {
+      describe('but with an error returned from getting the inbox id', function() {
         before(function() {
           eventStoreClient.projection.getState.callsArgWith(1, 'Houston we have a problem', null);
         })
@@ -696,7 +696,7 @@ describe('inboxesController', function() {
 
         it('it should report the error it received to the client.', function(done) {
           postInbox(inboxPayload, function(err, res) {
-            JSON.parse(res.text).message.should.equal('Houston we have a problem');
+            JSON.parse(res.text).errors[0].should.equal('Houston we have a problem');
             done();
           });
         });
@@ -708,6 +708,21 @@ describe('inboxesController', function() {
           });
         });
       })
+
+      describe('but with an HTTP status code of 408 (Request Timeout) when getting information for an inbox', function() {
+        before(function() {
+          eventStoreClient.projection.getState.callsArgWith(1, null, {
+            statusCode: 408
+          });
+        });
+
+        it('it should report that there is a problem communicating with the cluster', function(done) {
+          postInbox(inboxPayload, function(err, res) {
+            JSON.parse(res.text).errors[0].should.equal('The cluster is down.');
+            done();
+          });
+        });
+      });
     });
 
     describe('with an invalid inboxId', function() {
