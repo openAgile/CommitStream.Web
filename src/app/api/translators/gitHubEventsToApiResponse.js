@@ -13,6 +13,7 @@
 	module.exports = function(entries) {
 		var commits = _.map(entries, function(entry) {
             var e = entry.content.data;
+            var e = JSON.parse(entry.data);
             var repo = getRepoOwnerName(e);
             return {
                 commitDate: e.commit.committer.date,

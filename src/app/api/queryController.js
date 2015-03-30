@@ -89,7 +89,8 @@
         es.streams.get({
           name: stream,
           count: pageSize,
-          pageUrl: page
+          pageUrl: page,
+          embed: 'tryharder'
         }, function(error, response) {
           var result = {
             commits: [],
@@ -98,6 +99,7 @@
 
           if (response.body) {
             var obj = JSON.parse(response.body);
+
             var links = obj.links;
             var guid = uuid();
             result = gitHubEventsToApiResponse(obj.entries);

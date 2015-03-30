@@ -94,6 +94,7 @@ describe('queryController', function() {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'digestCommits-123',
             count: 25,
+            embed: 'tryharder',
             pageUrl: undefined
           }, sinon.match.any);
 
@@ -117,6 +118,7 @@ describe('queryController', function() {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'asset-' + assetId,
             count: 25,
+            embed: 'tryharder',
             pageUrl: undefined
           }, sinon.match.any);
 
@@ -142,6 +144,7 @@ describe('queryController', function() {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'asset-' + assetId,
             count: 10,
+            embed: 'tryharder',
             pageUrl: undefined
           }, sinon.match.any);
 
@@ -165,6 +168,7 @@ describe('queryController', function() {
             eventStoreClient.streams.get.should.have.been.calledWith({
               name: 'asset-' + assetId,
               count: defaultPageSize,
+              embed: 'tryharder',
               pageUrl: undefined
             }, sinon.match.any);
 
@@ -181,6 +185,7 @@ describe('queryController', function() {
             eventStoreClient.streams.get.should.have.been.calledWith({
               name: 'asset-' + assetId,
               count: defaultPageSize,
+              embed: 'tryharder',
               pageUrl: undefined
             }, sinon.match.any);
 
