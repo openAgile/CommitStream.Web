@@ -1,18 +1,17 @@
 (function() {
-	var _ = require('underscore'),
+    var _ = require('underscore'),
         moment = require('moment');
-    
-    var getRepoOwnerName = function (commit) {        
+
+    var getRepoOwnerName = function(commit) {
         var repoArray = commit.html_url.split('/commit')[0].split('/');
         return result = {
-                repoName: repoArray.pop(),
-                repoOwner: repoArray.pop()
-        }       
+            repoName: repoArray.pop(),
+            repoOwner: repoArray.pop()
+        }
     };
 
-	module.exports = function(entries) {
-		var commits = _.map(entries, function(entry) {
-            var e = entry.content.data;
+    module.exports = function(entries) {
+        var commits = _.map(entries, function(entry) {
             var e = JSON.parse(entry.data);
             var repo = getRepoOwnerName(e);
             return {
@@ -27,11 +26,11 @@
                 branch: e.branch,
                 branchHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName + "/tree/" + e.branch,
                 repoHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName
-			};
-		});
-		var response = {
-			commits: commits
-		};
-		return response;
-	};
+            };
+        });
+        var response = {
+            commits: commits
+        };
+        return response;
+    };
 })();
