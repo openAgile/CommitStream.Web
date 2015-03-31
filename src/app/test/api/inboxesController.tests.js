@@ -236,7 +236,7 @@ describe('inboxesController', function() {
             done();
           });
         });
-      })
+      });
 
       describe('but with a schema violation', function() {
         before(function() {
@@ -250,7 +250,7 @@ describe('inboxesController', function() {
             done();
           });
         })
-      })
+      });
 
       describe('and failures occur when posting to eventstore', function() {
 
@@ -265,6 +265,30 @@ describe('inboxesController', function() {
             JSON.parse(res.text).errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
             done();
           });
+        });
+      });
+
+      describe('and an HTTP timeout occurs with a status of 408 (Request Timeout) when posting to eventstore', function() {
+        var response;
+
+        before(function() {
+          eventStoreClient.streams.post.callsArgWith(1, null, {
+            statusCode: 408
+          });
+
+          postInboxCreate(payload, function(err, res) {
+            response = res;
+          });
+        })
+
+        it('it should report that there is a problem communicating with eventstore', function(done) {
+          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+          done();
+        });
+
+        it('it should report a status code of 500 (Internal Server Error)', function(done) {
+          response.status.should.equal(500);
+          done();
         });
       });
     });

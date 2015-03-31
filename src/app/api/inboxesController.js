@@ -68,9 +68,12 @@
 
           eventStore.streams.post(args, function(error, resp) {
             if (error) {
-              console.log(error);
               res.status(500).json({
                 errors: 'We had an internal problem. Please retry your request. Error: ' + error
+              });
+            } else if (resp && resp.statusCode === 408) {
+              res.status(500).json({
+                'errors': ['Trouble communicating with eventstore.']
               });
             } else {
               var hypermedia = hypermediaResponse.inboxes.POST(urls.href(req),
