@@ -324,7 +324,7 @@ describe('inboxesController', function() {
 
       it('it should send an appropriate error message.', function(done) {
         postInboxCreate(payload, function(err, res) {
-          JSON.parse(res.text).error.should.equal('There was an internal error when trying to process your request.');
+          JSON.parse(res.text).errors[0].should.equal('There was an internal error when trying to process your request.');
           done();
         });
       });
@@ -334,6 +334,30 @@ describe('inboxesController', function() {
           res.get('Content-Type').should.equal('application/json; charset=utf-8');
           done();
         });
+      });
+    });
+
+    describe('and an HTTP status code of 408 (Request Timeout) is received when looking up a digest', function() {
+      var response;
+
+      before(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          statusCode: 408
+        });
+
+        postInboxCreate(payload, function(err, res) {
+          response = res;
+        });
+      })
+
+      it('it should report that there is a problem communicating with eventstore', function(done) {
+        JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        done();
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function(done) {
+        response.status.should.equal(500);
+        done();
       });
     });
 
