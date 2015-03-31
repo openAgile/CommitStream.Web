@@ -106,6 +106,56 @@ describe('digestsController', function() {
       eventStoreClient.streams.post.callsArgWith(1, null, "ignored response");
     });
 
+    //TODO: shouldn't this be inside another describe?
+    it('it should use proper arguments when creating hypermedia.', function(done) {
+      postDigest({
+        description: 'Yay!'
+      }, function(err, res) {
+        hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
+        done();
+      });
+    });
+
+    it('it should create the DigestAdded event.', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        digestAdded.create.should.have.been.calledWith(digestDescription.description);
+        done();
+      });
+    });
+
+    it('it should have a response Content-Type of hal+json', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+        done();
+      });
+    });
+
+    it('it should set the Location response header to the newly created digest', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        res.get('Location').should.equal(hypermediaResponse._links.self.href);
+        done();
+      });
+    });
+
+    it('it should have a response code of 201 created', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        res.status.should.equal(201);
+        done();
+      });
+    });
+
     describe('with valid inputs', function() {
       it('it should use proper arguments when creating hypermedia.', function(done) {
         postDigest({
@@ -309,56 +359,6 @@ describe('digestsController', function() {
           res.text.should.equal('A digest description cannot contain more than 140 characters. The description you submitted contains 141 characters.');
           done();
         });
-      });
-    });
-
-    //TODO: shouldn't this be inside another describe?
-    it('it should use proper arguments when creating hypermedia.', function(done) {
-      postDigest({
-        description: 'Yay!'
-      }, function(err, res) {
-        hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
-        done();
-      });
-    });
-
-    it('it should create the DigestAdded event.', function(done) {
-      var digestDescription = {
-        description: 'myfirstdigest'
-      };
-      postDigest(digestDescription, function(err, res) {
-        digestAdded.create.should.have.been.calledWith(digestDescription.description);
-        done();
-      });
-    });
-
-    it('it should have a response Content-Type of hal+json', function(done) {
-      var digestDescription = {
-        description: 'myfirstdigest'
-      };
-      postDigest(digestDescription, function(err, res) {
-        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
-        done();
-      });
-    });
-
-    it('it should set the Location response header to the newly created digest', function(done) {
-      var digestDescription = {
-        description: 'myfirstdigest'
-      };
-      postDigest(digestDescription, function(err, res) {
-        res.get('Location').should.equal(hypermediaResponse._links.self.href);
-        done();
-      });
-    });
-
-    it('it should have a response code of 201 created', function(done) {
-      var digestDescription = {
-        description: 'myfirstdigest'
-      };
-      postDigest(digestDescription, function(err, res) {
-        res.status.should.equal(201);
-        done();
       });
     });
   });
