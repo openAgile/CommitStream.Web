@@ -983,7 +983,6 @@ describe('inboxesController', function() {
 
     });
 
-
     describe('with an error returned from eventStoreClient', function() {
 
       beforeEach(function() {
@@ -1026,7 +1025,35 @@ describe('inboxesController', function() {
           done();
         });
       });
+    });
 
+    describe('and an HTTP 408 timeout occurs (Request Timeout) when retrieving information about the inbox', function() {
+      var response;
+
+      before(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          statusCode: 408
+        });
+      })
+
+      function get(shouldBehaveThusly) {
+        getInbox('/api/inboxes/' + inboxId, shouldBehaveThusly);
+      }
+
+      it('it should report that there is a problem communicating with eventstore', function(done) {
+        get(function(error, response) {
+          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+          done();
+        });
+
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function(done) {
+        get(function(error, response) {
+          response.status.should.equal(500);
+          done();
+        });
+      });
     });
 
   });
