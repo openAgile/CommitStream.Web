@@ -140,7 +140,7 @@
                   } else if (response && response.statusCode === 408) {
                     // If there was a problem communicating with the cluster,
                     // then we should have recieved a 408 (Request Timeout)
-                    responseData.errors = ['The cluster is down.'];
+                    responseData.errors = ['Trouble communicating with eventstore.'];
                     res.status(500);
                   } else {
 
@@ -193,7 +193,7 @@
             // If there was a problem communicating with the cluster,
             // then we should have recieved a 408 (Request Timeout)
             if (response && response.statusCode === 408) {
-              responseData.errors = ['The cluster is down.'];
+              responseData.errors = ['Trouble communicating with eventstore.'];
             }
 
             res.status(500).send(responseData);
