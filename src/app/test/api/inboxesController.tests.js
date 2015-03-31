@@ -695,8 +695,8 @@ describe('inboxesController', function() {
           });
         })
 
-        it('it should report that there is a problem communicating with the cluster', function(done) {
-          JSON.parse(response.text).errors[0].should.equal('The cluster is down.');
+        it('it should report that there is a problem communicating with eventstore', function(done) {
+          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
           done();
         });
 
@@ -734,17 +734,27 @@ describe('inboxesController', function() {
       })
 
       describe('but with an HTTP status code of 408 (Request Timeout) when getting information for an inbox', function() {
+
+        var response;
+
         before(function() {
           eventStoreClient.projection.getState.callsArgWith(1, null, {
             statusCode: 408
           });
+
+          postInbox(inboxPayload, function(err, res) {
+            response = res;
+          });
         });
 
-        it('it should report that there is a problem communicating with the cluster', function(done) {
-          postInbox(inboxPayload, function(err, res) {
-            JSON.parse(res.text).errors[0].should.equal('The cluster is down.');
-            done();
-          });
+        it('it should report that there is a problem communicating with eventstore', function(done) {
+          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+          done();
+        });
+
+        it('it should report a status code of 500 (Internal Server Error)', function(done) {
+          response.status.should.equal(500);
+          done();
         });
       });
     });
