@@ -76,6 +76,10 @@
       eventStore.streams.post(args, function(error, resp) {
         if (error) {
           // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
+        } else if (resp && resp.statusCode === 408) {
+          res.status(500).json({
+            'errors': ['Trouble communicating with eventstore.']
+          });
         } else {
           var hypermedia = hypermediaResponse.digests.POST(href,
             digestAddedEvent.data.digestId);

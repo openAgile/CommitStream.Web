@@ -361,6 +361,34 @@ describe('digestsController', function() {
         });
       });
     });
+
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when posting to eventstore', function() {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      var response;
+
+      before(function() {
+        eventStoreClient.streams.post.callsArgWith(1, null, {
+          statusCode: 408
+        });
+
+        postDigest(digestDescription, function(err, res) {
+          response = res;
+        });
+      });
+
+      it('it should report that there is a problem communicating with eventstore', function(done) {
+        JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        done();
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function(done) {
+        response.status.should.equal(500);
+        done();
+      });
+
+    });
   });
 
   /********************************************
