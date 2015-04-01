@@ -930,22 +930,54 @@ describe('digestsController', function() {
       });
     });
 
-    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting digest information from eventstore', function() {
-      before(function(done) {
-        reset();
-        eventStoreClient.projection.getState.callsArgWith(1, null, {
-          statusCode: 408
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs', function() {
+      describe('when getting digest information from eventstore', function() {
+
+        before(function(done) {
+          reset();
+          eventStoreClient.projection.getState.callsArgWith(1, null, {
+            statusCode: 408
+          });
+
+          get(done);
         });
 
-        get(done);
+        it('it should report that there is a problem communicating with eventstore', function() {
+          JSON.parse(res.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        });
+
+        it('it should report a status code of 500 (Internal Server Error)', function() {
+          res.status.should.equal(500);
+        });
       });
 
-      it('it should report that there is a problem communicating with eventstore', function() {
-        JSON.parse(res.text).errors[0].should.equal('Trouble communicating with eventstore.');
-      });
+      describe('when getting digest information from eventstore', function() {
+        before(function(done) {
+          reset();
+          eventStoreClient.projection.getState.callsArgWith(1, null, {
+            statusCode: 408
+          });
 
-      it('it should report a status code of 500 (Internal Server Error)', function() {
-        res.status.should.equal(500);
+          eventStoreClient.projection.getState = sinon.stub();
+
+          eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, {
+            body: JSON.stringify(digest)
+          });
+
+          eventStoreClient.projection.getState.onSecondCall().callsArgWith(1, null, {
+            statusCode: 408
+          });
+
+          get(done);
+        });
+
+        it('it should report that there is a problem communicating with eventstore', function() {
+          JSON.parse(res.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        });
+
+        it('it should report a status code of 500 (Internal Server Error)', function() {
+          res.status.should.equal(500);
+        });
       });
     });
   });
@@ -1049,7 +1081,6 @@ describe('digestsController', function() {
           'error': 'There was an internal error when trying to process your request.'
         }));
       });
-
     });
 
     describe('and there are no digests', function() {
@@ -1084,6 +1115,25 @@ describe('digestsController', function() {
       it('returns a JSON body with a zero count property', function() {
         var body = JSON.parse(response.text);
         body.count.should.equal(0);
+      });
+    });
+
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting digest information from eventstore', function() {
+
+      before(function(done) {
+        eventStoreClient.streams.get.callsArgWith(1, null, {
+          statusCode: 408
+        });
+
+        get(done);
+      });
+
+      it('it should report that there is a problem communicating with eventstore', function() {
+        JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function() {
+        response.status.should.equal(500);
       });
 
     });

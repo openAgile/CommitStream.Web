@@ -215,6 +215,10 @@
                 res.status(500).json({
                   'error': 'There was an internal error when trying to process your request.'
                 });
+              } else if (resp && resp.statusCode === 408) {
+                res.status(500).json({
+                  "errors": ['Trouble communicating with eventstore.']
+                });
               } else if (!resp.body || resp.body.length < 1) {
                 var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, {
                   inboxes: {}
@@ -242,6 +246,10 @@
         if (err) {
           res.status(500).json({
             'error': 'There was an internal error when trying to process your request.'
+          });
+        } else if (resp && resp.statusCode === 408) {
+          res.status(500).json({
+            "errors": ['Trouble communicating with eventstore.']
           });
         } else if (resp.statusCode == 404) {
           var response = hypermediaResponse.digestsGET(href);
