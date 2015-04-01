@@ -387,7 +387,6 @@ describe('digestsController', function() {
         response.status.should.equal(500);
         done();
       });
-
     });
   });
 
@@ -472,7 +471,6 @@ describe('digestsController', function() {
           done();
         });
       });
-
     });
 
     describe('with a valid, uuid that does not match a real digest', function() {
@@ -523,7 +521,6 @@ describe('digestsController', function() {
           done();
         });
       });
-
     });
 
     describe('with an error returned from eventStoreClient', function() {
@@ -572,7 +569,36 @@ describe('digestsController', function() {
           done();
         });
       });
+    });
 
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting information from eventstore', function() {
+      var response;
+      var uuid = '4cc217e4-0802-4f0f-8218-f8e5772aac5b';
+
+      before(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          statusCode: 408
+        });
+      });
+
+      function get(shouldBehaveThusly) {
+        getDigest('/api/digests/' + uuid, shouldBehaveThusly);
+      }
+
+      it('it should report that there is a problem communicating with eventstore', function(done) {
+        get(function(error, response) {
+          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+          done();
+        });
+
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function(done) {
+        get(function(error, response) {
+          response.status.should.equal(500);
+          done();
+        });
+      });
     });
   });
 
