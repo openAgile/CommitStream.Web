@@ -750,7 +750,6 @@ describe('digestsController', function() {
           'error': 'There was an internal error when trying to process your request.'
         }));
       });
-
     });
 
     describe('when inboxes-for-digest projection returns an empty result it', function() {
@@ -928,6 +927,25 @@ describe('digestsController', function() {
         };
         var body = normalizeHrefs(res.text);
         JSON.parse(body).should.deep.equal(expected);
+      });
+    });
+
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting digest information from eventstore', function() {
+      before(function(done) {
+        reset();
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          statusCode: 408
+        });
+
+        get(done);
+      });
+
+      it('it should report that there is a problem communicating with eventstore', function() {
+        JSON.parse(res.text).errors[0].should.equal('Trouble communicating with eventstore.');
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function() {
+        res.status.should.equal(500);
       });
     });
   });
