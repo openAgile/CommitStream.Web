@@ -97,7 +97,7 @@
             _links: {}
           }
 
-          if (response.body) {
+          if (response && response.body) {
             var obj = JSON.parse(response.body);
 
             var links = obj.links;
@@ -112,6 +112,11 @@
                 next: next
               };
             }
+          } else if (response && response.statusCode === 408) {
+            res.status(500);
+            result = {
+              "errors": ["There was an internal error when trying to process your request."]
+            }
           }
 
           res.set("Content-Type", "application/json");
@@ -120,7 +125,7 @@
       } else {
         res.set("Content-Type", "application/json");
         res.status(400).send({
-          error: 'Parameter workitem is required'
+          error: "Parameter workitem is required"
         });
       }
     });

@@ -195,4 +195,35 @@ describe('queryController', function() {
     });
   });
 
+  describe('when I issue a query, and there is an HTTP timeout with a status of 408 (Request Timeout) with eventstore', function() {
+    var assetId = 'S-83940';
+    var response;
+
+    beforeEach(function(done) {
+      eventStoreClient.streams.get = sinon.stub();
+      eventStoreClient.streams.get.callsArgWith(1, null, {
+        statusCode: 408
+      });
+
+      request(app)
+        .get('/api/query?workitem=' + assetId)
+        .end(function(err, res) {
+
+          response = res;
+          done();
+        });
+    });
+
+    it('it should report that there was an internal error', function(done) {
+      JSON.parse(response.text).errors[0].should.equal('There was an internal error when trying to process your request.');
+      done();
+    });
+
+    it('it should report a status code of 500 (Internal Server Error)', function(done) {
+      response.status.should.equal(500);
+      done();
+    });
+
+  })
+
 });
