@@ -48,9 +48,9 @@
 
       getPartitionState('digest', req.body.digestId, function(err, resp) {
         if (err) {
-          res.sendGenericError();
+          return res.sendGenericError();
         } else if (resp && resp.statusCode === 408) {
-          res.sendGenericError('Trouble communicating with eventstore.');
+          return res.sendGenericError('Trouble communicating with eventstore.');
         } else if (!resp.body || !resp.body.length) {
           res.status(404).json({
             'error': 'Could not find a digest with id ' + req.body.digestId + '.'
@@ -64,9 +64,9 @@
 
           eventStore.streams.post(args, function(error, resp) {
             if (error) {
-              res.sendGenericError();
+              return res.sendGenericError();
             } else if (resp && resp.statusCode === 408) {
-              res.sendGenericError('Trouble communicating with eventstore.');
+              return res.sendGenericError('Trouble communicating with eventstore.');
             } else {
               var hypermedia = hypermediaResponse.inboxes.POST(urls.href(req),
                 inboxAddedEvent.data.inboxId);
@@ -184,7 +184,7 @@
             // If there was a problem communicating with the cluster,
             // then we should have recieved a 408 (Request Timeout)
             if (response && response.statusCode === 408) {
-              res.sendGenericError('Trouble communicating with eventstore.');
+              return res.sendGenericError('Trouble communicating with eventstore.');
             }
 
             res.status(500).send(responseData);
@@ -199,9 +199,9 @@
       } else {
         getPartitionState('inbox', req.params.uuid, function(err, resp) {
           if (err) {
-            res.sendGenericError();
+            return res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
-            res.sendGenericError('Trouble communicating with eventstore.');
+            return res.sendGenericError('Trouble communicating with eventstore.');
           } else if (!resp.body || resp.body.length < 1) {
             res.status(404).json({
               'error': 'Could not find an inbox with id ' + req.params.uuid

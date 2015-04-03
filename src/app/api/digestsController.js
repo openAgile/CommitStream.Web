@@ -77,7 +77,7 @@
         if (error) {
           // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
         } else if (resp && resp.statusCode === 408) {
-          res.sendGenericError('Trouble communicating with eventstore.');
+          return res.sendGenericError('Trouble communicating with eventstore.');
         } else {
           var hypermedia = hypermediaResponse.digests.POST(href,
             digestAddedEvent.data.digestId);
@@ -106,7 +106,7 @@
           if (err) {
             return res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
-            res.sendGenericError('Trouble communicating with eventstore');
+            return res.sendGenericError('Trouble communicating with eventstore');
           } else if (!resp.body || resp.body.length < 1) {
             res.status(404).json({
               'error': 'Could not find a digest with id ' + req.params.uuid
@@ -190,7 +190,7 @@
           if (err) {
             return res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
-            res.sendGenericError('Trouble communicating with eventstore.');
+            return res.sendGenericError('Trouble communicating with eventstore.');
           } else if (!resp.body || resp.body.length < 1) {
             res.status(404).json({
               'error': 'Could not find a digest with id ' + req.params.uuid + '.'
@@ -204,7 +204,7 @@
               if (err) {
                 return res.sendGenericError();
               } else if (resp && resp.statusCode === 408) {
-                res.sendGenericError('Trouble communicating with eventstore.');
+                return res.sendGenericError('Trouble communicating with eventstore.');
               } else if (!resp.body || resp.body.length < 1) {
                 var hypermediaResponse = JSON.stringify(createHyperMediaResponse(digest, {
                   inboxes: {}
@@ -230,9 +230,9 @@
         name: 'digests'
       }, function(err, resp) {
         if (err) {
-          res.sendGenericError();
+          return res.sendGenericError();
         } else if (resp && resp.statusCode === 408) {
-          res.sendGenericError('Trouble communicating with eventstore.');
+          return res.sendGenericError('Trouble communicating with eventstore.');
         } else if (resp.statusCode == 404) {
           var response = hypermediaResponse.digestsGET(href);
           res.set('Content-Type', 'application/hal+json; charset=utf-8');
