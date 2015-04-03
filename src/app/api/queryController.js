@@ -89,15 +89,21 @@
         es.streams.get({
           name: stream,
           count: pageSize,
-          pageUrl: page
+          pageUrl: page,
+          embed: 'tryharder'
         }, function(error, response) {
+          if (error) {
+            return res.sendGenericError(error);
+          }
+
           var result = {
             commits: [],
             _links: {}
           }
 
-          if (response.body) {
+          if (response && response.body) {
             var obj = JSON.parse(response.body);
+
             var links = obj.links;
             var guid = uuid();
             result = gitHubEventsToApiResponse(obj.entries);
@@ -110,15 +116,16 @@
                 next: next
               };
             }
+          } else if (response && response.statusCode === 408) {
+            return res.sendGenericError('GET /api/query.get: response && response.statusCode === 408');
           }
-
           res.set("Content-Type", "application/json");
           res.send(result);
         });
       } else {
         res.set("Content-Type", "application/json");
         res.status(400).send({
-          error: 'Parameter workitem is required'
+          error: "Parameter workitem is required"
         });
       }
     });

@@ -4,7 +4,8 @@ var express = require('express'),
   config = require('./config'),
   apikey = require('./apikey'),
   exphbs = require('express-handlebars'),
-  validation = require('./configValidation');
+  validation = require('./configValidation'),
+  appConfigure = require('./middleware/appConfigure');
 
 validation.validateConfig();
 validation.validateEventStore(function(error) {
@@ -39,6 +40,7 @@ app.get('/instances', function(req, res) {
 
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.
+appConfigure(app);
 app.use(apikey);
 
 app.use(function(req, res, next) {

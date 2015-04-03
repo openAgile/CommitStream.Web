@@ -1,7 +1,8 @@
+require('../helpers')(global);
 var chai = require('chai'),
   should = chai.should(),
   express = require('express'),
-  app = express(),
+  app = require('../../middleware/appConfigure')(express()),
   sinon = require('sinon'),
   sinonChai = require('sinon-chai'),
   _ = require('underscore'),
@@ -104,6 +105,56 @@ describe('digestsController', function() {
 
     beforeEach(function() {
       eventStoreClient.streams.post.callsArgWith(1, null, "ignored response");
+    });
+
+    //TODO: shouldn't this be inside another describe?
+    it('it should use proper arguments when creating hypermedia.', function(done) {
+      postDigest({
+        description: 'Yay!'
+      }, function(err, res) {
+        hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
+        done();
+      });
+    });
+
+    it('it should create the DigestAdded event.', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        digestAdded.create.should.have.been.calledWith(digestDescription.description);
+        done();
+      });
+    });
+
+    it('it should have a response Content-Type of hal+json', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
+        done();
+      });
+    });
+
+    it('it should set the Location response header to the newly created digest', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        res.get('Location').should.equal(hypermediaResponse._links.self.href);
+        done();
+      });
+    });
+
+    it('it should have a response code of 201 created', function(done) {
+      var digestDescription = {
+        description: 'myfirstdigest'
+      };
+      postDigest(digestDescription, function(err, res) {
+        res.status.should.equal(201);
+        done();
+      });
     });
 
     describe('with valid inputs', function() {
@@ -312,52 +363,29 @@ describe('digestsController', function() {
       });
     });
 
-    //TODO: shouldn't this be inside another describe?
-    it('it should use proper arguments when creating hypermedia.', function(done) {
-      postDigest({
-        description: 'Yay!'
-      }, function(err, res) {
-        hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
-        done();
-      });
-    });
-
-    it('it should create the DigestAdded event.', function(done) {
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when posting to eventstore', function() {
       var digestDescription = {
         description: 'myfirstdigest'
       };
-      postDigest(digestDescription, function(err, res) {
-        digestAdded.create.should.have.been.calledWith(digestDescription.description);
+      var response;
+
+      before(function() {
+        eventStoreClient.streams.post.callsArgWith(1, null, {
+          statusCode: 408
+        });
+
+        postDigest(digestDescription, function(err, res) {
+          response = res;
+        });
+      });
+
+      it('it should report that there is an internal problem', function(done) {
+        shouldBeGenericError(response);
         done();
       });
-    });
 
-    it('it should have a response Content-Type of hal+json', function(done) {
-      var digestDescription = {
-        description: 'myfirstdigest'
-      };
-      postDigest(digestDescription, function(err, res) {
-        res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
-        done();
-      });
-    });
-
-    it('it should set the Location response header to the newly created digest', function(done) {
-      var digestDescription = {
-        description: 'myfirstdigest'
-      };
-      postDigest(digestDescription, function(err, res) {
-        res.get('Location').should.equal(hypermediaResponse._links.self.href);
-        done();
-      });
-    });
-
-    it('it should have a response code of 201 created', function(done) {
-      var digestDescription = {
-        description: 'myfirstdigest'
-      };
-      postDigest(digestDescription, function(err, res) {
-        res.status.should.equal(201);
+      it('it should report a status code of 500 (Internal Server Error)', function(done) {
+        response.status.should.equal(500);
         done();
       });
     });
@@ -444,7 +472,6 @@ describe('digestsController', function() {
           done();
         });
       });
-
     });
 
     describe('with a valid, uuid that does not match a real digest', function() {
@@ -495,7 +522,6 @@ describe('digestsController', function() {
           done();
         });
       });
-
     });
 
     describe('with an error returned from eventStoreClient', function() {
@@ -538,13 +564,40 @@ describe('digestsController', function() {
 
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
-          res.text.should.equal(JSON.stringify({
-            'error': 'There was an internal error when trying to process your request'
-          }));
+          shouldBeGenericError(res);
           done();
         });
       });
+    });
 
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting information from eventstore', function() {
+      var response;
+      var uuid = '4cc217e4-0802-4f0f-8218-f8e5772aac5b';
+
+      before(function() {
+        eventStoreClient.projection.getState.callsArgWith(1, null, {
+          statusCode: 408
+        });
+      });
+
+      function get(shouldBehaveThusly) {
+        getDigest('/api/digests/' + uuid, shouldBehaveThusly);
+      }
+
+      it('it should report that there was an internal error', function(done) {
+        get(function(error, response) {
+          shouldBeGenericError(response);
+          done();
+        });
+
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function(done) {
+        get(function(error, response) {
+          response.status.should.equal(500);
+          done();
+        });
+      });
     });
   });
 
@@ -652,9 +705,7 @@ describe('digestsController', function() {
       });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({
-          'error': 'There was an internal error when trying to process your request.'
-        }));
+        shouldBeGenericError(res);
       });
     });
 
@@ -692,11 +743,8 @@ describe('digestsController', function() {
       });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({
-          'error': 'There was an internal error when trying to process your request.'
-        }));
+        shouldBeGenericError(res);
       });
-
     });
 
     describe('when inboxes-for-digest projection returns an empty result it', function() {
@@ -876,6 +924,57 @@ describe('digestsController', function() {
         JSON.parse(body).should.deep.equal(expected);
       });
     });
+
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs', function() {
+      describe('when getting digest information from eventstore', function() {
+
+        before(function(done) {
+          reset();
+          eventStoreClient.projection.getState.callsArgWith(1, null, {
+            statusCode: 408
+          });
+
+          get(done);
+        });
+
+        it('it should report that there was an internal error', function() {
+          shouldBeGenericError(res);
+        });
+
+        it('it should report a status code of 500 (Internal Server Error)', function() {
+          res.status.should.equal(500);
+        });
+      });
+
+      describe('when getting digest information from eventstore', function() {
+        before(function(done) {
+          reset();
+          eventStoreClient.projection.getState.callsArgWith(1, null, {
+            statusCode: 408
+          });
+
+          eventStoreClient.projection.getState = sinon.stub();
+
+          eventStoreClient.projection.getState.onFirstCall().callsArgWith(1, null, {
+            body: JSON.stringify(digest)
+          });
+
+          eventStoreClient.projection.getState.onSecondCall().callsArgWith(1, null, {
+            statusCode: 408
+          });
+
+          get(done);
+        });
+
+        it('it should report that there was an internal problem', function() {
+          shouldBeGenericError(res);
+        });
+
+        it('it should report a status code of 500 (Internal Server Error)', function() {
+          res.status.should.equal(500);
+        });
+      });
+    });
   });
 
   describe('/api/digests -- when requesting the endpoint for a list of digests', function() {
@@ -973,11 +1072,8 @@ describe('digestsController', function() {
       });
 
       it('returns a meaningful error message', function() {
-        response.text.should.equal(JSON.stringify({
-          'error': 'There was an internal error when trying to process your request.'
-        }));
+        shouldBeGenericError(response);
       });
-
     });
 
     describe('and there are no digests', function() {
@@ -1012,6 +1108,25 @@ describe('digestsController', function() {
       it('returns a JSON body with a zero count property', function() {
         var body = JSON.parse(response.text);
         body.count.should.equal(0);
+      });
+    });
+
+    describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting digest information from eventstore', function() {
+
+      before(function(done) {
+        eventStoreClient.streams.get.callsArgWith(1, null, {
+          statusCode: 408
+        });
+
+        get(done);
+      });
+
+      it('it should report that there was an internal problem', function() {
+        shouldBeGenericError(response);
+      });
+
+      it('it should report a status code of 500 (Internal Server Error)', function() {
+        response.status.should.equal(500);
       });
 
     });
