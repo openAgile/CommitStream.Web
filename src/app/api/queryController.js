@@ -92,6 +92,10 @@
           pageUrl: page,
           embed: 'tryharder'
         }, function(error, response) {
+          if (error) {
+            return res.sendGenericError(error);
+          }
+
           var result = {
             commits: [],
             _links: {}
@@ -113,12 +117,8 @@
               };
             }
           } else if (response && response.statusCode === 408) {
-            res.status(500);
-            result = {
-              "errors": ["There was an internal error when trying to process your request."]
-            }
+            return res.sendGenericError('GET /api/query.get: response && response.statusCode === 408');
           }
-
           res.set("Content-Type", "application/json");
           res.send(result);
         });

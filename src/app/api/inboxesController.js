@@ -48,13 +48,9 @@
 
       getPartitionState('digest', req.body.digestId, function(err, resp) {
         if (err) {
-          res.status(500).json({
-            'errors': ['There was an internal error when trying to process your request.']
-          });
+          res.sendGenericError();
         } else if (resp && resp.statusCode === 408) {
-          res.status(500).json({
-            'errors': ['Trouble communicating with eventstore.']
-          });
+          res.sendGenericError('Trouble communicating with eventstore.');
         } else if (!resp.body || !resp.body.length) {
           res.status(404).json({
             'error': 'Could not find a digest with id ' + req.body.digestId + '.'
@@ -68,13 +64,9 @@
 
           eventStore.streams.post(args, function(error, resp) {
             if (error) {
-              res.status(500).json({
-                errors: 'We had an internal problem. Please retry your request. Error: ' + error
-              });
+              res.sendGenericError();
             } else if (resp && resp.statusCode === 408) {
-              res.status(500).json({
-                'errors': ['Trouble communicating with eventstore.']
-              });
+              res.sendGenericError('Trouble communicating with eventstore.');
             } else {
               var hypermedia = hypermediaResponse.inboxes.POST(urls.href(req),
                 inboxAddedEvent.data.inboxId);
@@ -139,18 +131,10 @@
                   events: e
                 }, function(error, response) {
                   if (error) {
-                    responseData = {
-                      errors: 'We had an internal problem. Please retry your request. Error: ' + error
-                    };
-
-                    res.status(500);
+                    return res.sendGenericError();
                   } else if (response && response.statusCode === 408) {
-                    // If there was a problem communicating with the cluster,
-                    // then we should have recieved a 408 (Request Timeout)
-                    responseData.errors = ['Trouble communicating with eventstore.'];
-                    res.status(500);
+                    return res.sendGenericError('Trouble communicating with eventstore.');
                   } else {
-
                     var hypermediaData = {
                       inboxId: inboxId,
                       digestId: digestId
@@ -200,7 +184,7 @@
             // If there was a problem communicating with the cluster,
             // then we should have recieved a 408 (Request Timeout)
             if (response && response.statusCode === 408) {
-              responseData.errors = ['Trouble communicating with eventstore.'];
+              res.sendGenericError('Trouble communicating with eventstore.');
             }
 
             res.status(500).send(responseData);
@@ -215,13 +199,9 @@
       } else {
         getPartitionState('inbox', req.params.uuid, function(err, resp) {
           if (err) {
-            res.status(500).json({
-              'error': 'There was an internal error when trying to process your request'
-            });
+            res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
-            res.status(500).json({
-              'errors': ['Trouble communicating with eventstore.']
-            });
+            res.sendGenericError('Trouble communicating with eventstore.');
           } else if (!resp.body || resp.body.length < 1) {
             res.status(404).json({
               'error': 'Could not find an inbox with id ' + req.params.uuid

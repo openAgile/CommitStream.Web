@@ -1,9 +1,10 @@
+require('../helpers')(global);
 var chai = require('chai'),
   should = chai.should(),
   validator = require('validator'),
   _ = require('underscore'),
   express = require('express'),
-  app = express(),
+  app = require('../../middleware/appConfigure')(express()),
   sinon = require("sinon"),
   sinonChai = require("sinon-chai"),
   request = require('supertest'),
@@ -262,7 +263,7 @@ describe('inboxesController', function() {
 
         it('it should send back an appropriate error response', function(done) {
           postInboxCreate(payload, function(err, res) {
-            JSON.parse(res.text).errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem');
+            shouldBeGenericError(res);
             done();
           });
         });
@@ -281,8 +282,8 @@ describe('inboxesController', function() {
           });
         })
 
-        it('it should report that there is a problem communicating with eventstore', function(done) {
-          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        it('it should report that there was an internal problem', function(done) {
+          shouldBeGenericError(response);
           done();
         });
 
@@ -348,7 +349,7 @@ describe('inboxesController', function() {
 
       it('it should send an appropriate error message.', function(done) {
         postInboxCreate(payload, function(err, res) {
-          JSON.parse(res.text).errors[0].should.equal('There was an internal error when trying to process your request.');
+          shouldBeGenericError(res);
           done();
         });
       });
@@ -375,7 +376,7 @@ describe('inboxesController', function() {
       })
 
       it('it should report that there is a problem communicating with eventstore', function(done) {
-        JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        shouldBeGenericError(response);
         done();
       });
 
@@ -710,7 +711,7 @@ describe('inboxesController', function() {
 
         it('it should send back an appropriate error response', function(done) {
           postInbox(inboxPayload, function(err, res) {
-            JSON.parse(res.text).errors.should.equal('We had an internal problem. Please retry your request. Error: Houston, we have a problem.');
+            shouldBeGenericError(res);
             done();
           }, null, inboxId);
         });
@@ -743,8 +744,8 @@ describe('inboxesController', function() {
           });
         })
 
-        it('it should report that there is a problem communicating with eventstore', function(done) {
-          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        it('it should report that there was an internal error', function(done) {
+          shouldBeGenericError(response);
           done();
         });
 
@@ -756,7 +757,7 @@ describe('inboxesController', function() {
 
       describe('but with an error returned from getting the inbox id', function() {
         before(function() {
-          eventStoreClient.projection.getState.callsArgWith(1, 'Houston we have a problem', null);
+          eventStoreClient.projection.getState.callsArgWith(1, 'There was an internal error when trying to process your request.', null);
         })
 
         it('it should send back an appropriate error status code of 500 (Internal Server Error)', function(done) {
@@ -766,9 +767,9 @@ describe('inboxesController', function() {
           });
         });
 
-        it('it should report the error it received to the client.', function(done) {
+        it('it should report that there was an internal error.', function(done) {
           postInbox(inboxPayload, function(err, res) {
-            JSON.parse(res.text).errors[0].should.equal('Houston we have a problem');
+            shouldBeGenericError(res);
             done();
           });
         });
@@ -795,8 +796,8 @@ describe('inboxesController', function() {
           });
         });
 
-        it('it should report that there is a problem communicating with eventstore', function(done) {
-          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        it('it should report that there was an internal problem', function(done) {
+          shouldBeGenericError(response);
           done();
         });
 
@@ -1019,9 +1020,7 @@ describe('inboxesController', function() {
 
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
-          res.text.should.equal(JSON.stringify({
-            'error': 'There was an internal error when trying to process your request'
-          }));
+          shouldBeGenericError(res);
           done();
         });
       });
@@ -1040,9 +1039,9 @@ describe('inboxesController', function() {
         getInbox('/api/inboxes/' + inboxId, shouldBehaveThusly);
       }
 
-      it('it should report that there is a problem communicating with eventstore', function(done) {
+      it('it should report that there was an internal problem', function(done) {
         get(function(error, response) {
-          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+          shouldBeGenericError(response);
           done();
         });
 

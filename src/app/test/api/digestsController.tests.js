@@ -1,7 +1,8 @@
+require('../helpers')(global);
 var chai = require('chai'),
   should = chai.should(),
   express = require('express'),
-  app = express(),
+  app = require('../../middleware/appConfigure')(express()),
   sinon = require('sinon'),
   sinonChai = require('sinon-chai'),
   _ = require('underscore'),
@@ -378,8 +379,8 @@ describe('digestsController', function() {
         });
       });
 
-      it('it should report that there is a problem communicating with eventstore', function(done) {
-        JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+      it('it should report that there is an internal problem', function(done) {
+        shouldBeGenericError(response);
         done();
       });
 
@@ -563,9 +564,7 @@ describe('digestsController', function() {
 
       it('it returns a meaningful error message', function(done) {
         get(function(err, res) {
-          res.text.should.equal(JSON.stringify({
-            'error': 'There was an internal error when trying to process your request'
-          }));
+          shouldBeGenericError(res);
           done();
         });
       });
@@ -585,9 +584,9 @@ describe('digestsController', function() {
         getDigest('/api/digests/' + uuid, shouldBehaveThusly);
       }
 
-      it('it should report that there is a problem communicating with eventstore', function(done) {
+      it('it should report that there was an internal error', function(done) {
         get(function(error, response) {
-          JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+          shouldBeGenericError(response);
           done();
         });
 
@@ -706,9 +705,7 @@ describe('digestsController', function() {
       });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({
-          'error': 'There was an internal error when trying to process your request.'
-        }));
+        shouldBeGenericError(res);
       });
     });
 
@@ -746,9 +743,7 @@ describe('digestsController', function() {
       });
 
       it('returns a meaningful error message', function() {
-        res.text.should.equal(JSON.stringify({
-          'error': 'There was an internal error when trying to process your request.'
-        }));
+        shouldBeGenericError(res);
       });
     });
 
@@ -942,8 +937,8 @@ describe('digestsController', function() {
           get(done);
         });
 
-        it('it should report that there is a problem communicating with eventstore', function() {
-          JSON.parse(res.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        it('it should report that there was an internal error', function() {
+          shouldBeGenericError(res);
         });
 
         it('it should report a status code of 500 (Internal Server Error)', function() {
@@ -971,8 +966,8 @@ describe('digestsController', function() {
           get(done);
         });
 
-        it('it should report that there is a problem communicating with eventstore', function() {
-          JSON.parse(res.text).errors[0].should.equal('Trouble communicating with eventstore.');
+        it('it should report that there was an internal problem', function() {
+          shouldBeGenericError(res);
         });
 
         it('it should report a status code of 500 (Internal Server Error)', function() {
@@ -1077,9 +1072,7 @@ describe('digestsController', function() {
       });
 
       it('returns a meaningful error message', function() {
-        response.text.should.equal(JSON.stringify({
-          'error': 'There was an internal error when trying to process your request.'
-        }));
+        shouldBeGenericError(response);
       });
     });
 
@@ -1128,8 +1121,8 @@ describe('digestsController', function() {
         get(done);
       });
 
-      it('it should report that there is a problem communicating with eventstore', function() {
-        JSON.parse(response.text).errors[0].should.equal('Trouble communicating with eventstore.');
+      it('it should report that there was an internal problem', function() {
+        shouldBeGenericError(response);
       });
 
       it('it should report a status code of 500 (Internal Server Error)', function() {

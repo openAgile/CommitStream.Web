@@ -1,8 +1,9 @@
+require('../helpers')(global);
 // test/queryController.tests.js
 var chai = require('chai'),
   should = chai.should(),
   express = require('express'),
-  app = express(),
+  app = require('../../middleware/appConfigure')(express()),
   sinon = require('sinon'),
   sinonChai = require('sinon-chai'),
   _ = require('underscore'),
@@ -208,14 +209,13 @@ describe('queryController', function() {
       request(app)
         .get('/api/query?workitem=' + assetId)
         .end(function(err, res) {
-
           response = res;
           done();
         });
     });
 
     it('it should report that there was an internal error', function(done) {
-      JSON.parse(response.text).errors[0].should.equal('There was an internal error when trying to process your request.');
+      shouldBeGenericError(response);
       done();
     });
 
