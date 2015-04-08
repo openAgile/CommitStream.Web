@@ -1,5 +1,5 @@
 # VersionOne Commit Service
-Copyright (c) 2014 VersionOne, Inc.
+Copyright (c) 2015 VersionOne, Inc.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
