@@ -104,8 +104,8 @@
           partition: 'digest-' + req.params.uuid
         }, function(err, resp) {
           if (err) {
-            // throw err;
-            return res.sendGenericError();
+            throw err;
+            //return res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
             return res.sendGenericError('Trouble communicating with eventstore');
           } else if (!resp.body || resp.body.length < 1) {
