@@ -32,7 +32,8 @@
     "ttl-cache": "^1.0.2",
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
-    "validator": "^3.22.1"
+    "validator": "^3.22.1",
+    "express-domain-middleware": "^0.1.0"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
