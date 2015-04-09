@@ -5,7 +5,12 @@ var express = require('express'),
   apikey = require('./apikey'),
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
+  csError = require('./middleware/csError'),
+  domainMiddleware = require('express-domain-middleware'),
   appConfigure = require('./middleware/appConfigure');
+
+// DO NOT MOVE THIS. It is here to wrap routes in a domain to catch unhandled errors
+app.use(domainMiddleware);
 
 validation.validateConfig();
 validation.validateEventStore(function(error) {
@@ -50,6 +55,9 @@ app.use(function(req, res, next) {
 
 // Map API the routes
 api.init(app);
+
+// DO NOT MOVE THIS. It must be here to catch unhandled errors.
+app.use(csError.errorHandler);
 
 app.get('/app', function(req, res) {
   res.setHeader('content-type', 'application/javascript');
