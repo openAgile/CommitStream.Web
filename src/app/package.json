@@ -19,6 +19,7 @@
     "mocha-tap-reporter": "^0.1.2",
     "moment": "^2.8.3",
     "nconf": "^0.6.9",
+    "newman": "^1.2.15",
     "nock": "^0.48.0",
     "node-json-db": "^0.3.2",
     "octonode": "^0.6.9",
