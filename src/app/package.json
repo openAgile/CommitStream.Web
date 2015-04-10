@@ -13,7 +13,6 @@
     "custom-error-generator": "^7.0.0",
     "eventstore-client": "openAgile/eventstore-client#promisify-all",
     "express": "^4.8.3",
-    "express-domain-middleware": "^0.1.0",
     "express-handlebars": "^1.1.0",
     "istanbul": "^0.3.2",
     "jsonschema": "^1.0.0",
@@ -37,6 +36,7 @@
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
     "validator": "^3.22.1",
+    "express-domain-middleware": "^0.1.0",
     "node-mocks-http": "^1.4.1"
   },
   "devDependencies": {
