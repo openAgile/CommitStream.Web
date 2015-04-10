@@ -52,6 +52,9 @@ app.get('/instances', function(req, res) {
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.
 appConfigure(app);
+
+// TODO: move this after we remove the apiKey global middleware
+require('./api/instancesController').init(app);
 app.use(apikey);
 
 app.use(function(req, res, next) {

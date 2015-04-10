@@ -1,18 +1,13 @@
 (function(instancesController) {
   var uuid = require('uuid-v4'),
     config = require('../config'),
-    //csError = require('../csError'),
-    validator = require('validator'),
     instanceAdded = require('./events/instanceAdded'),
     eventStore = require('./helpers/eventStoreClient'),
     eventStorePromised = require('./helpers/eventStoreClientPromised'),
-    bodyParser = require('body-parser'),
-    sanitize = require('sanitize-html'),
-    Promise = require('bluebird'),
-    _ = require('underscore'),
     statusCodeValidator = require('./statusCodeValidator');
 
   function instanceFormatAsHal(href, instance) {
+    console.log(instance);
     var formatted = {
       "_links": {
         "self": {
@@ -35,7 +30,7 @@
   }
 
   instancesController.init = function(app) {
-    app.post('/api/instances', bodyParser.json(), function(req, res) {
+    app.post('/api/instances', function(req, res) {
 
       var instanceAddedEvent = instanceAdded.create();
 
@@ -48,7 +43,7 @@
         if (error) {
           throw error;
         } else {
-          var hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent);
+          var hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent.data);
           setTimeout(function() {
             res.hal(hypermedia);
           }, config.controllerResponseDelay);
