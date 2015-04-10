@@ -6,11 +6,17 @@ var express = require('express'),
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
   csError = require('./middleware/csError'),
-  domainMiddleware = require('express-domain-middleware'),
-  appConfigure = require('./middleware/appConfigure');
+  appConfigure = require('./middleware/appConfigure'),
+  Promise = require('bluebird'),
+  domainMiddleware = require('express-domain-middleware')
 
 // DO NOT MOVE THIS. It is here to wrap routes in a domain to catch unhandled errors
 app.use(domainMiddleware);
+
+// DO NOT MOVE THIS. It is here to handle unhandled rejected Promises cleanly
+Promise.onPossiblyUnhandledRejection(function(err){
+  throw err;
+});
 
 validation.validateConfig();
 validation.validateEventStore(function(error) {
