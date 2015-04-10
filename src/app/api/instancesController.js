@@ -30,7 +30,6 @@
 
   instancesController.init = function(app) {
     app.post('/api/instances', function(req, res) {
-
       var instanceAddedEvent = instanceAdded.create();
 
       var args = {
@@ -38,16 +37,13 @@
         events: JSON.stringify([instanceAddedEvent])
       };
 
-      eventStore.streams.post(args, function(error, resp) {
-        if (error) {
-          throw error;
-        } else {
+      eventStore.streams.postAsync(args)
+        .then(function(response) {
           var hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent.data);
           setTimeout(function() {
             res.hal(hypermedia, 201);
           }, config.controllerResponseDelay);
-        }
-      });
+        });
     });
 
     function queryStatePartitionById(args, validateEventStoreResponse, formatResponse) {
@@ -63,14 +59,16 @@
 
     app.get('/api/instances/:instanceId', function(req, res, next) {
       if (!validator.isUUID(req.params.instanceId)) {
-          throw new Error("Must supply a valid instanceId. The value " + req.params.instanceId + ' is invalid.');
+        throw new Error("Must supply a valid instanceId. The value " + req.params.instanceId + ' is invalid.');
       } else {
         queryStatePartitionById({
             name: 'instance',
             id: req.params.instanceId
           },
           statusCodeValidator.validateGetProjection('instance', req.params.instanceId),
-          function(instance) { return instanceFormatAsHal(req.href, instance); }
+          function(instance) {
+            return instanceFormatAsHal(req.href, instance);
+          }
         ).then(function(hypermedia) {
           res.hal(hypermedia);
         });
