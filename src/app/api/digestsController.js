@@ -232,10 +232,7 @@
           var result = hypermediaResponse.digestsGET(href);
           res.set('Content-Type', 'application/hal+json; charset=utf-8');
           res.send(result);
-        } else {       
-          console.log("--------------------HERE IS THE RESPONSE");
-          console.log(response.body);
-          console.log('--------------------DONE RESPONSE');
+        } else {
           var data = JSON.parse(response.body);
           var digests = _.map(data.entries, function(entry) {
             return entry.content.data;
