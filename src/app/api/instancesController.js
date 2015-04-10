@@ -43,16 +43,6 @@
             res.hal(hypermedia, 201);
           }, config.controllerResponseDelay);
         });
-
-      /*
-      eventStore.streams.postAsync(args)
-        .then(function(response) {
-          var hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent.data);
-          setTimeout(function() {
-            res.hal(hypermedia, 201);
-          }, config.controllerResponseDelay);
-        });
-      */
     });
 
     app.get('/api/instances/:instanceId', function(req, res, next) {
