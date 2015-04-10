@@ -6,6 +6,6 @@
       res.set('Content-Type', 'application/hal+json');
       res.send(halData);
     };
-    return next();
+    if (next) return next();
   };
 }(module));
