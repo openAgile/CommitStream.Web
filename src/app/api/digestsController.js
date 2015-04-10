@@ -6,7 +6,6 @@
     hypermediaResponse = require('./hypermediaResponse'),
     digestAdded = require('./events/digestAdded'),
     eventStore = require('./helpers/eventStoreClient'),
-    eventStorePromised = require('./helpers/eventStoreClientPromised'),
     bodyParser = require('body-parser'),
     sanitize = require('sanitize-html'),
     urls = require('./urls'),
@@ -227,7 +226,7 @@
 
     app.get('/api/digests', bodyParser.json(), function(req, res) {
       var href = urls.href(req);
-      eventStorePromised.streams.getAsync({name:'digests'})
+      eventStore.streams.getAsync({name:'digests'})
       .then(function(response) {
         if (response.statusCode === 404) {
           var result = hypermediaResponse.digestsGET(href);
