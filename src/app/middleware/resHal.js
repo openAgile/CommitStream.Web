@@ -1,0 +1,11 @@
+(function(module) {
+  module.exports = function(req, res, next) {
+    res.hal = function(halData, statusCode) {
+      statusCode = statusCode || 200;
+      res.location(halData._links.self.href);
+      res.set('Content-Type', 'application/hal+json');
+      res.send(halData);
+    };
+    return next();
+  };
+}(module));
