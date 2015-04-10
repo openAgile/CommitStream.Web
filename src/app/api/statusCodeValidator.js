@@ -17,7 +17,7 @@
         throw new Error(response.statusCode);
       } else {
           var data = JSON.parse(response.body);
-          return Promise.resolve(data);
+          return data;
       }
     };
   };
