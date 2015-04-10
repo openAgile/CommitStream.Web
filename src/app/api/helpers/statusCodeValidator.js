@@ -1,13 +1,13 @@
 (function(statusCodeValidator) {
-  var csError = require('../middleware/csError'),
-      Promise = require('bluebird');
+  var csError = require('../../middleware/csError'),
+    Promise = require('bluebird');
 
   var NotFound = csError.createCustomError('NotFound', function(message) {
     message = message || 'Resource not found';
     var errors = [message];
     NotFound.prototype.constructor.call(this, errors, 404);
     this.name = 'NotFound';
-  });  
+  });
 
   statusCodeValidator.validateGetProjection = function(objectType, objectId) {
     return function(response) {
@@ -16,8 +16,8 @@
       } else if (response.statusCode != 200) {
         throw new Error(response.statusCode);
       } else {
-          var data = JSON.parse(response.body);
-          return data;
+        var data = JSON.parse(response.body);
+        return data;
       }
     };
   };
