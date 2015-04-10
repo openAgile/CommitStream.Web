@@ -6,7 +6,6 @@
     message = message || 'Resource not found';
     var errors = [message];
     NotFound.prototype.constructor.call(this, errors, 404);
-    this.name = 'NotFound';
   });
 
   statusCodeValidator.validateGetProjection = function(objectType, objectId) {
