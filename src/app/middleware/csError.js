@@ -27,6 +27,8 @@
 
   csError.errorHandler = function(err, req, res, next) {
     console.error("\nEXCEPTION RAISED BY API ROUTE: " + util.inspect(req.route, { showHidden: true, depth: null }).substr(0, 5000));
+    console.error("STACK TRACE:");
+    console.error(err.stack);
     console.error("CAUGHT ERROR DETAILS:");
     console.error(util.inspect(err, { showHidden: true, depth: null }).substr(0, 5000));
 
