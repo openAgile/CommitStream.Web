@@ -3,11 +3,9 @@
     config = require('../config'),
     instanceAdded = require('./events/instanceAdded'),
     eventStore = require('./helpers/eventStoreClient'),
-    eventStorePromised = require('./helpers/eventStoreClientPromised'),
     statusCodeValidator = require('./statusCodeValidator');
 
   function instanceFormatAsHal(href, instance) {
-    console.log(instance);
     var formatted = {
       "_links": {
         "self": {
@@ -57,7 +55,7 @@
         partition: args.name + '-' + args.id
       };
 
-      return eventStorePromised.state.getAsync(stateArgs)
+      return eventStore.state.getAsync(stateArgs)
         .then(validateEventStoreResponse)
         .then(formatResponse);
     }
