@@ -10,7 +10,7 @@
     "chai": "^1.10.0",
     "cors": "^2.4.1",
     "custom-error-generator": "^7.0.0",
-    "eventstore-client": "openAgile/eventstore-client#enable-system-projections",
+    "eventstore-client": "openAgile/eventstore-client#promisify-all",
     "express": "^4.8.3",
     "express-domain-middleware": "^0.1.0",
     "express-handlebars": "^1.1.0",
