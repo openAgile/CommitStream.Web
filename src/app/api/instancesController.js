@@ -3,6 +3,7 @@
     config = require('../config'),
     instanceAdded = require('./events/instanceAdded'),
     eventStore = require('./helpers/eventStoreClient'),
+    validator = require('validator'),
     statusCodeValidator = require('./statusCodeValidator');
 
   function instanceFormatAsHal(href, instance) {
@@ -43,7 +44,7 @@
         } else {
           var hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent.data);
           setTimeout(function() {
-            res.hal(hypermedia);
+            res.hal(hypermedia, 201);
           }, config.controllerResponseDelay);
         }
       });
@@ -55,27 +56,21 @@
         partition: args.name + '-' + args.id
       };
 
-      return eventStore.state.getAsync(stateArgs)
+      return eventStore.projection.getStateAsync(stateArgs)
         .then(validateEventStoreResponse)
         .then(formatResponse);
     }
 
     app.get('/api/instances/:instanceId', function(req, res, next) {
-      var formatResponse = function(instance) {
-        return Promise.resolve(instanceFormatAsHal(req.href, instance));
-      };
-
-      if (false) {
-      //if (!validator.isUUID(req.params.instanceId)) {
-        // TODO response with error
-        throw new Error("Must supply a valid instanceId. The value " + req.params.instanceId + ' is invalid.');
+      if (!validator.isUUID(req.params.instanceId)) {
+          throw new Error("Must supply a valid instanceId. The value " + req.params.instanceId + ' is invalid.');
       } else {
         queryStatePartitionById({
             name: 'instance',
             id: req.params.instanceId
           },
           statusCodeValidator.validateGetProjection('instance', req.params.instanceId),
-          formatResponse
+          function(instance) { return instanceFormatAsHal(req.href, instance); }
         ).then(function(hypermedia) {
           res.hal(hypermedia);
         });
