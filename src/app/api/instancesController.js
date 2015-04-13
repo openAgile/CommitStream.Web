@@ -1,6 +1,5 @@
 (function(instancesController) {
-  var uuid = require('uuid-v4'),
-    config = require('../config'),
+    var config = require('../config'),
     instanceAdded = require('./events/instanceAdded'),
     eventStore = require('./helpers/eventStoreClient'),
     validator = require('validator');
