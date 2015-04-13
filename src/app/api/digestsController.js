@@ -216,6 +216,34 @@
     app.get('/api/digests', bodyParser.json(), function(req, res) {
       var href = urls.href(req);
       eventStorePromised.streams.getAsync({name:'digests'})
+      
+      eventStore.streams.get({
+        name: 'digests'
+      }, function(err, resp) {
+        if (err) {
+          return res.sendGenericError();
+        } else if (resp && resp.statusCode === 408) {
+          return res.sendGenericError('Trouble communicating with eventstore.');
+        } else if (resp.statusCode == 404) {
+          var response = hypermediaResponse.digestsGET(href);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        } else {
+          var data = JSON.parse(resp.body);
+          var digests = _.map(data.entries, function(entry) {
+            return entry.content.data;
+          });
+          var response = hypermediaResponse.digestsGET(href, digests);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        }
+      });
+    });
+
+    /* ASYNC VERSION
+    app.get('/api/digests', bodyParser.json(), function(req, res) {
+      var href = urls.href(req);
+      eventStore.streams.getAsync({name:'digests'})
       .then(function(response) {
         if (response.statusCode === 404) {
           var result = hypermediaResponse.digestsGET(href);
