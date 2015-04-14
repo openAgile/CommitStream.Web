@@ -1,5 +1,5 @@
 (function(instancesController) {
-    var config = require('../config'),
+  var config = require('../config'),
     instanceAdded = require('./events/instanceAdded'),
     eventStore = require('./helpers/eventStoreClient'),
     validator = require('validator');
@@ -38,9 +38,9 @@
       eventStore.postToStream(args)
         .then(function() {
           var hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent.data);
-          setTimeout(function() {
-            res.hal(hypermedia, 201);
-          }, config.controllerResponseDelay);
+          // setTimeout(function() {
+          res.hal(hypermedia, 201);
+          // }, config.controllerResponseDelay);
         });
     });
 
