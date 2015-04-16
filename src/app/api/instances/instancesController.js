@@ -1,10 +1,4 @@
 (function(instancesController) {
-  var config = require('../../config'),
-    instanceAdded = require('../events/instanceAdded'),
-    instanceFormatAsHal = require('./instanceFormatAsHal'),
-    eventStore = require('../helpers/eventStoreClient'),
-    validator = require('validator');
-
   instancesController.init = function(app) {
     app.post('/api/instances', require('./instanceCreate'));
 
