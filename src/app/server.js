@@ -6,6 +6,7 @@ var express = require('express'),
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
   csError = require('./middleware/csError'),
+  instanceAuthenticator = require('./middleware/instanceAuthenticator'),
   appConfigure = require('./middleware/appConfigure'),
   Promise = require('bluebird'),
   domainMiddleware = require('express-domain-middleware')
@@ -48,6 +49,9 @@ app.use(express.static(__dirname + '/client'));
 app.get('/instances', function(req, res) {
   res.render('instances');
 });
+
+// Ensure that all routes with :instanceId parameters are properly authenticated
+app.param('instanceId', instanceAuthenticator);
 
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.
