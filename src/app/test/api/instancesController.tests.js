@@ -23,13 +23,15 @@ var instanceAdded = {
     create: sinon.stub()
   },
   eventStore = {
-    postToStream: sinon.stub()
-  };
+    postToStream: sinon.stub().resolves()
+  },
+  instanceFormatAsHal = sinon.stub(); 
 
 // Configure up the controller use proxyquire
 var controller = proxyquire('../../api/instancesController', {
   './events/instanceAdded': instanceAdded,
-  './helpers/eventStoreClient': eventStore
+  './helpers/eventStoreClient': eventStore,
+  './instances/instanceFormatAsHal': instanceFormatAsHal
 });
 
 // Configure chai
@@ -39,10 +41,7 @@ chai.config.includeStack = true;
 // Initialize the controller with express
 controller.init(app);
 
-var postInstance = function(payload, shouldBehaveThusly, contentType) {
-  if (!contentType) {
-    contentType = 'application/json';
-  }
+var postInstance = function(shouldBehaveThusly) {
   request(app)
     .post('/api/instances')
     .end(shouldBehaveThusly);
@@ -77,8 +76,7 @@ describe('instancesController', function() {
 
       instanceAdded.create.returns(instanceAddedEvent);
 
-      postInstance({}, function(err, res) {
-        console.log('---------------- response -----------------')
+      postInstance(function(err, res) {
         console.log(res.text)
         response = res;
         done();
@@ -90,12 +88,17 @@ describe('instancesController', function() {
       instanceAdded.create.should.have.been.calledOnce;
     });
 
-    it('it should pass appropriate params when posting to the eventStore stream', function() {
+    it('it should pass correct args when posting to the eventStore stream', function() {
       eventStore.postToStream.should.have.been.calledWith(args)
     });
 
+    it('it should pass correct args when calling instanceFormatAsHal function', function() {
+      instanceFormatAsHal.should.have.been.calledWith(sinon.match.func, instanceAddedEvent.data);
+    });
+
+
     it('it should call res.hal', function() {
-      // response.hal.should.have.been.calledOnce;
+      //response.hal.should.have.been.calledOnce;
     });
 
 
