@@ -1,6 +1,5 @@
 (function(digestsController) {
-  var uuid = require('uuid-v4'),
-    config = require('../config'),
+  var config = require('../config'),
     validator = require('validator'),
     hypermediaResponse = require('./hypermediaResponse'),
     digestAdded = require('./events/digestAdded'),
@@ -35,23 +34,9 @@
   }
 
   digestsController.init = function(app) {
-
-    /**
-     * The hypermedia to creating a digest will have links (see _links below) to other resources
-     * that are a result of having created a digest. Those links are identified for documentation
-     * purposes via their rel value.
-     *
-     * @api {post} /api/digest Create a new digest
-     * @apiName digest
-     *
-     * @apiSuccess {String} id - Id of the digest created.
-     * @apiSuccess {String} digestUrl - The url of the digest created.
-     * @apiSuccess {Array[Object]} _links - Links to other resources as a result of creating a digest.
-     *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
-     **/
     app.post('/api/:instanceId/digests', bodyParser.json(), function(req, res) {
+      //TODO: do not repeat this
       var contentType = req.get('Content-Type');
-
       if (!contentType || contentType.toLowerCase() !== 'application/json') {
         res.status(415).send('When creating a digest, you must send a Content-Type: application/json header.');
         return;
@@ -101,7 +86,7 @@
         });
     });
 
-    app.get('/api/:instanceId/digests/:uuid', function(req, res, next) {
+    app.get('/api/digests/:uuid', function(req, res, next) {
       var href = urls.href(req);
       if (!validator.isUUID(req.params.uuid)) {
         res.status(400).send('The value "' + req.params.uuid + '" is not recognized as a valid digest identifier.');
