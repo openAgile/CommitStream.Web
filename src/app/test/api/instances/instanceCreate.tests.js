@@ -27,25 +27,16 @@ describe('instanceCreate', function() {
         response;
 
     before(function() {
-      var eventId = uuid();
-      var instanceId = uuid();
-      var apiKey = uuid();
-
       instanceAddedEvent = {
-        eventType: 'InstanceAdded',
-        eventId: eventId,
-        data: {
-          instanceId: instanceId,
-          apiKey: apiKey,
-        }
+        data: {}
       };
+      
+      instanceAdded.create.returns(instanceAddedEvent);
 
       args = {
         name: 'instances',
         events: instanceAddedEvent
       };
-
-      instanceAdded.create.returns(instanceAddedEvent);
 
       formattedInstance = {};
       instanceFormatAsHal.returns(formattedInstance);
