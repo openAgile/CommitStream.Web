@@ -35,7 +35,8 @@
     "ttl-cache": "^1.0.2",
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
-    "validator": "^3.22.1"
+    "validator": "^3.22.1",
+    "node-mocks-http": "^1.4.1"
   },
   "devDependencies": {
     "traceur": "^0.0.66"

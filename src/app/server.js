@@ -54,7 +54,7 @@ app.get('/instances', function(req, res) {
 appConfigure(app);
 
 // TODO: move this after we remove the apiKey global middleware
-require('./api/instancesController').init(app);
+require('./api/instances/instancesController').init(app);
 app.use(apikey);
 
 app.use(function(req, res, next) {
