@@ -254,12 +254,6 @@ describe('digestsController', function() {
         });
       });
 
-      it('it should reject the request and return a meaningful error message.', function(done) {
-        postDigest(data, function(err, res) {
-          res.text.should.equal('A digest description cannot contain script tags or HTML.');
-          done();
-        });
-      });
     });
 
     describe('with HTML tags in the description', function() {
@@ -273,12 +267,6 @@ describe('digestsController', function() {
         });
       });
 
-      it('it should reject a request and return a meaningful error message.', function(done) {
-        postDigest(data, function(err, res) {
-          res.text.should.equal('A digest description cannot contain script tags or HTML.');
-          done();
-        });
-      });
     });
 
     describe('with a zero length description', function() {
@@ -294,15 +282,6 @@ describe('digestsController', function() {
           });
         });
 
-        it('it should reject a request and return a meaningful error message.', function(done) {
-          var data = {
-            description: ''
-          };
-          postDigest(data, function(err, res) {
-            res.text.should.equal('A digest description must contain a value.');
-            done();
-          });
-        });
       });
 
       describe('where description is null as a value', function() {
@@ -316,15 +295,6 @@ describe('digestsController', function() {
           });
         });
 
-        it('should reject a request and return a meaningful error message.', function(done) {
-          var data = {
-            description: null
-          };
-          postDigest(data, function(err, res) {
-            res.text.should.equal('A digest description must not be null.');
-            done();
-          });
-        });
       });
 
       describe('where description does not exist in the json payload', function() {
@@ -334,13 +304,6 @@ describe('digestsController', function() {
         it('should reject a request and return a 400 status code.', function(done) {
           postDigest(data, function(err, res) {
             res.statusCode.should.equal(400);
-            done();
-          });
-        });
-
-        it('should reject a request and return a meaningful error message.', function(done) {
-          postDigest(data, function(err, res) {
-            res.text.should.equal('A digest must contain a description.');
             done();
           });
         });
@@ -359,40 +322,8 @@ describe('digestsController', function() {
         });
       });
 
-      it('it should reject a request and return a meaningful error message.', function(done) {
-        postDigest(data, function(err, res) {
-          res.text.should.equal('A digest description cannot contain more than 140 characters. The description you submitted contains 141 characters.');
-          done();
-        });
-      });
     });
 
-    // describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when posting to eventstore', function() {
-    //   var digestDescription = {
-    //     description: 'myfirstdigest'
-    //   };
-    //   var response;
-
-    //   before(function() {
-    //     eventStoreClient.postToStream.resolves({
-    //       statusCode: 408
-    //     });
-
-    //     postDigest(digestDescription, function(err, res) {
-    //       response = res;
-    //     });
-    //   });
-
-    //   it('it should report that there is an internal problem', function(done) {
-    //     shouldBeGenericError(response);
-    //     done();
-    //   });
-
-    //   it('it should report a status code of 500 (Internal Server Error)', function(done) {
-    //     response.status.should.equal(500);
-    //     done();
-    //   });
-    // });
   });
 
   /********************************************
