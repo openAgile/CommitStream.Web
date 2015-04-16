@@ -5,7 +5,7 @@
     digestAdded = require('./events/digestAdded'),
     eventStore = require('./helpers/eventStoreClient'),
     bodyParser = require('body-parser'),
-    sanitize = require('sanitize-html'),
+    sanitize = require('./sanitizer').sanitize,
     urls = require('./urls'),
     _ = require('underscore');
 
@@ -43,30 +43,26 @@
       }
 
       //TODO: don't leave this here
-      function hasErrors(errors) {
-        return errors.length > 0;
-      }
-
-      function sendErrors(errors) {
-        res.status(400).json({
-          errors: errors
-        });
+      function canSendErrors(errors) {
+        if (errors.length > 0) {
+          res.status(400).json({
+            errors: errors
+          });
+          return true;
+        }
+        return false;
       }
 
       var href = urls.href(req);
       var instanceId = req.params.instanceId;
 
-      // var description = sanitize(req.body.description, {
-      //   allowedTags: []
-      // });
-      // if (originalDescription !== description) {
-      //   res.status(400).send('A digest description cannot contain script tags or HTML.');
-      //   return;
-      // }
+      var errors = sanitize('digest', req.body, ['description']);
+      if (canSendErrors(errors)) {
+        return;
+      }
 
       var errors = digestAdded.validate(req.body);
-      if (hasErrors(errors)) {
-        sendErrors(errors);
+      if (canSendErrors(errors)) {
         return;
       }
 
