@@ -12,11 +12,12 @@ var chai = require('chai'),
   uuid = require('uuid-v4');
 
 // /* We must provide some dummy values here for the module: */
-// var config = require('../../config');
-// config.eventStorePassword = '123';
-// config.eventStoreUser = 'admin';
-// config.eventStoreBaseUrl = 'http://nothing:7887';
-// Things that proxyquire will use.
+var config = require('../../config');
+config.eventStorePassword = '123';
+config.eventStoreUser = 'admin';
+config.eventStoreBaseUrl = 'http://nothing:7887';
+
+//Things that proxyquire will use.
 
 var instanceAdded = {
     create: sinon.stub()
@@ -44,8 +45,6 @@ var postInstance = function(payload, shouldBehaveThusly, contentType) {
   }
   request(app)
     .post('/api/instances')
-    .send(JSON.stringify(payload))
-    .type(contentType)
     .end(shouldBehaveThusly);
 };
 
