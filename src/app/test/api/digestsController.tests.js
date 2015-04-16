@@ -566,12 +566,12 @@ describe('digestsController', function() {
       //   });
       // });
 
-      it('it returns a meaningful error message', function(done) {
-        get(function(err, res) {
-          shouldBeGenericError(res);
-          done();
-        });
-      });
+      // it('it returns a meaningful error message', function(done) {
+      //   get(function(err, res) {
+      //     shouldBeGenericError(res);
+      //     done();
+      //   });
+      // });
     });
 
     describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting information from eventstore', function() {
