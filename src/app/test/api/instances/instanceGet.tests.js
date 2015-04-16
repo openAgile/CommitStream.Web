@@ -92,9 +92,7 @@ describe('instanceGet', function() {
 
   });
 
-});
-
-describe('when getting an instance with an invalid instanceId it', function() {
+  describe('when getting an instance with an invalid instanceId it', function() {
     var request,
         response;    
 
@@ -118,4 +116,6 @@ describe('when getting an instance with an invalid instanceId it', function() {
       
     });
     */
+  });
+
 });
