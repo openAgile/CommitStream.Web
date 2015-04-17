@@ -110,16 +110,6 @@ describe('digestsController', function() {
       eventStoreClient.streams.post.callsArgWith(1, null, "ignored response");
     });
 
-    //TODO: shouldn't this be inside another describe?
-    // it('it should use proper arguments when creating hypermedia.', function(done) {
-    //   postDigest({
-    //     description: 'Yay!'
-    //   }, function(err, res) {
-    //     hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
-    //     done();
-    //   });
-    // });
-
     it('it should create the DigestAdded event.', function(done) {
       var digestDescription = {
         description: 'myfirstdigest'
@@ -161,14 +151,6 @@ describe('digestsController', function() {
     });
 
     describe('with valid inputs', function() {
-      // it('it should use proper arguments when creating hypermedia.', function(done) {
-      //   postDigest({
-      //     description: 'Yay!'
-      //   }, function(err, res) {
-      //     hypermediaResponseStub.digests.POST.should.have.been.calledWith(sinon.match.func, digestAddedEvent.data.digestId);
-      //     done();
-      //   });
-      // });
 
       it('it should create the DigestAdded event.', function(done) {
         var digestDescription = {
@@ -489,20 +471,6 @@ describe('digestsController', function() {
           done();
         });
       });
-
-      // it('returns a Content-Type of application/json', function(done) {
-      //   get(function(err, res) {
-      //     res.get('Content-Type').should.equal('application/json; charset=utf-8');
-      //     done();
-      //   });
-      // });
-
-      // it('it returns a meaningful error message', function(done) {
-      //   get(function(err, res) {
-      //     shouldBeGenericError(res);
-      //     done();
-      //   });
-      // });
     });
 
     describe('and there is an HTTP timeout of 408 (Request Timeout) that occurs when getting information from eventstore', function() {
@@ -1065,7 +1033,5 @@ describe('digestsController', function() {
       });
 
     });
-
   });
-
 });
