@@ -1,0 +1,4 @@
+Action,apiKey,Digest created,Status code,Message,Header,Element 1,Element 2,Element 3,Element 4,Element 5
+GET,32527e4a-e5ac-46f5-9bad-2c9b7d607bd7,Yes,200,OK,Content-Type: application/hal+json,self link href (requery),digest count (int),embedded: self link to each digest for that api key,embedded: digest of each id for that api key,embedded: description of each digest for that api key
+GET,none,Yes,200,OK,,,,,,
+GET,32527e4a-e5ac-46f5-9bad-2c9b7d607bd7,Yes,200,OK,,,,,,
