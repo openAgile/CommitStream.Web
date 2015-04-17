@@ -6,6 +6,7 @@ var express = require('express'),
   validation = require('./configValidation'),
   csError = require('./middleware/csError'),
   instanceAuthenticator = require('./middleware/instanceAuthenticator'),
+  apiRoutesRequireContentTypeAppJson = require('./middleware/apiRoutesRequireContentTypeAppJson'),
   appConfigure = require('./middleware/appConfigure'),
   Promise = require('bluebird'),
   domainMiddleware = require('express-domain-middleware');
@@ -56,13 +57,17 @@ app.param('instanceId', instanceAuthenticator);
 // Think thrice.
 appConfigure(app);
 
-// TODO: move this after we remove the apiKey global middleware
-require('./api/instances/instancesController').init(app);
-
+// Return a URL as a special header for each request
 app.use(function(req, res, next) {
   res.setHeader("X-CommitStream-API-Docs", "https://github.com/openAgile/CommitStream.Web");
   return next();
 });
+
+// This must happen here, before we cover additional routes with Content-Type validation
+require('./api/instances/instancesController').init(app);
+
+// Ensure all API routes have consistent Content-Type validation
+app.all('/api/*', apiRoutesRequireContentTypeAppJson);
 
 // Map API the routes
 api.init(app);
