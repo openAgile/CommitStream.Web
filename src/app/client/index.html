@@ -27,10 +27,10 @@ $(function() {
       return null;
   }
 
-  var key = getQueryVariable('key');
+  var apiKey = getQueryVariable('apiKey');
   var digestId = getQueryVariable('digestId');
-  if (!key) {
-    alert('Must specify API key in the form of key=<apikey> as a query string parameter');
+  if (!apiKey) {
+    alert('Must specify API key in the form of apiKey=<apikey> as a query string parameter');
   }
   var workitem = getQueryVariable('workitem');
 
@@ -38,7 +38,7 @@ $(function() {
     $('#commits').html('<div class="commitStream-TR-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
   }
 
-  $.getScript('app?key=' + key,
+  $.getScript('app?apiKey=' + apiKey,
     function(data, status, jqxhr) {
       CommitStream.commitsDisplay('#commits', workitem, handleError, digestId);
     });
