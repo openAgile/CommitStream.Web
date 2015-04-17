@@ -1,5 +1,5 @@
 (function() {
-  var instanceAdded = require('../events/instanceAdded'),
+  var instanceAdded = require('./instanceAdded'),
   instanceFormatAsHal = require('./instanceFormatAsHal'),
   eventStore = require('../helpers/eventStoreClient');
 
