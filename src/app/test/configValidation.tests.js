@@ -10,7 +10,6 @@ describe('configValidation', function() {
   //set configStub values that will make all test pass
   beforeEach(function() {
     configStub.protocol = 'https';
-    configStub.apiKey = '0123456789012345678901234567890123456789';
     configStub.eventStorePassword = 'F9168C5E-CEB2-4faa-B6BF-329BF39FA1E4';
     configStub.eventStoreUser = 'admin';
     configStub.eventStoreBaseUrl = 'https://localhost:2113/';
@@ -36,59 +35,7 @@ describe('configValidation', function() {
       expect(configValidation.validateConfig).to.not.throw(Error);
       done();
     });
-  });
-
-  describe('validateApiKeyIsSet', function() {
-    var errorObj = {
-      error: 'error.fatal.config.apiKey.invalid',
-      message: 'The config.apiKey value is not set. Please set it to a string.'
-    };
-
-    it('should raise an exception when the apiKey is not set.', function(done) {
-      configStub.apiKey = undefined;
-      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
-      done();
-    });
-
-    it('should raise an exception when the apiKey is an empty string.', function(done) {
-      configStub.apiKey = '';
-      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
-      done();
-    });
-
-  });
-
-  describe('validateApiKeyLength', function() {
-
-    var errorObj = {
-      error: 'error.fatal.config.apiKey.invalid',
-      message: 'The config.apiKey value is set to a value containing fewer than 36 characters.' +
-        'Please set it to a string containing at least 36 characters.'
-    };
-
-    it('should raise an exception when the apiKey is less than 36 characters long.', function(done) {
-      // 35 characters long
-      configStub.apiKey = '01234567890123456789012345678901234';
-      expect(configValidation.validateConfig).to.throw(JSON.stringify(errorObj));
-      done();
-    });
-
-    //updated by SMA
-    it('should NOT raise an exception when the apiKey is more than 36 characters long.', function(done) {
-      // 40 characters long
-      configStub.apiKey = '0123456789012345678901234567890123456789';
-      expect(configValidation.validateConfig).to.not.throw(Error);
-      done();
-    });
-
-    //added by SMA
-    it('should NOT raise and exception when the apiKey is equal to 36 characters in length.', function(done) {
-      // 36 characters long
-      configStub.apiKey = 'jklkifshe543890qwe345790lkjsh9123456';
-      expect(configValidation.validateConfig).to.not.throw(Error);
-      done();
-    });
-  });
+  });  
 
   describe('validateEventStorePasswordIsSet', function(done) {
 

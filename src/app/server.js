@@ -1,11 +1,22 @@
 var express = require('express'),
   app = express(),
   cors = require('cors'),
-  config = require('./config'),
-  apikey = require('./apikey'),
+  config = require('./config'),  
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
-  appConfigure = require('./middleware/appConfigure');
+  csError = require('./middleware/csError'),
+  instanceAuthenticator = require('./middleware/instanceAuthenticator'),
+  appConfigure = require('./middleware/appConfigure'),
+  Promise = require('bluebird'),
+  domainMiddleware = require('express-domain-middleware')
+
+// DO NOT MOVE THIS. It is here to wrap routes in a domain to catch unhandled errors
+app.use(domainMiddleware);
+
+// DO NOT MOVE THIS. It is here to handle unhandled rejected Promises cleanly
+Promise.onPossiblyUnhandledRejection(function(err){
+  throw err;
+});
 
 validation.validateConfig();
 validation.validateEventStore(function(error) {
@@ -38,10 +49,15 @@ app.get('/instances', function(req, res) {
   res.render('instances');
 });
 
+// Ensure that all routes with :instanceId parameters are properly authenticated
+app.param('instanceId', instanceAuthenticator);
+
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.
 appConfigure(app);
-app.use(apikey);
+
+// TODO: move this after we remove the apiKey global middleware
+require('./api/instances/instancesController').init(app);
 
 app.use(function(req, res, next) {
   res.setHeader("X-CommitStream-API-Docs", "https://github.com/openAgile/CommitStream.Web");
@@ -50,6 +66,9 @@ app.use(function(req, res, next) {
 
 // Map API the routes
 api.init(app);
+
+// DO NOT MOVE THIS. It must be here to catch unhandled errors.
+app.use(csError.errorHandler);
 
 app.get('/app', function(req, res) {
   res.setHeader('content-type', 'application/javascript');

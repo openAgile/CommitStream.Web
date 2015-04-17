@@ -104,6 +104,7 @@
           partition: 'digest-' + req.params.uuid
         }, function(err, resp) {
           if (err) {
+            // throw err;
             return res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
             return res.sendGenericError('Trouble communicating with eventstore');
@@ -249,5 +250,26 @@
       });
     });
 
+    /* ASYNC VERSION
+    app.get('/api/digests', bodyParser.json(), function(req, res) {
+      var href = urls.href(req);
+      eventStore.streams.getAsync({name:'digests'})
+      .then(function(response) {
+        if (response.statusCode === 404) {
+          var result = hypermediaResponse.digestsGET(href);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(result);
+        } else {
+          var data = JSON.parse(response.body);
+          var digests = _.map(data.entries, function(entry) {
+            return entry.content.data;
+          });
+          var response = hypermediaResponse.digestsGET(href, digests);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        }
+      });
+    });
+    */
   };
 })(module.exports);
