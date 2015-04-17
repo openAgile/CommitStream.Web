@@ -1,8 +1,7 @@
 var express = require('express'),
   app = express(),
   cors = require('cors'),
-  config = require('./config'),
-  apikey = require('./apikey'),
+  config = require('./config'),  
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
   csError = require('./middleware/csError'),
@@ -59,7 +58,6 @@ appConfigure(app);
 
 // TODO: move this after we remove the apiKey global middleware
 require('./api/instances/instancesController').init(app);
-app.use(apikey);
 
 app.use(function(req, res, next) {
   res.setHeader("X-CommitStream-API-Docs", "https://github.com/openAgile/CommitStream.Web");
