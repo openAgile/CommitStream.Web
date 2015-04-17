@@ -12,7 +12,7 @@ var instanceAdded = {
 
 // Configure up the controller use proxyquire
 var handler = proxyquire('../../api/instances/instanceCreate', {
-  '../events/instanceAdded': instanceAdded,
+  './instanceAdded': instanceAdded,
   './instanceFormatAsHal': instanceFormatAsHal,
   '../helpers/eventStoreClient': eventStore
 });

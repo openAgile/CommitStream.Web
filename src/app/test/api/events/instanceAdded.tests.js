@@ -4,7 +4,7 @@ var chai = require('chai'),
   proxyquire = require('proxyquire'),
   sinon = require('sinon'),
   uuidStub = sinon.stub(),
-  instanceAdded = proxyquire('../../../api/events/instanceAdded', {
+  instanceAdded = proxyquire('../../../api/instances/instanceAdded', {
     'uuid-v4': uuidStub
   });
 
