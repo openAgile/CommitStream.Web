@@ -41,7 +41,7 @@ describe('instanceCreate', function() {
       formattedInstance = {};
       instanceFormatAsHal.returns(formattedInstance);
 
-      var request  = httpMocks.createRequest({
+      request  = httpMocks.createRequest({
         method: 'POST',
         url: '/api/instances'
       });
@@ -72,7 +72,7 @@ describe('instanceCreate', function() {
     });
 
     it('should call instanceFormatAsHal with correct args', function() {
-      instanceFormatAsHal.should.have.been.calledWith(sinon.match.func, instanceAddedEvent.data);
+      instanceFormatAsHal.should.have.been.calledWith(request.href, instanceAddedEvent.data);
     });
 
     it('should call res.hal with correct args', function() {
