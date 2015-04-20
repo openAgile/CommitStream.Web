@@ -21,6 +21,28 @@
     };
   };
 
+  var StreamNotFound = csError.createCustomError('StreamNotFound', function(message) {
+    message = message || 'Stream not found';
+    var errors = [message];
+    StreamNotFound.prototype.constructor.call(this, errors, 404);
+  });
+  csError.StreamNotFound = StreamNotFound;
+  
+  statusCodeValidator.validateGetStream = function(streamName) {
+    return function(response) {
+      if (!response.body || response.body.length < 1 || response.statusCode === 404) {
+        // TODO handle ***UNKNOWN** with 200 status code
+        throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
+      } else if (response.statusCode != 200) {
+        throw new Error(response.statusCode);
+      } else {
+        var data = JSON.parse(response.body);
+        return data;
+      }
+    };
+  };
+
+
   // TODO: should we handle 408 using this specific failure in each case
   var EventStoreClusterFailure = csError.createCustomError('EventStoreClusterFailure', function() {
     EventStoreClusterFailure.prototype.constructor.call(this, null, 500, 'Trouble communicating with eventstore.');
