@@ -1,11 +1,11 @@
 ﻿global.streamResult = [];
 global.events = [];
 
-global.setEvents = function (events) {
+global.setEvents = function(events) {
     global.events = events;
 };
 
-global.getEvents = function () {
+global.getEvents = function() {
     return global.events;
 };
 
@@ -19,22 +19,22 @@ global.getEventsByType = function(eventType) {
     return events;
 };
 
-global.getStream = function (name) {
+global.getStream = function(name) {
     return streamResult[name];
 };
 
 global.getStreamsInCategoryCount = function(category) {
     var streamsInCategory = [];
-    for(var streamName in streamResult) {
+    for (var streamName in streamResult) {
         if (streamName.indexOf(category) === 0) streamsInCategory.push(streamName);
     }
     return streamsInCategory.length;
 };
 
-global.fromStream = function (streamSource) {
+global.fromStream = function(streamSource) {
     return {
         when: function(eventSpec) {
-            for(var eventType in eventSpec) {
+            for (var eventType in eventSpec) {
                 var callback = eventSpec[eventType];
                 var evts = getEventsByType(eventType);
                 evts.forEach(function(evt) {
@@ -42,8 +42,8 @@ global.fromStream = function (streamSource) {
                 });
             }
         },
-        whenAny: function (callback) {
-            getEvents().forEach(function (element) {
+        whenAny: function(callback) {
+            getEvents().forEach(function(element) {
                 callback(null, element);
             });
         }
@@ -51,16 +51,16 @@ global.fromStream = function (streamSource) {
 };
 
 global.fromCategory = function(streamSource) {
-  return {
-    whenAny: function(callback) {
-      getEvents().forEach(function(element) {
-        callback(null, element);
-      });
+    return {
+        whenAny: function(callback) {
+            getEvents().forEach(function(element) {
+                callback(null, element);
+            });
+        }
     }
-  }
 }
 
-global.linkTo = function (name, value) {
+global.linkTo = function(name, value) {
     if (streamResult[name])
         streamResult[name].push(value);
     else {
@@ -68,7 +68,7 @@ global.linkTo = function (name, value) {
     }
 };
 
-global.emit = function (name, type, value) {
+global.emit = function(name, type, value) {
     if (streamResult[name])
         streamResult[name].push(value);
     else {
