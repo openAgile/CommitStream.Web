@@ -37,5 +37,14 @@
       .then(statusCodeValidator.validateStreamsPost);
   };
 
+  client.getFromStream = function(args) {
+    var getArgs = {
+      name: args.name
+    };
+
+    return client.streams.getAsync(getArgs)
+      .then(statusCodeValidator.validateGetStream(args.name));
+  };
+
   module.exports = client;
 })();
