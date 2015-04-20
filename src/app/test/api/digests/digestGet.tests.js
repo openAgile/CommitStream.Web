@@ -1,60 +1,30 @@
 require('../handler-base')();
 
-// Things that proxyquire will use.
-var eventStore = {
-    queryStatePartitionById: sinon.stub().resolves()
-  },
-  digestFormatAsHal = sinon.stub(),
-  validateUUID = sinon.spy();
-
-// Configure up the controller use proxyquire
-var handler = proxyquire('../../api/digests/digestGet', {
-  './digestFormatAsHal': digestFormatAsHal,
-  '../helpers/eventStoreClient': eventStore,
-  '../validateUUID': validateUUID
-});
+function createHandler(digestFormatAsHal, eventStore, validateUUID) {
+  return proxyquire('../../api/digests/digestGet', {
+    './digestFormatAsHal': digestFormatAsHal,
+    '../helpers/eventStoreClient': eventStore,
+    '../validateUUID': validateUUID
+  });
+}
 
 describe('digestGet', function() {
-  describe('when getting a digest with an invalid, non-uuid digest identifier it', function() {
-    var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
-      response,
-      request,
-      digestId;
-
-    before(function() {
-      digestId = 'aVeryBadDigestId';
-
-      request = httpMocks.createRequest({
-        method: 'GET',
-        url: '/api/' + instanceId + '/digests/' + digestId,
-        body: {
-          description: 'My first Digest.'
-        },
-        params: {
-          digestId: digestId
-        }
-      });
-
-      response = httpMocks.createResponse();
-      response.hal = sinon.spy();
-
-      validator.isUUID.returns(false);
-
-      handler(request, response);
-    });
-
-    it('should call validateUUID with appropriate arguments.', function() {
-      validateUUID.should.be.calledWith('digests', digestId);
-    });
-  });
 
   describe('with a valid, uuid digest identifier it', function() {
     var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
       request,
       digestId;
 
+    var eventStore = {
+        queryStatePartitionById: sinon.stub().resolves({})
+      },
+      digestFormatAsHal = sinon.stub(),
+      validateUUID = sinon.spy();
+
     before(function() {
-      eventStore.queryStatePartitionById.reset();
+
+      formattedDigest = {};
+      digestFormatAsHal.returns(formattedDigest);
 
       digestId = 'aFakeId';
 
@@ -72,7 +42,11 @@ describe('digestGet', function() {
       response = httpMocks.createResponse();
       response.hal = sinon.spy();
 
-      handler(request, response);
+      createHandler(digestFormatAsHal, eventStore, validateUUID)(request, response);
+    });
+
+    it('should call validateUUID with appropriate arguments.', function() {
+      validateUUID.should.be.calledWith('digests', digestId);
     });
 
     it('calls eventStore.queryStatePartitionById with correct parameters', function() {
@@ -80,6 +54,10 @@ describe('digestGet', function() {
         name: 'digest',
         id: request.params.digestId
       });
+    });
+
+    it('should call digestFormatAsHal once', function() {
+      digestFormatAsHal.should.have.been.calledOnce;
     });
 
   });
@@ -99,15 +77,6 @@ describe('digestGet', function() {
   //       getDigest('/api/e9be4a71-f6ca-4f02-b431-d74489dee5d0/digests/' + uuid, shouldBehaveThusly);
   //     }
 
-  //     it('calls eventStore.queryStatePartitionById with correct parameters', function(done) {
-  //       get(function(err, res) {
-  //         eventStoreClient.queryStatePartitionById.should.have.been.calledWith({
-  //           name: sinon.match.any,
-  //           id: uuid
-  //         });
-  //         done();
-  //       });
-  //     });
 
   // // MIGHT NOT BE NEEDED
   //     /*it('calls hypermediaResponse.digestGET with correct parameters', function(done) {
