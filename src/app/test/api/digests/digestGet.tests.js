@@ -1,56 +1,53 @@
 require('../handler-base')();
 
 // Things that proxyquire will use.
-
 var eventStore = {
-    queryStatePartitionById: sinon.stub()
+    queryStatePartitionById: sinon.stub().resolves()
   },
   digestFormatAsHal = sinon.stub(),
-  validator = {
-    isUUID: sinon.stub()
-  };
-
+  validateUUID = sinon.spy();
 
 // Configure up the controller use proxyquire
 var handler = proxyquire('../../api/digests/digestGet', {
   './digestFormatAsHal': digestFormatAsHal,
   '../helpers/eventStoreClient': eventStore,
-  'validator': validator
+  '../validateUUID': validateUUID
 });
 
-
-
 describe('digestGet', function() {
+  describe('when getting a digest with an invalid, non-uuid digest identifier it', function() {
+    var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
+      response,
+      request,
+      digestId;
 
-  before(function() {
+    before(function() {
+      digestId = 'aVeryBadDigestId';
 
-  })
+      request = httpMocks.createRequest({
+        method: 'GET',
+        url: '/api/' + instanceId + '/digests/' + digestId,
+        body: {
+          description: 'My first Digest.'
+        },
+        params: {
+          digestId: digestId
+        }
+      });
 
-  it('it should run', function() {
-    console.log('-------------------------------- it runs')
+      response = httpMocks.createResponse();
+      response.status = sinon.spy();
+      response.hal = sinon.spy();
 
-  })
+      validator.isUUID.returns(false);
 
+      handler(request, response);
+    });
 
-  //   describe('with an invalid, non-uuid digest identifier', function() {
-  //     function get(shouldBehaveThusly) {
-  //       getDigest('/api/e9be4a71-f6ca-4f02-b431-d74489dee5d0/digests/not_a_uuid', shouldBehaveThusly);
-  //     }
-
-  //     it('it returns a 400 status code', function(done) {
-  //       get(function(err, res) {
-  //         res.statusCode.should.equal(400);
-  //         done();
-  //       });
-  //     });
-
-  //     it('it returns a meaningful error message', function(done) {
-  //       get(function(err, res) {
-  //         res.text.should.equal('The value "not_a_uuid" is not recognized as a valid digest identifier.');
-  //         done();
-  //       });
-  //     });
-  //   });
+    it('should call validateUUID with appropriate arguments.', function() {
+      validateUUID.should.be.calledWith('digests', digestId);
+    });
+  });
 
   //   describe('with a valid, uuid digest identifier', function() {
 
