@@ -36,7 +36,6 @@ describe('digestGet', function() {
       });
 
       response = httpMocks.createResponse();
-      response.status = sinon.spy();
       response.hal = sinon.spy();
 
       validator.isUUID.returns(false);
@@ -49,7 +48,41 @@ describe('digestGet', function() {
     });
   });
 
-  //   describe('with a valid, uuid digest identifier', function() {
+  describe('with a valid, uuid digest identifier it', function() {
+    var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
+      request,
+      digestId;
+
+    before(function() {
+      eventStore.queryStatePartitionById.reset();
+
+      digestId = 'aFakeId';
+
+      request = httpMocks.createRequest({
+        method: 'GET',
+        url: '/api/' + instanceId + '/digests/' + digestId,
+        body: {
+          description: 'My first Digest.'
+        },
+        params: {
+          digestId: digestId
+        }
+      });
+
+      response = httpMocks.createResponse();
+      response.hal = sinon.spy();
+
+      handler(request, response);
+    });
+
+    it('calls eventStore.queryStatePartitionById with correct parameters', function() {
+      eventStore.queryStatePartitionById.should.be.calledWith({
+        name: 'digest',
+        id: request.params.digestId
+      });
+    });
+
+  });
 
   //     var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
   //     var data = {
