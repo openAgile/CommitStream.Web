@@ -2,7 +2,8 @@
   var validateUUID = require('../validateUUID'),
     eventStore = require('../helpers/eventStoreClient'),
     translator = require('../translators/githubTranslator'),
-    commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal');
+    commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal'),
+    githubValidator = require('../helpers/githubValidator');
 
   module.exports = function(req, res) {
     var inboxId = req.params.inboxId;
@@ -15,19 +16,27 @@
       name: 'inbox',
       id: inboxId
     };
-    //TODO: add a module that validates github headers
+
     eventStore.queryStatePartitionById(args)
-      .then(function(inbox) { //let's pretend for the moment this is a x-github-event push
+      .then(function(inbox) {
         digestId = inbox.digestId;
-        var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
-        var e = JSON.stringify(events);
+        return githubValidator(req.headers);
+      })
+      .then(function(eventType) {
+        if (eventType === 'push') {
+          var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
+          var e = JSON.stringify(events);
 
-        var postArgs = {
-          name: 'inboxCommits-' + inboxId,
-          events: e
-        };
-
-        return eventStore.postToStream(postArgs);
+          var postArgs = {
+            name: 'inboxCommits-' + inboxId,
+            events: e
+          };
+          return eventStore.postToStream(postArgs);
+        } else if (eventType === 'ping') {
+          res.status(200).send({
+            message: 'Pong.'
+          });
+        }
       })
       .then(function() {
         var inboxData = {
