@@ -8,7 +8,6 @@ var eventStore = {
   instanceFormatAsHal = sinon.stub(),
   validateUUID = sinon.stub();
 
-// Configure up the controller use proxyquire
 var handler = proxyquire('../../api/instances/instanceGet', {
   './instanceFormatAsHal': instanceFormatAsHal,
   '../helpers/eventStoreClient': eventStore,
