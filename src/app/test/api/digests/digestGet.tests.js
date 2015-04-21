@@ -66,8 +66,7 @@ describe('digestGet', function() {
 
     it('should call res.hal with correct arguments.', function() {
       response.hal.should.have.been.calledWith(formattedDigestStub, 200);
-    })
-
+    });
   });
 
   //     var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
@@ -86,7 +85,7 @@ describe('digestGet', function() {
   //     }
 
 
-  // // MIGHT NOT BE NEEDED
+  // // MIGHT NOT BE NEEDED - PROBABLY, NOT, WAS REPLACED WITH response.hal.should.have.been.calledWith(formattedDigestStub, 200);
   //     /*it('calls hypermediaResponse.digestGET with correct parameters', function(done) {
   //         get(function(err, res) {
   //           hypermediaResponseStub.digestGET.should.have.been.calledWith(
@@ -96,6 +95,7 @@ describe('digestGet', function() {
   //         });
   //       });*/
 
+  // WE SHOULD BE GOOD HERE, CALLING RESPONSE.HAL WITH A 200
   //     it('it returns a 200 status code', function(done) {
   //       get(function(err, res) {
   //         res.statusCode.should.equal(200);
@@ -103,6 +103,7 @@ describe('digestGet', function() {
   //       });
   //     });
 
+  // WE SHOULD BE GOOD HERE, resHAL catches this.
   //     it('returns a Content-Type of application/hal+json', function(done) {
   //       get(function(err, res) {
   //         res.get('Content-Type').should.equal('application/hal+json; charset=utf-8');
@@ -111,6 +112,7 @@ describe('digestGet', function() {
   //     });
   //   });
 
+  // WE SHOULD BE GOOD HERE, statusCodeValidator.validateGetProjection CATCHES THIS CASE
   //   describe('with a valid, uuid that does not match a real digest', function() {
 
   //     beforeEach(function() {
@@ -127,7 +129,7 @@ describe('digestGet', function() {
   //       getDigest('/api/ba9f6ac9-fe4a-4ddd-bf07-f1fb37be5dbf/digests/' + uuid, shouldBehaveThusly);
   //     }
 
-  // // MIGHT NOT BE NEEDED
+  // // MIGHT NOT BE NEEDED, THIS IS NOT NEEDED ANYMORE HERE
   //      it('calls eventStore.projection.getState with correct parameters', function(done) {
   //         get(function(err, res) {
   //           eventStoreClient.projection.getState.should.have.been.calledWith({
@@ -138,6 +140,7 @@ describe('digestGet', function() {
   //         });
   //       });
 
+  // WE SHOULD BE GOOD HERE, statusCodeValidator.validateGetProjection catches it i believe.
   //       it('it returns a 404 status code', function(done) {
   //         get(function(err, res) {
   //           res.statusCode.should.equal(404);
@@ -145,6 +148,7 @@ describe('digestGet', function() {
   //         });
   //       });
 
+  // WE SHOULD BE GOOD HERE
   //       it('returns a Content-Type of application/json', function(done) {
   //         get(function(err, res) {
   //           res.get('Content-Type').should.equal('application/json; charset=utf-8');
@@ -152,6 +156,7 @@ describe('digestGet', function() {
   //         });
   //       });
 
+  // WE SHOULD BE GOOD HERE
   //       it('it returns a meaningful error message', function(done) {
   //         get(function(err, res) {
   //           res.text.should.equal(JSON.stringify({
@@ -176,7 +181,7 @@ describe('digestGet', function() {
   //         getDigest('/api/4cc217e4-0802-4f0f-8218-f8e5772aac5b/digests/' + uuid, shouldBehaveThusly);
   //       }
 
-  //       // MIGHT NOT BE NEEDED
+  //       // MIGHT NOT BE NEEDED, IT ISN'T NEEDED
   //       /*
   //         it('calls eventStore.projection.getState with correct parameters', function(done) {
   //           get(function(err, res) {
