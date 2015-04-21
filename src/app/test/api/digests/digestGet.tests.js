@@ -64,6 +64,10 @@ describe('digestGet', function() {
       digestFormatAsHal.should.have.been.calledWith(request.href, request.params.instanceId, digestInfoStub);
     });
 
+    it('should call res.hal with correct arguments.', function() {
+      response.hal.should.have.been.calledWith(formattedDigestStub, 200);
+    })
+
   });
 
   //     var uuid = 'e9be4a71-f6ca-4f02-b431-d74489dee5d0';
