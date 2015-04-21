@@ -66,12 +66,12 @@ describe('digestCreate', function() {
       digestAdded.create.should.have.been.calledOnce;
     });
 
-    it('should call digestAdded.create without any args', function() {
+    it('should call digestAdded.create with correct args', function() {
       digestAdded.create.should.have.been.calledWith(instanceId, 'My first Digest.');
     });
 
     it('should call eventStore.postToStream with correct args', function() {
-      eventStore.postToStream.should.have.been.calledWith(args)
+      eventStore.postToStream.should.have.been.calledWith(args);
     });
 
     it('should call digestFormatAsHal once', function() {
