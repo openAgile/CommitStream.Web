@@ -2,10 +2,8 @@
   var uuid = require('uuid-v4'),
     config = require('../../config'),
     validator = require('validator'),
-    inboxAdded = require('./inboxAdded'),
     eventStore = require('../helpers/eventStoreClient'),
     bodyParser = require('body-parser'),
-    sanitize = require('../sanitizer').sanitize,
     request = require('request'),
     hypermediaResponse = require('../hypermediaResponse'),
     translator = require('../translators/githubTranslator'),
@@ -116,39 +114,7 @@
       }
     });
 
-    app.get('/api/:instanceId/inboxes/:inboxId', function(req, res, next) {
-      if (!validator.isUUID(req.params.inboxId)) {
-        res.status(400).send('The value "' + req.params.inboxId + '" is not recognized as a valid inbox identifier.');
-      } else {
-        getPartitionState('inbox', req.params.inboxId, function(err, resp) {
-          if (err) {
-            res.status(500).json({
-              'error': 'There was an internal error when trying to process your request'
-            });
-          } else if (!resp.body || resp.body.length < 1) {
-            res.status(404).json({
-              'error': 'Could not find an inbox with id ' + req.params.inboxId
-            });
-          } else { // all good
-            var data = JSON.parse(resp.body);
-
-            var hypermedia = hypermediaResponse.inboxes.inboxId.GET(req.href, req.instance.instanceId, data);
-
-            res.set('Content-Type', 'application/hal+json; charset=utf-8');
-            res.status(200).send(hypermedia);
-          }
-        });
-      }
-    });
-
-    var getPartitionState = function(name, uuid, callback) {
-      eventStore.projection.getState({
-        name: name,
-        partition: name + '-' + uuid
-      }, function(err, resp) {
-        callback(err, resp);
-      });
-    }
-  }
+    app.get('/api/:instanceId/inboxes/:inboxId', require('./inboxGet'));
+  };
 
 })(module.exports);
