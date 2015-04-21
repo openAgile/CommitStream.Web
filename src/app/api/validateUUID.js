@@ -8,7 +8,7 @@
 
   // TODO: This may need some unit tests around it, not highly important right now.
   module.exports = function(valueType, data) {
-    var errors = ["The value " + data + "is not a valid identifier for " + valueType];
+    var errors = ["The value " + data + " is not a valid identifier for " + valueType];
 
     if (!validator.isUUID(data)) {
       throw new UUIDError(errors);
