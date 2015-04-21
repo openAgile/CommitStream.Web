@@ -1,5 +1,6 @@
 (function() {
   var inboxAdded = require('./inboxAdded'),
+    eventStore = require('../helpers/eventStoreClient'),
     inboxFormatAsHal = require('./inboxFormatAsHal'),
     validateUUID = require('../validateUUID');
 
