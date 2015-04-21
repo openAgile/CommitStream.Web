@@ -14,6 +14,6 @@
     }).then(function(instance) {
       res.hal(instanceFormatAsHal(req.href, instance));
     });
-    
+
   };
 }())
