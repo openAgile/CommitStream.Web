@@ -8,5 +8,4 @@
 
     app.get('/api/:instanceId/inboxes/:inboxId', require('./inboxGet'));
   };
-
 }(module.exports));
