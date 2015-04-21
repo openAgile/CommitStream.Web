@@ -21,7 +21,6 @@
 
     formatted.description = data.description;
     formatted.digestId = data.digestId;
-    formatted.instanceId = instanceId;
     return formatted;
   };
 }());
