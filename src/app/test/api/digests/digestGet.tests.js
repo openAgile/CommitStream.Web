@@ -13,18 +13,19 @@ describe('digestGet', function() {
   describe('with a valid, uuid digest identifier it', function() {
     var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
       request,
-      digestId;
+      digestId,
+      digestInfoStub = {};
 
     var eventStore = {
-        queryStatePartitionById: sinon.stub().resolves({})
+        queryStatePartitionById: sinon.stub().resolves(digestInfoStub)
       },
       digestFormatAsHal = sinon.stub(),
       validateUUID = sinon.spy();
 
     before(function() {
 
-      formattedDigest = {};
-      digestFormatAsHal.returns(formattedDigest);
+      formattedDigestStub = {};
+      digestFormatAsHal.returns(formattedDigestStub);
 
       digestId = 'aFakeId';
 
@@ -35,9 +36,12 @@ describe('digestGet', function() {
           description: 'My first Digest.'
         },
         params: {
-          digestId: digestId
+          digestId: digestId,
+          instanceId: instanceId
         }
       });
+
+      request.href = sinon.spy();
 
       response = httpMocks.createResponse();
       response.hal = sinon.spy();
@@ -49,15 +53,15 @@ describe('digestGet', function() {
       validateUUID.should.be.calledWith('digests', digestId);
     });
 
-    it('calls eventStore.queryStatePartitionById with correct parameters', function() {
+    it('calls eventStore.queryStatePartitionById with correct arguments.', function() {
       eventStore.queryStatePartitionById.should.be.calledWith({
         name: 'digest',
         id: request.params.digestId
       });
     });
 
-    it('should call digestFormatAsHal once', function() {
-      digestFormatAsHal.should.have.been.calledOnce;
+    it('should call digestFormatAsHal with correct arguments.', function() {
+      digestFormatAsHal.should.have.been.calledWith(request.href, request.params.instanceId, digestInfoStub);
     });
 
   });
