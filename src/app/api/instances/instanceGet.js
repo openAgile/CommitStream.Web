@@ -1,18 +1,19 @@
 (function() {
   instanceFormatAsHal = require('./instanceFormatAsHal'),
   eventStore = require('../helpers/eventStoreClient'),
-  validator = require('validator');  
+  validateUUID = require('../validateUUID');
 
   module.exports = function(req, res) {
-    if (!validator.isUUID(req.params.instanceId)) {
-      throw new Error('Must supply a valid instanceId. The value ' + req.params.instanceId + ' is invalid.');
-    } else {
-      eventStore.queryStatePartitionById({
-        name: 'instance',
-        id: req.params.instanceId
-      }).then(function(instance) {
-        res.hal(instanceFormatAsHal(req.href, instance));
-      });
-    }
+    var instanceId = req.params.instanceId;
+
+    validateUUID('instance', instanceId);
+
+    eventStore.queryStatePartitionById({
+      name: 'instance',
+      id: instanceId
+    }).then(function(instance) {
+      res.hal(instanceFormatAsHal(req.href, instance));
+    });
+    
   };
 }())
