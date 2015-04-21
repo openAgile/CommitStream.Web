@@ -37,7 +37,8 @@
     "uuid-v4": "^0.1.0",
     "validator": "^3.22.1",
     "express-domain-middleware": "^0.1.0",
-    "node-mocks-http": "^1.4.1"
+    "node-mocks-http": "^1.4.1",
+    "request-promise": "^0.4.2"
   },
   "devDependencies": {
     "traceur": "^0.0.66"
@@ -45,6 +46,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha -u exports -R spec test/**/*tests.js",
+    "spike": "mocha -u exports -R spec smoke-test/instance-support.tests.js",
     "smoke": "mocha -u exports -R spec smoke-test/**/*tests.js",
     "smoke-happy-path": "mocha -u exports -R spec smoke-test/happy-path-end-to-end.tests.js",
     "jenkins-test": "mocha -u exports -R tap test/**/*tests.js",
