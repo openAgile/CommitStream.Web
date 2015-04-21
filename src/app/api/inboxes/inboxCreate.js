@@ -1,5 +1,6 @@
 (function() {
   var inboxAdded = require('./inboxAdded'),
+      eventStore = require('../helpers/eventStoreClient'),
       inboxFormatAsHal = require('./inboxFormatAsHal'),
       sanitizeAndValidate = require('../sanitizeAndValidate');
 
@@ -16,17 +17,18 @@
       id: digestId
     };
     
-    var inboxAddedEvent = inboxAdded.create(digestId, req.body.family, req.body.name, req.body.url);
+    var inboxAddedEvent;
     
     eventStore.queryStatePartitionById(args)
       .then(function(digest) {
+        inboxAddedEvent = inboxAdded.create(digestId, req.body.family, req.body.name, req.body.url);
         var args = {
           name: 'inboxes-' + instanceId,
           events: inboxAddedEvent
         };
         return eventStore.postToStream(args);
       })
-      .then(function(inbox) {
+      .then(function() {
         var hypermedia = inboxFormatAsHal(req.href, instanceId, inboxAddedEvent.data);
         res.hal(hypermedia, 201);
       });
