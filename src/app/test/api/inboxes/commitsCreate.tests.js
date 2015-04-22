@@ -21,60 +21,60 @@ var handler = proxyquire('../../api/inboxes/commitsCreate', {
 
 describe('commitsCreate', function() {
 
+  var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
+    inboxId = 'e70ee98d-cd21-4bfe-a4fe-bbded9ce4584',
+    digestId = 'ff1fdc30-d0e2-465b-b23d-fda510acc1bc',
+    queryStatePartitionArgs,
+    postToStreamArgs,
+    request,
+    response,
+    inboxData;
+
+  before(function() {
+    eventStore.queryStatePartitionById.resolves({
+      digestId: digestId
+    });
+
+    commitsAddedFormatAsHal.returns({});
+    translator.translatePush.returns({});
+
+    request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/api/' + instanceId + '/inboxes/' + inboxId + '/commits',
+      body: {},
+      headers: {}
+    });
+
+    response = httpMocks.createResponse();
+    request.instance = {
+      instanceId: instanceId
+    };
+    request.params = {
+      inboxId: inboxId
+    };
+    request.href = sinon.spy();
+    response.hal = sinon.spy();
+
+    inboxData = {
+      inboxId: inboxId,
+      digestId: digestId
+    };
+
+    postToStreamArgs = {
+      name: 'inboxCommits-' + inboxId,
+      events: '{}'
+    };
+
+    queryStatePartitionArgs = {
+      name: 'inbox',
+      id: inboxId
+    };
+  });
+
   describe('when posting a push event', function() {
-    var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
-      inboxId = 'e70ee98d-cd21-4bfe-a4fe-bbded9ce4584',
-      digestId = 'ff1fdc30-d0e2-465b-b23d-fda510acc1bc',
-      queryStatePartitionArgs,
-      postToStreamArgs,
-      request,
-      response,
-      inboxData;
-
     before(function() {
-      eventStore.queryStatePartitionById.resolves({
-        digestId: digestId
-      });
-
       githubValidator.returns('push');
-
-      commitsAddedFormatAsHal.returns({});
-      translator.translatePush.returns({});
-
-      request = httpMocks.createRequest({
-        method: 'POST',
-        url: '/api/' + instanceId + '/inboxes/' + inboxId + '/commits',
-        body: {},
-        headers: {}
-      });
-
-      response = httpMocks.createResponse();
-      request.instance = {
-        instanceId: instanceId
-      };
-      request.params = {
-        inboxId: inboxId
-      };
-      request.href = sinon.spy();
-      response.hal = sinon.spy();
-
-      inboxData = {
-        inboxId: inboxId,
-        digestId: digestId
-      };
-
-      postToStreamArgs = {
-        name: 'inboxCommits-' + inboxId,
-        events: '{}'
-      };
-
-      queryStatePartitionArgs = {
-        name: 'inbox',
-        id: inboxId
-      };
-
       handler(request, response);
-
     });
 
     it('should call validateUUID with correct args', function() {
@@ -103,6 +103,40 @@ describe('commitsCreate', function() {
 
     it('should call res.hal with correct args', function() {
       response.hal.should.have.been.calledWith({}, 201);
+    });
+
+  });
+
+  describe('when posting a ping event', function() {
+    before(function() {
+      githubValidator.returns('ping');
+      response.status = sinon.stub();
+      response.status.returns({
+        send: sinon.stub()
+      });
+      handler(request, response);
+    });
+
+    it('should call validateUUID with correct args', function() {
+      validateUUID.should.have.been.calledWith('inbox', inboxId);
+    });
+
+    it('should call eventStore.queryStatePartitionById with correct args', function() {
+      eventStore.queryStatePartitionById.should.have.been.calledWith(queryStatePartitionArgs);
+    });
+
+    it('should call githubValidator with correct args', function() {
+      githubValidator.should.have.been.calledWith({});
+    });
+
+    it('should call res.status with correct args', function() {
+      response.status.should.have.been.calledWith(200);
+    });
+
+    it('should call res.status.send with correct args', function() {
+      response.status().send.should.have.been.calledWith({
+        message: 'Pong.'
+      });
     });
 
   });
