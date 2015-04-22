@@ -13,5 +13,5 @@
       "name": inbox.name,
       "url": inbox.url
     };
-  }
+  };
 }());

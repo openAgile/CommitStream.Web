@@ -3,7 +3,7 @@
     return {
       "_links": {
         "self": {
-          "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId)
+          "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId +"/commits")
         },
         "digest-parent": {
           "href": href("/api/" + instanceId + "/digests/" + inbox.digestId)
