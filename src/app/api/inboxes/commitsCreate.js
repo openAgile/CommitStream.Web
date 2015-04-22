@@ -45,7 +45,7 @@
               res.hal(hypermedia, 201);
             });
         } else if (eventType === 'ping') {
-          res.status(200).send({
+          res.json({
             message: 'Pong.'
           });
         }

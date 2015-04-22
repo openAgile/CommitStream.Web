@@ -28,21 +28,26 @@ describe('commitsCreate', function() {
     postToStreamArgs,
     request,
     response,
-    inboxData;
+    inboxData,
+    formattedCommits;
 
   before(function() {
     eventStore.queryStatePartitionById.resolves({
       digestId: digestId
     });
 
-    commitsAddedFormatAsHal.returns({});
-    translator.translatePush.returns({});
+    formattedCommits = sinon.spy();
+    commitsAddedFormatAsHal.returns(formattedCommits);
+
+    translator.translatePush.returns({
+      some: 'value'
+    });
 
     request = httpMocks.createRequest({
       method: 'POST',
       url: '/api/' + instanceId + '/inboxes/' + inboxId + '/commits',
-      body: {},
-      headers: {}
+      body: sinon.spy(),
+      headers: sinon.spy()
     });
 
     response = httpMocks.createResponse();
@@ -62,7 +67,7 @@ describe('commitsCreate', function() {
 
     postToStreamArgs = {
       name: 'inboxCommits-' + inboxId,
-      events: '{}'
+      events: '{"some":"value"}'
     };
 
     queryStatePartitionArgs = {
@@ -86,11 +91,11 @@ describe('commitsCreate', function() {
     });
 
     it('should call githubValidator with correct args', function() {
-      githubValidator.should.have.been.calledWith({});
+      githubValidator.should.have.been.calledWith(request.headers);
     });
 
     it('should call translator.translatePush with correct args', function() {
-      translator.translatePush.should.have.been.calledWith({}, instanceId, digestId, inboxId);
+      translator.translatePush.should.have.been.calledWith(request.body, instanceId, digestId, inboxId);
     });
 
     it('should call eventStore.postToStream with correct args', function() {
@@ -102,7 +107,7 @@ describe('commitsCreate', function() {
     });
 
     it('should call res.hal with correct args', function() {
-      response.hal.should.have.been.calledWith({}, 201);
+      response.hal.should.have.been.calledWith(formattedCommits, 201);
     });
 
   });
@@ -110,10 +115,7 @@ describe('commitsCreate', function() {
   describe('when posting a ping event', function() {
     before(function() {
       githubValidator.returns('ping');
-      response.status = sinon.stub();
-      response.status.returns({
-        send: sinon.stub()
-      });
+      response.json = sinon.stub();
       handler(request, response);
     });
 
@@ -126,15 +128,11 @@ describe('commitsCreate', function() {
     });
 
     it('should call githubValidator with correct args', function() {
-      githubValidator.should.have.been.calledWith({});
-    });
-
-    it('should call res.status with correct args', function() {
-      response.status.should.have.been.calledWith(200);
+      githubValidator.should.have.been.calledWith(request.headers);
     });
 
     it('should call res.status.send with correct args', function() {
-      response.status().send.should.have.been.calledWith({
+      response.json.should.have.been.calledWith({
         message: 'Pong.'
       });
     });
