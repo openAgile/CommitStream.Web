@@ -31,23 +31,26 @@
             name: 'inboxCommits-' + inboxId,
             events: e
           };
-          return eventStore.postToStream(postArgs);
+
+          eventStore.postToStream(postArgs)
+            .then(function() {
+              var inboxData = {
+                inboxId: inboxId,
+                digestId: digestId
+              };
+
+              var hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
+              //TODO: ask about this
+              //res.location(responseData._links['query-digest'].href);
+              res.hal(hypermedia, 201);
+            });
         } else if (eventType === 'ping') {
           res.status(200).send({
             message: 'Pong.'
           });
+        } else {
+          //TODO: unknown eventType, 400?
         }
-      })
-      .then(function() {
-        var inboxData = {
-          inboxId: inboxId,
-          digestId: digestId
-        };
-
-        var hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
-        //TODO: ask about this
-        //res.location(responseData._links['query-digest'].href);
-        res.hal(hypermedia, 201);
       });
   };
 }());
