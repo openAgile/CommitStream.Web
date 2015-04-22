@@ -7,11 +7,15 @@
         },
         "digest-parent": {
           "href": href("/api/" + instanceId + "/digests/" + inbox.digestId)
+        },
+        "add-commit": {
+          "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId + "/commits")
         }
       },
+      "inboxId": inbox.inboxId,
       "family": inbox.family,
       "name": inbox.name,
-      "url": inbox.url
+      "url": inbox.url,
     };
   };
 }());
