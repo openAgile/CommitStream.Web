@@ -48,8 +48,6 @@
           res.status(200).send({
             message: 'Pong.'
           });
-        } else {
-          //TODO: unknown eventType, 400?
         }
       });
   };
