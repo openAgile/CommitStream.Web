@@ -30,7 +30,7 @@ describe('digestCreate', function() {
 
     before(function() {
       digestAddedEvent = {
-        data: {}
+        data: sinon.stub()
       };
 
       digestAdded.create.returns(digestAddedEvent);
@@ -40,7 +40,7 @@ describe('digestCreate', function() {
         events: digestAddedEvent
       };
 
-      formattedDigest = {};
+      formattedDigest = sinon.spy();
       digestFormatAsHal.returns(formattedDigest);
 
       request = httpMocks.createRequest({
@@ -63,20 +63,12 @@ describe('digestCreate', function() {
       handler(request, response);
     });
 
-    it('should call digestAdded.create once to create an event', function() {
-      digestAdded.create.should.have.been.calledOnce;
-    });
-
     it('should call digestAdded.create with correct args', function() {
       digestAdded.create.should.have.been.calledWith(instanceId, 'My first Digest.');
     });
 
     it('should call eventStore.postToStream with correct args', function() {
       eventStore.postToStream.should.have.been.calledWith(args);
-    });
-
-    it('should call digestFormatAsHal once', function() {
-      digestFormatAsHal.should.have.been.calledOnce;
     });
 
     it('should call digestFormatAsHal with correct args', function() {
@@ -86,11 +78,6 @@ describe('digestCreate', function() {
     it('should call res.hal with correct args', function() {
       response.hal.should.have.been.calledWith(formattedDigest, 201);
     });
-
-    it('should call res.hal once', function() {
-      response.hal.should.have.been.calledOnce;
-    });
-
   });
 
 });

@@ -30,9 +30,9 @@ describe('digestsGet', function() {
         name: 'digests-' + instanceId
       };
       digests = {
-        entries: []
+        entries: sinon.spy()
       };
-      formattedDigests = {};
+      formattedDigests = sinon.spy();
       digestsFormatAsHal.returns(formattedDigests);
       eventStore.getFromStream.resolves(digests);
 
@@ -57,20 +57,12 @@ describe('digestsGet', function() {
       eventStore.getFromStream.should.have.been.calledWith(args)
     });
 
-    it('should call digestsFormatAsHal once', function() {
-      digestsFormatAsHal.should.have.been.calledOnce;
-    });
-
     it('should call digestsFormatAsHal with correct args', function() {
       digestsFormatAsHal.should.have.been.calledWith(request.href, instanceId, digests.entries);
     });
 
     it('should call res.hal with correct args', function() {
       response.hal.should.have.been.calledWith(formattedDigests);
-    });
-
-    it('should call res.hal once', function() {
-      response.hal.should.have.been.calledOnce;
     });
 
   });

@@ -14,7 +14,7 @@ describe('digestGet', function() {
     var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
       request,
       digestId,
-      digestInfoStub = {};
+      digestInfoStub = sinon.spy();
 
     var eventStore = {
         queryStatePartitionById: sinon.stub().resolves(digestInfoStub)
@@ -24,7 +24,7 @@ describe('digestGet', function() {
 
     before(function() {
 
-      formattedDigestStub = {};
+      formattedDigestStub = sinon.spy();
       digestFormatAsHal.returns(formattedDigestStub);
 
       digestId = 'aFakeId';
@@ -65,7 +65,7 @@ describe('digestGet', function() {
     });
 
     it('should call res.hal with correct arguments.', function() {
-      response.hal.should.have.been.calledWith(formattedDigestStub, 200);
+      response.hal.should.have.been.calledWith(formattedDigestStub);
     });
   });
 
