@@ -128,13 +128,20 @@
     return (!model || !model.commits);
   }
 
-  function getUrlToQuery(commitStreamDomId, digestId, workitem) {
+  function getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey) {
     if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
       return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
     } else if (workitem) {
-      var url = '{{{apiUrl}}}';
-      if (digestId !== undefined) url += '&digestId=' + digestId;
-      url += '&workitem=' + workitem;
+      console.log(digestId);
+      var url = '{{{apiUrl}}}' + instanceId;      
+      if (digestId !== null && digestId !== undefined) {
+        url += '/digests/' + digestId + '/commits';
+      } else {        
+        url += '/commits/tags/versionone/workitems/' + workitem;
+      }
+
+      url += '?apiKey=' + apiKey;
+      console.log(url);
       return url;
     } else {
       throw 'It was not possible to get the url to query.'
@@ -201,7 +208,7 @@
   // Put a commitStream object in the global space
   if (!window.CommitStream) {
     window.CommitStream = {
-      commitsDisplay: function(commitStreamDomId, workitem, errorHandler, digestId) {
+      commitsDisplay: function(commitStreamDomId, workitem, errorHandler, digestId, instanceId, apiKey) {
         try {
           var queryCallBack = function(commitStreamDomId, model) {
             if (thereAreNoCommits(model)) {
@@ -215,7 +222,7 @@
             }
           }
 
-          var url = getUrlToQuery(commitStreamDomId, digestId, workitem);
+          var url = getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey);
 
           queryCommitStreamRefresh = function() {
             queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
