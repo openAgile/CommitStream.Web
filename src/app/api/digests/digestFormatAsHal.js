@@ -18,6 +18,7 @@
         }
       }
     };
+
     formatted.description = data.description;
     formatted.digestId = data.digestId;
     return formatted;
