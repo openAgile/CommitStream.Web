@@ -37,11 +37,11 @@ describe('inboxCreate', function() {
         id: digestId
       };
 
-      digest = {};
+      digest = sinon.spy();
       eventStore.queryStatePartitionById.resolves(digest);
 
       inboxAddedEvent = {
-        data: {}
+        data: sinon.spy()
       };
 
       inboxAdded.create.returns(inboxAddedEvent);
@@ -53,7 +53,7 @@ describe('inboxCreate', function() {
 
       eventStore.postToStream.resolves();
 
-      formattedInbox = {};
+      formattedInbox = sinon.spy();
       inboxFormatAsHal.returns(formattedInbox);
 
       request = httpMocks.createRequest({
