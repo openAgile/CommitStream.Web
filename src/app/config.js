@@ -15,7 +15,6 @@
   }
 
   config.protocol = nconf.get('protocol') || null;
-  config.apiKey = nconf.get('apiKey') || '';
   config.eventStoreUser = nconf.get('eventStoreUser') || '';
   config.eventStorePassword = nconf.get('eventStorePassword') || '';
   config.eventStoreBaseUrl = nconf.get('eventStoreBaseUrl') || 'http://localhost:2113';

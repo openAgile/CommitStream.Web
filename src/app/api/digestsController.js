@@ -1,97 +1,86 @@
 (function(digestsController) {
-
-  var uuid = require('uuid-v4'),
-    config = require('../config'),
+  var config = require('../config'),
     validator = require('validator'),
     hypermediaResponse = require('./hypermediaResponse'),
     digestAdded = require('./events/digestAdded'),
     eventStore = require('./helpers/eventStoreClient'),
+    eventStorePromised = require('./helpers/eventStoreClientPromised'),
     bodyParser = require('body-parser'),
-    sanitize = require('sanitize-html'),
+    sanitize = require('./sanitizer').sanitize,
     urls = require('./urls'),
     _ = require('underscore');
 
+  function digestFormatAsHal(href, instanceId, data) {
+    var formatted = {
+      "_links": {
+        "self": {
+          "href": href("/api/" + instanceId + "/digests/" + data.digestId)
+        },
+        "digests": {
+          "href": href("/api/" + instanceId + "/digests")
+        },
+        "inbox-create": {
+          "href": href("/api/" + instanceId + "/digests/" + data.digestId + "/inboxes"),
+          "method": "POST",
+          "title": "Endpoint for creating an inbox for a repository on digest " + data.digestId + "."
+        },
+        "inboxes": {
+          "href": href("/api/" + instanceId + "/digests/" + data.digestId + "/inboxes")
+        }
+      }
+    };
+    formatted.description = data.description;
+    formatted.digestId = data.digestId;
+    return formatted;
+  }
+
   digestsController.init = function(app) {
-
-    /**
-     * The hypermedia to creating a digest will have links (see _links below) to other resources
-     * that are a result of having created a digest. Those links are identified for documentation
-     * purposes via their rel value.
-     *
-     * @api {post} /api/digest Create a new digest
-     * @apiName digest
-     *
-     * @apiSuccess {String} id - Id of the digest created.
-     * @apiSuccess {String} digestUrl - The url of the digest created.
-     * @apiSuccess {Array[Object]} _links - Links to other resources as a result of creating a digest.
-     *                               rel: 'inbox-form' links to a form for creating a new inbox for a repository.
-     **/
-    app.post('/api/digests', bodyParser.json(), function(req, res) {
+    app.post('/api/:instanceId/digests', bodyParser.json(), function(req, res) {
+      //TODO: do not repeat this
       var contentType = req.get('Content-Type');
-
       if (!contentType || contentType.toLowerCase() !== 'application/json') {
         res.status(415).send('When creating a digest, you must send a Content-Type: application/json header.');
         return;
       }
 
+      //TODO: don't leave this here
+      function canSendErrors(errors) {
+        if (errors.length > 0) {
+          res.status(400).json({
+            errors: errors
+          });
+          return true;
+        }
+        return false;
+      }
+
       var href = urls.href(req);
+      var instanceId = req.params.instanceId;
 
-      var originalDescription = req.body.description;
-
-      if (originalDescription === undefined) {
-        res.status(400).send('A digest must contain a description.');
+      var errors = sanitize('digest', req.body, ['description']);
+      if (canSendErrors(errors)) {
         return;
       }
 
-      if (originalDescription === null) {
-        res.status(400).send('A digest description must not be null.');
+      var errors = digestAdded.validate(req.body);
+      if (canSendErrors(errors)) {
         return;
       }
 
-      if (originalDescription.trim().length === 0) {
-        res.status(400).send('A digest description must contain a value.');
-        return;
-      }
-
-      var description = sanitize(req.body.description, {
-        allowedTags: []
-      });
-      if (originalDescription !== description) {
-        res.status(400).send('A digest description cannot contain script tags or HTML.');
-        return;
-      }
-
-      if (description.length > 140) {
-        res.status(400).send('A digest description cannot contain more than 140 characters. The description you submitted contains ' + description.length + ' characters.');
-        return;
-      }
-
-      var digestAddedEvent = digestAdded.create(description);
+      var digestAddedEvent = digestAdded.create(instanceId, req.body.description);
 
       var args = {
-        name: 'digests',
-        events: JSON.stringify([digestAddedEvent])
+        name: 'digests-' + instanceId,
+        events: digestAddedEvent
       };
 
-      eventStore.streams.post(args, function(error, resp) {
-        if (error) {
-          // WHAT TO DO HERE?? NEED SOME TESTS FOR ERROR CASES.
-        } else if (resp && resp.statusCode === 408) {
-          return res.sendGenericError('Trouble communicating with eventstore.');
-        } else {
-          var hypermedia = hypermediaResponse.digests.POST(href,
-            digestAddedEvent.data.digestId);
-
-          res.location(hypermedia._links.self.href);
-          res.set('Content-Type', 'application/hal+json');
-          res.status(201);
-
+      eventStore.postToStream(args)
+        .then(function() {
+          var hypermedia = digestFormatAsHal(href, instanceId, digestAddedEvent.data);
           setTimeout(function() {
-            res.send(hypermedia);
+            res.hal(hypermedia, 201);
           }, config.controllerResponseDelay);
-
-        }
-      });
+        });
     });
 
     app.get('/api/digests/:uuid', function(req, res, next) {
@@ -104,7 +93,8 @@
           partition: 'digest-' + req.params.uuid
         }, function(err, resp) {
           if (err) {
-            return res.sendGenericError();
+            throw err;
+            //return res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
             return res.sendGenericError('Trouble communicating with eventstore');
           } else if (!resp.body || resp.body.length < 1) {
@@ -225,7 +215,8 @@
 
     app.get('/api/digests', bodyParser.json(), function(req, res) {
       var href = urls.href(req);
-
+      eventStorePromised.streams.getAsync({name:'digests'})
+      
       eventStore.streams.get({
         name: 'digests'
       }, function(err, resp) {
@@ -249,5 +240,49 @@
       });
     });
 
+    /* ASYNC VERSION
+    app.get('/api/digests', bodyParser.json(), function(req, res) {
+      var href = urls.href(req);
+      eventStore.streams.getAsync({name:'digests'})
+      .then(function(response) {
+        if (response.statusCode === 404) {
+          var result = hypermediaResponse.digestsGET(href);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(result);
+        } else {       
+          console.log("--------------------HERE IS THE RESPONSE");
+          console.log(response.body);
+          console.log('--------------------DONE RESPONSE');
+          var data = JSON.parse(response.body);
+          var digests = _.map(data.entries, function(entry) {
+            return entry.content.data;
+          });
+          var response = hypermediaResponse.digestsGET(href, digests);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        }
+      });
+    });
+    /* ASYNC VERSION
+    app.get('/api/digests', bodyParser.json(), function(req, res) {
+      var href = urls.href(req);
+      eventStore.streams.getAsync({name:'digests'})
+      .then(function(response) {
+        if (response.statusCode === 404) {
+          var result = hypermediaResponse.digestsGET(href);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(result);
+        } else {
+          var data = JSON.parse(response.body);
+          var digests = _.map(data.entries, function(entry) {
+            return entry.content.data;
+          });
+          var response = hypermediaResponse.digestsGET(href, digests);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        }
+      });
+    });
+    */
   };
 })(module.exports);

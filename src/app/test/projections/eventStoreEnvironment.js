@@ -52,6 +52,15 @@ global.fromStream = function (streamSource) {
 
 global.fromCategory = function(streamSource) {
   return {
+    when: function(eventSpec) {
+        for(var eventType in eventSpec) {
+            var callback = eventSpec[eventType];
+            var evts = getEventsByType(eventType);
+            evts.forEach(function(evt) {
+                callback(null, evt);
+            });
+        }
+    },    
     whenAny: function(callback) {
       getEvents().forEach(function(element) {
         callback(null, element);
