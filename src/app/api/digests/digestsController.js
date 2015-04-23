@@ -5,5 +5,6 @@
     app.get('/api/:instanceId/digests/:digestId', require('./digestGet'));
     app.get('/api/:instanceId/digests', require('./digestsGet'));
     app.get('/api/:instanceId/digests/:digestId/commits', require('./digestCommitsGet'));
+    app.get('/api/:instanceId/digests/:digestId/inboxes', require('./digestInboxesGet'));    
   };
 }(module.exports));

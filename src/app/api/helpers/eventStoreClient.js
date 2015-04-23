@@ -11,9 +11,10 @@
   });
 
   client.queryStatePartitionById = function(args) {
+    var partition = args.partition || args.name + '-' + args.id;
     var stateArgs = {
       name: args.name,
-      partition: args.name + '-' + args.id
+      partition: partition
     };
 
     return client.projection.getStateAsync(stateArgs)
