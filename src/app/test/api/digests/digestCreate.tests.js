@@ -25,6 +25,7 @@ describe('digestCreate', function() {
       args,
       digestAddedEvent,
       formattedDigest,
+      description,
       request,
       response;
 
@@ -43,11 +44,12 @@ describe('digestCreate', function() {
       formattedDigest = sinon.spy();
       digestFormatAsHal.returns(formattedDigest);
 
+      description = sinon.spy();
       request = httpMocks.createRequest({
         method: 'POST',
         url: '/api/' + instanceId + '/digests',
         body: {
-          description: 'My first Digest.'
+          description: description
         }
       });
 
@@ -63,8 +65,12 @@ describe('digestCreate', function() {
       handler(request, response);
     });
 
+    it('should call sanitizeAndValidate with correct args', function() {
+      sanitizeAndValidate.should.have.been.calledWith('digest', request.body, ['description'], digestAdded);
+    });
+
     it('should call digestAdded.create with correct args', function() {
-      digestAdded.create.should.have.been.calledWith(instanceId, 'My first Digest.');
+      digestAdded.create.should.have.been.calledWith(instanceId, description);
     });
 
     it('should call eventStore.postToStream with correct args', function() {
