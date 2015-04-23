@@ -8,8 +8,11 @@
         "digest-parent": {
           "href": href("/api/" + instanceId + "/digests/" + inbox.digestId)
         },
-        "query-digest": {
-          "href": href("/api/query?digestId=" + inbox.digestId + "&workitem=all")
+        "digest-query": {
+          "href": href("/api/" + instanceId + "/digests/" + inbox.digestId + "/commits")
+        },
+        "instance-query": {
+          "href": href("/api/" + instanceId + "/commits/tags/versionone/workitems/:workitems")
         }
       },
       "message": "The commits have been added to the CommitStream inbox."
