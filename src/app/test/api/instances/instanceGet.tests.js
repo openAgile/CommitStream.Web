@@ -16,12 +16,12 @@ var handler = proxyquire('../../api/instances/instanceGet', {
 
 function createRequest() {
   var request = httpMocks.createRequest({
-      method: 'GET',
-      url: '/api/instances/fakeId',
-      params: {
-        instanceId: 'fakeId'
-      }
-    });
+    method: 'GET',
+    url: '/api/instances/fakeId',
+    params: {
+      instanceId: 'fakeId'
+    }
+  });
   request.href = sinon.spy();
   return request;
 }
@@ -36,10 +36,10 @@ function createResponse() {
 describe('instanceGet', function() {
 
   describe('when getting an instance with a valid instanceId it', function() {
-    var instance = {},
-        formattedInstance = {},
-        request,
-        response;    
+    var instance = sinon.spy(),
+      formattedInstance = sinon.spy(),
+      request,
+      response;
 
     before(function() {
       eventStore.queryStatePartitionById.resolves(instance);
@@ -55,7 +55,7 @@ describe('instanceGet', function() {
     });
 
     it('should call eventStore.queryStatePartitionById with correct args', function() {
-      var args = { 
+      var args = {
         name: 'instance',
         id: request.params.instanceId
       };
