@@ -4,6 +4,7 @@
     hypermediaResponse = require('./hypermediaResponse'),
     digestAdded = require('./events/digestAdded'),
     eventStore = require('./helpers/eventStoreClient'),
+    eventStorePromised = require('./helpers/eventStoreClientPromised'),
     bodyParser = require('body-parser'),
     sanitize = require('./sanitizer').sanitize,
     urls = require('./urls'),
@@ -92,8 +93,8 @@
           partition: 'digest-' + req.params.uuid
         }, function(err, resp) {
           if (err) {
-            // throw err;
-            return res.sendGenericError();
+            throw err;
+            //return res.sendGenericError();
           } else if (resp && resp.statusCode === 408) {
             return res.sendGenericError('Trouble communicating with eventstore');
           } else if (!resp.body || resp.body.length < 1) {
@@ -214,7 +215,8 @@
 
     app.get('/api/digests', bodyParser.json(), function(req, res) {
       var href = urls.href(req);
-
+      eventStorePromised.streams.getAsync({name:'digests'})
+      
       eventStore.streams.get({
         name: 'digests'
       }, function(err, resp) {
@@ -238,6 +240,29 @@
       });
     });
 
+    /* ASYNC VERSION
+    app.get('/api/digests', bodyParser.json(), function(req, res) {
+      var href = urls.href(req);
+      eventStore.streams.getAsync({name:'digests'})
+      .then(function(response) {
+        if (response.statusCode === 404) {
+          var result = hypermediaResponse.digestsGET(href);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(result);
+        } else {       
+          console.log("--------------------HERE IS THE RESPONSE");
+          console.log(response.body);
+          console.log('--------------------DONE RESPONSE');
+          var data = JSON.parse(response.body);
+          var digests = _.map(data.entries, function(entry) {
+            return entry.content.data;
+          });
+          var response = hypermediaResponse.digestsGET(href, digests);
+          res.set('Content-Type', 'application/hal+json; charset=utf-8');
+          res.send(response);
+        }
+      });
+    });
     /* ASYNC VERSION
     app.get('/api/digests', bodyParser.json(), function(req, res) {
       var href = urls.href(req);

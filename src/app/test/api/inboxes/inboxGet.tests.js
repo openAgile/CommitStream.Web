@@ -5,11 +5,11 @@ require('../handler-base')();
 var eventStore = {
     queryStatePartitionById: sinon.stub()
   },
-  instanceFormatAsHal = sinon.stub(),
+  inboxFormatAsHal = sinon.stub(),
   validateUUID = sinon.stub();
 
-var handler = proxyquire('../../api/instances/instanceGet', {
-  './instanceFormatAsHal': instanceFormatAsHal,
+var handler = proxyquire('../../api/inboxes/inboxGet', {
+  './inboxFormatAsHal': inboxFormatAsHal,
   '../helpers/eventStoreClient': eventStore,
   '../validateUUID': validateUUID
 });
@@ -17,33 +17,36 @@ var handler = proxyquire('../../api/instances/instanceGet', {
 function createRequest() {
   var request = httpMocks.createRequest({
       method: 'GET',
-      url: '/api/instances/fakeId',
+      url: '/api/inbox/fakeId',
       params: {
-        instanceId: 'fakeId'
+        instanceId: 'fakeInstanceId',
+        inboxId: 'fakeInboxId'
       }
     });
   request.href = sinon.spy();
+  request.instance = {
+    instanceId: 'fakeInstanceId'
+  };
   return request;
 }
 
 function createResponse() {
   var response = httpMocks.createResponse();
-  // Set up default mocks
   response.hal = sinon.spy();
   return response;
 }
 
-describe('instanceGet', function() {
+describe('inboxGet', function() {
 
-  describe('when getting an instance with a valid instanceId it', function() {
-    var instance = {},
-        formattedInstance = {},
+  describe('when getting an inbox with it', function() {
+    var inbox = sinon.spy(),
+        formattedInbox = sinon.spy(),
         request,
         response;    
 
     before(function() {
-      eventStore.queryStatePartitionById.resolves(instance);
-      instanceFormatAsHal.returns(formattedInstance);
+      eventStore.queryStatePartitionById.resolves(inbox);
+      inboxFormatAsHal.returns(formattedInbox);
       request = createRequest();
       response = createResponse();
 
@@ -51,23 +54,23 @@ describe('instanceGet', function() {
     });
 
     it('should call validateUUID with correct args', function() {
-      validateUUID.should.have.been.calledWith('instance', request.params.instanceId);
+      validateUUID.should.have.been.calledWith('inbox', request.params.inboxId);
     });
 
     it('should call eventStore.queryStatePartitionById with correct args', function() {
       var args = { 
-        name: 'instance',
-        id: request.params.instanceId
+        name: 'inbox',
+        id: request.params.inboxId
       };
       eventStore.queryStatePartitionById.should.have.been.calledWith(args);
     });
 
-    it('should call instanceFormatAsHal with correct args', function() {
-      instanceFormatAsHal.should.have.been.calledWith(request.href, instance);
+    it('should call inboxFormatAsHal with correct args', function() {
+      inboxFormatAsHal.should.have.been.calledWith(request.href, request.instance.instanceId, inbox);
     });
 
     it('should call res.hal with correct args', function() {
-      response.hal.should.have.been.calledWith(formattedInstance);
+      response.hal.should.have.been.calledWith(formattedInbox);
     });
 
   });

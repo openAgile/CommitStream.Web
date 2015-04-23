@@ -11,7 +11,6 @@
   statusCodeValidator.validateGetProjection = function(objectType, objectId) {
     return function(response) {
       if (!response.body || response.body.length < 1 || response.statusCode === 404) {
-        // TODO handle ***UNKNOWN** with 200 status code
         throw new NotFound('Could not find ' + objectType + ' with id ' + objectId + '.');
       } else if (response.statusCode != 200) {
         throw new Error(response.statusCode);
@@ -57,6 +56,27 @@
         throw new Error(response.statusCode);
       }
       return true;
+    };
+  };
+
+  var StreamNotFound = csError.createCustomError('StreamNotFound', function(message) {
+    message = message || 'Stream not found';
+    var errors = [message];
+    StreamNotFound.prototype.constructor.call(this, errors, 404);
+  });
+  csError.StreamNotFound = StreamNotFound;
+  
+  statusCodeValidator.validateGetStream = function(streamName) {
+    return function(response) {
+      if (!response.body || response.body.length < 1 || response.statusCode === 404) {
+        // TODO handle ***UNKNOWN** with 200 status code
+        throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
+      } else if (response.statusCode != 200) {
+        throw new Error(response.statusCode);
+      } else {
+        var data = JSON.parse(response.body);
+        return data;
+      }
     };
   };
 }(module.exports));
