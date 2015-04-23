@@ -291,6 +291,8 @@ describe('githubTranslator', function() {
   uuidStub.returns(eventId);
 
   var digestId = 'cd0b1089-7d6d-435a-adf2-125209b1c2c8';
+  var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
+  var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
 
   describe('when translating a push event that contains one commit', function() {
     var expected = [{
@@ -320,11 +322,13 @@ describe('githubTranslator', function() {
         originalMessage: pushEventMessageWithOneCommit.commits[0]
       },
       metadata: {
-        digestId: digestId
+        instanceId: instanceId,
+        digestId: digestId,
+        inboxId: inboxId
       }
     }];
 
-    var actual = githubTranslator.translatePush(pushEventMessageWithOneCommit, digestId);
+    var actual = githubTranslator.translatePush(pushEventMessageWithOneCommit, instanceId, digestId, inboxId);
 
     it('should match the expected translation', function() {
       actual.should.deep.equal(expected);
