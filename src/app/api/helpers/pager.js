@@ -1,6 +1,6 @@
 (function(pager) {
   var _ = require('underscore'),
-      uuid = require('uuid-v4');
+    uuid = require('uuid-v4');
 
   var hasPageSize = function(query) {
     return _.has(query, "pageSize");
@@ -39,15 +39,18 @@
   // TODO, not sure if we should really set the cache here or back
   // in the caller...
   pager.getPagedResponse = function(apiResponse, links, currentPage, buildUri, cache) {
-    var guid = uuid();        
-    
+    var guid = uuid();
+
     var pagedResponse = JSON.parse(JSON.stringify(apiResponse));
     pagedResponse._links = {};
 
-    //TODO: check all of them, not just the third one
-    if (links[3].relation == 'next') {
+    var nextESPage = _.find(links, function(el) {
+      return el.relation === 'next';
+    });
+
+    if (nextESPage) {
       cache.set(guid, links[3].uri);
-      var previous = buildUri(currentPage);      
+      var previous = buildUri(currentPage);
       var next = buildUri(guid);
       pagedResponse._links = {
         previous: previous,
