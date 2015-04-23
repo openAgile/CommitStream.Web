@@ -1,6 +1,5 @@
 (function(statusCodeValidator) {
-  var csError = require('../../middleware/csError'),
-    Promise = require('bluebird');
+  var csError = require('../../middleware/csError');
 
   var NotFound = csError.createCustomError('NotFound', function(message) {
     message = message || 'Resource not found';
@@ -12,12 +11,13 @@
     return function(response) {
       if (!response.body || response.body.length < 1 || response.statusCode === 404) {
         throw new NotFound('Could not find ' + objectType + ' with id ' + objectId + '.');
-      } else if (response.statusCode != 200) {
-        throw new Error(response.statusCode);
-      } else {
-        var data = JSON.parse(response.body);
-        return data;
       }
+      if (response.statusCode !== 200) {
+        throw new Error(response.statusCode);
+      }
+      // TODO handle ***UNKNOWN** with 200 status code
+      var data = JSON.parse(response.body);
+      return data;
     };
   };
 
@@ -27,21 +27,19 @@
     StreamNotFound.prototype.constructor.call(this, errors, 404);
   });
   csError.StreamNotFound = StreamNotFound;
-  
+
   statusCodeValidator.validateGetStream = function(streamName) {
     return function(response) {
       if (!response.body || response.body.length < 1 || response.statusCode === 404) {
-        // TODO handle ***UNKNOWN** with 200 status code
         throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
-      } else if (response.statusCode != 200) {
-        throw new Error(response.statusCode);
-      } else {
-        var data = JSON.parse(response.body);
-        return data;
       }
+      if (response.statusCode !== 200) {
+        throw new Error(response.statusCode);
+      }
+      var data = JSON.parse(response.body);
+      return data;
     };
   };
-
 
   // TODO: should we handle 408 using this specific failure in each case
   var EventStoreClusterFailure = csError.createCustomError('EventStoreClusterFailure', function() {
@@ -52,31 +50,12 @@
     return function(response) {
       if (response.statusCode === 408) {
         throw new EventStoreClusterFailure();
-      } else if (response.statusCode !== 201) {
+      }
+      if (response.statusCode !== 201) {
         throw new Error(response.statusCode);
       }
       return true;
     };
   };
 
-  var StreamNotFound = csError.createCustomError('StreamNotFound', function(message) {
-    message = message || 'Stream not found';
-    var errors = [message];
-    StreamNotFound.prototype.constructor.call(this, errors, 404);
-  });
-  csError.StreamNotFound = StreamNotFound;
-  
-  statusCodeValidator.validateGetStream = function(streamName) {
-    return function(response) {
-      if (!response.body || response.body.length < 1 || response.statusCode === 404) {
-        // TODO handle ***UNKNOWN** with 200 status code
-        throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
-      } else if (response.statusCode != 200) {
-        throw new Error(response.statusCode);
-      } else {
-        var data = JSON.parse(response.body);
-        return data;
-      }
-    };
-  };
 }(module.exports));
