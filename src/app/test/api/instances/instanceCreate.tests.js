@@ -29,9 +29,9 @@ describe('instanceCreate', function() {
 
     before(function() {
       instanceAddedEvent = {
-        data: {}
+        data: sinon.spy()
       };
-      
+
       instanceAdded.create.returns(instanceAddedEvent);
 
       args = {
@@ -39,7 +39,7 @@ describe('instanceCreate', function() {
         events: instanceAddedEvent
       };
 
-      formattedInstance = {};
+      formattedInstance = sinon.spy();
       instanceFormatAsHal.returns(formattedInstance);
 
       request  = httpMocks.createRequest({
@@ -56,10 +56,6 @@ describe('instanceCreate', function() {
       handler(request, response);
     });
 
-    it('should call instanceAdded.create once to create an event', function() {
-      instanceAdded.create.should.have.been.calledOnce;
-    });
-
     it('should call instanceAdded.create without any args', function() {
       instanceAdded.create.should.have.been.calledWith();
     });
@@ -68,20 +64,12 @@ describe('instanceCreate', function() {
       eventStore.postToStream.should.have.been.calledWith(args)
     });
 
-    it('should call instanceFormatAsHal once', function() {
-      instanceFormatAsHal.should.have.been.calledOnce;
-    });
-
     it('should call instanceFormatAsHal with correct args', function() {
       instanceFormatAsHal.should.have.been.calledWith(request.href, instanceAddedEvent.data);
     });
 
     it('should call res.hal with correct args', function() {
       response.hal.should.have.been.calledWith(formattedInstance, 201);
-    });
-
-    it('should call res.hal once', function() {
-      response.hal.should.have.been.calledOnce;
     });
 
   });
