@@ -54,11 +54,10 @@ function instanceTest(testCase, it) {
       .then(function(addCommitResponse) {
         addCommitResponse.message.should.equal(testCase.expectedMessage);
         console.log('```json\n' + JSON.stringify(addCommitResponse.message, ' ', 2) + '\n```\n\n');
-        var query = get('/' + testCase.instance.instanceId + '/query?workitem=' + testCase.workItemToQueryFor + '&apiKey=' + getApiKey());
-        console.log(query);
-        //return rp(query);
+        var queryLink = getLink(addCommitResponse, "instance-query");
+        queryLink = get(queryLink.replace(":workitems", testCase.workItemToQueryFor) + '?apiKey=' + getApiKey(), true);
+        return rp(queryLink);
       })
-      /*
       .then(function(queryResponse) {
         console.log('```json\n' + JSON.stringify(queryResponse, ' ', 2) + '\n```\n\n');
         var firstMessage = queryResponse.commits[0].message;
@@ -67,7 +66,6 @@ function instanceTest(testCase, it) {
         console.log(firstMessage);
         console.log("\n");
       })
-      */
       .catch(console.error)
       .finally(done);
   });

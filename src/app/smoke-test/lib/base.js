@@ -44,9 +44,10 @@
     };
   }
 
-  function get(uri) {
+  function get(uri, alreadyAbsolute) {
+    uri = alreadyAbsolute ? uri : href(uri);
     return {
-      uri: href(uri),
+      uri: uri,
       method: 'GET',
       transform: function(body) {
         return JSON.parse(body);
@@ -103,6 +104,7 @@
     post: post,
     postToLink: postToLink,
     get: get,
+    getLink: getLink,
     getApiKey: getApiKey,
     enableLogging: enableLogging
   };
