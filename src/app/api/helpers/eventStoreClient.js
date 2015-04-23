@@ -38,10 +38,8 @@
   };
 
   client.getFromStream = function(args) {
-    var getArgs = {
-      name: args.name
-    };
-
+    var getArgs = _.pick(args, 'name', 'count', 'pageUrl', 'embed');
+    
     return client.streams.getAsync(getArgs)
       .then(statusCodeValidator.validateGetStream(args.name));
   };

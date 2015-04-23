@@ -25,11 +25,10 @@
       .then(function(eventType) {
         if (eventType === 'push') {
           var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
-          var e = JSON.stringify(events);
 
           var postArgs = {
             name: 'inboxCommits-' + inboxId,
-            events: e
+            events: events
           };
 
           eventStore.postToStream(postArgs)

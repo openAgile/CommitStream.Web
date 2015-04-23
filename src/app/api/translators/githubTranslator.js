@@ -11,7 +11,7 @@
     this.pushEvent = pushEvent;
   });
 
-  githubTranslator.translatePush = function(pushEvent, digestId) {
+  githubTranslator.translatePush = function(pushEvent, instanceId, digestId, inboxId) {
     try {
       var branch = pushEvent.ref.split('/').pop();
       var repository = {
@@ -41,7 +41,9 @@
           eventType: 'GitHubCommitReceived',
           data: commit,
           metadata: {
-            digestId: digestId
+            instanceId: instanceId,
+            digestId: digestId,
+            inboxId: inboxId
           }
         };
       });
@@ -51,6 +53,6 @@
       //console.log(otherEx, otherEx.originalError.stack);            
       throw otherEx;
     }
-
-  }
+  };
+  
 })(module.exports);
