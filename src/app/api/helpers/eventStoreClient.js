@@ -11,9 +11,10 @@
   });
 
   client.queryStatePartitionById = function(args) {
+    var partition = args.partition || args.name + '-' + args.id;
     var stateArgs = {
       name: args.name,
-      partition: args.name + '-' + args.id
+      partition: partition
     };
 
     return client.projection.getStateAsync(stateArgs)
@@ -38,10 +39,8 @@
   };
 
   client.getFromStream = function(args) {
-    var getArgs = {
-      name: args.name
-    };
-
+    var getArgs = _.pick(args, 'name', 'count', 'pageUrl', 'embed');
+    
     return client.streams.getAsync(getArgs)
       .then(statusCodeValidator.validateGetStream(args.name));
   };

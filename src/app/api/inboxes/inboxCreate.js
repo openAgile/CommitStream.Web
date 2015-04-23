@@ -2,7 +2,8 @@
   var inboxAdded = require('./inboxAdded'),
       eventStore = require('../helpers/eventStoreClient'),
       inboxFormatAsHal = require('./inboxFormatAsHal'),
-      sanitizeAndValidate = require('../sanitizeAndValidate');
+      sanitizeAndValidate = require('../sanitizeAndValidate'),
+      config = require('../../config');
 
   module.exports = function(req, res) {
     var digestId = req.params.digestId;
@@ -30,7 +31,9 @@
       })
       .then(function() {
         var hypermedia = inboxFormatAsHal(req.href, instanceId, inboxAddedEvent.data);
-        res.hal(hypermedia, 201);
+        setTimeout(function() {
+          res.hal(hypermedia, 201);
+        }, config.controllerResponseDelay);
       });
   };
 }());

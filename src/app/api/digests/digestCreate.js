@@ -20,9 +20,9 @@
     eventStore.postToStream(args)
       .then(function() {
         var hypermedia = digestFormatAsHal(req.href, instanceId, digestAddedEvent.data);
-        //setTimeout(function() {
-        res.hal(hypermedia, 201);
-        //}, config.controllerResponseDelay);
+        setTimeout(function() {
+          res.hal(hypermedia, 201);
+        }, config.controllerResponseDelay);
       });
   };
 }());
