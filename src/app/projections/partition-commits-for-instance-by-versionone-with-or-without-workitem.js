@@ -10,7 +10,7 @@ var callback = function(state, ev) {
   } else if (matchWorkitem(ev.data.commit.message)) {
     linkTo('versionOne_CommitsWithWorkitemMention-' + ev.metadata.inboxId, ev);
   } else {
-    linkTo('versionOne_CommitsWithoutWorkitemMention-', ev.metadata.inboxId, ev);
+    linkTo('versionOne_CommitsWithoutWorkitemMention-' + ev.metadata.inboxId, ev);
   }
 };
 
