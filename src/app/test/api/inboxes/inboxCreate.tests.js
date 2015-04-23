@@ -14,6 +14,7 @@ var handler = proxyquire('../../api/inboxes/inboxCreate', {
   './inboxAdded': inboxAdded,
   './inboxFormatAsHal': inboxFormatAsHal,
   '../helpers/eventStoreClient': eventStore,
+  '../helpers/setTimeout': fakeTimeout,
   '../sanitizeAndValidate': sanitizeAndValidate
 });
 

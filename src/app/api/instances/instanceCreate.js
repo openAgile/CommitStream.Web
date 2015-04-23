@@ -2,6 +2,7 @@
   var instanceAdded = require('./instanceAdded'),
       instanceFormatAsHal = require('./instanceFormatAsHal'),
       eventStore = require('../helpers/eventStoreClient'),
+      setTimeout = require('../helpers/setTimeout'),
       config = require('../../config');
 
   module.exports = function(req, res, next) {

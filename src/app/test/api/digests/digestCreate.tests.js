@@ -14,6 +14,7 @@ var handler = proxyquire('../../api/digests/digestCreate', {
   './digestAdded': digestAdded,
   './digestFormatAsHal': digestFormatAsHal,
   '../helpers/eventStoreClient': eventStore,
+  '../helpers/setTimeout': fakeTimeout,
   '../sanitizeAndValidate': sanitizeAndValidate
 });
 

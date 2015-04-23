@@ -14,6 +14,7 @@ var instanceAdded = {
 var handler = proxyquire('../../api/instances/instanceCreate', {
   './instanceAdded': instanceAdded,
   './instanceFormatAsHal': instanceFormatAsHal,
+  '../helpers/setTimeout': fakeTimeout,
   '../helpers/eventStoreClient': eventStore
 });
 

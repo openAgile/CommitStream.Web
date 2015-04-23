@@ -3,6 +3,7 @@
     digestFormatAsHal = require('./digestFormatAsHal'),
     eventStore = require('../helpers/eventStoreClient'),
     sanitizeAndValidate = require('../sanitizeAndValidate'),
+    setTimeout = require('../helpers/setTimeout'),
     config = require('../../config');
 
   module.exports = function(req, res, next) {

@@ -67,7 +67,7 @@ describe('commitsCreate', function() {
 
     postToStreamArgs = {
       name: 'inboxCommits-' + inboxId,
-      events: '{"some":"value"}'
+      events: {"some":"value"}
     };
 
     queryStatePartitionArgs = {

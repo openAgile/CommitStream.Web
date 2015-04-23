@@ -3,6 +3,7 @@
       eventStore = require('../helpers/eventStoreClient'),
       inboxFormatAsHal = require('./inboxFormatAsHal'),
       sanitizeAndValidate = require('../sanitizeAndValidate'),
+      setTimeout = require('../helpers/setTimeout'),
       config = require('../../config');
 
   module.exports = function(req, res) {

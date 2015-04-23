@@ -5,7 +5,8 @@
     if (target === undefined || target === null) target = global;
     var config = require('../../config'),
       chai = require('chai'),
-      expect = chai.expect,      
+      expect = chai.expect,
+      sinon = require('sinon'),
       sinonChai = require('sinon-chai'),
       Bluebird = require('bluebird');
 
@@ -17,10 +18,11 @@
 
     var base = {
       _: _,
+      fakeTimeout: function(callback, delay) { callback(); },
       chai: chai,
       expect: expect,
       should: chai.should(),
-      sinon: require('sinon'),
+      sinon: sinon,
       sinonChai: sinonChai,
       sinonAsPromised: require('sinon-as-promised')(Bluebird),
       httpMocks: require('node-mocks-http'),
