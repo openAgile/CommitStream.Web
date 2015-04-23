@@ -11,7 +11,7 @@
       id: req.params.digestId
     }).then(function(digest) {
       var hypermedia = digestFormatAsHal(req.href, req.params.instanceId, digest);
-      res.hal(hypermedia, 200);
+      res.hal(hypermedia);
     });
   };
 }());
