@@ -1,7 +1,7 @@
 var express = require('express'),
   app = express(),
   cors = require('cors'),
-  config = require('./config'),  
+  config = require('./config'),
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
   csError = require('./middleware/csError'),
@@ -15,7 +15,7 @@ var express = require('express'),
 app.use(domainMiddleware);
 
 // DO NOT MOVE THIS. It is here to handle unhandled rejected Promises cleanly
-Promise.onPossiblyUnhandledRejection(function(err){
+Promise.onPossiblyUnhandledRejection(function(err) {
   throw err;
 });
 
@@ -82,7 +82,7 @@ app.get('/app', function(req, res) {
   var key = req.query.key;
 
   res.render('app', {
-    apiUrl: protocol + '://' + host + '/api/query?key=' + key,
+    apiUrl: protocol + '://' + host + '/api/',
     protocol: protocol,
     resourcePath: protocol + '://' + host + '/'
   });
