@@ -7,9 +7,7 @@
   module.exports = function(req, res) {
     var workitems = req.params.workitems;
     var instanceId = req.instance.instanceId;
-    // TODO validate differently
-    if (!workitems) throw new Error('Parameter workitems is required');
-    
+
     var buildUri = function(page) {
       return req.href('/api/' + instanceId + '/commits/tags/versionone/workitems/' + workitems + '?page=' + page);
     };

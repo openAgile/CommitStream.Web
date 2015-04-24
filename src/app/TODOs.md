@@ -3,7 +3,7 @@
 ## Quick fixes
 * MK:DONE Replace empty objs with spy in tests
 * JG:DONE Update Hypermedia URIs for restful /commits
-* instanceCommitsGet: throw a proper validation error after validating workitems/:workitems parameter
+* MK:DONE instanceCommitsGet: throw a proper validation error after validating workitems/:workitems parameter
 * in commitsGet.js, validate inputs or assert on them
 
 ## Smallish
