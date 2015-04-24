@@ -7,7 +7,7 @@
     csError = require('../../middleware/csError');
 
   var InputRequired = csError.createCustomError('InputRequired', function(objectType) {
-    message = 'objectType is required';
+    message = objectType + ' is required';
     var errors = [message];
     NotFound.prototype.constructor.call(this, errors, 400);
   });
@@ -19,7 +19,6 @@
   }
 
   module.exports = function(query, stream, buildUri, cache) {
-    // TODO assert stream and buildUri
     validate('stream', stream);
     validate('buildUri', buildUri);
 

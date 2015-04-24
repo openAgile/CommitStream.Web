@@ -1,7 +1,7 @@
 # Things to clean up
 
 ## Quick fixes
-* in commitsGet.js, validate inputs or assert on them
+* MH: in commitsGet.js, validate inputs or assert on them
 * See if we can just replace the code in instanceGet with `res.hal(instanceFormatAsHal(req.instance))` instead of all that extra code.
 
 ## Smallish
