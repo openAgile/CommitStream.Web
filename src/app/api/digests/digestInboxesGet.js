@@ -1,5 +1,6 @@
 (function() {
   var eventStore = require('../helpers/eventStoreClient'),
+    csError = require('../../middleware/csError'),
     digestInboxesFormatAsHal = require('./digestInboxesFormatAsHal'),
     validateUUID = require('../validateUUID');
 
@@ -9,25 +10,25 @@
 
     validateUUID('digest', digestId);
 
-    var args = {
+    eventStore.queryStatePartitionById({
       name: 'digest',
       id: digestId
-    };
-    
-    eventStore.queryStatePartitionById(args)
+    })
       .then(function(digest) {
-        var args = {
+        eventStore.queryStatePartitionById({
           name: 'inboxes-for-digest',
           partition: 'digestInbox-' + digest.digestId
-        };
-        eventStore.queryStatePartitionById(args)
-        .then(function(inboxes) {
-          var hypermedia = digestInboxesFormatAsHal(req.href, instanceId, digest, inboxes);        
-          res.hal(hypermedia);
-        }).catch(function(error) {
-          var hypermedia = digestInboxesFormatAsHal(req.href, instanceId, digest, { inboxes: {} });
-          res.hal(hypermedia);
-        });
+        })
+          .then(function(inboxes) {
+            var hypermedia = digestInboxesFormatAsHal(req.href, instanceId, digest, inboxes);
+            res.hal(hypermedia);
+          }).catch(csError.ProjectionNotFound, function(error) {
+            // TODO: log the error?
+            var hypermedia = digestInboxesFormatAsHal(req.href, instanceId, digest, {
+              inboxes: {}
+            });
+            res.hal(hypermedia);
+          });
       });
   };
 }());

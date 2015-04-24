@@ -1,16 +1,17 @@
 (function(statusCodeValidator) {
   var csError = require('../../middleware/csError');
 
-  var NotFound = csError.createCustomError('NotFound', function(message) {
-    message = message || 'Resource not found';
+  var ProjectionNotFound = csError.createCustomError('ProjectionNotFound', function(message) {
+    message = message || 'Projection not found';
     var errors = [message];
-    NotFound.prototype.constructor.call(this, errors, 404);
+    ProjectionNotFound.prototype.constructor.call(this, errors, 404);
   });
+  csError.ProjectionNotFound = ProjectionNotFound;
 
   statusCodeValidator.validateGetProjection = function(objectType, objectId) {
     return function(response) {
       if (!response.body || response.body.length < 1 || response.statusCode === 404) {
-        throw new NotFound('Could not find ' + objectType + ' with id ' + objectId + '.');
+        throw new ProjectionNotFound('Could not find ' + objectType + ' with id ' + objectId + '.');
       }
       if (response.statusCode !== 200) {
         throw new Error(response.statusCode);
