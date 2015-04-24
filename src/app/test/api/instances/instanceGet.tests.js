@@ -1,28 +1,18 @@
 require('../handler-base')();
 
-// Things that proxyquire will use.
-
-var eventStore = {
-    queryStatePartitionById: sinon.stub()
-  },
-  instanceFormatAsHal = sinon.stub(),
-  validateUUID = sinon.stub();
+var instanceFormatAsHal = sinon.stub();
 
 var handler = proxyquire('../../api/instances/instanceGet', {
-  './instanceFormatAsHal': instanceFormatAsHal,
-  '../helpers/eventStoreClient': eventStore,
-  '../validateUUID': validateUUID
+  './instanceFormatAsHal': instanceFormatAsHal
 });
 
 function createRequest() {
   var request = httpMocks.createRequest({
     method: 'GET',
-    url: '/api/instances/fakeId',
-    params: {
-      instanceId: 'fakeId'
-    }
+    url: '/api/instances/fakeId'
   });
   request.href = sinon.spy();
+  request.instance = sinon.spy();
   return request;
 }
 
@@ -36,13 +26,11 @@ function createResponse() {
 describe('instanceGet', function() {
 
   describe('when getting an instance with a valid instanceId it', function() {
-    var instance = sinon.spy(),
-      formattedInstance = sinon.spy(),
+    var formattedInstance = sinon.spy(),
       request,
       response;
 
     before(function() {
-      eventStore.queryStatePartitionById.resolves(instance);
       instanceFormatAsHal.returns(formattedInstance);
       request = createRequest();
       response = createResponse();
@@ -50,20 +38,8 @@ describe('instanceGet', function() {
       handler(request, response);
     });
 
-    it('should call validateUUID with correct args', function() {
-      validateUUID.should.have.been.calledWith('instance', request.params.instanceId);
-    });
-
-    it('should call eventStore.queryStatePartitionById with correct args', function() {
-      var args = {
-        name: 'instance',
-        id: request.params.instanceId
-      };
-      eventStore.queryStatePartitionById.should.have.been.calledWith(args);
-    });
-
     it('should call instanceFormatAsHal with correct args', function() {
-      instanceFormatAsHal.should.have.been.calledWith(request.href, instance);
+      instanceFormatAsHal.should.have.been.calledWith(request.href, request.instance);
     });
 
     it('should call res.hal with correct args', function() {
