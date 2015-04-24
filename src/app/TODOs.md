@@ -1,7 +1,6 @@
 # Things to clean up
 
 ## Quick fixes
-* MH: in commitsGet.js, validate inputs or assert on them
 * See if we can just replace the code in instanceGet with `res.hal(instanceFormatAsHal(req.instance))` instead of all that extra code.
 
 ## Smallish
@@ -19,4 +18,4 @@
 * JG: handlers: Figure out how to test setTimeout or a equivalent approach
 * MK: pager.js: next link from eventstore, use _ to find it, not just use 3rd position
 * JG: in digestInboxesGet, catch a specific error when reading a projection, not all errors to return empty result
-
+* MH: in commitsGet.js, validate inputs or assert on them
