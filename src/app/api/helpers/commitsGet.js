@@ -3,10 +3,25 @@
     _ = require('underscore'),
     gitHubEventsToApiResponse = require('../translators/gitHubEventsToApiResponse'),
     eventStore = require('../helpers/eventStoreClient'),
-    pager = require('../helpers/pager');
+    pager = require('../helpers/pager'),
+    csError = require('../../middleware/csError');
+
+  var InputRequired = csError.createCustomError('InputRequired', function(objectType) {
+    message = 'objectType is required';
+    var errors = [message];
+    NotFound.prototype.constructor.call(this, errors, 400);
+  });
+
+  function validate(propertyName, property) {
+    if (property === undefined || property === null || property == '') {
+      throw new InputRequired(propertyName);
+    }
+  }
 
   module.exports = function(query, stream, buildUri, cache) {
     // TODO assert stream and buildUri
+    validate('stream', stream);
+    validate('buildUri', buildUri);
 
     var pageSize = pager.getPageSize(query);
     var currentPage = cache.get(query.page);
@@ -19,8 +34,8 @@
     };
 
     return eventStore.getFromStream(args)
-      .then(function(response) {        
-        var links = response.links;       
+      .then(function(response) {
+        var links = response.links;
         var apiResponse = gitHubEventsToApiResponse(response.entries);
         var pagedResponse = pager.getPagedResponse(apiResponse, links, currentPage, buildUri, cache);
         return pagedResponse;
