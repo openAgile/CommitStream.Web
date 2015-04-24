@@ -2,6 +2,7 @@
 
 ## Quick fixes
 * in commitsGet.js, validate inputs or assert on them
+* See if we can just replace the code in instanceGet with `res.hal(instanceFormatAsHal(req.instance))` instead of all that extra code.
 
 ## Smallish
 * digestCommitsGet, instanceCommitsGet: revisit HAL approach for these responses
