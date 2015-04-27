@@ -2,6 +2,17 @@
 
 ## Smallish
 * digestCommitsGet, instanceCommitsGet: revisit HAL approach for these responses
+* We should have a smoke test that excercises this line from digestsFormatAsHal.js
+
+  response._embedded.digests.push(createDigestHyperMediaResult(digest.content.data));
+
+  The need for this is because digest.content.data. That digest object is what we get back from eventstore, and it's structure has changed in the past when we upgraded eventstore.
+
+* In digestsGet.tests.js, revisit this comment
+
+  describe('when there are no digests', function() {
+    //TODO: find out how to test this
+  });
 
 ## Bigger
 * Handle ***UNKNOWN*** from EventStore
