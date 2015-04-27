@@ -35,6 +35,7 @@ describe('digestInboxesGet', function() {
       eventStore.queryStatePartitionById.onFirstCall().resolves(digest);
       eventStore.queryStatePartitionById.onSecondCall().resolves(inboxes);
 
+      digestInboxesFormatted = sinon.spy();
       digestInboxesFormatAsHal.returns(digestInboxesFormatted);
 
       request = httpMocks.createRequest();
@@ -75,6 +76,14 @@ describe('digestInboxesGet', function() {
       digestInboxesFormatAsHal.should.have.been.calledWith(request.href, instanceId, digest, inboxes);
     });
 
+    it('should call res.hal with correct args', function() {
+      response.hal.should.have.been.calledWith(digestInboxesFormatted);
+    });
+
+  });
+
+  describe('when projection is not found', function() {
+    //TODO
   });
 
 });
