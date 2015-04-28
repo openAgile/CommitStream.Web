@@ -1,10 +1,8 @@
-var chai = require('chai'),
-  should = chai.should(),
-  validator = require('validator'),
-  proxyquire = require('proxyquire'),
-  sinon = require('sinon'),
+require('../handler-base')();
+
+var validator = require('validator'),
   uuidStub = sinon.stub(),
-  digestAdded = proxyquire('../../../api/digests/digestAdded', {
+  digestAdded = proxyquire('../../api/digests/digestAdded', {
     'uuid-v4': uuidStub
   });
 
