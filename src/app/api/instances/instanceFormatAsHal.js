@@ -9,9 +9,10 @@
           "href": href("/api/" + instance.instanceId + "/digests")
         },
         "digest-create": {
-          "href": href("/api/" + instance.instanceId + "/digests"),
+          "href": href("/api/" + instance.instanceId + "/digests?apiKey={apiKey}"),
           "method": "POST",
-          "title": "Endpoint for creating a digest on instance " + instance.instanceId + "."
+          "title": "Endpoint for creating a digest on instance " + instance.instanceId + ".",
+          "templated":true
         }
       },
       "instanceId": instance.instanceId,
