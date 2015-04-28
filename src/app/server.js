@@ -57,6 +57,22 @@ app.param('instanceId', instanceAuthenticator);
 // Think thrice.
 appConfigure(app);
 
+// SPIKE: Provide a public entry point for the API
+app.get('/api/public', function(req, res) {
+  res.set('Content-Type', 'application/hal+json');
+  res.status(200).send({
+    "_links":{
+      "self":{
+        "href":req.href("/api/public")
+      },
+      "instances":{
+        "href":req.href("/api/instances"),
+        "templated":false
+      }
+    }
+  });
+});
+
 // Return a URL as a special header for each request
 app.use(function(req, res, next) {
   res.setHeader("X-CommitStream-API-Docs", "https://github.com/openAgile/CommitStream.Web");

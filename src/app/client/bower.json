@@ -1,0 +1,24 @@
+{
+  "name": "CommitStream",
+  "version": "0.0.2",
+  "homepage": "https://github.com/openAgile/CommitStream.Web",
+  "authors": [
+    "Josh Gough <josh.gough@versionone.com>"
+  ],
+  "description": "CommitStream",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "~0.12.1",
+    "angular-hal": "~0.1.5"
+  }
+}

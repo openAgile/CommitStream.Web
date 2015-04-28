@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-hal/angular-hal.js"></script>
+    <script src="bower_components/rfc6570/rfc6570.js"></script>    
+
+    <script>
+'use strict';
+
+var app = angular.module('commitStream', ['ui.bootstrap', 'angular-hal']);
+
+app.factory('CommitStreamApi', ['halClient', function(halClient) {
+  return {
+    'load' : function() {
+      return halClient.$get('/api/public');
+    },
+  };
+}]);
+
+app.controller('CommitStreamController',
+  ['$rootScope', '$scope', 'CommitStreamApi', 
+  function($rootScope, $scope, CommitStreamApi) {
+    var apiKey = '';
+
+    CommitStreamApi
+    .load()
+    .then(function(resources) {
+      return resources.$post('instances');
+    })
+    .then(function(instance) {
+      apiKey = instance.apiKey;
+      $scope.instance = instance;      
+      $scope.links = JSON.stringify(instance.$links(), 2, ' ');
+      console.log(instance);
+      return instance.$post('digest-create', {apiKey:apiKey}, {description:'My new digest'});
+    })
+    .then(function(digest) {
+      console.log(digest);
+      console.log(digest.$links());
+    })
+    .catch(function(error) {
+      console.error("Caught an error!");
+      console.error(error);
+    });
+  }]
+);
+    </script>
+  </head>
+
+  <body ng-app='commitStream'>
+    <link type='text/css' rel='stylesheet' href='commitStream.css'>
+    <div ng-controller='CommitStreamController'>
+      <div ng-if='instance'>
+        <h3>New instance details</h3>
+        Instance ID: {{instance.instanceId}}
+        <br />
+        API Key: {{instance.apiKey}}
+      </div>
+      <div ng-if='links'>
+        <pre>{{links}}</pre>
+      </div>
+    </div>
+  </body>
+</html>
