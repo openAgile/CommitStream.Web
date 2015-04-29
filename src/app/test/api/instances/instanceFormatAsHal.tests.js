@@ -17,7 +17,7 @@ var expected = {
     }
   },
   "instanceId": "11111111-1111-4111-1111-111111111111",
-  "apiKey": "22222222-2222-4222-2222-222222222222"
+  "apiKey": "44444444-4444-4444-4444-444444444444"
 };
 
 var href = function(input) {
@@ -28,7 +28,7 @@ describe('instanceFormatAsHal', function() {
   describe('when calling it', function() {
     var instance = {
       instanceId: '11111111-1111-4111-1111-111111111111',
-      apiKey: '22222222-2222-4222-2222-222222222222'
+      apiKey: '44444444-4444-4444-4444-444444444444'
     };
 
     it('should return the expected value', function() {

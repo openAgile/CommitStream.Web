@@ -5,27 +5,27 @@ var digestFormatAsHal = require('../../../api/digests/digestFormatAsHal');
 var expected = {
   "_links": {
     "self": {
-      "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/digests/ff464ed1-b395-4a4d-8b18-b43f9b3790a9"
+      "href": "/api/11111111-1111-4111-1111-111111111111/digests/22222222-2222-4222-2222-222222222222"
     },
     "digests": {
-      "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/digests"
+      "href": "/api/11111111-1111-4111-1111-111111111111/digests"
     },
     "inbox-create": {
-      "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/digests/ff464ed1-b395-4a4d-8b18-b43f9b3790a9/inboxes",
+      "href": "/api/11111111-1111-4111-1111-111111111111/digests/22222222-2222-4222-2222-222222222222/inboxes",
       "method": "POST",
-      "title": "Endpoint for creating an inbox for a repository on digest ff464ed1-b395-4a4d-8b18-b43f9b3790a9."
+      "title": "Endpoint for creating an inbox for a repository on digest 22222222-2222-4222-2222-222222222222."
     },
     "inboxes": {
-      "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/digests/ff464ed1-b395-4a4d-8b18-b43f9b3790a9/inboxes"
+      "href": "/api/11111111-1111-4111-1111-111111111111/digests/22222222-2222-4222-2222-222222222222/inboxes"
     }
   },
   "description": "some random description",
-  "digestId": "ff464ed1-b395-4a4d-8b18-b43f9b3790a9"
+  "digestId": "22222222-2222-4222-2222-222222222222"
 };
 
-var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
+var instanceId = '11111111-1111-4111-1111-111111111111',
   data = {
-    digestId: 'ff464ed1-b395-4a4d-8b18-b43f9b3790a9',
+    digestId: '22222222-2222-4222-2222-222222222222',
     description: 'some random description'
   };
 

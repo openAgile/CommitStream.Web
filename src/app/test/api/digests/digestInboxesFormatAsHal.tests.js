@@ -3,66 +3,66 @@ require('../handler-base')();
 var digestInboxesFormatAsHal = require('../../../api/digests/digestInboxesFormatAsHal');
 
 describe('digestInboxesFormatAsHal', function() {
-  var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
+  var instanceId = '11111111-1111-4111-1111-111111111111',
     digest = {
-      'digestId': 'ff1fdc30-d0e2-465b-b23d-fda510acc1bc',
+      'digestId': '22222222-2222-4222-2222-222222222222',
       'description': 'a test digest'
     },
     state = {
       'inboxes': [{
-        'inboxId': 'e70ee98d-cd21-4bfe-a4fe-bbded9ce4584'
+        'inboxId': '33333333-3333-4333-3333-333333333333'
       }, {
-        'inboxId': 'e70ee98d-cd21-4bfe-a4fe-bbded9ce3298'
+        'inboxId': '55555555-5555-4555-5555-555555555555'
       }]
     },
     inboxIds = [{
-      'inboxId': 'e70ee98d-cd21-4bfe-a4fe-bbded9ce4584'
+      'inboxId': '33333333-3333-4333-3333-333333333333'
     }, {
-      'inboxId': 'e70ee98d-cd21-4bfe-a4fe-bbded9ce3298'
+      'inboxId': '55555555-5555-4555-5555-555555555555'
     }];
 
   var halResponse = {
     "_links": {
       "self": {
-        "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/digests/ff1fdc30-d0e2-465b-b23d-fda510acc1bc/inboxes",
+        "href": "/api/11111111-1111-4111-1111-111111111111/digests/22222222-2222-4222-2222-222222222222/inboxes",
       },
       "digest": {
-        "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/digests/ff1fdc30-d0e2-465b-b23d-fda510acc1bc"
+        "href": "/api/11111111-1111-4111-1111-111111111111/digests/22222222-2222-4222-2222-222222222222"
       },
       "inbox-create": {
-        "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/digests/ff1fdc30-d0e2-465b-b23d-fda510acc1bc/inboxes",
+        "href": "/api/11111111-1111-4111-1111-111111111111/digests/22222222-2222-4222-2222-222222222222/inboxes",
         "method": "POST",
-        "title": "Endpoint for creating an inbox for a repository on digest " + 'ff1fdc30-d0e2-465b-b23d-fda510acc1bc' + "."
+        "title": "Endpoint for creating an inbox for a repository on digest " + '22222222-2222-4222-2222-222222222222' + "."
       }
     },
     "count": 2,
     "digest": {
       "description": 'a test digest',
-      "digestId": 'ff1fdc30-d0e2-465b-b23d-fda510acc1bc'
+      "digestId": '22222222-2222-4222-2222-222222222222'
     },
     "_embedded": {
       "inboxes": [{
         "_links": {
           "inbox-commits": {
-            "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/inboxes/e70ee98d-cd21-4bfe-a4fe-bbded9ce4584/commits",
+            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/33333333-3333-4333-3333-333333333333/commits",
             "method": "POST"
           },
           "self": {
-            "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/inboxes/e70ee98d-cd21-4bfe-a4fe-bbded9ce4584"
+            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/33333333-3333-4333-3333-333333333333"
           }
         },
-        "inboxId": "e70ee98d-cd21-4bfe-a4fe-bbded9ce4584",
+        "inboxId": "33333333-3333-4333-3333-333333333333",
       }, {
         "_links": {
           "inbox-commits": {
-            "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/inboxes/e70ee98d-cd21-4bfe-a4fe-bbded9ce3298/commits",
+            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/55555555-5555-4555-5555-555555555555/commits",
             "method": "POST"
           },
           "self": {
-            "href": "/api/872512eb-0d42-41fa-9a4e-fcb480ef265f/inboxes/e70ee98d-cd21-4bfe-a4fe-bbded9ce3298"
+            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/55555555-5555-4555-5555-555555555555"
           }
         },
-        "inboxId": "e70ee98d-cd21-4bfe-a4fe-bbded9ce3298"
+        "inboxId": "55555555-5555-4555-5555-555555555555"
       }]
     }
   };
