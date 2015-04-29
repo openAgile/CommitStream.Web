@@ -17,7 +17,7 @@ describe('digestAdded', function() {
 
     var digestAddedEvent = digestAdded.create(instanceId, description);
 
-    it('should call uuid three times', function() {
+    it('should call uuid twice times', function() {
       uuidStub.should.have.been.calledTwice;
     });
 
