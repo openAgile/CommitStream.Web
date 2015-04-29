@@ -1,10 +1,10 @@
 (function() {
   var inboxAdded = require('./inboxAdded'),
-      eventStore = require('../helpers/eventStoreClient'),
-      inboxFormatAsHal = require('./inboxFormatAsHal'),
-      sanitizeAndValidate = require('../sanitizeAndValidate'),
-      setTimeout = require('../helpers/setTimeout'),
-      config = require('../../config');
+    eventStore = require('../helpers/eventStoreClient'),
+    inboxFormatAsHal = require('./inboxFormatAsHal'),
+    sanitizeAndValidate = require('../sanitizeAndValidate'),
+    setTimeout = require('../helpers/setTimeout'),
+    config = require('../../config');
 
   module.exports = function(req, res) {
     var digestId = req.params.digestId;
@@ -18,12 +18,12 @@
       name: 'digest',
       id: digestId
     };
-    
+
     var inboxAddedEvent;
-    
+
     eventStore.queryStatePartitionById(args)
       .then(function(digest) {
-        inboxAddedEvent = inboxAdded.create(digestId, req.body.family, req.body.name, req.body.url);
+        inboxAddedEvent = inboxAdded.create(instanceId, digestId, req.body.family, req.body.name, req.body.url);
         var args = {
           name: 'inboxes-' + instanceId,
           events: inboxAddedEvent

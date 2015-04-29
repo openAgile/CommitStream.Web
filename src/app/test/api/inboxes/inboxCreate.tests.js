@@ -91,7 +91,7 @@ describe('inboxCreate', function() {
     });
 
     it('should call inboxAdded.create with correct args', function() {
-      inboxAdded.create.should.have.been.calledWith(digestId, request.body.family, request.body.name, request.body.url);
+      inboxAdded.create.should.have.been.calledWith(instanceId, digestId, request.body.family, request.body.name, request.body.url);
     });
 
     it('should call eventStore.postToStream with correct args', function() {

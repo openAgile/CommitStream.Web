@@ -2,13 +2,14 @@
   var uuid = require('uuid-v4'),
     schemaValidator = require('../schemaValidator');
 
-  inboxAdded.create = function(digestId, family, name, url) {
+  inboxAdded.create = function(instanceId, digestId, family, name, url) {
     var eventId = uuid();
     var inboxId = uuid();
     return {
       eventType: 'InboxAdded',
       eventId: eventId,
       data: {
+        instanceId: instanceId,
         digestId: digestId,
         inboxId: inboxId,
         family: family,
@@ -27,6 +28,12 @@
       "name"
     ],
     "properties": {
+      "instanceId": {
+        "title": "ID of the instance to which this inbox will belong",
+        "type": "string",
+        "minLength": 36,
+        "maxLength": 36
+      },
       "digestId": {
         "title": "ID of the digest to which this inbox will belong",
         "type": "string",

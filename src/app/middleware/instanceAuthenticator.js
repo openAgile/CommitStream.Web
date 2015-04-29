@@ -3,7 +3,7 @@
     eventStore = require('../api/helpers/eventStoreClient');
 
   var InvalidInstanceApiKey = csError.createCustomError('InvalidInstanceApiKey', function(instanceId) {
-    message = 'Invalid apiKey for instance ' + instanceId;
+    var message = 'Invalid apiKey for instance ' + instanceId;
     var errors = [message];
     InvalidInstanceApiKey.prototype.constructor.call(this, errors, 401);
   });

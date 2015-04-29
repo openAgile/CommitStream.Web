@@ -1,10 +1,11 @@
 fromCategory('digest')
-.foreachStream()
-.when({
+  .foreachStream()
+  .when({
     'DigestAdded': function(state, ev) {
-        return {
-            digestId: ev.data.digestId,
-            description: ev.data.description
-        }
+      return {
+        instanceId: ev.data.instanceId,
+        digestId: ev.data.digestId,
+        description: ev.data.description
+      };
     }
-});
+  });
