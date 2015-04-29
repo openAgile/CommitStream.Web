@@ -61,13 +61,16 @@ appConfigure(app);
 app.get('/api/public', function(req, res) {
   res.set('Content-Type', 'application/hal+json');
   res.status(200).send({
-    "_links":{
-      "self":{
-        "href":req.href("/api/public")
+    "_links": {
+      "self": {
+        "href": req.href("/api/public")
       },
-      "instances":{
-        "href":req.href("/api/instances"),
-        "templated":false
+      "instances": {
+        "href": req.href("/api/instances")
+      },
+      "digest": {
+        "href": req.href('/api/{instanceId}/digests/{digestId}'),
+        "templated": true
       }
     }
   });
