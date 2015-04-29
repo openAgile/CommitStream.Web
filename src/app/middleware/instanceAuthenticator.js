@@ -12,8 +12,10 @@
     eventStore.queryStatePartitionById({
       name: 'instance',
       id: instanceId
-    }).then(function(instance) {
-      if (instance.apiKey === req.query.apiKey) {
+    }).then(function(instance) {      
+      if (instance.apiKey === req.query.apiKey
+          ||
+          instance.apiKey === req.get('Bearer')) {
         req.instance = instance;
         next();
       } else {
