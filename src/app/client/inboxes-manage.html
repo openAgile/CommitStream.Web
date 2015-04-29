@@ -4,7 +4,7 @@
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-hal/angular-hal.js"></script>
-    <script src="bower_components/rfc6570/rfc6570.js"></script>    
+    <script src="bower_components/rfc6570/rfc6570.js"></script>
 
     <script>
 'use strict';
@@ -28,16 +28,29 @@ app.factory('CommitStreamApi', ['halClient', function(halClient) {
 }]);
 
 app.controller('CommitStreamController',
-  ['$scope', 'CommitStreamApi', 
+  ['$scope', 'CommitStreamApi',
   function($scope, CommitStreamApi) {
+    $scope.instance = {};
+    $scope.digest = {};
+
+    $scope.newInbox = {
+      url: '',
+      name: '',
+      family: 'GitHub'
+    };
+    window.scope = $scope;
+    window.newInbox = $scope.newInbox;
+
     CommitStreamApi
     .load()
     .then(function(resources) {
+      $scope.resources = resources;
       return resources.$post('instances');
     })
     .then(function(instance) {
+      angular.copy(instance, $scope.instance);
       persistentOptions.headers.Bearer = instance.apiKey;
-      $scope.instance = instance;      
+      $scope.instance = instance;
       $scope.instanceLinks = formatLinks(instance.$links());
 
       return instance.$post('digest-create', {}, {
@@ -45,21 +58,52 @@ app.controller('CommitStreamController',
       });
     })
     .then(function(digest) {
+      angular.copy(digest, $scope.digest);
+
       $scope.digestLinks = formatLinks(digest.$links());
 
-      return digest.$post('inbox-create', {}, {
-        'name': 'CommitStream.Web',
-        'family': 'GitHub',
-        'url': 'http://www.github.com/openAgile/CommitStream.Web'
-      });
-    })    
-    .then(function(inbox) {
-      var links = inbox.$links();
-      $scope.inboxLinks = formatLinks(inbox.$links());
-      prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
+      $scope.addInboxStartingAtDigest = function() {
+
+        $scope.resources.$get('digest', {
+          instanceId: $scope.instance.instanceId,
+          digestId: $scope.digest.digestId
+        }).then(function(digestFromRoot) {
+          var index = $scope.newInbox.url.lastIndexOf('/');
+          $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+
+          digestFromRoot.$post('inbox-create', {}, $scope.newInbox)
+          .then(function(inbox) {
+            var links = inbox.$links();
+            $scope.inboxLinks = formatLinks(inbox.$links());
+            console.log($scope.inboxLinks);
+            prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
+          })
+          .catch(function(error) {
+            console.error("Caught an error adding repo!");
+            console.error(error);
+          });
+        });
+      };
+
+      $scope.addInbox = function() {
+        var index = $scope.newInbox.url.lastIndexOf('/');
+        $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+
+        digest.$post('inbox-create', {}, $scope.newInbox)
+        .then(function(inbox) {
+          var links = inbox.$links();
+          $scope.inboxLinks = formatLinks(inbox.$links());
+          console.log($scope.inboxLinks);
+          prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
+        })
+        .catch(function(error) {
+          console.error("Caught an error adding repo!");
+          console.error(error);
+        });
+      };
     })
     .catch(function(error) {
-      console.error("Caught an error!");
+      console.error("Caught an error adding instance or repo list!");
       console.error(error);
     });
   }]
@@ -69,7 +113,28 @@ app.controller('CommitStreamController',
 
   <body ng-app='commitStream'>
     <link type='text/css' rel='stylesheet' href='commitStream.css'>
+
     <div ng-controller='CommitStreamController'>
+      <p>
+        Instance ID: <input ng-model='instance.instanceId' />
+        <br/>
+        Digest ID: <input ng-model='digest.digestId' />
+      </p>
+      <form ng-submit="addInboxStartingAtDigest()">
+        <input type="text" ng-model="newInbox.url"  size="100"
+               placeholder="add new GitHub repo url...">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+
+      <hr />
+      <h2>Alternate</h2>
+
+      <form ng-submit="addInbox()">
+        <input type="text" ng-model="newInbox.url"  size="100"
+               placeholder="add new GitHub repo url...">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+
       <div ng-if='instance'>
         <h3>New instance details</h3>
         Instance ID: {{instance.instanceId}}
