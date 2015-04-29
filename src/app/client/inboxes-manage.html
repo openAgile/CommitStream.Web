@@ -11,34 +11,52 @@
 
 var app = angular.module('commitStream', ['ui.bootstrap', 'angular-hal']);
 
+var persistentOptions = {
+  headers: { Bearer: '' }
+};
+
+function formatLinks(links) {
+  return JSON.stringify(links, 2, ' ');
+}
+
 app.factory('CommitStreamApi', ['halClient', function(halClient) {
   return {
     'load' : function() {
-      return halClient.$get('/api/public');
+      return halClient.$get('/api/public', persistentOptions);
     },
   };
 }]);
 
 app.controller('CommitStreamController',
-  ['$rootScope', '$scope', 'CommitStreamApi', 
-  function($rootScope, $scope, CommitStreamApi) {
-    var apiKey = '';
-
+  ['$scope', 'CommitStreamApi', 
+  function($scope, CommitStreamApi) {
     CommitStreamApi
     .load()
     .then(function(resources) {
       return resources.$post('instances');
     })
     .then(function(instance) {
-      apiKey = instance.apiKey;
+      persistentOptions.headers.Bearer = instance.apiKey;
       $scope.instance = instance;      
-      $scope.links = JSON.stringify(instance.$links(), 2, ' ');
-      console.log(instance);
-      return instance.$post('digest-create', {apiKey:apiKey}, {description:'My new digest'});
+      $scope.instanceLinks = formatLinks(instance.$links());
+
+      return instance.$post('digest-create', {}, {
+        description: 'My new digest'
+      });
     })
     .then(function(digest) {
-      console.log(digest);
-      console.log(digest.$links());
+      $scope.digestLinks = formatLinks(digest.$links());
+
+      return digest.$post('inbox-create', {}, {
+        'name': 'CommitStream.Web',
+        'family': 'GitHub',
+        'url': 'http://www.github.com/openAgile/CommitStream.Web'
+      });
+    })    
+    .then(function(inbox) {
+      var links = inbox.$links();
+      $scope.inboxLinks = formatLinks(inbox.$links());
+      prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
     })
     .catch(function(error) {
       console.error("Caught an error!");
@@ -58,8 +76,17 @@ app.controller('CommitStreamController',
         <br />
         API Key: {{instance.apiKey}}
       </div>
-      <div ng-if='links'>
-        <pre>{{links}}</pre>
+      <div ng-if='instanceLinks'>
+        <h4>Instance links</h4>
+        <pre>{{instanceLinks}}</pre>
+      </div>
+      <div ng-if='digestLinks'>
+        <h4>Digest links</h4>
+        <pre>{{digestLinks}}</pre>
+      </div>
+      <div ng-if='inboxLinks'>
+        <h4>Inbox links</h4>
+        <pre>{{inboxLinks}}</pre>
       </div>
     </div>
   </body>
