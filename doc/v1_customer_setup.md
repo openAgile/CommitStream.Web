@@ -14,8 +14,10 @@ Normally, you can just clone the base virtual machine image that already has Eve
 * Specify a **machine name**, starting with `v1cs-`. Example, for a customer named `devopsheros`, name it `v1cs-devopsheros`
 * Tier: `Standard`
 * Size: `A2 3.5 GB`
-* Region: `US East 2` (auto-selected)
-* Add a firewall port named `eventstore` with private and public TCP ports for `2113`.
+* Cloud Service: `Create a new cloud service`
+* Cloud Service DNS Name: `v1cs-<customername>` (this will be automatically populated)
+* Region/Affinity Group/Virtual Network: `East US 2` (auto-selected)
+* Add a firewall port (Endpoint) named `eventstore` with private and public TCP ports for `2113`.
 * Finally, leave VM Agent checked for `The VM agent that supports extensions is already installed.`
 * Click the **Complete** checkmark to start the new VM
 
