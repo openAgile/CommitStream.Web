@@ -2,10 +2,10 @@
   var csError = require('./csError'),
     eventStore = require('../api/helpers/eventStoreClient');
 
-  var InvalidInstanceDigest = csError.createCustomError('InvalidInstanceDigest', function(instanceId, digestId) {
-    var message = 'Invalid digest ' + digestId + ' for instance ' + instanceId;
+  var InvalidInstanceToDigest = csError.createCustomError('InvalidInstanceToDigest', function(instanceId, digestId) {
+    var message = 'The digest ' + digestId + ' does not exists for instance ' + instanceId;
     var errors = [message];
-    InvalidInstanceDigest.prototype.constructor.call(this, errors, 401);
+    InvalidInstanceToDigest.prototype.constructor.call(this, errors, 404);
   });
 
   module.exports = function(req, res, next, digestId) {
@@ -16,7 +16,7 @@
       if (req.instance.instanceId === digest.instanceId) {
         next();
       } else {
-        throw new InvalidInstanceDigest(req.instance.instanceId, digestId);
+        throw new InvalidInstanceToDigest(req.instance.instanceId, digestId);
       }
     });
 

@@ -2,10 +2,10 @@
   var csError = require('./csError'),
     eventStore = require('../api/helpers/eventStoreClient');
 
-  var InvalidInstanceInbox = csError.createCustomError('InvalidInboxDigest', function(instanceId, inboxId) {
-    var message = 'Invalid digest ' + inboxId + ' for instance ' + instanceId;
+  var InvalidInstanceToInbox = csError.createCustomError('InvalidInstanceToInbox', function(instanceId, inboxId) {
+    var message = 'The inbox ' + inboxId + ' does not exists for instance ' + instanceId;
     var errors = [message];
-    InvalidInstanceInbox.prototype.constructor.call(this, errors, 401);
+    InvalidInstanceToInbox.prototype.constructor.call(this, errors, 404);
   });
 
   module.exports = function(req, res, next, inboxId) {
@@ -16,7 +16,7 @@
       if (req.instance.instanceId === inbox.instanceId) {
         next();
       } else {
-        throw new InvalidInstanceInbox(req.instance.instanceId, inboxId);
+        throw new InvalidInstanceToInbox(req.instance.instanceId, inboxId);
       }
     });
 
