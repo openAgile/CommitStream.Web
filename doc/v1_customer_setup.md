@@ -79,8 +79,8 @@ git checkout devopsheros
 git push origin devopsheros
 ```
 
-## Create the Azure web site to host the customer instance
-* Create a new web site in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `v1cs-devopsheros`
+## Create the Azure web site (Web App) to host the customer instance
+* Create a new web app in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `v1cs-devopsheros`
 * Configure the site's App Settings so that it knows where to find its EventStore instance with these settings
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
