@@ -81,6 +81,15 @@ git push origin devopsheros
 
 ## Create the Azure web site (Web App) to host the customer instance
 * Create a new web app in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `v1cs-devopsheros`
+* Under Azure's "Web Apps" section, click "+NEW" (bottom left)
+* Select COMPUTE>>WEB APP>>CUSTOM CREATE
+	* URL:			v1cs-devopsheros
+	* APP SERVICE PLAN:	Default1 (East US, Standard)
+	* DATABASE:		No database
+	* Tick the "Publish from source control" option
+* Select "GitHub" in the "Where is your source code?" screen
+* For "REPOSITORY NAME" select "CommitStream.Web"
+* For "BRANCH TO DEPLOY" type the branch created for this customer (i.e. v1cs-devopsheros)
 * Configure the site's App Settings so that it knows where to find its EventStore instance with these settings
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
