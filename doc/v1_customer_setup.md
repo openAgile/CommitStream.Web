@@ -95,7 +95,7 @@ git push origin devopsheros
   * Then, add these App Settings to the site
 	* protocol : `https`
 	* apiKey: `apiKey`
-	* eventStoreBaseUrl: `https://devopsheroscs.cloudapp.net:2113`
+	* eventStoreBaseUrl: `https://v1cs-devopsheros.cloudapp.net:2113`
 	* eventStoreUser `admin`
 	* eventStorePassword: `eventStorePassword`
 	* eventStoreAllowSelfSignedCert: `true`
