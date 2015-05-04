@@ -62,7 +62,7 @@ HttpPrefixes:
  - https://v1cs-se.cloudapp.net:2113/
 ```
 * Now, verify that EventStore is running normally by browsing to [https://localhost:2113](https://localhost:2113) from within the VM. If it does not respond, you may need to reset the EventStore service by opening **Powershell As Administrator** and typing: `nssm restart eventstore`.
-* Now, change the admin account EventStore password through the EventStore UI at [https://localhost:2113](https://localhost:2113). **Note**: the UI has a bug, so you must specify **https://localhost:2113** in the first field on the login screen. The default credentials are admin / changeit. Use a newly generated GUID for the admin account password. This value will also serve as the `eventStorePassword` value below within the Azure Web Site. You can generate a GUID in PowerShell by typing  `[guid]::NewGuid()` or by using the web site [http://www.uuidgenerator.net](http://www.uuidgenerator.net)
+* Now, change the admin account EventStore password through the EventStore UI at [https://localhost:2113](https://localhost:2113). **Note**: the UI has a bug, so you must specify **https://localhost:2113** in the first field on the login screen. The default credentials are admin / changeit. Use a newly generated GUID for the admin account password. This value will also serve as the `eventStorePassword` value below within the Azure Web Site. You can generate a GUID in PowerShell by typing  `[guid]::NewGuid()` or by using the web site [http://www.uuidgenerator.net](http://www.uuidgenerator.net). To change the password select the "Users" option at the top right of the page. Next, click the "admin" username and finally the "Reset Password" option on the top right.
 
 ## Create code branch for the customer instance
 
