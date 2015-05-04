@@ -100,7 +100,7 @@ git push origin devopsheros
 	* eventStorePassword: `eventStorePassword`
 	* eventStoreAllowSelfSignedCert: `true`
   * From the site's "Deployments" section, verify that the deployment worked in the web site details view. In the event the deployment fails, select the "SYNC" option at the bottom of the page to re-deploy.
-  * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=apiKey&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
+  * Verify that the site is working by querying in your browser: [https://v1cs-devopsheros.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://v1cs-devopsheros.azurewebsites.net/api/query?key=apiKey&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
 ## Create a Digest and Inboxes the GitHub repositories you want to send messages to CommitStream
 
