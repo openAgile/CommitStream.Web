@@ -90,7 +90,7 @@ git push origin devopsheros
 * Select "GitHub" in the "Where is your source code?" screen
 * For "REPOSITORY NAME" select "CommitStream.Web"
 * For "BRANCH TO DEPLOY" type the branch created for this customer (i.e. v1cs-devopsheros)
-* Configure the site's App Settings so that it knows where to find its EventStore instance with these settings
+* Once the web app has been created, configure the App Settings so that it knows where to find its EventStore instance with these settings
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
 	* protocol : `https`
