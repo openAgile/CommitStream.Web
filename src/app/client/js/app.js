@@ -10,14 +10,15 @@
   app.factory('CommitStreamApi', ['halClient', function(halClient) {
     return {
       'load' : function() {
-        return halClient.$get('/api/public', persistentOptions);
+        return halClient.$get('http://localhost:6565/api/public', persistentOptions);
       },
     };
   }]);
 
-  app.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/', {templateUrl: 'partials/instances.html', controller: 'InstancesController'});
-    $routeProvider.when('/inboxes', {templateUrl: 'partials/inboxes.html', controller: 'InboxesController'});
+  app.config(['$routeProvider', '$sceProvider', function($routeProvider, $sceProvider) {
+    $sceProvider.enabled(false);
+    $routeProvider.when('/', {templateUrl: 'http://localhost:6565/partials/instances.html', controller: 'InstancesController'});
+    $routeProvider.when('/inboxes', {templateUrl: 'http://localhost:6565/partials/inboxes.html', controller: 'InboxesController'});
     $routeProvider.otherwise({redirectTo: '/'});
   }]);
 
@@ -62,11 +63,14 @@
       var index = $scope.newInbox.url.lastIndexOf('/');
       $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
 
+      $scope.getWebHookUrl = function(inbox) {
+        return inbox.$links()['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
+      };
+
       $rootScope.digest.$post('inbox-create', {}, $scope.newInbox)
       .then(function(inbox) {
-        var links = inbox.$links();
+        var links = inbox.$links();        
         $scope.inboxes.push(inbox);
-        prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
       })
       .catch(function(error) {
         console.error("Caught an error adding a repo!");
