@@ -6,6 +6,8 @@ var express = require('express'),
   validation = require('./configValidation'),
   csError = require('./middleware/csError'),
   instanceAuthenticator = require('./middleware/instanceAuthenticator'),
+  instanceToDigestValidator = require('./middleware/instanceToDigestValidator'),
+  instanceToInboxValidator = require('./middleware/instanceToInboxValidator'),
   apiRoutesRequireContentTypeAppJson = require('./middleware/apiRoutesRequireContentTypeAppJson'),
   appConfigure = require('./middleware/appConfigure'),
   Promise = require('bluebird'),
@@ -52,6 +54,8 @@ app.get('/instances', function(req, res) {
 
 // Ensure that all routes with :instanceId parameters are properly authenticated
 app.param('instanceId', instanceAuthenticator);
+app.param('digestId', instanceToDigestValidator);
+app.param('inboxId', instanceToInboxValidator);
 
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.
