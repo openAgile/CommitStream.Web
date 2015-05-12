@@ -3,7 +3,7 @@
     eventStore = require('../api/helpers/eventStoreClient');
 
   var InvalidInstanceToDigest = csError.createCustomError('InvalidInstanceToDigest', function(instanceId, digestId) {
-    var message = 'The digest ' + digestId + ' does not exists for instance ' + instanceId;
+    var message = 'The digest ' + digestId + ' does not exist for instance ' + instanceId;
     var errors = [message];
     InvalidInstanceToDigest.prototype.constructor.call(this, errors, 404);
   });

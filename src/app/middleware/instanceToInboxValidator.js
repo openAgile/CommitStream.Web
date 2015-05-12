@@ -3,7 +3,7 @@
     eventStore = require('../api/helpers/eventStoreClient');
 
   var InvalidInstanceToInbox = csError.createCustomError('InvalidInstanceToInbox', function(instanceId, inboxId) {
-    var message = 'The inbox ' + inboxId + ' does not exists for instance ' + instanceId;
+    var message = 'The inbox ' + inboxId + ' does not exist for instance ' + instanceId;
     var errors = [message];
     InvalidInstanceToInbox.prototype.constructor.call(this, errors, 404);
   });
