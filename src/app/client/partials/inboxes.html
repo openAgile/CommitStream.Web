@@ -14,7 +14,7 @@
         <th>WebHook URL</th>        
       </tr>
       <tr ng-repeat='inbox in inboxes'>
-        <td style='width: 25%'>{{inbox.name}} <i style='font-size:75%'><b>URL:</b> {{inbox.url}}</i></td>          
+        <td style='width: 25%'>{{inbox.name}} <i style='font-size:75%'>({{inbox.url}})</i></td>
         <td>
           <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control' />
         </td>
