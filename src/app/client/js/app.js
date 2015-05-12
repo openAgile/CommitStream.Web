@@ -65,8 +65,8 @@
       $rootScope.digest.$post('inbox-create', {}, $scope.newInbox)
       .then(function(inbox) {
         var links = inbox.$links();
+        inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
         $scope.inboxes.push(inbox);
-        prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
       })
       .catch(function(error) {
         console.error("Caught an error adding a repo!");

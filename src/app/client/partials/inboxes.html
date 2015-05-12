@@ -1,11 +1,24 @@
-<form ng-submit="inboxCreate()">
-  <input type="text" ng-model="newInbox.url"  size="100"
-         placeholder="add new GitHub repo url...">
-  <input class="btn-primary" type="submit" value="add">
+<form ng-submit='inboxCreate()'>
+  <div class='input-group'>  
+    <input type='text' class='form-control' ng-model='newInbox.url'  size='100'
+         placeholder='add new GitHub repo url...'>
+    <span class='input-group-btn'>
+      <button class='btn btn-primary' type='button' ng-click='inboxCreate()'>Add</button>
+    </span>
+  </div>
   <div ng-if='inboxes.length > 0'>
     <h3>Repos</h3>
-    <div ng-repeat='inbox in inboxes'>
-      <h5>{{inbox.name}} | {{inbox.url}}</h5>
-  	</div>
+    <table class='table table-striped'>
+      <tr>
+        <th>Repo</th>
+        <th>WebHook URL</th>        
+      </tr>
+      <tr ng-repeat='inbox in inboxes'>
+        <td style='width: 25%'>{{inbox.name}} <i style='font-size:75%'><b>URL:</b> {{inbox.url}}</i></td>          
+        <td>
+          <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control' />
+        </td>
+      </tr>
+    </table>
   </div>
 </form>
