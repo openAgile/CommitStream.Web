@@ -113,24 +113,6 @@ app.get('/app', function(req, res) {
   });
 });
 
-app.get('/adminBootstrap', function(req, res) {
-  res.setHeader('Content-Type', 'application/javascript');
-  var settings = getHostSettings(req);
-
-  res.render('adminBootstrap', {
-    resourcePath: settings.protocol + '://' + settings.host + '/'
-  });
-});
-
-app.get('/admin', function(req, res) {
-  res.setHeader('Content-Type', 'application/javascript');
-  var settings = getHostSettings(req);
-
-  res.render('admin', {
-    resourcePath: settings.protocol + '://' + settings.host + '/'
-  });
-});
-
 app.listen(config.port, function() {
   console.log('CommitStream Web Server listening on port ' + config.port);
 });
