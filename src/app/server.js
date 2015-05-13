@@ -102,16 +102,40 @@ api.init(app);
 // DO NOT MOVE THIS. It must be here to catch unhandled errors.
 app.use(csError.errorHandler);
 
+function getHostSettings(req) {
+  return {
+    protocol : config.protocol || req.protocol,
+    host: req.get('host'),
+    key: req.query.key
+  };
+}
+
 app.get('/app', function(req, res) {
-  res.setHeader('content-type', 'application/javascript');
-  var protocol = config.protocol || req.protocol;
-  var host = req.get('host');
-  var key = req.query.key;
+  res.setHeader('Content-Type', 'application/javascript');
+  var settings = getHostSettings(req);
 
   res.render('app', {
-    apiUrl: protocol + '://' + host + '/api/',
-    protocol: protocol,
-    resourcePath: protocol + '://' + host + '/'
+    apiUrl: settings.protocol + '://' + settings.host + '/api/',
+    protocol: settings.protocol,
+    resourcePath: settings.protocol + '://' + settings.host + '/'
+  });
+});
+
+app.get('/adminBootstrap', function(req, res) {
+  res.setHeader('Content-Type', 'application/javascript');
+  var settings = getHostSettings(req);
+
+  res.render('adminBootstrap', {
+    resourcePath: settings.protocol + '://' + settings.host + '/'
+  });
+});
+
+app.get('/admin', function(req, res) {
+  res.setHeader('Content-Type', 'application/javascript');
+  var settings = getHostSettings(req);
+
+  res.render('admin', {
+    resourcePath: settings.protocol + '://' + settings.host + '/'
   });
 });
 

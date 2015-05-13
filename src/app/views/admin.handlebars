@@ -5,20 +5,23 @@
     headers: { Bearer: '' }
   };
 
-  var app = angular.module('commitStream', ['ui.bootstrap', 'angular-hal', 'ngRoute']);
+  var app = angular.module('commitStreamAdmin', ['angular-hal', 'ngRoute'])
+  app.config(function($sceProvider) {
+    $sceProvider.enabled(false);
+  });
 
   app.factory('CommitStreamApi', ['halClient', function(halClient) {
     return {
       'load' : function() {
-        return halClient.$get('/api/public', persistentOptions);
+        return halClient.$get('{{{resourcePath}}}api/public', persistentOptions);
       },
     };
   }]);
 
   app.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/', {templateUrl: 'partials/instances.html', controller: 'InstancesController'});
-    $routeProvider.when('/inboxes', {templateUrl: 'partials/inboxes.html', controller: 'InboxesController'});
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.when('/', {templateUrl: '{{{resourcePath}}}partials/instances.html', controller: 'InstancesController'});
+    $routeProvider.when('/inboxes', {templateUrl: '{{{resourcePath}}}partials/inboxes.html', controller: 'InboxesController'});
+    $routeProvider.otherwise({redirectTo: '{{{resourcePath}}}'});
   }]);
 
   app.controller('InstancesController',
@@ -72,6 +75,12 @@
         console.error("Caught an error adding a repo!");
         console.error(error);
       });
+    };
+
+    $scope.inboxHighlight = function(evt) {
+      var el = evt.currentTarget;
+      el.focus();
+      el.select();
     };
   }]);
 
