@@ -10,7 +10,16 @@
       <div id="commitStreamAdmin">
         <div ng-view></div>
       </div>
-      <script src="/adminBootstrap"></script>
+      <script src="/js/adminBootstrap.js"></script>
+      <script>
+        "use strict";
+        try {
+          CommitStreamAdminLoad("http://localhost:6565");
+        } catch(ex) { 
+          console.error("CommitStreamAdminLoad error:");
+          console.error(ex);
+        }
+      </script>
     </div>
   </body>
 </html>
