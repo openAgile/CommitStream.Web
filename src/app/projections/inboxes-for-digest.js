@@ -6,5 +6,8 @@ fromCategory('digestInbox')
   },
   'InboxAdded': function (state, ev) {
     state.inboxes[ev.data.inboxId] = ev.data;
+  },
+  'InboxRemoved': function (state, ev) {
+      delete state.inboxes[ev.data.inboxId];
   }
 });

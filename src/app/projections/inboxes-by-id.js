@@ -3,5 +3,6 @@ var callback = function (state, ev) {
 };
 
 fromCategory('inboxes').when({
-	'InboxAdded': callback 
+	'InboxAdded': callback,
+	'InboxRemoved': callback 
 });

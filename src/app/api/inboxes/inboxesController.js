@@ -7,5 +7,7 @@
     app.post('/api/:instanceId/inboxes/:inboxId/commits', bodyParser.json(), require('./commitsCreate'));
 
     app.get('/api/:instanceId/inboxes/:inboxId', require('./inboxGet'));
+    
+    app.delete('/api/:instanceId/inboxes/:inboxId', require('./inboxRemove'));
   };
 }(module.exports));

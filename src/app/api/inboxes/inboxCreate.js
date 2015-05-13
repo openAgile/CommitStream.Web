@@ -20,7 +20,8 @@
     };
 
     var inboxAddedEvent;
-
+    
+    //TODO: Why are we quering for the digest state? the middleware checks for the existence.
     eventStore.queryStatePartitionById(args)
       .then(function(digest) {
         inboxAddedEvent = inboxAdded.create(instanceId, digestId, req.body.family, req.body.name, req.body.url);
