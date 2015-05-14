@@ -1,7 +1,8 @@
 (function() { 
-  function CommitStreamAdminLoad(serviceUrl) {
-    var commitStreamAdminStyles = $("#commitStreamAdminStyles");
-    commitStreamAdminStyles.append($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap/dist/css/bootstrap.css">'));
+  function CommitStreamAdminLoad(serviceUrl, rootElementId) {
+    var commitStreamAdminStyles = $('#' + rootElementId);
+    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">'));    
+    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap/dist/css/bootstrap.css">'));
 
     var loadScripts = function(scripts) {
       if (!scripts || !scripts.length) {
@@ -20,24 +21,27 @@
                 $get: function () { return serviceUrl; }
               }
             });
-            console.log("About to boot");
-            CommitStreamAdminBoot($('#commitStreamAdmin'));
+            CommitStreamAdminBoot($('#' + rootElementId));
           }
         })
         .fail(function(jqXhr, settings, exception) {
-          console.error("CommitStream dependency loading exception for script:" + currentScript);
-          console.error("CommitStream dependency loading exception details:");
+          console.error('CommitStream dependency loading exception for script:' + currentScript);
+          console.error('CommitStream dependency loading exception details:');
           console.error(exception);
         });
     };
 
-    loadScripts([
-      serviceUrl + "/bower_components/angular/angular.js",
-      serviceUrl + "/bower_components/angular-route/angular-route.js",
-      serviceUrl + "/bower_components/angular-hal/angular-hal.js",
-      serviceUrl + "/bower_components/rfc6570/rfc6570.js",
-      serviceUrl + "/js/admin.js"
-    ]);
+    var scripts = [    
+      serviceUrl + '/bower_components/angular/angular.min.js',
+      serviceUrl + '/bower_components/angular-route/angular-route.min.js',
+      serviceUrl + '/bower_components/angular-hal/angular-hal.js',
+      serviceUrl + '/bower_components/rfc6570/rfc6570.js',
+      serviceUrl + '/bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+      serviceUrl + '/bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js',
+      serviceUrl + '/js/admin.js'
+    ];
+
+    loadScripts(scripts);    
   };
   window.CommitStreamAdminLoad = CommitStreamAdminLoad;
 }());

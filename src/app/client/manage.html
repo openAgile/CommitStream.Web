@@ -2,24 +2,21 @@
 <html>
   <head>
     <title>CommitStream Admin</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
   </head>
-  <body class="commitstream-config">
-    <div class="enable"><!-- hacky -->
-      <div id="commitStreamAdminStyles"></div>
-      <div id="commitStreamAdmin">
-        <div ng-view></div>
-      </div>
-      <script src="/js/adminBootstrap.js"></script>
-      <script>
-        "use strict";
-        try {
-          CommitStreamAdminLoad("http://localhost:6565");
-        } catch(ex) { 
-          console.error("CommitStreamAdminLoad error:");
-          console.error(ex);
-        }
-      </script>
+  <body class='commitstream-admin'>
+    <div id='commitStreamAdmin'>
+      <div ng-view></div>
     </div>
+    <script src='/js/adminBootstrap.js'></script>
+    <script>
+      'use strict';
+      try {
+        CommitStreamAdminLoad('http://localhost:6565', 'commitStreamAdmin');
+      } catch(ex) { 
+        console.error('CommitStreamAdminLoad error:');
+        console.error(ex);
+      }
+    </script>
   </body>
 </html>
