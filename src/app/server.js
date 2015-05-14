@@ -11,7 +11,8 @@ var express = require('express'),
   apiRoutesRequireContentTypeAppJson = require('./middleware/apiRoutesRequireContentTypeAppJson'),
   appConfigure = require('./middleware/appConfigure'),
   Promise = require('bluebird'),
-  domainMiddleware = require('express-domain-middleware');
+  domainMiddleware = require('express-domain-middleware'),
+  methodOverride = require('method-override');
 
 // DO NOT MOVE THIS. It is here to wrap routes in a domain to catch unhandled errors
 app.use(domainMiddleware);
@@ -27,6 +28,9 @@ validation.validateEventStore(function(error) {
     throw new Error(error);
   }
 });
+
+// override with the X-HTTP-Method-Override header in the request
+app.use(methodOverride('X-HTTP-Method-Override'))
 
 app.get('/version', function(req, res) {
   res.json({
