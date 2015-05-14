@@ -20,7 +20,6 @@
 
     app.config(['serviceUrlProvider', '$routeProvider', function(serviceUrlProvider, $routeProvider) {
       var serviceUrl = serviceUrlProvider.$get();
-      console.log(serviceUrl);
       $routeProvider.when('/', {templateUrl: serviceUrl + '/partials/instances.html', controller: 'InstancesController'});
       $routeProvider.when('/inboxes', {templateUrl: serviceUrl + '/partials/inboxes.html', controller: 'InboxesController'});
       $routeProvider.otherwise({redirectTo: serviceUrl + '/'});
@@ -54,7 +53,7 @@
       }]
     );
 
-    app.controller('InboxesController', ['$rootScope', '$scope', function($rootScope, $scope) {
+    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', function($rootScope, $scope, $timeout) {
       $scope.newInbox = {
         url: '',
         name: '',
@@ -71,7 +70,7 @@
         .then(function(inbox) {
           var links = inbox.$links();
           inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
-          $scope.inboxes.push(inbox);
+          $scope.inboxes.unshift(inbox);
         })
         .catch(function(error) {
           console.error("Caught an error adding a repo!");
@@ -79,10 +78,20 @@
         });
       };
 
-      $scope.inboxHighlight = function(evt) {
-        var el = evt.currentTarget;
+      var inboxHighlight = function(el) {
         el.focus();
         el.select();
+      };
+
+      $scope.inboxHighlight = function(evt) {
+        inboxHighlight(evt.currentTarget);
+      };
+
+      $scope.inboxHighlightTop = function() {
+        var el = $($('.inbox')[0]);
+        $timeout(function() {
+          inboxHighlight(el);
+        }, 0);
       };
     }]);
 
