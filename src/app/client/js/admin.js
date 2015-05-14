@@ -5,7 +5,7 @@
       headers: { Bearer: '' }
     };
 
-    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 'angular-hal', 'ngRoute']);
+    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 'angular-hal', 'ngRoute', 'frapontillo.bootstrap-switch']);
     app.config(function($sceProvider) {
       $sceProvider.enabled(false);
     });
@@ -62,6 +62,45 @@
       
       $scope.inboxes = [];
 
+      $scope.enabled = {
+        enabled: false,
+        selected : 'Disabled',        
+        onText: 'Enabled',
+        offText: 'Disabled',
+        onColor: 'success',
+        offColor: 'danger',
+        active: true,
+        size: 'normal',
+        animate: true,
+        radioOff: true,
+        icon: 'glyphicon glyphicon-play',
+        handleWidth: 'auto',
+        labelWidth: 'auto',
+        inverse: true
+      };
+
+      $scope.enabledChange = function() {
+        $scope.enabled.icon = $scope.enabled.selected === 'Enabled' ? 
+          'glyphicon glyphicon-stop' : 'glyphicon glyphicon-play';
+        $scope.enabled.active = false;
+        apply();
+      };
+      
+      var applying = false;
+
+      var apply = function() {
+        applying = true;
+        $timeout(function() {
+          applying = false;
+          $scope.enabled.active = true;
+          $scope.enabled.enabled = !$scope.enabled.enabled;
+        }, 2000);
+      };
+
+      $scope.applying = function() {
+        return applying;
+      };
+
       $scope.inboxCreate = function() {
         var index = $scope.newInbox.url.lastIndexOf('/');
         $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
@@ -91,8 +130,9 @@
         var el = $($('.inbox')[0]);
         $timeout(function() {
           inboxHighlight(el);
-        }, 0);
+        }, 0);      
       };
+
     }]);
 
     angular.bootstrap(el, ['commitStreamAdmin']);
