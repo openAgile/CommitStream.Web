@@ -31,13 +31,14 @@
         <th>Repo</th>
         <th>WebHook URL</th>        
       </tr>
-      <tr ng-repeat='inbox in inboxes'>
+      <tr ng-repeat-start='inbox in inboxes'>
         <td style='width: 25%'>{{inbox.name}} <i style='font-size:75%'>({{inbox.url}})</i></td>
         <td>
           <div class='copy-clip'>Copy to clipboard</div>
-          <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control' ng-click='inboxHighlight($event)' />
+          <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' />
         </td>
       </tr>
+      <tr ng-repeat-end ng-init='inboxHighlightTop()'></tr>
     </table>
   </div>
 </form>
