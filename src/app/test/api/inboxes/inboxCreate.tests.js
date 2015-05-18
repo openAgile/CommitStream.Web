@@ -85,11 +85,7 @@ describe('inboxCreate', function() {
     it('should call sanitizeAndValidate with correct args', function() {
       sanitizeAndValidate.should.have.been.calledWith('inbox', request.body, ['family', 'name', 'url'], inboxAdded);
     });
-
-    it('should call eventStore.queryStatePartitionById with correct args', function() {
-      eventStore.queryStatePartitionById.should.have.been.calledWith(queryStatePartitionArgs);
-    });
-
+    
     it('should call inboxAdded.create with correct args', function() {
       inboxAdded.create.should.have.been.calledWith(instanceId, digestId, request.body.family, request.body.name, request.body.url);
     });
