@@ -97,12 +97,14 @@
       }]
     );
 
-    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', function($rootScope, $scope, $timeout) {
+    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', function($rootScope, $scope, $timeout, serviceUrl) {
       $scope.newInbox = {
         url: '',
         name: '',
         family: 'GitHub'
       };
+
+      $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
       
       $scope.inboxes = [];
 
