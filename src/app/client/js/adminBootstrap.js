@@ -2,7 +2,9 @@
   function CommitStreamAdminLoad(serviceUrl, rootElementId) {
     var commitStreamAdminStyles = $('#' + rootElementId);
     commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css">'));
-    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap/dist/css/bootstrap.css">'));
+    //commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap/dist/css/bootstrap.css">'));
+    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/css/bootstrap-theme.min.css">'));
+    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/css/bootstrap.min.css">'));
 
     var loadScripts = function(scripts) {
       if (!scripts || !scripts.length) {

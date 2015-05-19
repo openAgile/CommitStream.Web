@@ -16,13 +16,18 @@
     .commitstream-admin .copy-clip {
       font-size: 70%;
     }
+
+    .toggle-handle { 
+      border-radius: 0px;
+      width: 50px;
+    }
   </style>
 
   <p>
     <input 
       data-on='Enabled'
       data-off='Disabled'
-      data-onstyle='info'
+      data-style='slow'
       class='form-control enabled'
       type='checkbox'
       ng-model='enabledState.enabled'
@@ -30,7 +35,7 @@
       toggle-checkbox
     >
 
-    <span ng-show='applying()'>&nbsp;<img src='ajax-loader.gif' /> <em>Please wait while applying changes...</em></span>
+    <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Please wait while applying changes...</em></span>
   </p>
 
   <div ng-if='reposVisible()'>
