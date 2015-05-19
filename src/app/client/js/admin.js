@@ -25,6 +25,50 @@
       $routeProvider.otherwise({redirectTo: serviceUrl + '/'});
     }]);
 
+    app.directive('toggleCheckbox', function($timeout) {
+      /**
+       * Directive
+       */
+      return {
+        restrict: 'A',
+        transclude: true,
+        replace: false,
+        require: 'ngModel',
+        link: function ($scope, $element, $attr, ngModel) {
+          // update model from Element
+          var updateModelFromElement = function() {
+            // If modified
+            var checked = $element.prop('checked');
+            if (checked != ngModel.$viewValue) {
+              // Update ngModel
+              ngModel.$setViewValue(checked);
+              $scope.$apply();
+            }
+          };
+
+          // Update input from Model
+          var updateElementFromModel = function(newValue) {
+            $element.trigger('change');
+          };
+
+          // Observe: Element changes affect Model
+          $element.on('change', function() {
+            updateModelFromElement();
+          });
+
+          $scope.$watch(function() {
+            return ngModel.$viewValue;
+          }, function(newValue) { 
+            updateElementFromModel(newValue);
+          }, true);
+
+          // Initialise BootstrapToggle
+          $element.bootstrapToggle();
+        }
+      };
+    });
+
+
     app.controller('InstancesController',
       ['$rootScope', '$scope', '$location', 'CommitStreamApi',
       function($rootScope, $scope, $location, CommitStreamApi) {        
@@ -62,44 +106,37 @@
       
       $scope.inboxes = [];
 
-      $scope.enabled = {
+      $scope.enabledState = { 
         enabled: false,
-        selected : 'Disabled',        
+        applying: false,
         onText: 'Enabled',
-        offText: 'Disabled',
-        onColor: 'success',
-        offColor: 'danger',
-        active: true,
-        size: 'normal',
-        animate: true,
-        radioOff: true,
-        icon: 'glyphicon glyphicon-play',
-        handleWidth: 'auto',
-        labelWidth: 'auto',
-        inverse: true
+        offText: 'Disabled'
       };
 
-      $scope.enabledChange = function() {
-        $scope.enabled.icon = $scope.enabled.selected === 'Enabled' ? 
-          'glyphicon glyphicon-stop' : 'glyphicon glyphicon-play';
-        $scope.enabled.active = false;
+      $scope.enabledChanged = function() {
+        // TODO do we want icons?
+        //$scope.enabled.icon = $scope.enabled.selected === 'Enabled' ? 
+        // 'glyphicon glyphicon-stop' : 'glyphicon glyphicon-play';
         apply();
       };
-      
-      var applying = false;
 
       var apply = function() {
-        applying = true;
-        $timeout(function() {
-          applying = false;
-          $scope.enabled.active = true;
-          $scope.enabled.enabled = !$scope.enabled.enabled;
+        $scope.enabledState.applying = true;
+        $('.enabled').bootstrapToggle('disable');
+        $timeout(function() {          
+          $scope.enabledState.applying = false;
+          $('.enabled').bootstrapToggle('enable');
         }, 2000);
       };
 
       $scope.applying = function() {
-        return applying;
+        return $scope.enabledState.applying;
       };
+
+      $scope.reposVisible = function() {
+        return ($scope.enabledState.enabled && !$scope.enabledState.applying) 
+        || (!$scope.enabledState.enabled && $scope.enabledState.applying);
+      }
 
       $scope.inboxCreate = function() {
         var index = $scope.newInbox.url.lastIndexOf('/');
@@ -135,11 +172,7 @@
 
     }]);
 
-    $(function() {
-      $('.toggle').bootstrapToggle();
-      angular.bootstrap(el, ['commitStreamAdmin']);
-    });
-    
+    angular.bootstrap(el, ['commitStreamAdmin']);
   };
   window.CommitStreamAdminBoot = CommitStreamAdminBoot;
 }());

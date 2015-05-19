@@ -19,12 +19,21 @@
   </style>
 
   <p>
-    <input type='checkbox' checked data-toggle='toggle' class='toggle'>
+    <input 
+      data-on='Enabled'
+      data-off='Disabled'
+      data-onstyle='info'
+      class='form-control enabled'
+      type='checkbox'
+      ng-model='enabledState.enabled'
+      ng-change='enabledChanged()'
+      toggle-checkbox
+    >
 
-    <span ng-show='applying()'>&nbsp;<img src='http://localhost/css/images/loaders/ajax-loader.gif' /> <em>Please wait while enabling...</em></span>
+    <span ng-show='applying()'>&nbsp;<img src='ajax-loader.gif' /> <em>Please wait while applying changes...</em></span>
   </p>
 
-  <div ng-if='enabled.enabled'>  
+  <div ng-if='reposVisible()'>
     <h3>Setup Global Repositories</h3>    
     <div class='well well-sm'>
       <div class='input-group'>
