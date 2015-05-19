@@ -17,9 +17,7 @@
       };
       eventStore.postToStream(args).then(function() {
         var responseBody = {
-          instanceId: instanceId,
-          inboxId: inboxId,
-          message: 'Your inbox has been successfully removed.'
+          message: 'The inbox ' + inboxId + ' has been removed from instance ' + instanceId + '.'
         };
         res.status(200).json(responseBody);
       });

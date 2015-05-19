@@ -9,7 +9,7 @@
   });
 
   var InstanceToInboxRemoved = csError.createCustomError('InstanceToInboxRemoved', function(instanceId, inboxId) {
-    var message = 'The inbox ' + inboxId + ' has been removed from instance ' + instanceId;
+    var message = 'The inbox ' + inboxId + ' has been removed from instance ' + instanceId + '.';
     var errors = [message];
     InstanceToInboxRemoved.prototype.constructor.call(this, errors, 410);
   });
