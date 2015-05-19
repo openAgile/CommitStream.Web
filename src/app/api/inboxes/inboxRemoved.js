@@ -1,7 +1,7 @@
-(function (inboxRemoved) {
+(function(inboxRemoved) {
   var uuid = require('uuid-v4');
 
-  inboxRemoved.create = function (instanceId, digestId, inboxId) {
+  inboxRemoved.create = function(instanceId, digestId, inboxId) {
     var eventId = uuid();
     return {
       eventType: 'InboxRemoved',
@@ -13,4 +13,4 @@
       }
     };
   };
-} (module.exports));
+}(module.exports));
