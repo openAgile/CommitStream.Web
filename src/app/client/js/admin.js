@@ -5,7 +5,7 @@
       headers: { Bearer: '' }
     };
 
-    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 'angular-hal', 'ngRoute', 'frapontillo.bootstrap-switch']);
+    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 'angular-hal', 'ngRoute']);
     app.config(function($sceProvider) {
       $sceProvider.enabled(false);
     });
@@ -135,7 +135,11 @@
 
     }]);
 
-    angular.bootstrap(el, ['commitStreamAdmin']);
+    $(function() {
+      $('.toggle').bootstrapToggle();
+      angular.bootstrap(el, ['commitStreamAdmin']);
+    });
+    
   };
   window.CommitStreamAdminBoot = CommitStreamAdminBoot;
 }());

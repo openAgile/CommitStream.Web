@@ -19,27 +19,8 @@
   </style>
 
   <p>
-    <input
-      ng-change="enabledChange()"
-      bs-switch
-      ng-model="enabled.selected"
-      type="radio"
-      switch-active="{{ enabled.active }}"
-      switch-on-text="{{ enabled.onText }}"
-      switch-off-text="{{ enabled.offText }}"
-      switch-on-color="{{ enabled.onColor }}"
-      switch-off-color="{{ enabled.offColor }}"
-      switch-animate="{{ enabled.animate }}"
-      switch-size="{{ enabled.size }}"
-      switch-radio-off="{{ enabled.radioOff }}"
-      switch-label-width="{{ enabled.labelWidth }}"
-      switch-handle-width="{{ enabled.handleWidth }}"
-      switch-icon="{{ enabled.icon }}"
-      ng-value="'Enabled'"
-      ng-true-value="'Enbalbed'"
-      ng-false-value="'Disabled'"
-      switch-inverse="{{ !inverse }}">
-    
+    <input type='checkbox' checked data-toggle='toggle' class='toggle'>
+
     <span ng-show='applying()'>&nbsp;<img src='http://localhost/css/images/loaders/ajax-loader.gif' /> <em>Please wait while enabling...</em></span>
   </p>
 
