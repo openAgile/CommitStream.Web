@@ -5,5 +5,8 @@ var callback = function(state, ev) {
 fromCategory('inboxes').when({
   'InboxAdded': function(state, ev) {
     callback(state, ev);
+  },
+  'InboxRemoved': function(state, ev) {
+    callback(state, ev);
   }
 });

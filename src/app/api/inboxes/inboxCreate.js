@@ -14,27 +14,18 @@
 
     sanitizeAndValidate('inbox', req.body, ['family', 'name', 'url'], inboxAdded);
 
-    var args = {
-      name: 'digest',
-      id: digestId
-    };
-
     var inboxAddedEvent;
 
-    eventStore.queryStatePartitionById(args)
-      .then(function(digest) {
-        inboxAddedEvent = inboxAdded.create(instanceId, digestId, req.body.family, req.body.name, req.body.url);
-        var args = {
-          name: 'inboxes-' + instanceId,
-          events: inboxAddedEvent
-        };
-        return eventStore.postToStream(args);
-      })
-      .then(function() {
-        var hypermedia = inboxFormatAsHal(req.href, instanceId, inboxAddedEvent.data);
-        setTimeout(function() {
-          res.hal(hypermedia, 201);
-        }, config.controllerResponseDelay);
-      });
+    inboxAddedEvent = inboxAdded.create(instanceId, digestId, req.body.family, req.body.name, req.body.url);
+    var args = {
+      name: 'inboxes-' + instanceId,
+      events: inboxAddedEvent
+    };
+    eventStore.postToStream(args).then(function() {
+      var hypermedia = inboxFormatAsHal(req.href, instanceId, inboxAddedEvent.data);
+      setTimeout(function() {
+        res.hal(hypermedia, 201);
+      }, config.controllerResponseDelay);
+    });
   };
 }());

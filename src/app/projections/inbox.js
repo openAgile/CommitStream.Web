@@ -3,5 +3,8 @@ fromCategory('inbox')
   .when({
     'InboxAdded': function(state, ev) {
       return ev.data;
+    },
+    'InboxRemoved': function(state, ev) {
+      return ev;
     }
   });

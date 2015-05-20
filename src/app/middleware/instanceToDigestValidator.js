@@ -14,6 +14,7 @@
       id: digestId
     }).then(function(digest) {
       if (req.instance.instanceId === digest.instanceId) {
+        req.digest = digest;
         next();
       } else {
         throw new InvalidInstanceToDigest(req.instance.instanceId, digestId);

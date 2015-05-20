@@ -24,7 +24,6 @@ describe('commitsCreate', function() {
   var instanceId = '872512eb-0d42-41fa-9a4e-fcb480ef265f',
     inboxId = 'e70ee98d-cd21-4bfe-a4fe-bbded9ce4584',
     digestId = 'ff1fdc30-d0e2-465b-b23d-fda510acc1bc',
-    queryStatePartitionArgs,
     postToStreamArgs,
     request,
     response,
@@ -54,6 +53,9 @@ describe('commitsCreate', function() {
     request.instance = {
       instanceId: instanceId
     };
+    request.inbox = {
+      digestId: digestId
+    };
     request.params = {
       inboxId: inboxId
     };
@@ -67,13 +69,11 @@ describe('commitsCreate', function() {
 
     postToStreamArgs = {
       name: 'inboxCommits-' + inboxId,
-      events: {"some":"value"}
+      events: {
+        "some": "value"
+      }
     };
 
-    queryStatePartitionArgs = {
-      name: 'inbox',
-      id: inboxId
-    };
   });
 
   describe('when posting a push event', function() {
@@ -84,10 +84,6 @@ describe('commitsCreate', function() {
 
     it('should call validateUUID with correct args', function() {
       validateUUID.should.have.been.calledWith('inbox', inboxId);
-    });
-
-    it('should call eventStore.queryStatePartitionById with correct args', function() {
-      eventStore.queryStatePartitionById.should.have.been.calledWith(queryStatePartitionArgs);
     });
 
     it('should call githubValidator with correct args', function() {
@@ -121,10 +117,6 @@ describe('commitsCreate', function() {
 
     it('should call validateUUID with correct args', function() {
       validateUUID.should.have.been.calledWith('inbox', inboxId);
-    });
-
-    it('should call eventStore.queryStatePartitionById with correct args', function() {
-      eventStore.queryStatePartitionById.should.have.been.calledWith(queryStatePartitionArgs);
     });
 
     it('should call githubValidator with correct args', function() {
