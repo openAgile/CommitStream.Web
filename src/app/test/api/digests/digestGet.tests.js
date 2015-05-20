@@ -41,7 +41,7 @@ describe('digestGet', function() {
       });
 
       request.href = sinon.spy();
-      request.digest = digestInfoStub;
+      request.digest = sinon.spy();
 
       response = httpMocks.createResponse();
       response.hal = sinon.spy();
@@ -54,7 +54,7 @@ describe('digestGet', function() {
     });
 
     it('should call digestFormatAsHal with correct arguments.', function() {
-      digestFormatAsHal.should.have.been.calledWith(request.href, request.params.instanceId, digestInfoStub);
+      digestFormatAsHal.should.have.been.calledWith(request.href, request.params.instanceId, request.digest);
     });
 
     it('should call res.hal with correct arguments.', function() {
