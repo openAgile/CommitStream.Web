@@ -17,6 +17,7 @@ describe('inboxRemove', function() {
 
   describe('when removing an inbox it', function() {
     var instanceId = '44444444-4444-4444-4444-444444444444',
+      digestId = '22222222-2222-4222-2222-222222222222',
       inboxId = '33333333-3333-4333-3333-333333333333',
       inbox,
       inboxRemovedEvent,
@@ -50,6 +51,10 @@ describe('inboxRemove', function() {
         instanceId: instanceId
       };
 
+      request.inbox = {
+        digestId: digestId
+      };
+
       response = httpMocks.createResponse();
 
       var resBody = {
@@ -66,15 +71,8 @@ describe('inboxRemove', function() {
 
     });
 
-    it('should call eventStore.queryStatePartitionById with correct args', function() {
-      eventStore.queryStatePartitionById.should.have.been.calledWith({
-        name: 'inbox',
-        id: '33333333-3333-4333-3333-333333333333'
-      });
-    });
-
     it('should call inboxRemoved.create with correct args', function() {
-      inboxRemoved.create.should.have.been.calledWith('44444444-4444-4444-4444-444444444444', inbox.digestId, '33333333-3333-4333-3333-333333333333');
+      inboxRemoved.create.should.have.been.calledWith('44444444-4444-4444-4444-444444444444', '22222222-2222-4222-2222-222222222222', '33333333-3333-4333-3333-333333333333');
     });
 
     it('should call eventStore.postToStream with correct args', function() {

@@ -23,6 +23,7 @@
         throw new InstanceToInboxRemoved(req.instance.instanceId, inboxId);
       }
       if (req.instance.instanceId === inbox.instanceId) {
+        req.inbox = inbox;
         next();
       } else {
         throw new InvalidInstanceToInbox(req.instance.instanceId, inboxId);
