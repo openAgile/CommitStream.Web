@@ -9,14 +9,5 @@
       <div ng-view></div>
     </div>
     <script data-commitstream-root='commitStreamAdmin' src='/js/adminBootstrap.js'></script>
-    <script>
-      'use strict';
-      try {
-        CommitStreamAdminLoad('http://localhost:6565', 'commitStreamAdmin');
-      } catch(ex) { 
-        console.error('CommitStreamAdminLoad error:');
-        console.error(ex);
-      }
-    </script>
   </body>
 </html>
