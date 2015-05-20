@@ -10,6 +10,9 @@
         },
         "add-commit": {
           "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId + "/commits")
+        },
+        "remove-inbox": {
+          "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId)
         }
       },
       "inboxId": inbox.inboxId,
