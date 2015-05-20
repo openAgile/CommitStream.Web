@@ -1,10 +1,22 @@
-(function() { 
-  function CommitStreamAdminLoad(serviceUrl, rootElementId) {
-    var commitStreamAdminStyles = $('#' + rootElementId);
-    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css">'));
-    //commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/bower_components/bootstrap/dist/css/bootstrap.css">'));
-    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/css/bootstrap-theme.min.css">'));
-    commitStreamAdminStyles.prepend($('<link type="text/css" rel="stylesheet" href="' + serviceUrl + '/css/bootstrap.min.css">'));
+(function() {
+  try {
+    'use strict';
+
+    var prependStyleSheet = function(el, href) {
+      el.prepend($('<link type="text/css" rel="stylesheet" href="' + href + '">'));
+    }
+
+    var scriptEl = $($('script[data-commitstream-root]')[0]);
+    var serviceUrl = '';
+    var src = scriptEl.attr('src');
+    if (src.indexOf('/') !== 0) {
+      serviceUrl = src.substr(0, src.indexOf('/js/adminBootstrap.js'));
+    }
+    var rootElementId = scriptEl.attr('data-commitstream-root');
+    var commitStreamRoot = $('#' + rootElementId);
+    prependStyleSheet(commitStreamRoot, serviceUrl + '/bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css');
+    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
+    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
 
     var loadScripts = function(scripts) {
       if (!scripts || !scripts.length) {
@@ -23,15 +35,7 @@
                 $get: function () { return serviceUrl; }
               }
             });
-            var scriptEl = $($('script[data-commitstream-root]')[0]);
-            console.log(scriptEl);
-            console.log(scriptEl.attr('data-commitstream-root'));
-            var baseUrl = '';
-            var src = scriptEl.attr('src');
-            console.log(src);
-            if (src.indexOf('/') !== 0) {
-              baseUrl = src.substr(0, src.indexOf('/js/adminBootstrap.js'));
-            }
+
             CommitStreamAdminBoot($('#' + rootElementId));
           }
         })
@@ -51,7 +55,9 @@
       serviceUrl + '/js/admin.js'
     ];
 
-    loadScripts(scripts);    
-  };
-  window.CommitStreamAdminLoad = CommitStreamAdminLoad;
+    loadScripts(scripts);
+  } catch (ex) {
+    console.error('CommitStream adminBootstrap error:');
+    console.error(ex);
+  }
 }());
