@@ -45,6 +45,7 @@ function initFakes() {
   request.instance = {
     instanceId: instanceId
   };
+  request.digest = digest;
   request.params = {
     digestId: digestId
   };
@@ -67,8 +68,7 @@ describe('digestInboxesGet', function() {
       eventStore = {
         queryStatePartitionById: sinon.stub()
       };
-      eventStore.queryStatePartitionById.onFirstCall().resolves(digest);
-      eventStore.queryStatePartitionById.onSecondCall().resolves(inboxes);
+      eventStore.queryStatePartitionById.onFirstCall().resolves(inboxes);
 
       var handler = getHandler(digestInboxesFormatAsHal, eventStore, csError, validateUUID);
       handler(request, response);
@@ -81,13 +81,6 @@ describe('digestInboxesGet', function() {
 
     it('should call eventStore.queryStatePartitionById with correct args on first call', function() {
       eventStore.queryStatePartitionById.getCall(0).should.have.been.calledWith({
-        name: 'digest',
-        id: '0dd1eab2-c521-4c4f-9d47-38568564193b'
-      });
-    });
-
-    it('should call eventStore.queryStatePartitionById with correct args on second call', function() {
-      eventStore.queryStatePartitionById.getCall(1).should.have.been.calledWith({
         name: 'inboxes-for-digest',
         partition: 'digestInbox-0dd1eab2-c521-4c4f-9d47-38568564193b'
       });
@@ -117,8 +110,7 @@ describe('digestInboxesGet', function() {
       eventStore = {
         queryStatePartitionById: sinon.stub()
       };
-      eventStore.queryStatePartitionById.onFirstCall().resolves(digest);
-      eventStore.queryStatePartitionById.onSecondCall().rejects(new csError.ProjectionNotFound());
+      eventStore.queryStatePartitionById.onFirstCall().rejects(new csError.ProjectionNotFound());
 
       var handler = getHandler(digestInboxesFormatAsHal, eventStore, csError, validateUUID);
       handler(request, response);
@@ -131,13 +123,6 @@ describe('digestInboxesGet', function() {
 
     it('should call eventStore.queryStatePartitionById with correct args on first call', function() {
       eventStore.queryStatePartitionById.getCall(0).should.have.been.calledWith({
-        name: 'digest',
-        id: '0dd1eab2-c521-4c4f-9d47-38568564193b'
-      });
-    });
-
-    it('should call eventStore.queryStatePartitionById with correct args on second call', function() {
-      eventStore.queryStatePartitionById.getCall(1).should.have.been.calledWith({
         name: 'inboxes-for-digest',
         partition: 'digestInbox-0dd1eab2-c521-4c4f-9d47-38568564193b'
       });
