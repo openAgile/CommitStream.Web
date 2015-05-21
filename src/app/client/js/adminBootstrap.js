@@ -18,6 +18,12 @@
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
 
+    // Grab route locations for config-get and config-save, if they exist
+
+    // TODO handle null case
+    var configGetUrl = scriptEl.attr('data-commitstream-config-get-url');
+    var configSaveUrl = scriptEl.attr('data-commitstream-config-save-url');
+
     var loadScripts = function(scripts) {
       if (!scripts || !scripts.length) {
         return;
@@ -33,6 +39,16 @@
             config.provider('serviceUrl', function () {
               return {
                 $get: function () { return serviceUrl; }
+              }
+            });
+            config.provider('configGetUrl', function() {
+              return {
+                $get: function () { return configGetUrl; }
+              }
+            });
+            config.provider('configSaveUrl', function() {
+              return {
+                $get: function () { return configSaveUrl; }
               }
             });
 

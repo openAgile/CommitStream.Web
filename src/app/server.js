@@ -76,6 +76,10 @@ app.get('/api/public', function(req, res) {
       "instances": {
         "href": req.href("/api/instances")
       },
+      "instance": {
+        "href": req.href("/api/instances/{instanceId}"),
+        templated: true
+      },
       "digest": {
         "href": req.href('/api/{instanceId}/digests/{digestId}'),
         "templated": true

@@ -68,27 +68,71 @@
       };
     });
 
-
     app.controller('InstancesController',
-      ['$rootScope', '$scope', '$location', 'CommitStreamApi',
-      function($rootScope, $scope, $location, CommitStreamApi) {        
+      ['$rootScope', '$scope', '$http', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
+      function($rootScope, $scope, $http, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl) {        
+        var config;
+
         CommitStreamApi
         .load()
         .then(function(resources) {
           $rootScope.resources = resources;
-          return resources.$post('instances');
+          if (!configGetUrl) return {
+            data: {
+              serviceUrl: serviceUrl,
+              instanceId: '',
+              apiKey: '',
+              globalDigestId: '',
+              configured: false,
+              enabled: false
+            }
+          }
+          return $http.get(configGetUrl);
+        })
+        .then(function(configRes) {
+          // TODO handle null case?
+          config = configRes.data;
+          if (config.configured) {
+            persistentOptions.headers.Bearer = config.apiKey;
+            return $rootScope.resources.$get('instance', {instanceId: config.instanceId});
+          } else {
+            return $rootScope.resources.$post('instances');
+          }
         })
         .then(function(instance) {
-          persistentOptions.headers.Bearer = instance.apiKey;
+          persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
           $rootScope.instance = instance;
 
-          return instance.$post('digest-create', {}, {
-            description: 'My new digest'
-          });
+          if (config.configured) {
+            return $rootScope.resources.$get('digest', {
+              instanceId: config.instanceId,
+              digestId: config.globalDigestId
+            });
+          }
+          else {
+            return instance.$post('digest-create', {}, {
+              description: 'Global Repositories List'
+            });
+          }
         })
         .then(function(digest) {
           $rootScope.digest = digest;
-          $location.path('/inboxes');
+
+          if (!config.configured) {
+            config.instanceId = $rootScope.instance.instanceId;
+            config.globalDigestId = $rootScope.digest.digestId;
+            config.apiKey = $rootScope.instance.apiKey;
+            if (configSaveUrl) {
+              $http.post(configSaveUrl, config).then(function(configSaveResult) {
+                // TODO?
+                $location.path('/inboxes');
+              });
+            } else {
+              $location.path('/inboxes');
+            }
+          } else {
+            $location.path('/inboxes');
+          }
         })
         .catch(function(error) {
           console.error("Caught an error adding an instance or a repo list!");
@@ -118,9 +162,17 @@
       $scope.message = { value: ''};
 
       $scope.enabledChanged = function() {
-        // TODO do we want icons?
-        //$scope.enabled.icon = $scope.enabled.selected === 'Enabled' ? 
-        // 'glyphicon glyphicon-stop' : 'glyphicon glyphicon-play';
+        $rootScope.digest.$get('inboxes').then(function(inboxesRes) {
+          inboxesRes.$get('inboxes').then(function(inboxes) {
+            // TODO: fix all this up
+            console.log(inboxes);
+            inboxes.forEach(function(inbox) {
+              console.log(inbox.name);
+              var links = inbox.$links();
+              console.log(links['self'].href);
+            });
+          });
+        });       
         apply();
       };
 
