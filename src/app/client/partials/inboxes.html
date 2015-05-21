@@ -42,7 +42,11 @@
     <h3>Setup Global Repositories</h3>
 
     <div ng-if="message.value !== ''" class='message'>
-      <p class='bg-success'><b>{{message.value}}</b></p>
+      <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>{{message.value}}</strong>
+      </div>
+      <!-- <p class='bg-success'><b>{{message.value}}</b></p> -->
     </div>
 
     <div class='well well-sm'>
@@ -68,7 +72,8 @@
               <div class='copy-clip'>Copy to clipboard</div>
             </td>
             <td>
-              <a class='btn btn-warning' ng-click='inboxRemove(inbox)'><span class='glyphicon glyphicon-minus-sign' title='Remove' aria-hidden='true'></span></a>
+              <span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
+              <!-- <a class='btn btn-warning' ng-click='inboxRemove(inbox)'><span class='glyphicon glyphicon-minus-sign' title='Remove' aria-hidden='true'></span></a> -->
             </td>
           </tr>
           <tr ng-repeat-end ng-init='inboxHighlightTop(inbox.removeHref)'></tr>

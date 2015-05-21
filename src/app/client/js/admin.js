@@ -165,9 +165,10 @@
           var index = $scope.inboxes.indexOf(inbox);
           $scope.inboxes.splice(index, 1);
           $timeout(function() {
-            $('.message').fadeOut();
+            $('.message').fadeOut('slow', function() {
               $scope.message.value = '';
-          }, 2000);
+            });
+          }, 4000);
         });
       };
 
