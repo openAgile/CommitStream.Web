@@ -115,6 +115,8 @@
         offText: 'Disabled'
       };
 
+      $scope.message = { value: ''};
+
       $scope.enabledChanged = function() {
         // TODO do we want icons?
         //$scope.enabled.icon = $scope.enabled.selected === 'Enabled' ? 
@@ -148,11 +150,24 @@
         .then(function(inbox) {
           var links = inbox.$links();
           inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
+          inbox.removeHref = links['self'].href + 'apiKey=' + persistentOptions.headers.Bearer;          
           $scope.inboxes.unshift(inbox);
         })
         .catch(function(error) {
           console.error("Caught an error adding a repo!");
           console.error(error);
+        });
+      };
+
+      $scope.inboxRemove = function(inbox) {
+        inbox.$del('self').then(function(result) {
+          $scope.message.value = 'Successfully removed inbox';      
+          var index = $scope.inboxes.indexOf(inbox);
+          $scope.inboxes.splice(index, 1);
+          $timeout(function() {
+            $('.message').fadeOut();
+              $scope.message.value = '';
+          }, 2000);
         });
       };
 

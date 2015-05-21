@@ -39,7 +39,12 @@
   </p>
 
   <div ng-if='reposVisible()'>
-    <h3>Setup Global Repositories</h3>    
+    <h3>Setup Global Repositories</h3>
+
+    <div ng-if="message.value !== ''" class='message'>
+      <p class='bg-success'><b>{{message.value}}</b></p>
+    </div>
+
     <div class='well well-sm'>
       <div class='input-group'>
         <input type='text' class='form-control' ng-model='newInbox.url'  size='100'
@@ -53,16 +58,20 @@
         <table class='table table-striped table-bordered'>
           <tr>
             <th>Repository</th>
-            <th>WebHook URL</th>        
+            <th>WebHook URL</th>
+            <th>Remove</th>    
           </tr>
           <tr ng-repeat-start='inbox in inboxes'>
             <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
             <td>
-              <div class='copy-clip'>Copy to clipboard</div>
               <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' />
+              <div class='copy-clip'>Copy to clipboard</div>
+            </td>
+            <td>
+              <a class='btn btn-warning' ng-click='inboxRemove(inbox)'><span class='glyphicon glyphicon-minus-sign' title='Remove' aria-hidden='true'></span></a>
             </td>
           </tr>
-          <tr ng-repeat-end ng-init='inboxHighlightTop()'></tr>
+          <tr ng-repeat-end ng-init='inboxHighlightTop(inbox.removeHref)'></tr>
         </table>
       </div>
     </div>
