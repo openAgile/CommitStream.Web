@@ -30,7 +30,8 @@
 						"825befed-09b2-187e-fccf-41ae125116e0",
 						"1c4a97aa-aed4-40d1-2fe7-d1172f0f8bf8",
 						"5ad41eed-30d3-b52c-ee56-1ecbfecc4c20",
-						"222fbde0-dfa7-f7fe-40ab-cfb4892271c0"
+						"222fbde0-dfa7-f7fe-40ab-cfb4892271c0",
+						"11035ed7-8f10-f2f7-177d-888e877ab7fd"
 					],
 					"collection_name": "CommitStream",
 					"collection_owner": 0,
@@ -159,6 +160,25 @@
 					"helperAttributes": {},
 					"time": 1429632436185,
 					"name": "Create an instance",
+					"description": "",
+					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
+					"responses": []
+				},
+				{
+					"id": "11035ed7-8f10-f2f7-177d-888e877ab7fd",
+					"headers": "",
+					"url": "{{rootURL}}/{{instanceId}}/inboxes/{{inboxId}}?apiKey={{apiKey}}",
+					"preRequestScript": "postman.setGlobalVariable('errorTypes', 's_descrip');\npostman.setGlobalVariable('statusCode', 400);",
+					"pathVariables": {},
+					"method": "GET",
+					"data": [],
+					"dataMode": "params",
+					"version": 2,
+					"tests": "var instanceId = postman.getGlobalVariable('instanceId');\nvar digestId = postman.getGlobalVariable('digestId');\nvar inboxId = postman.getGlobalVariable('inboxId');\nvar inboxFamily = postman.getGlobalVariable('inboxFamily');\nvar inboxName = postman.getGlobalVariable('inboxName');\nvar responseData = JSON.parse(responseBody);\nvar errorTypes = postman.getGlobalVariable(\"errorTypes\");\nvar statusCode = parseInt(postman.getGlobalVariable('statusCode'));\n\nvar potentialErrorsMap = {\n    nf_digestId: 'Could not find digest with id ' + digestId1,\n    nf_inboxId: 'Could not find inbox with id ' + inboxId,\n    nf_instanceId: 'Could not find instance with id ' + instanceId,\n    inv_apiKey: 'Invalid apiKey for instance ' + instanceId\n};\n\nfunction getExpectedErrors(errorTypes) {\n    var errorTypesArray = errorTypes.split(',');\n    return {errors: _.map(errorTypesArray, function(errorTypeKey) {\n        return potentialErrorsMap[errorTypeKey]\n    })};\n}\n\ntests[\"Status code is correct\"] = responseCode.code === statusCode;\n\nif(responseCode.code === 200){\n    var expected = {\n          \"_links\": {\n            \"self\": {\n              \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\": {\n              \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\": {\n              \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n          },\n          \"inboxId\": inboxId,\n          \"family\": inboxFamily,\n          \"name\": inboxName\n        };\n\n    tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/hal+json\");\n    tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === (postman.getGlobalVariable(\"rootURL\") + \"/\" + instanceId + \"/inboxes/\" + inboxId);\n    tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\nif(responseCode.code != 200){\n    \n    tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\");\n    tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === null;\n    tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\n\n",
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1432225040062,
+					"name": "Delete an inbox - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
 					"responses": []
@@ -643,7 +663,7 @@
 					"id": "c16ba3db-7f50-c174-fade-b49c880ceed8",
 					"headers": "{{reqHeaderContentType}}: {{requestHeaderValue}}\n",
 					"url": "{{rootURL}}/{{instanceId}}/digests/{{digestId}}/inboxes?apiKey={{apiKey}}",
-					"preRequestScript": "postman.setGlobalVariable('requestHeaderValue', 'application/json');\npostman.setGlobalVariable('inboxId', null);\npostman.setGlobalVariable('inboxFamily', 'GitHub');\npostman.setGlobalVariable('inboxName', 'super fly');\npostman.setGlobalVariable('inboxURL', 'http://noted.com');\npostman.setGlobalVariable('errorTypes', 's_descrip');\npostman.setGlobalVariable('statusCode', 201);",
+					"preRequestScript": "postman.setGlobalVariable('requestHeaderValue', 'application/json');\npostman.setGlobalVariable('inboxId', null);\npostman.setGlobalVariable('inboxFamily', 'GitHub');\npostman.setGlobalVariable('inboxName', '');\npostman.setGlobalVariable('inboxURL', 'http://noted.com');\npostman.setGlobalVariable('errorTypes', 'r_name');\npostman.setGlobalVariable('statusCode', 404);",
 					"pathVariables": {},
 					"method": "POST",
 					"data": "{\r\n    \"family\": \"{{inboxFamily}}\",\r\n    \"name\": \"{{inboxName}}\",\r\n    \"url\": \"{{inboxURL}}\"\r\n}",
@@ -652,7 +672,7 @@
 					"tests": "var digestId = postman.getGlobalVariable(\"digestId\");\nvar responseData = JSON.parse(responseBody);\npostman.setGlobalVariable(\"inboxId\", responseData.inboxId);\nvar inboxId = postman.getGlobalVariable(\"inboxId\");\nvar inboxName = postman.getGlobalVariable(\"inboxName\");\nvar inboxFamily = postman.getGlobalVariable(\"inboxFamily\");\nvar inboxURL = postman.getGlobalVariable(\"inboxURL\");\nvar instanceId = postman.getGlobalVariable(\"instanceId\");\nvar digestId = postman.getGlobalVariable(\"digestId\");\nvar errorTypes = postman.getGlobalVariable(\"errorTypes\");\nvar statusCode = parseInt(postman.getGlobalVariable('statusCode'));\n\nvar potentialErrorsMap = {\n    r_name: 'inbox requires property \"name\"', \n    r_family: 'inbox requires property \"family\"',\n    e_family: 'inbox.family is not one of enum values: GitHub',\n    s_name: 'inbox.name cannot contain script tags or HTML.',\n    s_url: 'inbox.url cannot contain script tags or HTML.',\n    s_family: 'inbox.family cannot contain script tags or HTML.',\n    i_name: 'inbox.name does not meet the minimum length of 3',\n    x_name: 'inbox.name does not meet the maximum length of 140',\n    i_digestId: 'inbox.digestId does not meet the minimum length of 36',\n    i_url: 'inbox.url does not meet the minimum length of 10',\n    x_url: 'inbox.url does not meet the maximum length of 2000',\n    nf_digestId: 'Could not find a digest with id ' + digestId,\n    nf_instanceId: 'Could not find instance with id ' + instanceId,\n    p_header: 'When issuing a POST to the CommitStream API, you must send a Content-Type: application/json header.',\n    inv_apiKey: 'Invalid apiKey for instance ' + instanceId\n};\n\nfunction getExpectedErrors(errorTypes) {\n    var errorTypesArray = errorTypes.split(',');\n    return {errors: _.map(errorTypesArray, function(errorTypeKey) {\n        return potentialErrorsMap[errorTypeKey]\n    })};\n}\n\ntests[\"Status code is correct\"] = responseCode.code === statusCode;\n\nif(responseCode.code === 201) {\n        if(inboxURL === \"null\"){\n            var expected = {\n            \"_links\":{\n            \"self\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n            },\n            \"inboxId\": inboxId,\n            \"family\": inboxFamily,\n            \"name\": inboxName\n            };\n        }\n        else {\n            var expected = {\n            \"_links\":{\n            \"self\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n            },\n            \"inboxId\": inboxId,\n            \"family\": inboxFamily,\n            \"name\": inboxName,\n            \"url\": inboxURL\n            };\n            \n            tests[\"InboxURL contains http\"] = postman.getGlobalVariable(\"inboxURL\").startsWith(\"http\");\n        }\n        \n        tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/hal+json\");\n        tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === (postman.getGlobalVariable(\"rootURL\") + \"/\" + instanceId + \"/inboxes/\" + inboxId);\n        tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\n        \nif(responseCode.code != 201){\n        tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\");\n        tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === null;\n        tests[\"Response Body is correct\"] = _.matches(getExpectedErrors(errorTypes))(responseData);\n}       \n\n\n\n\n\n\n\n\n",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1431724673343,
+					"time": 1432225017002,
 					"name": "Create an inbox for a digest - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
@@ -946,7 +966,7 @@
 					"enabled": true
 				}
 			],
-			"timestamp": 1432222078118
+			"timestamp": 1432223447020
 		},
 		{
 			"id": "450be40c-5826-8311-0f8e-a71300714485",
@@ -960,7 +980,7 @@
 					"enabled": true
 				}
 			],
-			"timestamp": 1432222078121
+			"timestamp": 1432223447024
 		},
 		{
 			"id": "80aef751-8e34-9662-913b-b2b989726c27",
@@ -988,7 +1008,7 @@
 					"enabled": true
 				}
 			],
-			"timestamp": 1432222078123
+			"timestamp": 1432223447027
 		},
 		{
 			"id": "8ea2cd2a-cb49-87cf-2cdf-672f3c8adbaf",
@@ -1002,7 +1022,7 @@
 					"enabled": true
 				}
 			],
-			"timestamp": 1432222078125
+			"timestamp": 1432223447031
 		},
 		{
 			"id": "e8ed1c10-aef5-32fe-8d46-e61b6877ac70",
@@ -1037,14 +1057,14 @@
 					"enabled": true
 				}
 			],
-			"timestamp": 1432222078126
+			"timestamp": 1432223447033
 		}
 	],
 	"headerPresets": [],
 	"globals": [
 		{
 			"key": "digestId",
-			"value": "e09050c0-7f70-4b97-809b-45ca26deaa12",
+			"value": "ef930949-4555-48a2-a34e-e3ac79d68f2e",
 			"type": "text",
 			"name": "digestId",
 			"enabled": true
@@ -1058,7 +1078,7 @@
 		},
 		{
 			"key": "apiKey",
-			"value": "d4c0c5de-7bff-4461-a794-b4f460cd0df8",
+			"value": "2a79bc03-e206-408f-901a-a35269ca7a63",
 			"type": "text",
 			"name": "apiKey",
 			"enabled": true
@@ -1079,7 +1099,7 @@
 		},
 		{
 			"key": "inboxId",
-			"value": "2834085e-bba9-44fe-9abd-aeb50cece48d",
+			"value": "undefined",
 			"type": "text",
 			"name": "inboxId",
 			"enabled": true
@@ -1093,14 +1113,14 @@
 		},
 		{
 			"key": "inboxName",
-			"value": "sing it Gonzo!",
+			"value": "",
 			"type": "text",
 			"name": "inboxName",
 			"enabled": true
 		},
 		{
 			"key": "inboxURL",
-			"value": "http://gonzolove.com/super",
+			"value": "http://noted.com",
 			"type": "text",
 			"name": "inboxURL",
 			"enabled": true
@@ -1121,7 +1141,7 @@
 		},
 		{
 			"key": "instanceId",
-			"value": "3c626a58-d0fd-465b-830e-a927657e6a81",
+			"value": "43ec1f71-5379-4f06-863f-446cfb5b0f87",
 			"type": "text",
 			"name": "instanceId",
 			"enabled": true
@@ -1234,7 +1254,7 @@
 		{
 			"key": "statusCode",
 			"type": "text",
-			"value": "200"
+			"value": "400"
 		},
 		{
 			"key": "errorTypes",
