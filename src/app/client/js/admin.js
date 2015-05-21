@@ -204,6 +204,7 @@
           inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
           inbox.removeHref = links['self'].href + 'apiKey=' + persistentOptions.headers.Bearer;          
           $scope.inboxes.unshift(inbox);
+          $scope.newInbox.url = '';
         })
         .catch(function(error) {
           console.error("Caught an error adding a repo!");
