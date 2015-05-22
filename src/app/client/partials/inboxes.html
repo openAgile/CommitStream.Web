@@ -20,19 +20,19 @@
     }
 
     .commitstream-admin .repoAdd { 
-      border: none;
-      background-color: #00a7e2;
-      margin-top: 0px;
-      margin-left: 15px;
-      width: 50px;
-      text-transform: uppercase;
-      font-weight: bolder;
-      color: #fff;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      border-radius: 6px;
-      height: 32px;
-      line-height: 32px;
+        border: none;
+        background-color: #eb6c00;
+        margin-top: 0px;
+        margin-left: 15px;
+        width: 50px;
+        text-transform: uppercase;
+        font-weight: bolder;
+        color: #fff;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        border-radius: 6px;
+        height: 32px;
+        line-height: 32px;
     }
     .commitstream-admin .repoAdd:hover { 
       color: #fff;
@@ -43,6 +43,15 @@
     .commitstream-admin .toggle-handle {
       border-radius: 0px;
       width: 50px;
+    }
+    .btn-primary {
+      background-color: #00a7e2;
+    }
+    .toggle-on.btn {
+      padding-right:35px
+    }
+    .toggle-off.btn {
+      padding-left:35px
     }
   </style>
 
@@ -82,18 +91,18 @@
     <div class='well well-sm'>
       <div class='input-group'>
         <input type='text' class='form-control' ng-model='newInbox.url'  size='100'
-             placeholder='add new GitHub repo url...'>
+             placeholder='Enter repository URL'>
         <span class='input-group-btn'>
           <button class='repoAdd' type='button' ng-click='inboxCreate()'>Add</button>
         </span>
       </div>
       <div ng-if='inboxes.length > 0'>
-        <h4>Repositories</h4>
+        <h4>Active Repositories</h4>
         <table class='table table-striped table-bordered'>
           <tr>
-            <th>Repository</th>
-            <th>WebHook URL</th>
-            <th>Remove</th>    
+            <th>Repository Name</th>
+            <th>Webhook URL</th>
+            <th>Remove Repository</th>    
           </tr>
           <tr ng-repeat-start='inbox in inboxes'>
             <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
