@@ -71,23 +71,6 @@ h1 {
     margin: 0.67em 0
 }
 
-.message {
-	position: absolute;
-	top:0;
-	margin: 0 auto;
-	z-index: 3;
-	width: 400px;
-	left: 41%;
-	text-align: center;
-}
-.repository-section {
-	width: 100%;
-	height: 200px;
-	position: absolute;
-	top: 47px;
-	opacity: .6;
-	z-index: 3;
-}
 mark {
     background: #ff0;
     color: #000

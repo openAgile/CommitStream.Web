@@ -1,19 +1,38 @@
 <form ng-submit='inboxCreate()'>
   <style>
+    .commitstream-admin .prompt {
+      position: absolute;
+      top:0;
+      margin: 0 auto;
+      z-index: 3;
+      width: 33%;
+      left: 33%;
+      text-align: center;
+    }
+
+    .commitstream-admin .repository-section {
+      width: 100%;
+      height: 200px;
+      position: absolute;
+      top: 47px;
+      opacity: .6;
+      z-index: 3;
+    }
+
     .commitstream-admin .repoAdd { 
-        border: none;
-        background-color: #00a7e2;
-        margin-top: 0px;
-        margin-left: 15px;
-        width: 50px;
-        text-transform: uppercase;
-        font-weight: bolder;
-        color: #fff;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        border-radius: 6px;
-        height: 32px;
-        line-height: 32px;
+      border: none;
+      background-color: #00a7e2;
+      margin-top: 0px;
+      margin-left: 15px;
+      width: 50px;
+      text-transform: uppercase;
+      font-weight: bolder;
+      color: #fff;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      border-radius: 6px;
+      height: 32px;
+      line-height: 32px;
     }
     .commitstream-admin .repoAdd:hover { 
       color: #fff;
@@ -42,14 +61,14 @@
     <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Applying changes...</em></span>
   </p>
 
-   <div ng-if="messageActive()" class='message'>
+   <div ng-if="messageActive()" class='message prompt'>
     <div class="alert alert-success alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>{{message.value}}</strong>
     </div>
   </div>
 
-   <div ng-if="errorActive()" class='message'>
+   <div ng-if="errorActive()" class='error prompt'>
     <div class="alert alert-warning alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>{{error.value}}</strong>
