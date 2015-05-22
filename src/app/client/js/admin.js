@@ -92,6 +92,8 @@
         .then(function(configRes) {
           // TODO handle null case?
           config = configRes.data;
+          $rootScope.config = config;
+
           if (config.configured) {
             persistentOptions.headers.Bearer = config.apiKey;
             return $rootScope.resources.$get('instance', {instanceId: config.instanceId});
@@ -117,22 +119,7 @@
         })
         .then(function(digest) {
           $rootScope.digest = digest;
-
-          if (!config.configured) {
-            config.instanceId = $rootScope.instance.instanceId;
-            config.globalDigestId = $rootScope.digest.digestId;
-            config.apiKey = $rootScope.instance.apiKey;
-            if (configSaveUrl) {
-              $http.post(configSaveUrl, config).then(function(configSaveResult) {
-                // TODO?
-                $location.path('/inboxes');
-              });
-            } else {
-              $location.path('/inboxes');
-            }
-          } else {
-            $location.path('/inboxes');
-          }
+          $location.path('/inboxes');
         })
         .catch(function(error) {
           console.error("Caught an error adding an instance or a repo list!");
@@ -141,11 +128,11 @@
       }]
     );
 
-    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', function($rootScope, $scope, $timeout, serviceUrl) {
+    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http) {
       $scope.newInbox = {
         url: '',
         name: '',
-        family: 'GitHub'
+        family: 'GitHub' // Until we support other systems, hard-code this.
       };
 
       $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
@@ -153,7 +140,7 @@
       $scope.inboxes = [];
 
       $scope.enabledState = { 
-        enabled: false,
+        enabled: $rootScope.config.enabled,
         applying: false,
         onText: 'Enabled',
         offText: 'Disabled'
@@ -161,27 +148,57 @@
 
       $scope.message = { value: ''};
 
-      $scope.enabledChanged = function() {
-        $rootScope.digest.$get('inboxes').then(function(inboxesRes) {
-          inboxesRes.$get('inboxes').then(function(inboxes) {
-            // TODO: fix all this up
-            console.log(inboxes);
+      var configSave = function(enabled) {
+        $rootScope.config.enabled = enabled;
+        
+        if (!$rootScope.config.configured) {
+          $rootScope.config.instanceId = $rootScope.instance.instanceId;
+          $rootScope.config.globalDigestId = $rootScope.digest.digestId;
+          $rootScope.config.apiKey = $rootScope.instance.apiKey;
+          $rootScope.config.configured = true;
+        }
+        
+        return $http.post(configSaveUrl, $rootScope.config);
+      };
+
+      var inboxConfigure = function(inbox) {
+        var links = inbox.$links();
+        inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
+        inbox.removeHref = links['self'].href + 'apiKey=' + persistentOptions.headers.Bearer;
+      };
+      
+      var inboxesGet = function() {
+        return $rootScope.digest.$get('inboxes')
+          .then(function(inboxesRes) {
+            return inboxesRes.$get('inboxes');
+          }).then(function(inboxes) {
+            $scope.inboxes.length = 0;
             inboxes.forEach(function(inbox) {
-              console.log(inbox.name);
-              var links = inbox.$links();
-              console.log(links['self'].href);
+              inboxConfigure(inbox);
+              $scope.inboxes.unshift(inbox);
             });
           });
-        });       
-        apply();
+      }
+
+      if ($rootScope.config.enabled) inboxesGet();
+
+      $scope.enabledChanged = function() {
+        var enabled = $('.commitstream-admin .enabled').prop('checked');
+
+        apply(); // TODO clean up...
+
+        configSave(enabled).then(function(configSaveResult) {
+          // TODO handle configSaveResult
+          if (enabled) inboxesGet();
+        });
       };
 
       var apply = function() {
         $scope.enabledState.applying = true;
-        $('.enabled').bootstrapToggle('disable');
+        $('.commitstream-admin .enabled').bootstrapToggle('disable');
         $timeout(function() {          
           $scope.enabledState.applying = false;
-          $('.enabled').bootstrapToggle('enable');
+          $('.commitstream-admin .enabled').bootstrapToggle('enable');
         }, 2000);
       };
 
@@ -200,9 +217,7 @@
 
         $rootScope.digest.$post('inbox-create', {}, $scope.newInbox)
         .then(function(inbox) {
-          var links = inbox.$links();
-          inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
-          inbox.removeHref = links['self'].href + 'apiKey=' + persistentOptions.headers.Bearer;          
+          inboxConfigure(inbox);
           $scope.inboxes.unshift(inbox);
           $scope.newInbox.url = '';
         })
@@ -218,7 +233,7 @@
           var index = $scope.inboxes.indexOf(inbox);
           $scope.inboxes.splice(index, 1);
           $timeout(function() {
-            $('.message').fadeOut('slow', function() {
+            $('.commitstream-admin .message').fadeOut('slow', function() {
               $scope.message.value = '';
             });
           }, 4000);
@@ -235,11 +250,11 @@
       };
 
       $scope.inboxHighlightTop = function() {
-        var el = $($('.inbox')[0]);
+        var el = $($('.commitstream-admin .inbox')[0]);
         $timeout(function() {
           inboxHighlight(el);
         }, 0);      
-      };
+      };      
 
     }]);
 
