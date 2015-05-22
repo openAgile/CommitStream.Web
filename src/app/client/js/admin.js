@@ -148,7 +148,7 @@
       }]
     );
 
-    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http) {
+    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', '$q', function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http, $q) {
       $scope.newInbox = {
         url: '',
         name: '',
@@ -195,8 +195,8 @@
           $rootScope.config.apiKey = $rootScope.instance.apiKey;
           $rootScope.config.configured = true;
         }
-        
-        return $http.post(configSaveUrl, $rootScope.config);
+        if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
+        return $q.when(true);
       };
 
       var inboxConfigure = function(inbox) {

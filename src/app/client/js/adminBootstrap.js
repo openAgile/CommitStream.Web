@@ -12,6 +12,7 @@
     if (src.indexOf('/') !== 0) {
       serviceUrl = src.substr(0, src.indexOf('/js/adminBootstrap.js'));
     }
+
     var rootElementId = scriptEl.attr('data-commitstream-root');
     var commitStreamRoot = $('#' + rootElementId);
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
