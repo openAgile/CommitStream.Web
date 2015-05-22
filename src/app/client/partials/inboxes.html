@@ -49,6 +49,13 @@
     </div>
   </div>
 
+   <div ng-if="errorActive()" class='message'>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong>{{error.value}}</strong>
+    </div>
+  </div>
+
   <!-- <div class="repository-section"><img src="../disable-overlay.gif" width="100%" height="120px" /></div> -->
 
   <div ng-if='reposVisible()'>

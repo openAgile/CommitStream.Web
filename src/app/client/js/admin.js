@@ -178,6 +178,14 @@
         return $scope.error.value !== '';
       };
 
+      var errorHandler = function(error) {
+        if (error.data && error.data.errors && error.data.errors.length) {
+          $scope.error.value = error.data.errors[0];
+        } else {
+          $scope.error.value = 'There was an unexpected error when processing your request.';
+        }
+      };
+
       var configSave = function(enabled) {
         $rootScope.config.enabled = enabled;
         
@@ -207,8 +215,9 @@
               inboxConfigure(inbox);
               $scope.inboxes.unshift(inbox);
             });
-          });
-      }
+          })
+          .catch(errorHandler);
+      };
 
       if ($rootScope.config.enabled) inboxesGet();
 
@@ -220,7 +229,8 @@
         configSave(enabled).then(function(configSaveResult) {
           // TODO handle configSaveResult
           if (enabled) inboxesGet();
-        });
+        })
+        .catch(errorHandler);
       };
 
       var apply = function() {
@@ -251,10 +261,7 @@
           $scope.inboxes.unshift(inbox);
           $scope.newInbox.url = '';
         })
-        .catch(function(error) {
-          console.error("Caught an error adding a repo!");
-          console.error(error);
-        });
+        .catch(errorHandler);
       };
 
       $scope.inboxRemove = function(inbox) {
@@ -267,7 +274,8 @@
               $scope.message.value = '';
             });
           }, 4000);
-        });
+        })
+        .catch(errorHandler);
       };
 
       var inboxHighlight = function(el) {
