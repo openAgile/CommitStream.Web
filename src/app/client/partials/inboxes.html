@@ -21,12 +21,10 @@
     .commitstream-admin .copy-clip {
       font-size: 70%;
     }
-
-    .toggle-handle { 
+    .commitstream-admin .toggle-handle {
       border-radius: 0px;
       width: 50px;
     }
-
   </style>
 
   <p>
@@ -44,14 +42,14 @@
     <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Applying changes...</em></span>
   </p>
 
-   <div ng-if="message.value !== ''" class='message'>
-      <div class="alert alert-success alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <strong>{{message.value}}</strong>
-      </div>
-      <!-- <p class='bg-success'><b>{{message.value}}</b></p> -->
+   <div ng-if="messageActive()" class='message'>
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong>{{message.value}}</strong>
+    </div>
   </div>
-  <div class="repository-section"><img src="../disable-overlay.gif" width="100%" height="120px" /></div>
+
+  <!-- <div class="repository-section"><img src="../disable-overlay.gif" width="100%" height="120px" /></div> -->
 
   <div ng-if='reposVisible()'>
     <h3>Setup Global Repositories</h3>
@@ -78,7 +76,6 @@
             </td>
             <td>
               <span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
-              <!-- <a class='btn btn-warning' ng-click='inboxRemove(inbox)'><span class='glyphicon glyphicon-minus-sign' title='Remove' aria-hidden='true'></span></a> -->
             </td>
           </tr>
           <tr ng-repeat-end ng-init='inboxHighlightTop(inbox.removeHref)'></tr>
@@ -86,5 +83,4 @@
       </div>
     </div>
   </div>
-
 </form>

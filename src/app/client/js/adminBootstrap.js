@@ -67,6 +67,7 @@
       serviceUrl + '/bower_components/angular-route/angular-route.min.js',
       serviceUrl + '/bower_components/angular-hal/angular-hal.js',
       serviceUrl + '/bower_components/rfc6570/rfc6570.js',
+      serviceUrl + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
       serviceUrl + '/bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js',
       serviceUrl + '/js/admin.js'
     ];

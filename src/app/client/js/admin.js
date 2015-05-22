@@ -70,8 +70,31 @@
 
     app.controller('InstancesController',
       ['$rootScope', '$scope', '$http', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
-      function($rootScope, $scope, $http, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl) {        
+      function($rootScope, $scope, $http, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl) {       
         var config;
+      
+        $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
+
+        var loading = true;
+
+        $scope.loading = function() {
+          return loading;
+        };
+
+        var errorHandler = function(error) {
+          loading = false;
+          if (error.data && error.data.errors && error.data.errors.length) {
+            $scope.error.value = error.data.errors[0];
+          } else {
+            $scope.error.value = 'There was an unexpected error when processing your request.';
+          }
+        };
+
+        $scope.error = { value: ''};
+
+        $scope.errorActive = function() {
+          return $scope.error.value !== '';
+        };
 
         CommitStreamApi
         .load()
@@ -121,10 +144,7 @@
           $rootScope.digest = digest;
           $location.path('/inboxes');
         })
-        .catch(function(error) {
-          console.error("Caught an error adding an instance or a repo list!");
-          console.error(error);
-        });
+        .catch(errorHandler);
       }]
     );
 
@@ -147,6 +167,16 @@
       };
 
       $scope.message = { value: ''};
+
+      $scope.messageActive = function() {
+        return $scope.message.value !== '';
+      };
+
+      $scope.error = { value: ''};
+
+      $scope.errorActive = function() {
+        return $scope.error.value !== '';
+      };
 
       var configSave = function(enabled) {
         $rootScope.config.enabled = enabled;

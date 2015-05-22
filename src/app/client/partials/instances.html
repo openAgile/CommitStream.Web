@@ -1,3 +1,8 @@
 <div style='text-align: center'>
-	<img style='margin-top: 8px;' src='http://localhost/css/images/loaders/ajax-loader.gif' />
+  <div ng-if="errorActive()" class='error'>
+    <div class="alert alert-warning" role="alert">
+      <strong>{{error.value}}</strong>
+    </div>
+  </div>
+  <img ng-show='loading()' ng-src='{{loaderUrl}}' class='loader' />
 </div>
