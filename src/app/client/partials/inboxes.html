@@ -1,17 +1,22 @@
 <form ng-submit='inboxCreate()'>
   <style>
     .commitstream-admin .repoAdd { 
-      margin-top: 0px;
-      width: 50px;
-      height: 34px;
-      outline-color: rgb(7, 73, 107);
-      color: rgb(7, 73, 107);
-      text-shadow: rgb(230, 230, 230) 0px 1px 0px;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 12px;
+        border: none;
+        background-color: #00a7e2;
+        margin-top: 0px;
+        margin-left: 15px;
+        width: 50px;
+        text-transform: uppercase;
+        font-weight: bolder;
+        color: #fff;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        border-radius: 6px;
+        height: 32px;
+        line-height: 32px;
     }
     .commitstream-admin .repoAdd:hover { 
-      color: rgb(0, 159, 242);
+      color: #fff;
     }
     .commitstream-admin .copy-clip {
       font-size: 70%;
@@ -21,6 +26,7 @@
       border-radius: 0px;
       width: 50px;
     }
+
   </style>
 
   <p>
@@ -35,20 +41,20 @@
       toggle-checkbox
     >
 
-    <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Please wait while applying changes...</em></span>
+    <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Applying changes...</em></span>
   </p>
 
-  <div ng-if='reposVisible()'>
-    <h3>Setup Global Repositories</h3>
-
-    <div ng-if="message.value !== ''" class='message'>
+   <div ng-if="message.value !== ''" class='message'>
       <div class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <strong>{{message.value}}</strong>
       </div>
       <!-- <p class='bg-success'><b>{{message.value}}</b></p> -->
-    </div>
+  </div>
+  <div class="repository-section"><img src="../disable-overlay.gif" width="100%" height="120px" /></div>
 
+  <div ng-if='reposVisible()'>
+    <h3>Setup Global Repositories</h3>
     <div class='well well-sm'>
       <div class='input-group'>
         <input type='text' class='form-control' ng-model='newInbox.url'  size='100'
@@ -69,7 +75,6 @@
             <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
             <td>
               <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' />
-              <div class='copy-clip'>Copy to clipboard</div>
             </td>
             <td>
               <span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>

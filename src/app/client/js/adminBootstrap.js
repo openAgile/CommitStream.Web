@@ -14,7 +14,7 @@
     }
     var rootElementId = scriptEl.attr('data-commitstream-root');
     var commitStreamRoot = $('#' + rootElementId);
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css');
+    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
 
