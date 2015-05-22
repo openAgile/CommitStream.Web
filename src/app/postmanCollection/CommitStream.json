@@ -37,7 +37,7 @@
 					"collection_owner": 0,
 					"collection_id": "078e1998-9164-d802-84db-3387328fe19f",
 					"collection": "078e1998-9164-d802-84db-3387328fe19f",
-					"owner": "40527",
+					"owner": 0,
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f"
 				},
 				{
@@ -74,7 +74,7 @@
 					"collection_owner": 0,
 					"collection_id": "078e1998-9164-d802-84db-3387328fe19f",
 					"collection": "078e1998-9164-d802-84db-3387328fe19f",
-					"owner": "40527",
+					"owner": 0,
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f"
 				},
 				{
@@ -92,7 +92,7 @@
 					"collection_owner": 0,
 					"collection_id": "078e1998-9164-d802-84db-3387328fe19f",
 					"collection": "078e1998-9164-d802-84db-3387328fe19f",
-					"owner": "40527",
+					"owner": 0,
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f"
 				},
 				{
@@ -108,7 +108,7 @@
 					"collection_owner": 0,
 					"collection_id": "078e1998-9164-d802-84db-3387328fe19f",
 					"collection": "078e1998-9164-d802-84db-3387328fe19f",
-					"owner": "40527"
+					"owner": 0
 				},
 				{
 					"id": "c114730a-5f6a-1b32-75bc-0643232eb37d",
@@ -132,7 +132,8 @@
 					"order": [],
 					"collection_name": "CommitStream",
 					"collection_owner": 0,
-					"collection_id": "078e1998-9164-d802-84db-3387328fe19f"
+					"collection_id": "078e1998-9164-d802-84db-3387328fe19f",
+					"owner": 0
 				}
 			],
 			"timestamp": 1428422920112,
@@ -144,6 +145,7 @@
 			"remoteLink": "https://www.getpostman.com/collections/a17c44a631a562df06df",
 			"public": false,
 			"write": true,
+			"hasRequests": true,
 			"requests": [
 				{
 					"id": "0e9cf7f6-d3b8-8d47-58c1-0fccaa134a82",
@@ -162,23 +164,25 @@
 					"name": "Create an instance",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "bc8836c9-b43c-e8da-db41-3bfd310851f1"
 				},
 				{
 					"id": "11035ed7-8f10-f2f7-177d-888e877ab7fd",
 					"headers": "",
 					"url": "{{rootURL}}/{{instanceId}}/inboxes/{{inboxId}}?apiKey={{apiKey}}",
-					"preRequestScript": "postman.setGlobalVariable('errorTypes', 's_descrip');\npostman.setGlobalVariable('statusCode', 400);",
+					"preRequestScript": "// the first time run it with 200 then 410\npostman.setGlobalVariable('statusCode', 200);",
 					"pathVariables": {},
-					"method": "GET",
+					"method": "DELETE",
 					"data": [],
 					"dataMode": "params",
 					"version": 2,
-					"tests": "var instanceId = postman.getGlobalVariable('instanceId');\nvar digestId = postman.getGlobalVariable('digestId');\nvar inboxId = postman.getGlobalVariable('inboxId');\nvar inboxFamily = postman.getGlobalVariable('inboxFamily');\nvar inboxName = postman.getGlobalVariable('inboxName');\nvar responseData = JSON.parse(responseBody);\nvar errorTypes = postman.getGlobalVariable(\"errorTypes\");\nvar statusCode = parseInt(postman.getGlobalVariable('statusCode'));\n\nvar potentialErrorsMap = {\n    nf_digestId: 'Could not find digest with id ' + digestId1,\n    nf_inboxId: 'Could not find inbox with id ' + inboxId,\n    nf_instanceId: 'Could not find instance with id ' + instanceId,\n    inv_apiKey: 'Invalid apiKey for instance ' + instanceId\n};\n\nfunction getExpectedErrors(errorTypes) {\n    var errorTypesArray = errorTypes.split(',');\n    return {errors: _.map(errorTypesArray, function(errorTypeKey) {\n        return potentialErrorsMap[errorTypeKey]\n    })};\n}\n\ntests[\"Status code is correct\"] = responseCode.code === statusCode;\n\nif(responseCode.code === 200){\n    var expected = {\n          \"_links\": {\n            \"self\": {\n              \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\": {\n              \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\": {\n              \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n          },\n          \"inboxId\": inboxId,\n          \"family\": inboxFamily,\n          \"name\": inboxName\n        };\n\n    tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/hal+json\");\n    tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === (postman.getGlobalVariable(\"rootURL\") + \"/\" + instanceId + \"/inboxes/\" + inboxId);\n    tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\nif(responseCode.code != 200){\n    \n    tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\");\n    tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === null;\n    tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\n\n",
+					"tests": "var instanceId = postman.getGlobalVariable('instanceId');\nvar inboxId = postman.getGlobalVariable('inboxId');\nvar responseData = JSON.parse(responseBody);\nvar statusCode = parseInt(postman.getGlobalVariable('statusCode'));\n\n\ntests[\"Status code is correct\"] = responseCode.code === statusCode;\n\nif(responseCode.code === 200){\n    var expected = {\n        \"message\": \"The inbox \" + inboxId + \" has been removed from instance \" + instanceId + \".\"\n    };\n    \n    tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\");\n    tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\n\nif(responseCode.code === 410){\n    var expected = {\n        \"errors\":[ \"The inbox \" + inboxId + \" has been removed from instance \" + instanceId + \".\" ]\n    };\n    \n    tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\");\n    tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1432225040062,
-					"name": "Delete an inbox - csv",
+					"time": 1432305697574,
+					"name": "Remove an inbox - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
 					"responses": []
@@ -200,7 +204,9 @@
 					"name": "Get info about all inboxes",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "c51dd647-b2bc-6fbb-5586-82513c554e60"
 				},
 				{
 					"id": "1c4a97aa-aed4-40d1-2fe7-d1172f0f8bf8",
@@ -219,7 +225,9 @@
 					"name": "Add GitHub Commits to Inbox - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "222fbde0-dfa7-f7fe-40ab-cfb4892271c0",
@@ -242,7 +250,8 @@
 					"synced": true,
 					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075",
 					"isFromCollection": true,
-					"collectionRequestId": "222fbde0-dfa7-f7fe-40ab-cfb4892271c0"
+					"collectionRequestId": "222fbde0-dfa7-f7fe-40ab-cfb4892271c0",
+					"owner": 0
 				},
 				{
 					"id": "3241724c-f27b-f24b-e0ef-435aca8eef8b",
@@ -263,7 +272,8 @@
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
 					"responses": [],
 					"synced": true,
-					"folder": "c51dd647-b2bc-6fbb-5586-82513c554e60"
+					"folder": "c51dd647-b2bc-6fbb-5586-82513c554e60",
+					"owner": 0
 				},
 				{
 					"id": "411ca69c-50f1-db64-b33c-a82302598680",
@@ -282,7 +292,9 @@
 					"name": "Create a second inbox for a digest - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "4dc3d416-3ad8-9329-81ce-4300edb6faa2",
@@ -301,7 +313,9 @@
 					"name": "Get info about ALL digests - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "4e9720ad-6df5-4643-a10a-01a09f0e2c76",
@@ -322,7 +336,8 @@
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
 					"responses": [],
 					"synced": true,
-					"folder": "c51dd647-b2bc-6fbb-5586-82513c554e60"
+					"folder": "c51dd647-b2bc-6fbb-5586-82513c554e60",
+					"owner": 0
 				},
 				{
 					"id": "567129fb-c3a2-6728-7902-a73dab80df02",
@@ -341,7 +356,9 @@
 					"name": "Get instance commits for workitem",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "8c9c3b96-c523-576e-db80-690dedf973e4"
 				},
 				{
 					"id": "5763cfeb-b104-60eb-17ad-95000c835b48",
@@ -365,7 +382,8 @@
 					"folder": "c114730a-5f6a-1b32-75bc-0643232eb37d",
 					"synced": true,
 					"isFromCollection": true,
-					"collectionRequestId": "5763cfeb-b104-60eb-17ad-95000c835b48"
+					"collectionRequestId": "5763cfeb-b104-60eb-17ad-95000c835b48",
+					"owner": 0
 				},
 				{
 					"id": "5a68883f-ddf1-6909-d4ed-68bb5cee1f14",
@@ -384,7 +402,9 @@
 					"name": "Get info about ALL digests - csv copy",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "5ad41eed-30d3-b52c-ee56-1ecbfecc4c20",
@@ -407,7 +427,8 @@
 					"synced": true,
 					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075",
 					"isFromCollection": true,
-					"collectionRequestId": "5ad41eed-30d3-b52c-ee56-1ecbfecc4c20"
+					"collectionRequestId": "5ad41eed-30d3-b52c-ee56-1ecbfecc4c20",
+					"owner": 0
 				},
 				{
 					"id": "64e24d5e-0e25-472f-7416-f90997cd8c99",
@@ -426,7 +447,9 @@
 					"name": "Get info about a digest",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "190f176e-2c29-3610-a706-7773f35d20d2"
 				},
 				{
 					"id": "65705602-9cc4-0be1-cbcf-3036b3463957",
@@ -445,7 +468,9 @@
 					"name": "Add GitHub Commits to Inbox",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "8c9c3b96-c523-576e-db80-690dedf973e4"
 				},
 				{
 					"id": "6beba802-da8c-5e60-0960-6137d23631f2",
@@ -464,7 +489,9 @@
 					"name": "Get info about an inbox - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "7a3a9efe-e6c4-ebf5-a0c2-6046ae4e5400",
@@ -483,7 +510,9 @@
 					"name": "Create a digest",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "190f176e-2c29-3610-a706-7773f35d20d2"
 				},
 				{
 					"id": "7d71f7da-3e2e-8ff4-a3f3-0c046ed353f8",
@@ -502,7 +531,9 @@
 					"name": "Digest count - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "825befed-09b2-187e-fccf-41ae125116e0",
@@ -521,7 +552,9 @@
 					"name": "Get info about ALL inboxes - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "88f233df-697f-1cd7-4b68-de9f3710461f",
@@ -540,7 +573,9 @@
 					"name": "Create a digest - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "8e0a01a6-4068-1d24-6f30-eea4810e89ab",
@@ -559,7 +594,9 @@
 					"name": "Get digest commits",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "8c9c3b96-c523-576e-db80-690dedf973e4"
 				},
 				{
 					"id": "a5b63b74-716f-280d-e2cb-003e4d098fef",
@@ -578,7 +615,9 @@
 					"name": "Create an inbox for a digest",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "190f176e-2c29-3610-a706-7773f35d20d2"
 				},
 				{
 					"id": "b450a087-159d-63a0-94b2-abe45ce0578a",
@@ -597,7 +636,9 @@
 					"name": "Get info about a digest - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "b7ce7098-23e1-0fa8-b40f-7cc04c094430",
@@ -616,7 +657,9 @@
 					"name": "Create a second digest",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "190f176e-2c29-3610-a706-7773f35d20d2"
 				},
 				{
 					"id": "bdcae0e3-e7c0-525e-5826-5afd5ef62abc",
@@ -635,7 +678,9 @@
 					"name": "Create an instance - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "be7ce4eb-d361-98a8-c257-75612b25c831",
@@ -657,22 +702,23 @@
 					"responses": [],
 					"write": true,
 					"folder": "190f176e-2c29-3610-a706-7773f35d20d2",
-					"synced": true
+					"synced": true,
+					"owner": 0
 				},
 				{
 					"id": "c16ba3db-7f50-c174-fade-b49c880ceed8",
 					"headers": "{{reqHeaderContentType}}: {{requestHeaderValue}}\n",
 					"url": "{{rootURL}}/{{instanceId}}/digests/{{digestId}}/inboxes?apiKey={{apiKey}}",
-					"preRequestScript": "postman.setGlobalVariable('requestHeaderValue', 'application/json');\npostman.setGlobalVariable('inboxId', null);\npostman.setGlobalVariable('inboxFamily', 'GitHub');\npostman.setGlobalVariable('inboxName', '');\npostman.setGlobalVariable('inboxURL', 'http://noted.com');\npostman.setGlobalVariable('errorTypes', 'r_name');\npostman.setGlobalVariable('statusCode', 404);",
+					"preRequestScript": "postman.setGlobalVariable('requestHeaderValue', 'application/json');\npostman.setGlobalVariable('inboxId', null);\npostman.setGlobalVariable('inboxFamily', 'GitHub');\npostman.setGlobalVariable('inboxName', 'somename');\npostman.setGlobalVariable('inboxURL', 'http://noted.com');\npostman.setGlobalVariable('errorTypes', 'r_name');\npostman.setGlobalVariable('statusCode', 201);",
 					"pathVariables": {},
 					"method": "POST",
 					"data": "{\r\n    \"family\": \"{{inboxFamily}}\",\r\n    \"name\": \"{{inboxName}}\",\r\n    \"url\": \"{{inboxURL}}\"\r\n}",
 					"dataMode": "raw",
 					"version": 2,
-					"tests": "var digestId = postman.getGlobalVariable(\"digestId\");\nvar responseData = JSON.parse(responseBody);\npostman.setGlobalVariable(\"inboxId\", responseData.inboxId);\nvar inboxId = postman.getGlobalVariable(\"inboxId\");\nvar inboxName = postman.getGlobalVariable(\"inboxName\");\nvar inboxFamily = postman.getGlobalVariable(\"inboxFamily\");\nvar inboxURL = postman.getGlobalVariable(\"inboxURL\");\nvar instanceId = postman.getGlobalVariable(\"instanceId\");\nvar digestId = postman.getGlobalVariable(\"digestId\");\nvar errorTypes = postman.getGlobalVariable(\"errorTypes\");\nvar statusCode = parseInt(postman.getGlobalVariable('statusCode'));\n\nvar potentialErrorsMap = {\n    r_name: 'inbox requires property \"name\"', \n    r_family: 'inbox requires property \"family\"',\n    e_family: 'inbox.family is not one of enum values: GitHub',\n    s_name: 'inbox.name cannot contain script tags or HTML.',\n    s_url: 'inbox.url cannot contain script tags or HTML.',\n    s_family: 'inbox.family cannot contain script tags or HTML.',\n    i_name: 'inbox.name does not meet the minimum length of 3',\n    x_name: 'inbox.name does not meet the maximum length of 140',\n    i_digestId: 'inbox.digestId does not meet the minimum length of 36',\n    i_url: 'inbox.url does not meet the minimum length of 10',\n    x_url: 'inbox.url does not meet the maximum length of 2000',\n    nf_digestId: 'Could not find a digest with id ' + digestId,\n    nf_instanceId: 'Could not find instance with id ' + instanceId,\n    p_header: 'When issuing a POST to the CommitStream API, you must send a Content-Type: application/json header.',\n    inv_apiKey: 'Invalid apiKey for instance ' + instanceId\n};\n\nfunction getExpectedErrors(errorTypes) {\n    var errorTypesArray = errorTypes.split(',');\n    return {errors: _.map(errorTypesArray, function(errorTypeKey) {\n        return potentialErrorsMap[errorTypeKey]\n    })};\n}\n\ntests[\"Status code is correct\"] = responseCode.code === statusCode;\n\nif(responseCode.code === 201) {\n        if(inboxURL === \"null\"){\n            var expected = {\n            \"_links\":{\n            \"self\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n            },\n            \"inboxId\": inboxId,\n            \"family\": inboxFamily,\n            \"name\": inboxName\n            };\n        }\n        else {\n            var expected = {\n            \"_links\":{\n            \"self\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n            },\n            \"inboxId\": inboxId,\n            \"family\": inboxFamily,\n            \"name\": inboxName,\n            \"url\": inboxURL\n            };\n            \n            tests[\"InboxURL contains http\"] = postman.getGlobalVariable(\"inboxURL\").startsWith(\"http\");\n        }\n        \n        tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/hal+json\");\n        tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === (postman.getGlobalVariable(\"rootURL\") + \"/\" + instanceId + \"/inboxes/\" + inboxId);\n        tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\n        \nif(responseCode.code != 201){\n        tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\");\n        tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === null;\n        tests[\"Response Body is correct\"] = _.matches(getExpectedErrors(errorTypes))(responseData);\n}       \n\n\n\n\n\n\n\n\n",
+					"tests": "var digestId = postman.getGlobalVariable(\"digestId\");\nvar responseData = JSON.parse(responseBody);\npostman.setGlobalVariable(\"inboxId\", responseData.inboxId);\nvar inboxId = postman.getGlobalVariable(\"inboxId\");\nvar inboxName = postman.getGlobalVariable(\"inboxName\");\nvar inboxFamily = postman.getGlobalVariable(\"inboxFamily\");\nvar inboxURL = postman.getGlobalVariable(\"inboxURL\");\nvar instanceId = postman.getGlobalVariable(\"instanceId\");\nvar digestId = postman.getGlobalVariable(\"digestId\");\nvar errorTypes = postman.getGlobalVariable(\"errorTypes\");\nvar statusCode = parseInt(postman.getGlobalVariable('statusCode'));\n\nvar potentialErrorsMap = {\n    r_name: 'inbox requires property \"name\"', \n    r_family: 'inbox requires property \"family\"',\n    e_family: 'inbox.family is not one of enum values: GitHub',\n    s_name: 'inbox.name cannot contain script tags or HTML.',\n    s_url: 'inbox.url cannot contain script tags or HTML.',\n    s_family: 'inbox.family cannot contain script tags or HTML.',\n    i_name: 'inbox.name does not meet the minimum length of 3',\n    x_name: 'inbox.name does not meet the maximum length of 140',\n    i_digestId: 'inbox.digestId does not meet the minimum length of 36',\n    i_url: 'inbox.url does not meet the minimum length of 10',\n    x_url: 'inbox.url does not meet the maximum length of 2000',\n    nf_digestId: 'Could not find a digest with id ' + digestId,\n    nf_instanceId: 'Could not find instance with id ' + instanceId,\n    p_header: 'When issuing a POST to the CommitStream API, you must send a Content-Type: application/json header.',\n    inv_apiKey: 'Invalid apiKey for instance ' + instanceId\n};\n\nfunction getExpectedErrors(errorTypes) {\n    var errorTypesArray = errorTypes.split(',');\n    return {errors: _.map(errorTypesArray, function(errorTypeKey) {\n        return potentialErrorsMap[errorTypeKey]\n    })};\n}\n\ntests[\"Status code is correct\"] = responseCode.code === statusCode;\n\nif(responseCode.code === 201) {\n    postman.setGlobalVariable(\"inboxId\", responseData.inboxId);\n    var inboxId = responseData.inboxId;\n    \n    var digestId = postman.getGlobalVariable('digestId');\n        if(inboxURL === \"null\"){\n            var expected = {\n            \"_links\":{\n            \"self\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n            },\n            \"inboxId\": inboxId,\n            \"family\": inboxFamily,\n            \"name\": inboxName\n            };\n        }\n        else {\n            var expected = {\n            \"_links\":{\n            \"self\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId\n            },\n            \"digest-parent\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/digests/\" + digestId\n            },\n            \"add-commit\":{\n            \"href\": \"http://localhost:6565/api/\" + instanceId + \"/inboxes/\" + inboxId + \"/commits\"\n            }\n            },\n            \"inboxId\": inboxId,\n            \"family\": inboxFamily,\n            \"name\": inboxName,\n            \"url\": inboxURL\n            };\n            \n            tests[\"InboxURL contains http\"] = postman.getGlobalVariable(\"inboxURL\").startsWith(\"http\");\n        }\n        \n        tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/hal+json\");\n        tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === (postman.getGlobalVariable(\"rootURL\") + \"/\" + instanceId + \"/inboxes/\" + inboxId);\n        tests[\"Response Body is correct\"] = _.matches(expected)(responseData);\n}\n        \nif(responseCode.code != 201){\n        tests[\"Response Header is correct\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json\");\n        tests[\"Location Header is correct\"] = postman.getResponseHeader(\"Location\") === null;\n        tests[\"Response Body is correct\"] = _.matches(getExpectedErrors(errorTypes))(responseData);\n}       \n\n\n\n\n\n\n\n\n",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1432225017002,
+					"time": 1432234245840,
 					"name": "Create an inbox for a digest - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
@@ -705,7 +751,8 @@
 					"folder": "c51dd647-b2bc-6fbb-5586-82513c554e60",
 					"synced": true,
 					"isFromCollection": true,
-					"collectionRequestId": "c1c7d722-f1eb-7029-aa2c-45c37a9b23cb"
+					"collectionRequestId": "c1c7d722-f1eb-7029-aa2c-45c37a9b23cb",
+					"owner": 0
 				},
 				{
 					"id": "c7537742-8132-504b-25c5-2ebdcd9a8107",
@@ -724,7 +771,9 @@
 					"name": "Get info about ALL digests",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "190f176e-2c29-3610-a706-7773f35d20d2"
 				},
 				{
 					"id": "dd846cb9-8a6f-f39b-34af-c037b020a2a1",
@@ -748,7 +797,9 @@
 					"name": "Inbox count - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "e081fd2b-c83d-fddc-739e-27bb54296a8c",
@@ -767,7 +818,9 @@
 					"name": "GET details for an instance",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "bc8836c9-b43c-e8da-db41-3bfd310851f1"
 				},
 				{
 					"id": "f4b04476-f205-6efb-946f-403a9dc2e707",
@@ -791,7 +844,9 @@
 					"name": "Digest count - csv copy",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "f4fbed3e-2809-eb23-a60d-28469fc302de",
@@ -810,7 +865,9 @@
 					"name": "Digest count",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "190f176e-2c29-3610-a706-7773f35d20d2"
 				},
 				{
 					"id": "f5f8b4fc-eff3-be34-345b-956e57ab9696",
@@ -829,7 +886,9 @@
 					"name": "GET details for an instance - csv",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "fb7c1689-6a0e-6c37-a6cf-64b77e861d49",
@@ -848,7 +907,9 @@
 					"name": "Create a second digest - csv copy",
 					"description": "",
 					"collectionId": "078e1998-9164-d802-84db-3387328fe19f",
-					"responses": []
+					"responses": [],
+					"owner": 0,
+					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075"
 				},
 				{
 					"id": "fdc1dcd8-3a9f-e714-d2b8-1aa2f7952759",
@@ -875,7 +936,8 @@
 					"responses": [],
 					"write": true,
 					"folder": "fdd97ecd-cfec-024a-7100-8ea16e442075",
-					"synced": true
+					"synced": true,
+					"owner": 0
 				}
 			]
 		},
@@ -891,12 +953,13 @@
 			"timestamp": 1430503420378,
 			"synced": false,
 			"remote_id": 0,
-			"owner": "40527",
+			"owner": 0,
 			"sharedWithTeam": false,
 			"subscribed": false,
 			"remoteLink": "",
 			"public": false,
 			"write": true,
+			"hasRequests": true,
 			"requests": [
 				{
 					"id": "eff820fb-0fdf-d4e5-1cc3-e85c0771587b",
@@ -915,7 +978,8 @@
 					"name": "A sample story at Story:54874",
 					"description": "",
 					"collectionId": "956d4535-63e2-ca26-5bce-fe21516f9d9c",
-					"responses": []
+					"responses": [],
+					"owner": 0
 				},
 				{
 					"id": "f4898fec-a2ae-a25c-1849-92093c8c7455",
@@ -934,7 +998,8 @@
 					"name": "Here it is Story:54873 that we care about",
 					"description": "",
 					"collectionId": "956d4535-63e2-ca26-5bce-fe21516f9d9c",
-					"responses": []
+					"responses": [],
+					"owner": 0
 				}
 			]
 		}
@@ -1064,7 +1129,7 @@
 	"globals": [
 		{
 			"key": "digestId",
-			"value": "ef930949-4555-48a2-a34e-e3ac79d68f2e",
+			"value": "ae9ce2be-bd9e-4cd0-8fb9-251256fe9dc4",
 			"type": "text",
 			"name": "digestId",
 			"enabled": true
@@ -1078,7 +1143,7 @@
 		},
 		{
 			"key": "apiKey",
-			"value": "2a79bc03-e206-408f-901a-a35269ca7a63",
+			"value": "2316690a-db62-4b10-84ba-6874ff701536",
 			"type": "text",
 			"name": "apiKey",
 			"enabled": true
@@ -1099,7 +1164,7 @@
 		},
 		{
 			"key": "inboxId",
-			"value": "undefined",
+			"value": "ec32df81-d6bc-431d-9d4c-884a333a7671",
 			"type": "text",
 			"name": "inboxId",
 			"enabled": true
@@ -1113,7 +1178,7 @@
 		},
 		{
 			"key": "inboxName",
-			"value": "",
+			"value": "somename",
 			"type": "text",
 			"name": "inboxName",
 			"enabled": true
@@ -1141,7 +1206,7 @@
 		},
 		{
 			"key": "instanceId",
-			"value": "43ec1f71-5379-4f06-863f-446cfb5b0f87",
+			"value": "19b8830f-658b-4500-9496-753bec7c640d",
 			"type": "text",
 			"name": "instanceId",
 			"enabled": true
@@ -1254,12 +1319,12 @@
 		{
 			"key": "statusCode",
 			"type": "text",
-			"value": "400"
+			"value": "200"
 		},
 		{
 			"key": "errorTypes",
 			"type": "text",
-			"value": "s_descrip"
+			"value": "r_name"
 		},
 		{
 			"key": "workitem",
