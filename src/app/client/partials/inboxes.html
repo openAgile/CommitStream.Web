@@ -1,121 +1,135 @@
-<form ng-submit='inboxCreate()'>
-  <style>
-    .commitstream-admin .prompt {
-      position: absolute;
-      top:0;
-      margin: 0 auto;
-      z-index: 3;
-      width: 33%;
-      left: 33%;
-      text-align: center;
-    }
+<style>
+  .commitstream-admin .prompt {
+    position: absolute;
+    top:0;
+    margin: 0 auto;
+    z-index: 3;
+    width: 33%;
+    left: 33%;
+    text-align: center;
+  }
 
-    .commitstream-admin .repository-section {
-      width: 100%;
-      height: 200px;
-      position: absolute;
-      top: 47px;
-      opacity: .6;
-      z-index: 3;
-    }
+  .commitstream-admin .repository-section {
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    top: 47px;
+    opacity: .6;
+    z-index: 3;
+  }
 
-    .commitstream-admin .repoAdd { 
-      border: none;
-      background-color: #eb6c00;
-      margin-top: 0px;
-      margin-left: 15px;
-      width: 50px;
-      text-transform: uppercase;
-      font-weight: bolder;
-      color: #fff;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      border-radius: 6px;
-      height: 32px;
-      line-height: 32px;
-    }
-    .commitstream-admin .repoAdd:hover { 
-      color: #fff;
-    }
-    .commitstream-admin .copy-clip {
-      font-size: 70%;
-    }
-    .commitstream-admin .toggle-handle {
-      border-radius: 0px;
-      width: 50px;
-    }
-    .btn-primary {
-      background-color: #00a7e2;
-    }
-    .toggle-on.btn {
-      padding-right:35px
-    }
-    .toggle-off.btn {
-      padding-left:35px
-    }
-  </style>
+  .commitstream-admin .repoAdd { 
+    border: none;
+    background-color: #eb6c00;
+    margin-top: 0px;
+    margin-left: 15px;
+    width: 50px;
+    text-transform: uppercase;
+    font-weight: bolder;
+    color: #fff;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    border-radius: 6px;
+    height: 32px;
+    line-height: 32px;
+  }
+  .commitstream-admin .repoAdd:hover { 
+    color: #fff;
+  }
+  .commitstream-admin .repoSummary {
+    font-size: 80%;
+  }
+  .commitstream-admin .copy-clip {
+    font-size: 70%;
+  }
+  .commitstream-admin .toggle-handle {
+    border-radius: 0px;
+    width: 50px;
+  }
+  .commitstream-admin .btn-primary {
+    background-color: #00a7e2;
+  }
+  .commitstream-admin .toggle-on.btn {
+    padding-right:35px
+  }
+  .commitstream-admin .toggle-off.btn {
+    padding-left:35px
+  }
+  .commitstream-admin .validation-error {
+    font-size: 80%;
+    font-style: italic;
+    color: red;
+    font-weight: bold;
+  }
+</style>
 
-  <p>
-    <input 
-      data-on='Enabled'
-      data-off='Disabled'
-      data-style='slow'
-      class='form-control enabled'
-      type='checkbox'
-      ng-model='enabledState.enabled'
-      ng-change='enabledChanged()'
-      toggle-checkbox
-    >
+<p>
+  <input 
+    data-on='Enabled'
+    data-off='Disabled'
+    data-style='slow'
+    class='form-control enabled'
+    type='checkbox'
+    ng-model='enabledState.enabled'
+    ng-change='enabledChanged()'
+    toggle-checkbox
+  >
 
-    <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Applying changes...</em></span>
-  </p>
+  <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Applying changes...</em></span>
+</p>
 
-   <div ng-if="messageActive()" class='message prompt'>
-    <div class="alert alert-success alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <strong>{{message.value}}</strong>
-    </div>
+ <div ng-if="messageActive()" class='message prompt'>
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{message.value}}</strong>
   </div>
+</div>
 
-   <div ng-if="errorActive()" class='error prompt'>
-    <div class="alert alert-warning alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <strong>{{error.value}}</strong>
-    </div>
+ <div ng-if="errorActive()" class='error prompt'>
+  <div class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{error.value}}</strong>
   </div>
+</div>
 
-  <!-- <div class="repository-section"><img src="../disable-overlay.gif" width="100%" height="120px" /></div> -->
+<!-- <div class="repository-section"><img src="../disable-overlay.gif" width="100%" height="120px" /></div> -->
 
-  <div ng-if='reposVisible()'>
-    <h3>Setup Global Repositories</h3>
-    <div class='well well-sm'>
+<div ng-if='reposVisible()'>
+  <h3>Setup Global Repositories</h3>
+  <div class='well well-sm'>
+    <form ng-submit='inboxCreate()' name='inboxesForm'>
       <div class='input-group'>
-        <input type='text' class='form-control' ng-model='newInbox.url'  size='100'
-             placeholder='Enter repository URL'>
+        <input type='text' name='url' class='form-control' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
         <span class='input-group-btn'>
-          <button class='repoAdd' type='button' ng-click='inboxCreate()'>Add</button>
+          <button class='repoAdd' type='button' ng-click='inboxCreate()' ng-disabled='inboxesForm.$invalid'>Add</button>
         </span>
       </div>
-      <div ng-if='inboxes.length > 0'>
-        <h4>Active Repositories</h4>
-        <table class='table table-striped table-bordered'>
-          <tr>
-            <th>Repository Name</th>
-            <th>Webhook URL</th>
-            <th>Remove Repository</th>    
-          </tr>
-          <tr ng-repeat-start='inbox in inboxes'>
-            <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
-            <td>
-              <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' />
-            </td>
-            <td>
-              <span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
-            </td>
-          </tr>
-          <tr ng-repeat-end ng-init='inboxHighlightTop(inbox.removeHref)'></tr>
-        </table>
-      </div>
+    </form>
+    <div class='repoSummary'><b>URL valid:</b> <span ng-hide='inboxesForm.$invalid' class='glyphicon glyphicon-ok-circle alert-success'></span><span ng-show='inboxesForm.$invalid' class='glyphicon glyphicon-remove-circle alert-warning'></span>&nbsp;|&nbsp;<b>Repository name:</b> {{inboxName()}}</div>
+    <!--
+    <div role='alert'>
+      <span class='validation-error' ng-show='inboxesForm.url.$error.pattern'>Repository URL must be valid</span>
     </div>
+    -->      
   </div>
-</form>
+  <div ng-if='inboxes.length > 0'>
+    <h4>Active Repositories</h4>
+    <table class='table table-striped table-bordered'>
+      <tr>
+        <th>Repository Name</th>
+        <th>Webhook URL</th>
+        <th>Remove Repository</th>    
+      </tr>
+      <tr ng-repeat-start='inbox in inboxes'>
+        <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+        <td>
+          <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' />
+        </td>
+        <td>
+          <span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
+        </td>
+      </tr>
+      <tr ng-repeat-end ng-init='inboxHighlightTop(inbox.removeHref)'></tr>
+    </table>
+  </div>
+</div>

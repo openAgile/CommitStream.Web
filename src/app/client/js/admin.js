@@ -178,6 +178,14 @@
         return $scope.error.value !== '';
       };
 
+      $scope.urlPattern = /^https?\:\/\/.*?\/.{1,}$/;
+
+      $scope.inboxName = function() {
+        var index = $scope.newInbox.url.lastIndexOf('/');
+        if (index < 0) return '...';
+        return $scope.newInbox.url.substr(index + 1);
+      };
+
       var errorHandler = function(error) {
         if (error.data && error.data.errors && error.data.errors.length) {
           $scope.error.value = error.data.errors[0];
