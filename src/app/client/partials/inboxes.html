@@ -36,6 +36,9 @@
   .commitstream-admin .repoAdd:hover { 
     color: #fff;
   }
+  .commitstream-admin .repoAdd:disabled { 
+    background-color: lightgray;
+  }
   .commitstream-admin .repoSummary {
     font-size: 80%;
   }
@@ -60,6 +63,12 @@
     font-style: italic;
     color: red;
     font-weight: bold;
+  }
+  .commitstream-admin .alert-danger {
+    font-size: 75%;
+  }
+  .commitstream-admin .alert-success {
+    font-size: 75%;
   }
 </style>
 
@@ -105,7 +114,7 @@
         </span>
       </div>
     </form>
-    <div class='repoSummary'><b>URL valid:</b> <span ng-hide='inboxesForm.$invalid' class='glyphicon glyphicon-ok-circle alert-success'></span><span ng-show='inboxesForm.$invalid' class='glyphicon glyphicon-remove-circle alert-warning'></span>&nbsp;|&nbsp;<b>Repository name:</b> {{inboxName()}}</div>
+    <div class='repoSummary'><b>URL valid:</b> <span ng-hide='inboxesForm.$invalid' class='badge alert-success'><span class='glyphicon glyphicon-ok'></span></span><span class='badge alert-danger' ng-show='inboxesForm.$invalid'><span class='glyphicon glyphicon-remove'></span></span>&nbsp;|&nbsp;<b>Repository name:</b> {{inboxName()}}</div>
     <!--
     <div role='alert'>
       <span class='validation-error' ng-show='inboxesForm.url.$error.pattern'>Repository URL must be valid</span>
