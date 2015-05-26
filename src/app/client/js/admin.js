@@ -1,11 +1,12 @@
 (function(){
-  "use strict";
+  'use strict';
   function CommitStreamAdminBoot(el) {
     var persistentOptions = {
       headers: { Bearer: '' }
     };
 
-    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 'angular-hal', 'ngRoute']);
+    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 
+      'angular-hal', 'ngRoute', 'ui.bootstrap','cgPrompt']);
     app.config(function($sceProvider) {
       $sceProvider.enabled(false);
     });
@@ -148,15 +149,15 @@
       }]
     );
 
-    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', '$q', function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http, $q) {
+    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', '$q', 'prompt', 
+      function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http, $q, prompt) {
       $scope.newInbox = {
         url: '',
         name: '',
         family: 'GitHub' // Until we support other systems, hard-code this.
       };
 
-      $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
-      
+      $scope.serviceUrl = serviceUrl;
       $scope.inboxes = [];
 
       $scope.enabledState = { 
@@ -176,6 +177,30 @@
 
       $scope.errorActive = function() {
         return $scope.error.value !== '';
+      };
+      
+      var reposListEl = $('.repos-list');
+      var overlayEl = $('.repos-section');
+
+      $scope.$watch(
+        function () {
+          return reposListEl.height();
+        },
+        function (newValue, oldValue) {
+          if (newValue != oldValue) {
+            overlayEl.height(newValue);
+          }
+        }
+      );    
+
+      $scope.urlPattern = /^https?\:\/\/.*?\/.{1,}$/;
+
+      $scope.inboxName = function() {
+        if (!$scope.newInbox.url || $scope.newInbox.url.length < 1) return '...';
+        var index = $scope.newInbox.url.lastIndexOf('/');
+        if (index < 0) return '...';
+        if (index === $scope.newInbox.url.length - 1) return '...';
+        return $scope.newInbox.url.substr(index + 1);
       };
 
       var errorHandler = function(error) {
@@ -201,8 +226,8 @@
 
       var inboxConfigure = function(inbox) {
         var links = inbox.$links();
-        inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
-        inbox.removeHref = links['self'].href + 'apiKey=' + persistentOptions.headers.Bearer;
+        inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
+        inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
       };
       
       var inboxesGet = function() {
@@ -219,37 +244,43 @@
           .catch(errorHandler);
       };
 
-      if ($rootScope.config.enabled) inboxesGet();
+      var inboxesUpdate = function(enabled) {
+        if (enabled) { 
+          $('.inbox-url').select().focus();            
+        }
+        inboxesGet();
+      }
+
+      inboxesUpdate($rootScope.config.enabled);
 
       $scope.enabledChanged = function() {
-        var enabled = $('.commitstream-admin .enabled').prop('checked');
+        $scope.newInbox.url = '';
 
-        apply(); // TODO clean up...
+        var toggle = $('.commitstream-admin .enabled');
+
+        var enabled = toggle.prop('checked');
+
+        $scope.enabledState.applying = true;
+        toggle.bootstrapToggle('disable');
 
         configSave(enabled).then(function(configSaveResult) {
-          // TODO handle configSaveResult
-          if (enabled) inboxesGet();
+          // TODO need to handle configSaveResult?
+          inboxesUpdate(enabled);
         })
-        .catch(errorHandler);
-      };
-
-      var apply = function() {
-        $scope.enabledState.applying = true;
-        $('.commitstream-admin .enabled').bootstrapToggle('disable');
-        $timeout(function() {          
+        .catch(errorHandler)
+        .finally(function() {
           $scope.enabledState.applying = false;
-          $('.commitstream-admin .enabled').bootstrapToggle('enable');
-        }, 2000);
+          toggle.bootstrapToggle('enable');
+        });
       };
 
       $scope.applying = function() {
         return $scope.enabledState.applying;
       };
 
-      $scope.reposVisible = function() {
-        return ($scope.enabledState.enabled && !$scope.enabledState.applying) 
-        || (!$scope.enabledState.enabled && $scope.enabledState.applying);
-      }
+      $scope.overlayVisible = function() {
+        return $scope.enabledState.applying ||!$rootScope.config.enabled;
+      };
 
       $scope.inboxCreate = function() {
         var index = $scope.newInbox.url.lastIndexOf('/');
@@ -260,27 +291,36 @@
           inboxConfigure(inbox);
           $scope.inboxes.unshift(inbox);
           $scope.newInbox.url = '';
+          $scope.inboxHighlightTop(inbox.removeHref);
         })
         .catch(errorHandler);
       };
 
       $scope.inboxRemove = function(inbox) {
-        inbox.$del('self').then(function(result) {
-          $scope.message.value = 'Successfully removed inbox';      
-          var index = $scope.inboxes.indexOf(inbox);
-          $scope.inboxes.splice(index, 1);
-          $timeout(function() {
-            $('.commitstream-admin .message').fadeOut('slow', function() {
-              $scope.message.value = '';
-            });
-          }, 4000);
-        })
-        .catch(errorHandler);
+        prompt({
+          title: 'Remove Repository?',
+          message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
+          buttons: [{ label:'Remove', primary: true }, { label:'Cancel', cancel: true }]
+        }).then(function() {
+          inbox.$del('self').then(function(result) {
+            $scope.message.value = 'Successfully removed repository';      
+            var index = $scope.inboxes.indexOf(inbox);
+            $scope.inboxes.splice(index, 1);
+            $timeout(function() {
+              $('.commitstream-admin .message').fadeOut('slow', function() {
+                $scope.message.value = '';
+              });
+            }, 4000);
+          })
+          .catch(errorHandler);
+        });
       };
 
       var inboxHighlight = function(el) {
-        el.focus();
-        el.select();
+        if ($rootScope.config.enabled) {
+          el.focus();
+          el.select();
+        }
       };
 
       $scope.inboxHighlight = function(evt) {
@@ -288,10 +328,10 @@
       };
 
       $scope.inboxHighlightTop = function() {
-        var el = $($('.commitstream-admin .inbox')[0]);
         $timeout(function() {
+          var el = $($('.commitstream-admin .inbox')[0]);          
           inboxHighlight(el);
-        }, 0);      
+        }, 0);
       };      
 
     }]);

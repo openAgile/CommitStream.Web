@@ -66,6 +66,9 @@
     var scripts = [    
       serviceUrl + '/bower_components/angular/angular.min.js',
       serviceUrl + '/bower_components/angular-route/angular-route.min.js',
+      serviceUrl + '/bower_components/angular-bootstrap/ui-bootstrap.min.js',
+      serviceUrl + '/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+      serviceUrl + '/bower_components/angular-prompt/dist/angular-prompt.min.js',
       serviceUrl + '/bower_components/angular-hal/angular-hal.js',
       serviceUrl + '/bower_components/rfc6570/rfc6570.js',
       serviceUrl + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
