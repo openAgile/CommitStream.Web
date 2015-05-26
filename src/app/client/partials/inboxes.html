@@ -74,11 +74,12 @@
     color: red;
     font-weight: bold;
   }
-  .commitstream-admin .alert-danger {
-    font-size: 75%;
+  .commitstream-admin .alert-danger, .commitstream-admin .alert-success {
+    font-size: 85%;
   }
-  .commitstream-admin .alert-success {
-    font-size: 75%;
+  /* DO NOT prefix with .commit-stream-admin */
+  .modal-footer {
+    text-align: left;
   }
 </style>
 
@@ -113,6 +114,7 @@
 
 <div class="repos-section" ng-if='overlayVisible()'><img src="{{serviceUrl}}/disable-overlay.gif" width="100%" /></div>
 
+<div 
 <div class='repos-list'>
   <h3>Setup Global Repositories</h3>
   <div class='well well-sm'>

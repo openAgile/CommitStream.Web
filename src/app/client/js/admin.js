@@ -5,7 +5,8 @@
       headers: { Bearer: '' }
     };
 
-    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 'angular-hal', 'ngRoute']);
+    var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 
+      'angular-hal', 'ngRoute', 'ui.bootstrap','cgPrompt']);
     app.config(function($sceProvider) {
       $sceProvider.enabled(false);
     });
@@ -148,7 +149,8 @@
       }]
     );
 
-    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', '$q', function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http, $q) {
+    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', '$q', 'prompt', 
+      function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http, $q, prompt) {
       $scope.newInbox = {
         url: '',
         name: '',
@@ -252,6 +254,8 @@
       inboxesUpdate($rootScope.config.enabled);
 
       $scope.enabledChanged = function() {
+        $scope.newInbox.url = '';
+
         var toggle = $('.commitstream-admin .enabled');
 
         var enabled = toggle.prop('checked');
@@ -293,17 +297,23 @@
       };
 
       $scope.inboxRemove = function(inbox) {
-        inbox.$del('self').then(function(result) {
-          $scope.message.value = 'Successfully removed inbox';      
-          var index = $scope.inboxes.indexOf(inbox);
-          $scope.inboxes.splice(index, 1);
-          $timeout(function() {
-            $('.commitstream-admin .message').fadeOut('slow', function() {
-              $scope.message.value = '';
-            });
-          }, 4000);
-        })
-        .catch(errorHandler);
+        prompt({
+          title: 'Remove Repository?',
+          message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
+          buttons: [{ label:'Remove', primary: true }, { label:'Cancel', cancel: true }]
+        }).then(function() {
+          inbox.$del('self').then(function(result) {
+            $scope.message.value = 'Successfully removed repository';      
+            var index = $scope.inboxes.indexOf(inbox);
+            $scope.inboxes.splice(index, 1);
+            $timeout(function() {
+              $('.commitstream-admin .message').fadeOut('slow', function() {
+                $scope.message.value = '';
+              });
+            }, 4000);
+          })
+          .catch(errorHandler);
+        });
       };
 
       var inboxHighlight = function(el) {
