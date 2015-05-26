@@ -8,8 +8,7 @@
     left: 33%;
     text-align: center;
   }
-
-  .commitstream-admin .repository-section {
+  .commitstream-admin .repos-section {
     width: 100%;
     height: 200px;
     position: absolute;
@@ -17,10 +16,17 @@
     opacity: .6;
     z-index: 3;
   }
+  .commitstream-admin .repo-add:hover { 
+    color: #fff;
+  }
+  /*
+  .commitstream-admin .repo-add:disabled { 
+    background-color: lightgray !important;
+  }
+  */
 
-  .commitstream-admin .repoAdd { 
+  .commitstream-admin .repo-add, .commitstream-admin .repo-add-disabled { 
     border: none;
-    background-color: #eb6c00;
     margin-top: 0px;
     margin-left: 15px;
     width: 50px;
@@ -33,17 +39,18 @@
     height: 32px;
     line-height: 32px;
   }
-  .commitstream-admin .repoAdd:hover { 
-    color: #fff;
+  .commitstream-admin .repo-add {
+    background: #eb6c00 !important;
   }
-  .commitstream-admin .repoAdd:disabled { 
-    background-color: lightgray;
-  }
-  .commitstream-admin .repoSummary {
+  .commitstream-admin .repo-add-disabled {
+    background: lightgray !important;
+  }  
+  .commitstream-admin .repo-instruction {
     font-size: 80%;
-  }
-  .commitstream-admin .copy-clip {
-    font-size: 70%;
+    margin-top: 8px;
+    margin-left: 12px;
+    color: #909090;
+    font-style: italic;
   }
   .commitstream-admin .toggle-handle {
     border-radius: 0px;
@@ -84,7 +91,7 @@
     toggle-checkbox
   >
 
-  <span ng-show='applying()'>&nbsp;<img ng-src='{{loaderUrl}}' /> <em>Applying changes...</em></span>
+  <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
 </p>
 
  <div ng-if="messageActive()" class='message prompt'>
@@ -101,25 +108,21 @@
   </div>
 </div>
 
-<!-- <div class="repository-section"><img src="../disable-overlay.gif" width="100%" height="120px" /></div> -->
+<div class="repos-section"><img src="{{serviceUrl}}/disable-overlay.gif" width="100%" /></div>
 
-<div ng-if='reposVisible()'>
+<div FIXng-if='reposVisible()' class='repos-list'>
   <h3>Setup Global Repositories</h3>
   <div class='well well-sm'>
     <form ng-submit='inboxCreate()' name='inboxesForm'>
       <div class='input-group'>
-        <input type='text' name='url' class='form-control' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
+        <input type='text' name='inboxUrl' class='inboxUrl form-control' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
         <span class='input-group-btn'>
-          <button class='repoAdd' type='button' ng-click='inboxCreate()' ng-disabled='inboxesForm.$invalid'>Add</button>
+          <button class='repo-add' type='button' ng-click='inboxCreate()' ng-hide='inboxesForm.$invalid'>Add</button>
+          <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
         </span>
       </div>
+      <div class='repo-instruction'>Example: http://versioncontrol.com/acme/repo-name</div>      
     </form>
-    <div class='repoSummary'><b>URL valid:</b> <span ng-hide='inboxesForm.$invalid' class='badge alert-success'><span class='glyphicon glyphicon-ok'></span></span><span class='badge alert-danger' ng-show='inboxesForm.$invalid'><span class='glyphicon glyphicon-remove'></span></span>&nbsp;|&nbsp;<b>Repository name:</b> {{inboxName()}}</div>
-    <!--
-    <div role='alert'>
-      <span class='validation-error' ng-show='inboxesForm.url.$error.pattern'>Repository URL must be valid</span>
-    </div>
-    -->      
   </div>
   <div ng-if='inboxes.length > 0'>
     <h4>Active Repositories</h4>
@@ -138,7 +141,7 @@
           <span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
         </td>
       </tr>
-      <tr ng-repeat-end ng-init='inboxHighlightTop(inbox.removeHref)'></tr>
+      <tr ng-repeat-end></tr>
     </table>
   </div>
 </div>

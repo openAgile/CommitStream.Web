@@ -155,8 +155,8 @@
         family: 'GitHub' // Until we support other systems, hard-code this.
       };
 
-      $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
-      
+      $scope.serviceUrl = serviceUrl;
+      //repository-section
       $scope.inboxes = [];
 
       $scope.enabledState = { 
@@ -177,6 +177,21 @@
       $scope.errorActive = function() {
         return $scope.error.value !== '';
       };
+      
+      var reposListEl = $('.repos-list');
+      var overlayEl = $('.repos-section');
+
+      $scope.$watch(
+        function () {
+          return reposListEl.height();
+        },
+        function (newValue, oldValue) {
+          if (newValue != oldValue) {
+            overlayEl.height(newValue);
+            console.log(newValue);
+          }
+        }
+      );    
 
       $scope.urlPattern = /^https?\:\/\/.*?\/.{1,}$/;
 
@@ -229,7 +244,11 @@
           .catch(errorHandler);
       };
 
-      if ($rootScope.config.enabled) inboxesGet();
+      inboxesGet();
+      if ($rootScope.config.enabled) {
+        overlayEl.hide();
+        $('.inboxUrl').select().focus();        
+      }
 
       $scope.enabledChanged = function() {
         var enabled = $('.commitstream-admin .enabled').prop('checked');
@@ -238,7 +257,12 @@
 
         configSave(enabled).then(function(configSaveResult) {
           // TODO handle configSaveResult
-          if (enabled) inboxesGet();
+          inboxesGet();
+          if (enabled) { overlayEl.hide(); }
+          else { overlayEl.show() };
+          if (enabled) {
+            $('.inboxUrl').select().focus();
+          }
         })
         .catch(errorHandler);
       };
@@ -270,6 +294,7 @@
           inboxConfigure(inbox);
           $scope.inboxes.unshift(inbox);
           $scope.newInbox.url = '';
+          $scope.inboxHighlightTop(inbox.removeHref);
         })
         .catch(errorHandler);
       };
@@ -289,8 +314,10 @@
       };
 
       var inboxHighlight = function(el) {
-        el.focus();
-        el.select();
+        if ($rootScope.config.enabled) {
+          el.focus();
+          el.select();
+        }
       };
 
       $scope.inboxHighlight = function(evt) {
@@ -298,10 +325,10 @@
       };
 
       $scope.inboxHighlightTop = function() {
-        var el = $($('.commitstream-admin .inbox')[0]);
         $timeout(function() {
+          var el = $($('.commitstream-admin .inbox')[0]);          
           inboxHighlight(el);
-        }, 0);      
+        }, 0);
       };      
 
     }]);
