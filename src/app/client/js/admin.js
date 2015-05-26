@@ -181,8 +181,10 @@
       $scope.urlPattern = /^https?\:\/\/.*?\/.{1,}$/;
 
       $scope.inboxName = function() {
+        if (!$scope.newInbox.url || $scope.newInbox.url.length < 1) return '...';
         var index = $scope.newInbox.url.lastIndexOf('/');
         if (index < 0) return '...';
+        if (index === $scope.newInbox.url.length - 1) return '...';
         return $scope.newInbox.url.substr(index + 1);
       };
 
