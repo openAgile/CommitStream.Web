@@ -279,11 +279,6 @@
         return $scope.enabledState.applying;
       };
 
-      $scope.reposVisible = function() {
-        return ($scope.enabledState.enabled && !$scope.enabledState.applying) 
-        || (!$scope.enabledState.enabled && $scope.enabledState.applying);
-      }
-
       $scope.inboxCreate = function() {
         var index = $scope.newInbox.url.lastIndexOf('/');
         $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
