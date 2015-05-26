@@ -50,7 +50,7 @@
       "name": {
         "type": "string",
         "title": "Short name for this inbox",
-        "minLength": 3,
+        "minLength": 1,
         "maxLength": 140
       },
       "url": {
