@@ -1,5 +1,5 @@
 (function(){
-  "use strict";
+  'use strict';
   function CommitStreamAdminBoot(el) {
     var persistentOptions = {
       headers: { Bearer: '' }
@@ -265,11 +265,9 @@
         })
         .catch(errorHandler)
         .finally(function() {
-          $timeout(function() {
           $scope.enabledState.applying = false;
           toggle.bootstrapToggle('enable');
-          }, 4000);
-        })
+        });
       };
 
       $scope.applying = function() {
