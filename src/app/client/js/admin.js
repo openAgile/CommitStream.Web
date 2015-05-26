@@ -187,7 +187,6 @@
         function (newValue, oldValue) {
           if (newValue != oldValue) {
             overlayEl.height(newValue);
-            console.log(newValue);
           }
         }
       );    
@@ -243,40 +242,42 @@
           .catch(errorHandler);
       };
 
-      inboxesGet();
-      if ($rootScope.config.enabled) {
-        overlayEl.hide();
-        $('.inbox-url').select().focus();
+      var inboxesUpdate = function(enabled) {
+        if (enabled) { 
+          $('.inbox-url').select().focus();            
+        }
+        inboxesGet();
       }
 
-      $scope.enabledChanged = function() {
-        var enabled = $('.commitstream-admin .enabled').prop('checked');
+      inboxesUpdate($rootScope.config.enabled);
 
-        apply(); // TODO clean up...
+      $scope.enabledChanged = function() {
+        var toggle = $('.commitstream-admin .enabled');
+
+        var enabled = toggle.prop('checked');
+
+        $scope.enabledState.applying = true;
+        toggle.bootstrapToggle('disable');
 
         configSave(enabled).then(function(configSaveResult) {
-          // TODO handle configSaveResult
-          inboxesGet();
-          if (enabled) { overlayEl.hide(); }
-          else { overlayEl.show() };
-          if (enabled) {
-            $('.inbox-url').select().focus();
-          }
+          // TODO need to handle configSaveResult?
+          inboxesUpdate(enabled);
         })
-        .catch(errorHandler);
-      };
-
-      var apply = function() {
-        $scope.enabledState.applying = true;
-        $('.commitstream-admin .enabled').bootstrapToggle('disable');
-        $timeout(function() {          
+        .catch(errorHandler)
+        .finally(function() {
+          $timeout(function() {
           $scope.enabledState.applying = false;
-          $('.commitstream-admin .enabled').bootstrapToggle('enable');
-        }, 2000);
+          toggle.bootstrapToggle('enable');
+          }, 4000);
+        })
       };
 
       $scope.applying = function() {
         return $scope.enabledState.applying;
+      };
+
+      $scope.overlayVisible = function() {
+        return $scope.enabledState.applying ||!$rootScope.config.enabled;
       };
 
       $scope.inboxCreate = function() {
