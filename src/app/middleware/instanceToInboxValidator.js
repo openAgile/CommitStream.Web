@@ -19,11 +19,11 @@
       name: 'inbox',
       id: inboxId
     }).then(function(inbox) {
-      if (inbox.eventType && inbox.eventType === 'InboxRemoved') {
+      if (inbox.eventType === 'InboxRemoved') {
         throw new InstanceToInboxRemoved(req.instance.instanceId, inboxId);
       }
-      if (req.instance.instanceId === inbox.instanceId) {
-        req.inbox = inbox;
+      if (inbox.eventType === 'InboxAdded' && req.instance.instanceId === inbox.data.instanceId) {
+        req.inbox = inbox.data;
         next();
       } else {
         throw new InvalidInstanceToInbox(req.instance.instanceId, inboxId);
