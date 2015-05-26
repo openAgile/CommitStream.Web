@@ -11,7 +11,7 @@
         "add-commit": {
           "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId + "/commits")
         },
-        "remove-inbox": {
+        "inbox-remove": {
           "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId)
         }
       },
