@@ -156,7 +156,6 @@
       };
 
       $scope.serviceUrl = serviceUrl;
-      //repository-section
       $scope.inboxes = [];
 
       $scope.enabledState = { 
@@ -226,8 +225,8 @@
 
       var inboxConfigure = function(inbox) {
         var links = inbox.$links();
-        inbox.addCommit = links['add-commit'].href + 'apiKey=' + persistentOptions.headers.Bearer;
-        inbox.removeHref = links['self'].href + 'apiKey=' + persistentOptions.headers.Bearer;
+        inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
+        inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
       };
       
       var inboxesGet = function() {
@@ -247,7 +246,7 @@
       inboxesGet();
       if ($rootScope.config.enabled) {
         overlayEl.hide();
-        $('.inboxUrl').select().focus();        
+        $('.inbox-url').select().focus();
       }
 
       $scope.enabledChanged = function() {
@@ -261,7 +260,7 @@
           if (enabled) { overlayEl.hide(); }
           else { overlayEl.show() };
           if (enabled) {
-            $('.inboxUrl').select().focus();
+            $('.inbox-url').select().focus();
           }
         })
         .catch(errorHandler);
