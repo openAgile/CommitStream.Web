@@ -8,6 +8,9 @@
     left: 33%;
     text-align: center;
   }
+  .commitstream-admin .well {
+    background: #f2f2f2;
+  }
   .commitstream-admin .repos-section {
     width: 100%;
     height: 200px;
@@ -19,13 +22,7 @@
   .commitstream-admin .repo-add:hover { 
     color: #fff;
   }
-  /*
-  .commitstream-admin .repo-add:disabled { 
-    background-color: lightgray !important;
-  }
-  */
-
-  .commitstream-admin .repo-add, .commitstream-admin .repo-add-disabled { 
+  .commitstream-admin .repo-add, .commitstream-admin .repo-add-disabled, .commitstream-admin .repo-remove { 
     border: none;
     margin-top: 0px;
     margin-left: 15px;
@@ -42,6 +39,15 @@
   .commitstream-admin .repo-add {
     background: #eb6c00 !important;
   }
+  .commitstream-admin .repo-remove {
+    margin-left: 0;
+    border: thin lightgray solid;
+    color: #000;
+    background: #fff !important;
+    width: 115px;
+    height: 32px;
+    line-height: 29px;
+  }  
   .commitstream-admin .repo-add-disabled {
     background: lightgray !important;
   }
@@ -55,18 +61,25 @@
     color: #909090;
     font-style: italic;
   }
+  .commitstream-admin .btn-default, .commitstream-admin .btn-primary {
+    background-image: none;
+    text-transform: uppercase;
+    font-weight: bolder;
+    text-shadow: 0 0 0 transparent !important;
+  }
   .commitstream-admin .toggle-handle {
     border-radius: 0px;
     width: 50px;
   }
   .commitstream-admin .btn-primary {
-    background-color: #00a7e2;
+    background: #eb6c00;
   }
   .commitstream-admin .toggle-on.btn {
-    padding-right:35px
+    padding-right:35px;
+    background: #00a7e2;;
   }
   .commitstream-admin .toggle-off.btn {
-    padding-left:35px
+    padding-left:35px;
   }
   .commitstream-admin .validation-error {
     font-size: 80%;
@@ -80,6 +93,9 @@
   /* DO NOT prefix with .commit-stream-admin */
   .modal-footer {
     text-align: left;
+  }
+  .modal-footer .btn-primary {
+    border: 1px #eb6c00 solid !important;
   }
 </style>
 
@@ -97,7 +113,6 @@
 
   <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
 </p>
-
  <div ng-if="messageActive()" class='message prompt'>
   <div class="alert alert-success alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -135,7 +150,7 @@
       <tr>
         <th>Repository Name</th>
         <th>Webhook URL</th>
-        <th>Remove Repository</th>
+        <th>&nbsp;</th>
       </tr>
       <tr ng-repeat-start='inbox in inboxes'>
         <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
@@ -143,7 +158,8 @@
           <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true' />
         </td>
         <td>
-          <span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
+          <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
+          <button class='repo-remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove <span class='glyphicon glyphicon-minus-sign alert-warning' title='Remove' aria-hidden='true'></span></button>         
         </td>
       </tr>
       <tr ng-repeat-end></tr>
