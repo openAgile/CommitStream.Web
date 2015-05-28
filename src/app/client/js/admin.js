@@ -180,18 +180,19 @@
       };
       
       var reposListEl = $('.repos-list');
-      var overlayEl = $('.repos-section');
+      var overlayImg = $('.repos-section img');
 
       $scope.$watch(
         function () {
           return reposListEl.height();
         },
         function (newValue, oldValue) {
-          if (newValue != oldValue) {
-            overlayEl.height(newValue);
+          if (newValue !== oldValue) {
+            overlayImg.height(newValue);
+            overlayImg.width(reposListEl.width());
           }
         }
-      );    
+      );
 
       $scope.urlPattern = /^https?\:\/\/.*?\/.{1,}$/;
 
@@ -300,7 +301,17 @@
         prompt({
           title: 'Remove Repository?',
           message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
-          buttons: [{ label:'Remove', primary: true }, { label:'Cancel', cancel: true }]
+          buttons: [
+            { label:'Remove',
+              primary: true,
+              class: 'action-remove'
+            }, 
+            { 
+              label:'Cancel',
+              cancel: true,
+              class: 'action-cancel'
+            }
+          ]
         }).then(function() {
           inbox.$del('self').then(function(result) {
             $scope.message.value = 'Successfully removed repository';      

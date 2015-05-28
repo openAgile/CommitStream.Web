@@ -12,12 +12,15 @@
     background: #f2f2f2;
   }
   .commitstream-admin .repos-section {
-    width: 100%;
-    height: 200px;
+    position: relative;
+  }
+  .commitstream-admin .repos-section img {
     position: absolute;
+    height: 70vh;
     top: 47px;
     opacity: .6;
     z-index: 3;
+    overflow: hidden;
   }
   .commitstream-admin .repo-add:hover { 
     color: #fff;
@@ -31,7 +34,7 @@
     font-weight: bolder;
     color: #fff;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     border-radius: 6px;
     height: 32px;
     line-height: 32px;
@@ -94,8 +97,24 @@
   .modal-footer {
     text-align: left;
   }
-  .modal-footer .btn-primary {
+  .action-remove {
+    font-weight: bolder !important;
     border: 1px #eb6c00 solid !important;
+    background: #eb6c00 !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 0 transparent !important;
+  }
+  .action-remove:hover {
+    box-shadow: none !important;
+  }
+  .action-cancel {
+    font-weight: bolder !important;
+    text-transform: uppercase;
+    text-shadow: 0 0 0 transparent !important;
+  }
+  .action-cancel:hover {
+    box-shadow: none !important;
+    background: white !important;
   }
 </style>
 
@@ -127,9 +146,8 @@
   </div>
 </div>
 
-<div class="repos-section" ng-if='overlayVisible()'><img ng-src="{{serviceUrl}}/disable-overlay.gif" width="100%" /></div>
+<div class='repos-section' ng-if='overlayVisible()'><img ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
-<div 
 <div class='repos-list'>
   <h3>Setup Global Repositories</h3>
   <div class='well well-sm'>
