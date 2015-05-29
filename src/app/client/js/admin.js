@@ -191,21 +191,6 @@
       $scope.errorActive = function() {
         return $scope.error.value !== '';
       };
-      
-      var reposListEl = $('.repos-list');
-      var overlayImg = $('.repos-section img');
-
-      $scope.$watch(
-        function () {
-          return reposListEl.height();
-        },
-        function (newValue, oldValue) {
-          if (newValue !== oldValue) {
-            overlayImg.height(newValue);
-            overlayImg.width(reposListEl.width());
-          }
-        }
-      );
 
       $scope.urlPattern = /^https?\:\/\/.*?\/.{1,}$/;
 
@@ -294,6 +279,13 @@
 
       $scope.overlayVisible = function() {
         return $scope.enabledState.applying ||!$rootScope.config.enabled;
+      };
+
+      $scope.toggleOverlay = function() {
+        var repolistWidth = $('.repos-list').width();
+        var repolistHeight = $('.repos-list').height();
+        $('.repos-section img').height(repolistHeight);
+        $('.repos-section img').width(repolistWidth);
       };
 
       $scope.inboxCreate = function() {
