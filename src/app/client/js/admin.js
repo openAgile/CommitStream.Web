@@ -26,6 +26,15 @@
       $routeProvider.otherwise({redirectTo: serviceUrl + '/'});
     }]);
 
+    app.directive('resizableOverlay', function($window) {
+      return function($scope) {
+        return angular.element($window).bind('resize', function() {
+          $scope.adjustOverlay();
+          return $scope.$apply();
+        });
+      };
+    });
+
     app.directive('toggleCheckbox', function($timeout) {
       /**
        * Directive
@@ -284,9 +293,15 @@
       $scope.adjustOverlay = function() {
         var repolistWidth = $('.repos-list').width();
         var repolistHeight = $('.repos-list').height();
-        $('.repos-section img').height(repolistHeight);
-        $('.repos-section img').width(repolistWidth);
+        $('.repos-section .overlay').height(repolistHeight);
+        $('.repos-section .overlay').width(repolistWidth);
       };
+
+      // A jQuery based way of handling resizing of the window to adjust the overlay
+      // when CS is disabled.
+      // $(window).resize(function(){
+      //   $scope.adjustOverlay();
+      // });
 
       $scope.inboxCreate = function() {
         var index = $scope.newInbox.url.lastIndexOf('/');

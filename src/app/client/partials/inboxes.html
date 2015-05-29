@@ -14,9 +14,8 @@
   .commitstream-admin .repos-section {
     position: relative;
   }
-  .commitstream-admin .repos-section img {
+  .commitstream-admin .repos-section .overlay {
     position: absolute;
-    height: 70vh;
     top: 47px;
     opacity: .6;
     z-index: 3;
@@ -147,7 +146,7 @@
     </div>
   </div>
 
-  <div class='repos-section' ng-if='overlayVisible()'><img ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
+  <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list'>
     <h3>Setup Global Repositories</h3>
