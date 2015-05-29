@@ -149,8 +149,21 @@
       }]
     );
 
-    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl', 'configSaveUrl', '$http', '$q', 'prompt', 
-      function($rootScope, $scope, $timeout, serviceUrl, configSaveUrl, $http, $q, prompt) {
+    app.controller('InboxesController', ['$rootScope', '$scope', '$timeout', 'serviceUrl',
+      'configSaveUrl', '$http', '$q', 'prompt', '$location',
+      function($rootScope, $scope, $timeout, serviceUrl,
+        configSaveUrl, $http, $q, prompt, $location) {
+
+      $scope.inboxesVisible = function() {
+        // Only display when we actually have the config in $scope!
+        return $rootScope.config;
+      };
+
+      if (!$rootScope.config) {
+        $location.path('/');
+        return;
+      }
+
       $scope.newInbox = {
         url: '',
         name: '',
