@@ -281,7 +281,7 @@
         return $scope.enabledState.applying ||!$rootScope.config.enabled;
       };
 
-      $scope.toggleOverlay = function() {
+      $scope.adjustOverlay = function() {
         var repolistWidth = $('.repos-list').width();
         var repolistHeight = $('.repos-list').height();
         $('.repos-section img').height(repolistHeight);
