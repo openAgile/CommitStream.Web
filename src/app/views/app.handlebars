@@ -131,8 +131,7 @@
   function getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey) {
     if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
       return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
-    } else if (workitem) {
-      console.log(digestId);
+    } else if (workitem || digestId) {
       var url = '{{{apiUrl}}}' + instanceId;      
       if (digestId !== null && digestId !== undefined) {
         url += '/digests/' + digestId + '/commits';
@@ -141,7 +140,6 @@
       }
 
       url += '?apiKey=' + apiKey;
-      console.log(url);
       return url;
     } else {
       throw 'It was not possible to get the url to query.'
@@ -215,7 +213,7 @@
               errorHandler();
             } else {
               configureModel(model);
-              if (workitem.toLowerCase() === 'all') {
+              if (workitem && workitem.toLowerCase() === 'all') {
                 model.enableAutoRefresh = true;
               }
               renderCommitsContainer(commitStreamDomId, model, errorHandler);
