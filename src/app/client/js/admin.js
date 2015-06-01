@@ -26,16 +26,19 @@
       $routeProvider.otherwise({redirectTo: serviceUrl + '/'});
     }]);
 
-    app.directive('resizableOverlay', function($window) {
+    app.directive('resizableOverlay', ['$window', function($window) {
       return function($scope) {
         return angular.element($window).bind('resize', function() {
+          // If this directive 'resizableOverlay' is used on some other controller besides the 
+          // InboxesController here in angular, then the call to $scope.adjustOverlay() will 
+          // blow up, unless we take care to give that controller's $scope a function to handle that case.
           $scope.adjustOverlay();
           return $scope.$apply();
         });
       };
-    });
+    }]);
 
-    app.directive('toggleCheckbox', function($timeout) {
+    app.directive('toggleCheckbox', ['$timeout', function($timeout) {
       /**
        * Directive
        */
@@ -76,7 +79,7 @@
           $element.bootstrapToggle();
         }
       };
-    });
+    }]);
 
     app.controller('InstancesController',
       ['$rootScope', '$scope', '$http', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
