@@ -106,10 +106,10 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 :: 4. Install bower packages
-echo "%DEPLOYMENT_TARGET%"
+echo %DEPLOYMENT_TARGET%
 IF EXIST "%DEPLOYMENT_TARGET%\client\bower.json" (
   pushd "%DEPLOYMENT_TARGET%"
-  ./node_modules/.bin/bower install
+  call :ExecuteCmd bower install
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )
