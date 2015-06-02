@@ -131,27 +131,32 @@
             persistentOptions.headers.Bearer = config.apiKey;
             return $rootScope.resources.$get('instance', {instanceId: config.instanceId});
           } else {
-            return $rootScope.resources.$post('instances');
+            // return $rootScope.resources.$post('instances');
+            return false;
           }
         })
         .then(function(instance) {
-          persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
-          $rootScope.instance = instance;
-
-          if (config.configured) {
-            return $rootScope.resources.$get('digest', {
-              instanceId: config.instanceId,
-              digestId: config.globalDigestId
-            });
-          }
-          else {
-            return instance.$post('digest-create', {}, {
-              description: 'Global Repositories List'
-            });
+          if (instance) {
+            persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
+            $rootScope.instance = instance;
+            if (config.configured) {
+              return $rootScope.resources.$get('digest', {
+                instanceId: config.instanceId,
+                digestId: config.globalDigestId
+              });
+            } else {
+              return instance.$post('digest-create', {}, {
+                description: 'Global Repositories List'
+              });
+            }
+          } else {
+            return false;
           }
         })
         .then(function(digest) {
-          $rootScope.digest = digest;
+          if (digest) {
+            $rootScope.digest = digest;
+          }
           $location.path('/inboxes');
         })
         .catch(errorHandler);
@@ -230,13 +235,27 @@
         $rootScope.config.enabled = enabled;
         
         if (!$rootScope.config.configured) {
-          $rootScope.config.instanceId = $rootScope.instance.instanceId;
-          $rootScope.config.globalDigestId = $rootScope.digest.digestId;
-          $rootScope.config.apiKey = $rootScope.instance.apiKey;
-          $rootScope.config.configured = true;
+          return $rootScope.resources.$post('instances')
+          .then(function(instance) {
+            persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
+            $rootScope.instance = instance;
+            return instance.$post('digest-create', {}, {
+              description: 'Global Repositories List'
+            });
+          })
+          .then(function(digest) {
+            $rootScope.digest = digest;
+            $rootScope.config.instanceId = $rootScope.instance.instanceId;
+            $rootScope.config.globalDigestId = digest.digestId;
+            $rootScope.config.apiKey = $rootScope.instance.apiKey;
+            $rootScope.config.configured = true;
+            if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
+            return $q.when(true);
+          });
+        } else {
+          if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
+          return $q.when(true);
         }
-        if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
-        return $q.when(true);
       };
 
       var inboxConfigure = function(inbox) {
@@ -246,7 +265,8 @@
       };
       
       var inboxesGet = function() {
-        return $rootScope.digest.$get('inboxes')
+        if ($rootScope.digest) {
+          $rootScope.digest.$get('inboxes')
           .then(function(inboxesRes) {
             return inboxesRes.$get('inboxes');
           }).then(function(inboxes) {
@@ -257,11 +277,12 @@
             });
           })
           .catch(errorHandler);
+        }
       };
 
       var inboxesUpdate = function(enabled) {
         if (enabled) { 
-          $('.inbox-url').select().focus();            
+          $('.inbox-url').select().focus();
         }
         inboxesGet();
       }
