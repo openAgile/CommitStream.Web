@@ -87,6 +87,8 @@ goto :EOF
 
 :Deployment
 echo Handling node.js deployment.
+echo "Deployment target:"
+echo %DEPLOYMENT_TARGET%
 
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
@@ -105,8 +107,15 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-:: 4. Install bower packages
-echo %DEPLOYMENT_TARGET%
+:: 4. Install bower
+IF EXIST “%DEPLOYMENT_TARGET%\client\bower.json” (
+  pushd “%DEPLOYMENT_TARGET%”
+  call :ExecuteCmd !NPM_CMD! install bower -g
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
+
+:: 5. Install bower packages
 IF EXIST "%DEPLOYMENT_TARGET%\client\bower.json" (
   pushd "%DEPLOYMENT_TARGET%"
   call :ExecuteCmd bower install
