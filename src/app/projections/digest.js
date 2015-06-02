@@ -2,6 +2,6 @@ fromCategory('digest')
   .foreachStream()
   .when({
     'DigestAdded': function(state, ev) {
-      return ev.data;
+      return ev;
     }
   });
