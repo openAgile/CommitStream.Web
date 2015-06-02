@@ -105,15 +105,14 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-# 4. Install bower packages
-if [ -e "$DEPLOYMENT_TARGET/bower.json" ]; then
-  cd "$DEPLOYMENT_TARGET"
-  eval $NPM_CMD install bower
-  exitWithMessageOnError "installing bower failed"
+:: 4. Install bower packages
+echo "%DEPLOYMENT_TARGET%"
+IF EXIST "%DEPLOYMENT_TARGET%\client\bower.json" (
+  pushd "%DEPLOYMENT_TARGET%"
   ./node_modules/.bin/bower install
-  exitWithMessageOnError "bower failed"
-  cd - > /dev/null
-fi
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
