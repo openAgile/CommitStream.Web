@@ -142,7 +142,7 @@
       url += '?apiKey=' + apiKey;
       return url;
     } else {
-      throw 'It was not possible to get the url to query.'
+      throw 'Must specify either workitem or digestId.'
     }
   }
 
@@ -213,7 +213,7 @@
               errorHandler();
             } else {
               configureModel(model);
-              if (workitem && workitem.toLowerCase() === 'all') {
+              if (digestId) {
                 model.enableAutoRefresh = true;
               }
               renderCommitsContainer(commitStreamDomId, model, errorHandler);
