@@ -201,6 +201,13 @@
         return $scope.error.value !== '';
       };
 
+      // NOTE: this is a bit of a hack to remove errors upon network request to clear 
+      // out the UI prompts
+      persistentOptions.transformUrl = function(url) {
+        $scope.error.value = '';
+        return url;
+      };
+
       $scope.urlPattern = /^https?\:\/\/.{1,}\/.{1,}$/;
 
       $scope.inboxName = function() {
