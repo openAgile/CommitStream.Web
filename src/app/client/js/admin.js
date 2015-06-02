@@ -265,7 +265,8 @@
       };
       
       var inboxesGet = function() {
-        return $rootScope.digest.$get('inboxes')
+        if ($rootScope.digest) {
+          $rootScope.digest.$get('inboxes')
           .then(function(inboxesRes) {
             return inboxesRes.$get('inboxes');
           }).then(function(inboxes) {
@@ -276,16 +277,17 @@
             });
           })
           .catch(errorHandler);
+        }
       };
 
       var inboxesUpdate = function(enabled) {
         if (enabled) { 
-          $('.inbox-url').select().focus();            
+          $('.inbox-url').select().focus();
         }
         inboxesGet();
       }
 
-      //inboxesUpdate($rootScope.config.enabled);
+      inboxesUpdate($rootScope.config.enabled);
 
       $scope.enabledChanged = function() {
         $scope.newInbox.url = '';
