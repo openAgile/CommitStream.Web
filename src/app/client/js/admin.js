@@ -287,8 +287,10 @@
       };
 
       var inboxesUpdate = function(enabled) {
-        if (enabled) { 
-          $('.inbox-url').select().focus();
+        if (enabled) {
+          $timeout(function() {
+            $('.inbox-url').select().focus();
+          });
         }
         inboxesGet();
       }
