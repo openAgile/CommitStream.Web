@@ -8,13 +8,13 @@
     var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 
       'angular-hal', 'ngRoute', 'ui.bootstrap','cgPrompt']);
     app.config(['$sceProvider', '$sceDelegateProvider', function($sceProvider, $sceDelegateProvider) {
-      // $sceProvider.enabled(false);
-      $sceProvider.enabled(true);
-      $sceDelegateProvider.resourceUrlWhitelist([
-        'self',
-        'http://v1commitstream.cloudapp.net:6565/partials/instances.html',
-        'http://v1commitstream.cloudapp.net:6565/partials/inboxes.html'
-      ]);
+      $sceProvider.enabled(false);
+      // $sceProvider.enabled(true);
+      // $sceDelegateProvider.resourceUrlWhitelist([
+      //   'self',
+      //   'http://v1commitstream.cloudapp.net:6565/partials/instances.html',
+      //   'http://v1commitstream.cloudapp.net:6565/partials/inboxes.html'
+      // ]);
     }]);
 
     app.factory('CommitStreamApi', ['serviceUrl', 'halClient', function(serviceUrl, halClient) {
