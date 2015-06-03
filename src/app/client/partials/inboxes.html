@@ -153,9 +153,9 @@
     <div class='well well-sm'>
       <form ng-submit='inboxCreate()' name='inboxesForm'>
         <div class='input-group'>
-          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
+          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
           <span class='input-group-btn'>
-            <button class='repo-add' type='button' ng-click='inboxCreate()' ng-hide='inboxesForm.$invalid'>Add</button>
+            <button class='repo-add' type='button' ng-disabled='inboxCreating' ng-click='inboxCreate()' ng-hide='inboxesForm.$invalid'>Add</button>
             <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
           </span>
         </div>
