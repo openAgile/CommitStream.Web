@@ -11,7 +11,7 @@
       // $sceProvider.enabled(false);
       $sceDelegateProvider.resourceUrlWhitelist([
         'self',
-        'https://v1commitstream.cloudapp.net/**'
+        'https://commitstream.v1host.com/**'
       ]);
     }]);
 
