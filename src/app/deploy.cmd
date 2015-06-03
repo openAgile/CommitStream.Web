@@ -24,11 +24,9 @@ SET ARTIFACTS=%~dp0%..\artifacts
 
 IF NOT DEFINED DEPLOYMENT_SOURCE (
   SET DEPLOYMENT_SOURCE=%~dp0%.
-  echo %DEPLOYMENT_SOURCE%
 )
 
 SET DEPLOYMENT_SOURCE=%DEPLOYMENT_SOURCE%\src\app
-echo %DEPLOYMENT_SOURCE%
 
 IF NOT DEFINED DEPLOYMENT_TARGET (
   SET DEPLOYMENT_TARGET=%ARTIFACTS%\wwwroot
@@ -91,8 +89,6 @@ goto :EOF
 
 :Deployment
 echo Handling node.js deployment.
-echo "Deployment target:"
-echo %DEPLOYMENT_TARGET%
 
 :: 1. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
