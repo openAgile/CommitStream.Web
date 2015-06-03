@@ -8,7 +8,7 @@
     var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 
       'angular-hal', 'ngRoute', 'ui.bootstrap','cgPrompt']);
     app.config(['$sceProvider', '$sceDelegateProvider', function($sceProvider, $sceDelegateProvider) {
-      $sceProvider.enabled(false);
+      // $sceProvider.enabled(false);
       $sceDelegateProvider.resourceUrlWhitelist([
         'self',
         'https://v1commitstream.cloudapp.net/**'
