@@ -9,6 +9,7 @@
       'angular-hal', 'ngRoute', 'ui.bootstrap','cgPrompt']);
     app.config(['$sceProvider', '$sceDelegateProvider', function($sceProvider, $sceDelegateProvider) {
       // $sceProvider.enabled(false);
+      $sceProvider.enabled(true);
       $sceDelegateProvider.resourceUrlWhitelist([
         'self',
         'https://commitstream.v1host.com/partials/instances.html',
