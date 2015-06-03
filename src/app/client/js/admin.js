@@ -8,10 +8,11 @@
     var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config', 
       'angular-hal', 'ngRoute', 'ui.bootstrap','cgPrompt']);
     app.config(['$sceProvider', '$sceDelegateProvider', function($sceProvider, $sceDelegateProvider) {
-      $sceProvider.enabled(false);
+      // $sceProvider.enabled(false);
       $sceDelegateProvider.resourceUrlWhitelist([
         'self',
-        'https://commitstream.v1host.com/**'
+        'https://commitstream.v1host.com/partials/instances.html',
+        'https://commitstream.v1host.com/partials/inboxes.html'
       ]);
     }]);
 
