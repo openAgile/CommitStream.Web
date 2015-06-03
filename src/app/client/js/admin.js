@@ -12,8 +12,8 @@
       $sceProvider.enabled(true);
       $sceDelegateProvider.resourceUrlWhitelist([
         'self',
-        'https://commitstream.v1host.com/partials/instances.html',
-        'https://commitstream.v1host.com/partials/inboxes.html'
+        'http://v1commitstream.cloudapp.net:6565/partials/instances.html',
+        'http://v1commitstream.cloudapp.net:6565/partials/inboxes.html'
       ]);
     }]);
 
