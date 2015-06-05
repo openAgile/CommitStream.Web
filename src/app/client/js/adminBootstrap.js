@@ -17,7 +17,10 @@
     var commitStreamRoot = $('#' + rootElementId);
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
+    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');3
+
+    // XDomain support for IE9 especially
+    commitStreamRoot.prepend($('<scr' + 'ipt src="' + serviceUrl + '/bower_components/jpillora/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"'));
 
     // Grab route locations for config-get and config-save, if they exist
 
@@ -63,7 +66,7 @@
         });
     };
 
-    var scripts = [    
+    var scripts = [
       serviceUrl + '/bower_components/angular/angular.min.js',
       serviceUrl + '/bower_components/angular-route/angular-route.min.js',
       serviceUrl + '/bower_components/angular-bootstrap/ui-bootstrap.min.js',
