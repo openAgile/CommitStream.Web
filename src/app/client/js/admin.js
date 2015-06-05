@@ -11,8 +11,8 @@
     var app = angular.module('commitStreamAdmin', ['commitStreamAdmin.config',
       'angular-hal', 'ngRoute', 'ui.bootstrap', 'cgPrompt'
     ]);
-    app.config(['$sceProvider', '$sceDelegateProvider',
-      function($sceProvider, $sceDelegateProvider) {
+    app.config(['$sceProvider', '$sceDelegateProvider', '$httpProvider',
+      function($sceProvider, $sceDelegateProvider, $httpProvider) {
         $sceProvider.enabled(false);
         // $sceProvider.enabled(true);
         // $sceDelegateProvider.resourceUrlWhitelist([
@@ -20,6 +20,16 @@
         //   'http://v1commitstream.cloudapp.net:6565/partials/instances.html',
         //   'http://v1commitstream.cloudapp.net:6565/partials/inboxes.html'
         // ]);
+
+        //initialize get if not there
+        if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+        }
+
+        //disable IE ajax request caching
+        $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+        $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+        $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
       }
     ]);
 
