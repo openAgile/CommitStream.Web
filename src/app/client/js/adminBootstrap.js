@@ -17,7 +17,7 @@
     var commitStreamRoot = $('#' + rootElementId);
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');3
+    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
 
     // XDomain support for IE9 especially
     commitStreamRoot.prepend($('<scr' + 'ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"'));
