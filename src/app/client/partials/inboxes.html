@@ -11,6 +11,9 @@
   .commitstream-admin .well {
     background: #f2f2f2;
   }
+  .commitstream-admin .vcs-link {
+    font-size: 12px;
+  }
   .commitstream-admin .repos-section {
     position: relative;
   }
@@ -151,6 +154,9 @@
   <div class='repos-list'>
     <h3>Setup Global Repositories</h3>
     <div class='well well-sm'>
+      <p>
+        <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
+      </p>
       <form ng-submit='inboxCreate()' name='inboxesForm'>
         <div class='input-group'>
           <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
