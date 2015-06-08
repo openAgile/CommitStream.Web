@@ -22,7 +22,6 @@
     "mocha-tap-reporter": "^0.1.2",
     "moment": "^2.8.3",
     "nconf": "^0.6.9",
-    "newman": "git+https://github.com/iVantage/Newman.git#4eff11608b172e561bf0ecaf15c878709071ef14",
     "nock": "^0.48.0",
     "node-json-db": "^0.3.2",
     "node-mocks-http": "^1.4.1",

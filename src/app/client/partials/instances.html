@@ -1,0 +1,20 @@
+<div style='text-align: center'>
+  <style>
+    .commitstream-admin .prompt {
+      position: absolute;
+      top:0;
+      margin: 0 auto;
+      z-index: 3;
+      width: 33%;
+      left: 33%;
+      text-align: center;
+    }
+  </style>
+
+  <div ng-if="errorActive()" class='error prompt'>
+    <div class="alert alert-warning" role="alert">
+      <strong>{{error.value}}</strong>
+    </div>
+  </div>
+  <img ng-show='loading()' ng-src='{{loaderUrl}}' class='loader' />
+</div>

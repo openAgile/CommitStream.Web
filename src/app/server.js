@@ -65,6 +65,29 @@ app.param('inboxId', instanceToInboxValidator);
 // Think thrice.
 appConfigure(app);
 
+// SPIKE: Provide a public entry point for the API
+app.get('/api/public', function(req, res) {
+  res.set('Content-Type', 'application/hal+json');
+  res.status(200).send({
+    "_links": {
+      "self": {
+        "href": req.href("/api/public")
+      },
+      "instances": {
+        "href": req.href("/api/instances")
+      },
+      "instance": {
+        "href": req.href("/api/instances/{instanceId}"),
+        templated: true
+      },
+      "digest": {
+        "href": req.href('/api/{instanceId}/digests/{digestId}'),
+        "templated": true
+      }
+    }
+  });
+});
+
 // Return a URL as a special header for each request
 app.use(function(req, res, next) {
   res.setHeader("X-CommitStream-API-Docs", "https://github.com/openAgile/CommitStream.Web");
@@ -83,16 +106,22 @@ api.init(app);
 // DO NOT MOVE THIS. It must be here to catch unhandled errors.
 app.use(csError.errorHandler);
 
+function getHostSettings(req) {
+  return {
+    protocol : config.protocol || req.protocol,
+    host: req.get('host'),
+    key: req.query.key
+  };
+}
+
 app.get('/app', function(req, res) {
-  res.setHeader('content-type', 'application/javascript');
-  var protocol = config.protocol || req.protocol;
-  var host = req.get('host');
-  var key = req.query.key;
+  res.setHeader('Content-Type', 'application/javascript');
+  var settings = getHostSettings(req);
 
   res.render('app', {
-    apiUrl: protocol + '://' + host + '/api/',
-    protocol: protocol,
-    resourcePath: protocol + '://' + host + '/'
+    apiUrl: settings.protocol + '://' + settings.host + '/api/',
+    protocol: settings.protocol,
+    resourcePath: settings.protocol + '://' + settings.host + '/'
   });
 });
 

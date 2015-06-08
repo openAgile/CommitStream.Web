@@ -34,9 +34,8 @@
           "self": {
             "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId)
           },
-          "inbox-commits": {
-            "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId + "/commits"),
-            "method": "POST"
+          "add-commit": {
+            "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId + "/commits")
           }
         }
       };

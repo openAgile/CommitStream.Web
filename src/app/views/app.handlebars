@@ -132,16 +132,13 @@
     if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
       return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
     } else if (workitem) {
-      console.log(digestId);
       var url = '{{{apiUrl}}}' + instanceId;      
       if (digestId !== null && digestId !== undefined) {
         url += '/digests/' + digestId + '/commits';
       } else {        
         url += '/commits/tags/versionone/workitems/' + workitem;
       }
-
       url += '?apiKey=' + apiKey;
-      console.log(url);
       return url;
     } else {
       throw 'It was not possible to get the url to query.'
@@ -237,7 +234,9 @@
             queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
           }
         } catch (ex) {
-          console.log(ex);
+          if (console && console.log) {
+            console.log(ex);
+          }
         }
       }
     };
