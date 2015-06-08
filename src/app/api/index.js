@@ -1,14 +1,15 @@
 (function (api) {
-
-	var importController = require("./importController"),
-		queryController = require("./queryController"),
-		settingsController = require("./settingsController"),
-		digestsController = require("./digestsController");
-
 	api.init = function (app) {
-		importController.init(app);
-		queryController.init(app);
-		settingsController.init(app);
-		digestsController.init(app);
+		var controllers = [
+			'import',
+			'query',
+			'settings',
+			'digests/digests',
+			'inboxes/inboxes'
+		];
+		controllers.forEach(function(controllerPrefix) {
+			var controller = require('./' + controllerPrefix + 'Controller');
+			controller.init(app);
+		});
 	};
 })(module.exports);

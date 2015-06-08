@@ -31,5 +31,11 @@ build/Release
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules
 
+# Ignore Bower components
+bower_components
+
 # Generated test directory
 __tests__
+
+# WebStorm IDE
+.idea

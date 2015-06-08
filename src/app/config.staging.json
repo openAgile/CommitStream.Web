@@ -1,6 +1,0 @@
-{
-	"serverBaseUrl" : "http://v1commitstream-staging.azurewebsites.net",
-	"eventStoreBaseUrl" : "https://v1commitstream.cloudapp.net:2113",
-	"assetDetailTemplateUrl" : "http://v1commitstream-staging.azurewebsites.net/assetDetailCommits.html",
-	"protocol" : "https"
-}

@@ -1,18 +1,19 @@
+require('../helpers')(global);
 // test/queryController.tests.js
 var chai = require('chai'),
   should = chai.should(),
   express = require('express'),
-  app = express(),
+  app = require('../../middleware/appConfigure')(express()),
   sinon = require('sinon'),
   sinonChai = require('sinon-chai'),
   _ = require('underscore'),
   request = require('supertest'),
   proxyquire = require('proxyquire').noPreserveCache();
-  /* We must provide some dummy values here for the module: */
-  config = require ('../../config');
-  config.eventStorePassword = '123';
-  config.eventStoreUser = 'admin';
-  config.eventStoreBaseUrl = 'http://nothing:7887';
+/* We must provide some dummy values here for the module: */
+config = require('../../config');
+config.eventStorePassword = '123';
+config.eventStoreUser = 'admin';
+config.eventStoreBaseUrl = 'http://nothing:7887';
 
 chai.use(sinonChai);
 chai.config.includeStack = true;
@@ -30,7 +31,7 @@ var controller = proxyquire('../../api/queryController', {
 controller.init(app);
 
 describe('queryController', function() {
-  var defaultPageSize = 5;
+  var defaultPageSize = 25;
 
   describe('when I issue a workitem query for an asset that has no associated commits', function() {
     var mockData = {
@@ -71,8 +72,15 @@ describe('queryController', function() {
   });
 
   describe('when I issue a query with a workitem=all as a parameter for default pageSize', function() {
+    var body = {
+      entries: [],
+      links: [{}, {}, {}, {
+        relation: 'next'
+      }]
+    };
+
     var mockData = {
-      body: '{ "entries": [] }'
+      body: JSON.stringify(body)
     };
 
     beforeEach(function() {
@@ -80,13 +88,15 @@ describe('queryController', function() {
       eventStoreClient.streams.get.callsArgWith(1, null, mockData);
     });
 
-    it('calls eventstore-client.streams.get asking for the github-events stream and pageSize of 5', function(done) {
+    it('calls eventstore-client.streams.get asking for the github-events stream and pageSize of 25', function(done) {
       request(app)
-        .get('/api/query?workitem=all')
+        .get('/api/query?digestId=123&workitem=all')
         .end(function(err, res) {
           eventStoreClient.streams.get.should.have.been.calledWith({
-            name: 'github-events',
-            count: 5
+            name: 'digestCommits-123',
+            count: 25,
+            embed: 'tryharder',
+            pageUrl: undefined
           }, sinon.match.any);
 
           done();
@@ -102,13 +112,15 @@ describe('queryController', function() {
       eventStoreClient.streams.get.callsArgWith(1, null, {});
     });
 
-    it('calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 5', function(done) {
+    it('calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 25', function(done) {
       request(app)
         .get('/api/query?workitem=' + assetId)
         .end(function(err, res) {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'asset-' + assetId,
-            count: 5
+            count: 25,
+            embed: 'tryharder',
+            pageUrl: undefined
           }, sinon.match.any);
 
           done();
@@ -125,14 +137,16 @@ describe('queryController', function() {
     });
 
     it('of 10, it calls eventstore-client.streams.get asking for a asset-' + assetId + ' stream and pageSize of 10', function(done) {
-      var pageSize=10;
+      var pageSize = 10;
 
       request(app)
         .get('/api/query?workitem=' + assetId + '&pageSize=' + pageSize)
         .end(function(err, res) {
           eventStoreClient.streams.get.should.have.been.calledWith({
             name: 'asset-' + assetId,
-            count: 10
+            count: 10,
+            embed: 'tryharder',
+            pageUrl: undefined
           }, sinon.match.any);
 
           done();
@@ -154,7 +168,9 @@ describe('queryController', function() {
           .end(function(err, res) {
             eventStoreClient.streams.get.should.have.been.calledWith({
               name: 'asset-' + assetId,
-              count: defaultPageSize
+              count: defaultPageSize,
+              embed: 'tryharder',
+              pageUrl: undefined
             }, sinon.match.any);
 
             done();
@@ -169,7 +185,9 @@ describe('queryController', function() {
           .end(function(err, res) {
             eventStoreClient.streams.get.should.have.been.calledWith({
               name: 'asset-' + assetId,
-              count: defaultPageSize
+              count: defaultPageSize,
+              embed: 'tryharder',
+              pageUrl: undefined
             }, sinon.match.any);
 
             done();
@@ -177,5 +195,35 @@ describe('queryController', function() {
       });
     });
   });
+
+  describe('when I issue a query, and there is an HTTP timeout with a status of 408 (Request Timeout) with eventstore', function() {
+    var assetId = 'S-83940';
+    var response;
+
+    beforeEach(function(done) {
+      eventStoreClient.streams.get = sinon.stub();
+      eventStoreClient.streams.get.callsArgWith(1, null, {
+        statusCode: 408
+      });
+
+      request(app)
+        .get('/api/query?workitem=' + assetId)
+        .end(function(err, res) {
+          response = res;
+          done();
+        });
+    });
+
+    it('it should report that there was an internal error', function(done) {
+      shouldBeGenericError(response);
+      done();
+    });
+
+    it('it should report a status code of 500 (Internal Server Error)', function(done) {
+      response.status.should.equal(500);
+      done();
+    });
+
+  })
 
 });

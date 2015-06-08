@@ -18,7 +18,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Compile Include="apikey.js" />
     <Compile Include="api\digestController.js" />
     <Compile Include="api\events\digestAdded.js" />
     <Compile Include="api\hypermediaResponse.js" />

@@ -1,120 +1,245 @@
 (function() {
-    var handlebarsUrl = '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min',
-        requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js';
+  var handlebarsUrl = '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min',
+    requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js';
 
-    function configureCommitStreamDependencies() {
-        require.config({
-            paths: {
-                handlebars: handlebarsUrl
-            }
-        });
+  function configureCommitStreamDependencies() {
+    require.config({
+      paths: {
+        handlebars: handlebarsUrl
+      }
+    });
+  }
+
+  var deps = ['handlebars'];
+
+  function hasAllDeps() {
+    if (!window.requirejs) return false;
+    for (var i = 0; i < deps.length; i++) {
+      if (!requirejs.defined(deps[i])) return false;
     }
+    return true;
+  }
 
-    var deps = ['handlebars'];
-    function hasAllDeps() {
-        if (!window.requirejs) return false;
-        for(var i = 0; i < deps.length; i++) {
-            if (!requirejs.defined(deps[i])) return false;
-        }
-        return true;
+  var commitsContainerTmpl = null;
+  var commitsListTmpl = null;
+
+  function bindRefreshActions(commitStreamDomId) {
+    var el = $(commitStreamDomId);
+    el.find('.cs-refresh').unbind('click');
+    el.find('.cs-refresh').bind('click', queryCommitStreamRefresh);
+    el.find('.toggle-cs-autorefresh').unbind('click');
+    el.find('.toggle-cs-autorefresh').bind('click', autoRefreshToggle);
+    if (autoRefreshIntervalId) {
+      el.find('.toggle-cs-autorefresh').prop('checked', true);
     }
+  }
 
-    var assetDetailCommitsTmpl = null;
-    function render(commitStreamDomId, data, errorHandler) {
-        try {
-            var content = assetDetailCommitsTmpl(data);
-            $(commitStreamDomId).html(content);
-            $(commitStreamDomId).find('.cs-refresh').unbind('click');
-            $(commitStreamDomId).find('.cs-refresh').bind('click', queryCommitStreamRefresh);
-            $(commitStreamDomId).find('.toggle-cs-autorefresh').unbind('click');
-            $(commitStreamDomId).find('.toggle-cs-autorefresh').bind('click', autoRefreshToggle);
-            if (autoRefreshIntervalId) {
-                $(commitStreamDomId).find('.toggle-cs-autorefresh').prop('checked', true);
-            }
-        } catch(ex) {
-            errorHandler();
-        }
-    }
-
-    function queryCommitStream(commitStreamDomId, workitem, handlebars, errorHandler) {
-        $.getJSON('{{{apiUrl}}}' + workitem).done(function(data) {
-            if (!data || !data.commits) {
-                errorHandler();
-            } else {
-                data.noCommits = data.commits.length < 1;
-                data.resourcePath = "{{{resourcePath}}}";
-
-                if (assetDetailCommitsTmpl === null) {
-                    $.get('{{{templateUrl}}}').done(function(source) {
-                        try {
-                            assetDetailCommitsTmpl = handlebars.compile(source);
-                            render(commitStreamDomId, data, errorHandler);
-                        } catch(ex) {
-                            errorHandler();
-                        }
-                    }).fail(errorHandler);
-                } else {
-                    render(commitStreamDomId, data, errorHandler);
-                }
-            }
-        }).fail(errorHandler);
-    }
-
-    function queryCommitStreamRefresh() {};
-
-    var autoRefreshIntervalId = null;
-
-    function autoRefreshToggle() {
-        var toggle = $(this);
-        if (toggle.is(':checked')) {
-            autoRefreshEnable();
-        } else {
-            autoRefreshDisable();
-        }
-    }
-
-    function autoRefreshEnable() {
-        if (autoRefreshIntervalId) {
-            clearInterval(autoRefreshIntervalId);
-        }
-       autoRefreshIntervalId = setInterval(queryCommitStreamRefresh,
-        window.CommitStream.autoRefreshIntervalInSeconds * 1000);
-    }
-
-    function autoRefreshDisable() {
-        if (autoRefreshIntervalId) {
-            clearInterval(autoRefreshIntervalId);
-            autoRefreshIntervalId = null;
-        }
-    }
-
-    function invokeCommitStream(commitStreamDomId, workitem, errorHandler) {
-        require(deps, function(handlebars) {
-            queryCommitStreamRefresh = function() {
-                queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);
-            };
-            queryCommitStream(commitStreamDomId, workitem, handlebars.default, errorHandler);            
+  function renderCommitsContainer(commitStreamDomId, model, errorHandler) {
+    try {
+      if (commitsContainerTmpl === null) {
+        getCompiledTemplate('commitsList.html', function(tmpl) {
+          commitsListTmpl = tmpl;
+          registerPartial('commitsList', tmpl, function() {
+            getCompiledTemplate('commitsContainer.html', function(tmpl) {
+              commitsContainerTmpl = tmpl;
+              var content = tmpl(model);
+              $(commitStreamDomId).html(content);
+              checkIfNextPage(commitStreamDomId, model, errorHandler);
+              bindRefreshActions(commitStreamDomId);
+            }, errorHandler);
+          }, errorHandler);
         }, errorHandler);
+      } else {
+        var content = commitsContainerTmpl(model);
+        $(commitStreamDomId).html(content);
+        checkIfNextPage(commitStreamDomId, model, errorHandler);
+        bindRefreshActions(commitStreamDomId);
+      }
+    } catch (ex) {
+      errorHandler();
     }
+  }
 
-    // Put a commitStream object in the global space
-    if (!window.CommitStream) {
-        window.CommitStream = {
-            commitsDisplay : function(commitStreamDomId, workitem, errorHandler) {
-                try {
-                    if (!hasAllDeps()) {
-                        $.getScript(requirejsUrl, function(data, status, jqxhr) {
-                            configureCommitStreamDependencies();
-                            invokeCommitStream(commitStreamDomId, workitem, errorHandler);
-                        }).fail(errorHandler);
-                    } else {
-                        invokeCommitStream(commitStreamDomId, workitem, errorHandler);
-                    }
-                } catch (ex) {
-                    console.log(ex);
-                }
-            }
-        };
-        window.CommitStream.autoRefreshIntervalInSeconds = 30;
+  function renderCommitsList(commitStreamDomId, model, errorHandler) {
+    try {
+      if (commitsListTmpl === null) {
+        getCompiledTemplate('commitsList.html', function(tmpl) {
+          commitsListTmpl = tmpl;
+          var content = tmpl(model);
+          $(commitStreamDomId).find('.side-panel-scrollable').append(content);
+          checkIfNextPage(commitStreamDomId, model, errorHandler);
+        }, errorHandler);
+      } else {
+        var content = commitsListTmpl(model);
+        $(commitStreamDomId).find('.side-panel-scrollable').append(content);
+        checkIfNextPage(commitStreamDomId, model, errorHandler);
+      }
+    } catch (ex) {
+      errorHandler();
     }
+  }
+
+  function compileSource(source, cb, errorHandler) {
+    require(deps, function(handlebars) {
+      cb(handlebars.default.compile(source));
+    }, errorHandler);
+  }
+
+  function registerPartial(partialName, template, cb, errorHandler) {
+    require(deps, function(handlebars) {
+      handlebars.default.registerPartial(partialName, template);
+      cb();
+    }, errorHandler);
+
+  }
+
+  function getTemplate(template, cb, errorHandler) {
+    var tmplUrl = '{{{resourcePath}}}' + template;
+    $.get(tmplUrl).done(cb).fail(errorHandler);
+  }
+
+  function getCompiledTemplate(template, cb, errorHandler) {
+    getTemplate(template, function(source) {
+      compileSource(source, cb, errorHandler);
+    }, errorHandler);
+  }
+
+  function configureModel(model) {
+    model.noCommits = model.commits.length < 1;
+    model.protocol = '{{{protocol}}}';
+    model.resourcePath = '{{{resourcePath}}}';
+    model.lastPage = false;
+    if (!model._links || !model._links.next) {
+      model.lastPage = true;
+    }
+  }
+
+  function checkIfNextPage(commitStreamDomId, model, errorHandler) {
+    if (!model._links || !model._links.next) {
+      $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
+    } else {
+      $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
+      $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
+      bindScrollEvent(commitStreamDomId, errorHandler);
+    }
+  }
+
+  function thereAreNoCommits(model) {
+    return (!model || !model.commits);
+  }
+
+  function getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey) {
+    if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
+      return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
+    } else if (workitem) {
+      var url = '{{{apiUrl}}}' + instanceId;      
+      if (digestId !== null && digestId !== undefined) {
+        url += '/digests/' + digestId + '/commits';
+      } else {        
+        url += '/commits/tags/versionone/workitems/' + workitem;
+      }
+      url += '?apiKey=' + apiKey;
+      return url;
+    } else {
+      throw 'It was not possible to get the url to query.'
+    }
+  }
+
+  function isEndOfScrollbar(el) {
+    return (el.scrollTop() + el.innerHeight() >= el[0].scrollHeight);
+  }
+
+  function bindScrollEvent(commitStreamDomId, errorHandler) {
+    $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
+    $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
+      if (isEndOfScrollbar($(this))) {
+        queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, model) {
+          if (thereAreNoCommits(model)) {
+            errorHandler();
+          } else {
+            configureModel(model);
+            renderCommitsList(commitStreamDomId, model);
+          }
+        }, errorHandler);
+      }
+    });
+  }
+
+  function queryCommitStreamRefresh() {};
+
+  var autoRefreshIntervalId = null;
+
+  function autoRefreshToggle() {
+    var toggle = $(this);
+    if (toggle.is(':checked')) {
+      autoRefreshEnable();
+    } else {
+      autoRefreshDisable();
+    }
+  }
+
+  function autoRefreshEnable() {
+    if (autoRefreshIntervalId) {
+      clearInterval(autoRefreshIntervalId);
+    }
+    autoRefreshIntervalId = setInterval(queryCommitStreamRefresh,
+      window.CommitStream.autoRefreshIntervalInSeconds * 1000);
+  }
+
+  function autoRefreshDisable() {
+    if (autoRefreshIntervalId) {
+      clearInterval(autoRefreshIntervalId);
+      autoRefreshIntervalId = null;
+    }
+  }
+
+  function queryCommitStream(commitStreamDomId, apiUrl, cb, errorHandler) {
+    var el = $(commitStreamDomId);
+    el.find('.cs-refresh').addClass('requesting');
+    $.getJSON(apiUrl).done(function(model) {
+      el.find('.cs-refresh').removeClass('requesting');
+      cb(commitStreamDomId, model);
+    }).fail(errorHandler);
+  }
+
+  // Put a commitStream object in the global space
+  if (!window.CommitStream) {
+    window.CommitStream = {
+      commitsDisplay: function(commitStreamDomId, workitem, errorHandler, digestId, instanceId, apiKey) {
+        try {
+          var queryCallBack = function(commitStreamDomId, model) {
+            if (thereAreNoCommits(model)) {
+              errorHandler();
+            } else {
+              configureModel(model);
+              if (workitem.toLowerCase() === 'all') {
+                model.enableAutoRefresh = true;
+              }
+              renderCommitsContainer(commitStreamDomId, model, errorHandler);
+            }
+          }
+
+          var url = getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey);
+
+          queryCommitStreamRefresh = function() {
+            queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
+          };
+
+          if (!hasAllDeps()) {
+            $.getScript(requirejsUrl, function(model, status, jqxhr) {
+              configureCommitStreamDependencies();
+              queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
+            }).fail(errorHandler);
+          } else {
+            queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
+          }
+        } catch (ex) {
+          if (console && console.log) {
+            console.log(ex);
+          }
+        }
+      }
+    };
+    window.CommitStream.autoRefreshIntervalInSeconds = 30;
+  }
 })();

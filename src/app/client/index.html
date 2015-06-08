@@ -2,6 +2,17 @@
 <html>
   <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style type="text/css">
+      .side-panel-scrollable {
+        overflow-y: auto;
+        position: absolute;
+        bottom: 0;
+        top: 45px;
+        left: 0;
+        right: 0;
+      }
+    </style>
+
     <script>
 $(function() {
   function getQueryVariable(variable) {
@@ -16,21 +27,28 @@ $(function() {
       return null;
   }
 
-  var key = getQueryVariable('key');
-  if (!key) {
-    alert('Must specify API key in the form of key=<apikey> as a query string parameter');
+  var apiKey = getQueryVariable('apiKey');
+  var digestId = getQueryVariable('digestId');
+  var instanceId = getQueryVariable('instanceId');
+  if (!apiKey) {
+    alert('Must specify API key in the form of apiKey=<apikey> as a query string parameter');
   }
-  var workitem = getQueryVariable('workitem') || 'S-47665';
+  var workitem = getQueryVariable('workitem');
 
-  $.getScript('app?key=' + key,
+  function handleError(data, status) {
+    $('#commits').html('<div class="commitStream-TR-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
+  }
+
+  $.getScript('app',
     function(data, status, jqxhr) {
-      CommitStream.commitsDisplay('#commits', workitem);
+      CommitStream.commitsDisplay('#commits', workitem, handleError, digestId, instanceId, apiKey);
     });
-});   
+});
     </script>
   </head>
 
   <body>
+    <link type="text/css" rel="stylesheet" href="commitStream.css">
     <div id="commits"></div>
   </body>
 </html>

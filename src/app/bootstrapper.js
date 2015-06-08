@@ -11,6 +11,9 @@
       password: config.eventStorePassword
     });
 
+    console.log('Enabling system projections...');
+    es.projection.enableSystemAll(function() {});
+
     console.log('Looking for already existing projections...');
     es.projections.get(function(error, response) {
       initProjections(JSON.parse(response.body));
