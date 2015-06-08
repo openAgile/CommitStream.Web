@@ -14,8 +14,11 @@ Normally, you can just clone the base virtual machine image that already has Eve
 * Specify a **machine name**, starting with `v1cs-`. Example, for a customer named `devopsheros`, name it `v1cs-devopsheros`
 * Tier: `Standard`
 * Size: `A2 3.5 GB`
-* Region: `US East 2`
-* Add a firewall port named `eventstore` with private and public TCP ports for `2113`.
+* Cloud Service: `Create a new cloud service`
+* Cloud Service DNS Name: `v1cs-<customername>` (this will be automatically populated)
+* Region/Affinity Group/Virtual Network: `East US 2` (auto-selected)
+* Availability Set: `(None)`
+* Add a firewall port (Endpoint) named `eventstore` with private and public TCP ports for `2113`.
 * Finally, leave VM Agent checked for `The VM agent that supports extensions is already installed.`
 * Click the **Complete** checkmark to start the new VM
 
@@ -59,7 +62,7 @@ HttpPrefixes:
  - https://v1cs-se.cloudapp.net:2113/
 ```
 * Now, verify that EventStore is running normally by browsing to [https://localhost:2113](https://localhost:2113) from within the VM. If it does not respond, you may need to reset the EventStore service by opening **Powershell As Administrator** and typing: `nssm restart eventstore`.
-* Now, change the admin account EventStore password through the EventStore UI at [https://localhost:2113](https://localhost:2113). **Note**: the UI has a bug, so you must specify **https://localhost:2113** in the first field on the login screen. The default credentials are admin / changeit. Use a newly generated GUID for the admin account password. This value will also serve as the `eventStorePassword` value below within the Azure Web Site. You can generate a GUID in PowerShell by typing  `[guid]::NewGuid()` or by using the web site [http://www.uuigenerator.net](http://www.uuigenerator.net).
+* Now, change the admin account EventStore password through the EventStore UI at [https://localhost:2113](https://localhost:2113). **Note**: the UI has a bug, so you must specify **https://localhost:2113** in the first field on the login screen. The default credentials are admin / changeit. Use a newly generated GUID for the admin account password. This value will also serve as the `eventStorePassword` value below within the Azure Web Site. You can generate a GUID in PowerShell by typing  `[guid]::NewGuid()` or by using the web site [http://www.uuidgenerator.net](http://www.uuidgenerator.net). To change the password select the "Users" option at the top right of the page. Next, click the "admin" username and finally the "Reset Password" option on the top right.
 
 ## Create code branch for the customer instance
 
@@ -76,23 +79,30 @@ git checkout devopsheros
 git push origin devopsheros
 ```
 
-## Create the Azure web site to host the customer instance
-* Create a new web site in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `v1cs-devopsheros`
-* Configure the site's App Settings so that it knows where to find its EventStore instance with these settings
+## Create the Azure web site (Web App) to host the customer instance
+* Create a new web app in the [Azure Dev account portal](https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard) named `v1cs-devopsheros`
+* Under Azure's "Web Apps" section, click "+NEW" (bottom left)
+* Select COMPUTE>>WEB APP>>CUSTOM CREATE
+	* URL:			v1cs-devopsheros
+	* APP SERVICE PLAN:	Default1 (East US, Standard)
+	* DATABASE:		No database
+	* Tick the "Publish from source control" option
+* Select "GitHub" in the "Where is your source code?" screen
+* For "REPOSITORY NAME" select "CommitStream.Web"
+* For "BRANCH TO DEPLOY" type the branch created for this customer (i.e. v1cs-devopsheros)
+* Once the web app has been created, configure the App Settings so that it knows where to find its EventStore instance with these settings
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
 	* protocol : `https`
 	* apiKey: `apiKey`
-	* eventStoreBaseUrl: `https://devopsheroscs.cloudapp.net:2113`
+	* eventStoreBaseUrl: `https://v1cs-devopsheros.cloudapp.net:2113`
 	* eventStoreUser `admin`
 	* eventStorePassword: `eventStorePassword`
 	* eventStoreAllowSelfSignedCert: `true`
-* From the site's Dashboard, select **Set up deployment from source control**, and choose GitHub, then after authorizing, select [https://github.com/openAgile/CommitStream.Web](openAgile/CommitStream.Web) on the `devopsheros` branch
-  * **Note:** If you need access to the repo ask Josh in HipChat
-  * Verify that the deployment worked in the web site details view
-  * Verify that the site is working by querying in your browser: [https://devopsheroscs.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://devopsheroscs.azurewebsites.net/api/query?key=apiKey&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
+  * From the site's "Deployments" section, verify that the deployment worked in the web site details view. In the event the deployment fails, select the "SYNC" option at the bottom of the page to re-deploy.
+  * Verify that the site is working by querying in your browser: [https://v1cs-devopsheros.azurewebsites.net/api/query?key=&lt;apiKey GUID&gt;&workitem=S-11111](https://v1cs-devopsheros.azurewebsites.net/api/query?key=apiKey&workitem=S-11111). You should get an empty `{commits:[]}` message back, since no commits have been sent to this system yet.
 
-## Create a Digest and Inboxes the GitHub repositories you want to send messages to CommitStream
+## Create a Digest and Inboxes for the GitHub repositories you want to send messages to CommitStream
 
 ### Using [curl](http://curl.haxx.se/) or another equivalent HTTP client, execute the following to create a new Digest:
 
