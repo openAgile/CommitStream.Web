@@ -1,2 +1,2 @@
 [config]
-project = src/app
+command = src/app/deploy.cmd

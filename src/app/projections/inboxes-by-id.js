@@ -1,7 +1,8 @@
-var callback = function (state, ev) {
-	linkTo('inbox-' + ev.data.inboxId, ev);
+var callback = function(state, ev) {
+  linkTo('inbox-' + ev.data.inboxId, ev);
 };
 
-fromStream('inboxes').when({ 
-	'InboxAdded': callback 
+fromCategory('inboxes').when({
+  'InboxAdded': callback,
+  'InboxRemoved': callback
 });

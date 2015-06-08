@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-hal/angular-hal.js"></script>
+    <script src="bower_components/rfc6570/rfc6570.js"></script>
+
+    <script>
+'use strict';
+
+var app = angular.module('commitStream', ['ui.bootstrap', 'angular-hal']);
+
+var persistentOptions = {
+  headers: { Bearer: '' }
+};
+
+function formatLinks(links) {
+  return JSON.stringify(links, 2, ' ');
+}
+
+app.factory('CommitStreamApi', ['halClient', function(halClient) {
+  return {
+    'load' : function() {
+      return halClient.$get('/api/public', persistentOptions);
+    },
+  };
+}]);
+
+app.controller('CommitStreamController',
+  ['$scope', 'CommitStreamApi',
+  function($scope, CommitStreamApi) {
+    $scope.instance = {};
+    $scope.digest = {};
+
+    $scope.newInbox = {
+      url: '',
+      name: '',
+      family: 'GitHub'
+    };
+    window.scope = $scope;
+    window.newInbox = $scope.newInbox;
+
+    CommitStreamApi
+    .load()
+    .then(function(resources) {
+      $scope.resources = resources;
+      return resources.$post('instances');
+    })
+    .then(function(instance) {
+      angular.copy(instance, $scope.instance);
+      persistentOptions.headers.Bearer = instance.apiKey;
+      $scope.instance = instance;
+      $scope.instanceLinks = formatLinks(instance.$links());
+
+      return instance.$post('digest-create', {}, {
+        description: 'My new digest'
+      });
+    })
+    .then(function(digest) {
+      angular.copy(digest, $scope.digest);
+
+      $scope.digestLinks = formatLinks(digest.$links());
+
+      $scope.addInboxStartingAtDigest = function() {
+
+        $scope.resources.$get('digest', {
+          instanceId: $scope.instance.instanceId,
+          digestId: $scope.digest.digestId
+        }).then(function(digestFromRoot) {
+          var index = $scope.newInbox.url.lastIndexOf('/');
+          $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+
+          digestFromRoot.$post('inbox-create', {}, $scope.newInbox)
+          .then(function(inbox) {
+            var links = inbox.$links();
+            $scope.inboxLinks = formatLinks(inbox.$links());
+            console.log($scope.inboxLinks);
+            prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
+          })
+          .catch(function(error) {
+            console.error("Caught an error adding repo!");
+            console.error(error);
+          });
+        });
+      };
+
+      $scope.addInbox = function() {
+        var index = $scope.newInbox.url.lastIndexOf('/');
+        $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+
+        digest.$post('inbox-create', {}, $scope.newInbox)
+        .then(function(inbox) {
+          var links = inbox.$links();
+          $scope.inboxLinks = formatLinks(inbox.$links());
+          console.log($scope.inboxLinks);
+          prompt('Paste this into a new repo WebHook', links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer);
+        })
+        .catch(function(error) {
+          console.error("Caught an error adding repo!");
+          console.error(error);
+        });
+      };
+    })
+    .catch(function(error) {
+      console.error("Caught an error adding instance or repo list!");
+      console.error(error);
+    });
+  }]
+);
+    </script>
+  </head>
+
+  <body ng-app='commitStream'>
+    <link type='text/css' rel='stylesheet' href='commitStream.css'>
+
+    <div ng-controller='CommitStreamController'>
+      <p>
+        Instance ID: <input ng-model='instance.instanceId' />
+        <br/>
+        Digest ID: <input ng-model='digest.digestId' />
+      </p>
+      <form ng-submit="addInboxStartingAtDigest()">
+        <input type="text" ng-model="newInbox.url"  size="100"
+               placeholder="add new GitHub repo url...">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+
+      <hr />
+      <h2>Alternate</h2>
+
+      <form ng-submit="addInbox()">
+        <input type="text" ng-model="newInbox.url"  size="100"
+               placeholder="add new GitHub repo url...">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+
+      <div ng-if='instance'>
+        <h3>New instance details</h3>
+        Instance ID: {{instance.instanceId}}
+        <br />
+        API Key: {{instance.apiKey}}
+      </div>
+      <div ng-if='instanceLinks'>
+        <h4>Instance links</h4>
+        <pre>{{instanceLinks}}</pre>
+      </div>
+      <div ng-if='digestLinks'>
+        <h4>Digest links</h4>
+        <pre>{{digestLinks}}</pre>
+      </div>
+      <div ng-if='inboxLinks'>
+        <h4>Inbox links</h4>
+        <pre>{{inboxLinks}}</pre>
+      </div>
+    </div>
+  </body>
+</html>

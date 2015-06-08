@@ -1,11 +1,11 @@
 (function (api) {
 	api.init = function (app) {
 		var controllers = [
-			'import', 
-			'query', 
+			'import',
+			'query',
 			'settings',
-			'digests',
-			'inboxes'
+			'digests/digests',
+			'inboxes/inboxes'
 		];
 		controllers.forEach(function(controllerPrefix) {
 			var controller = require('./' + controllerPrefix + 'Controller');

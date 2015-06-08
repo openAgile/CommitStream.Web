@@ -16,27 +16,6 @@ var validateProtocolIsHttps = function() {
   };
 };
 
-var validateApiKeyIsSet = function() {
-  if (!config.apiKey) {
-    var errorObj = {
-      error: 'error.fatal.config.apiKey.invalid',
-      message: 'The config.apiKey value is not set. Please set it to a string.'
-    };
-    throw new Error(JSON.stringify(errorObj));
-  };
-};
-
-var validateApiKeyLength = function() {
-  if (!config.apiKey || config.apiKey.length < 36) {
-    var errorObj = {
-      error: 'error.fatal.config.apiKey.invalid',
-      message: 'The config.apiKey value is set to a value containing fewer than 36 characters.' +
-        'Please set it to a string containing at least 36 characters.'
-    };
-    throw new Error(JSON.stringify(errorObj));
-  };
-};
-
 var validateEventStorePasswordIsSet = function() {
   if (!config.eventStorePassword) {
     var errorObj = {
@@ -107,15 +86,12 @@ var configValidation = {
   validateConfig: function() {
 
     // common validations
-    validateApiKeyIsSet();
     validateEventStoreUserIsSet();
     validateEventStorePasswordIsSet();
 
     // production validations
     if (config.production) {
       validateProtocolIsHttps();
-      validateApiKeyIsSet();
-      validateApiKeyLength();
       validateEventStorePasswordIsGuid();
       validateEventStoreHttpsUri();
     }
