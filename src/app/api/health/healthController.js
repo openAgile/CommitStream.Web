@@ -1,6 +1,6 @@
 (function(healthController) {
 
   healthController.init = function(app) {
-  	app.get('/api/:instanceId/health', require('./healthGet'));
+	app.get('/health', require('./healthGet'));
   };
 }(module.exports));
