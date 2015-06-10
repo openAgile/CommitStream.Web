@@ -18,7 +18,7 @@ describe('healthStatusGet', function() {
 		healthStatusGet(request, response);
 	})
 
-	it('should call res.hal with correct args', function() {
+	it('should call res.json with correct args', function() {
       response.json.should.have.been.calledWith(healthyStatus);
     });
 
