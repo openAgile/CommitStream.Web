@@ -49,13 +49,13 @@ describe('healthProjectionsGet', function() {
     });
 
     it('should call res.json with {"status" :"healthy"} and no projections.', function() {
-      var expectedResponse = {'status': 'healthy'}
+      var expectedResponse = {'status': 'healthy'};
       response.json.should.have.been.calledWith(expectedResponse);
     });
   });
 
   describe('when one or more projections not Running', function() {
-    var response, request, eventStoreClientProxy, esResponse, nonRunningProjections;
+    var response, request, eventStoreClientProxy, esResponse;
 
     before(function() {
       response = httpMocks.createResponse();
