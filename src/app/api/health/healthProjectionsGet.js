@@ -14,7 +14,7 @@
 
 			var nonRunningProjections = _.filter(eventStoreResponse.projections, function(projection) {
 				return projection.status !== runningStatus;
-			})
+			});
 
 			var projectionsStatus = {'status': 'healthy'};
 
