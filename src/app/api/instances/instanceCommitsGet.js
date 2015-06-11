@@ -9,7 +9,8 @@
     var instanceId = req.instance.instanceId;
 
     var buildUri = function(page) {
-      return req.href('/api/' + instanceId + '/commits/tags/versionone/workitems/' + workitems + '?page=' + page);
+      return req.href('/api/' + instanceId + '/commits/tags/versionone/workitems/' 
+        + workitems + '?page=' + page + '&apiKey=' + req.instance.apiKey);
     };
 
     // TODO: refactor when we support ad-hoc queries on multiple workitems...

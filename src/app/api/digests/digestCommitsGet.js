@@ -10,7 +10,8 @@
     var instanceId = req.instance.instanceId;
 
     var buildUri = function(page) {
-      return req.href('/api/' + instanceId + '/digests/' + digestId + '/commits?page=' + page);
+      return req.href('/api/' + instanceId + '/digests/' + digestId + 
+        '/commits?page=' + page + '&apiKey=' + req.instance.apiKey);
     };
 
     var stream = 'digestCommits-' + digestId;
