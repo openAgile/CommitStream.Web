@@ -43,9 +43,8 @@ describe('digestInboxesFormatAsHal', function() {
     "_embedded": {
       "inboxes": [{
         "_links": {
-          "inbox-commits": {
-            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/33333333-3333-4333-3333-333333333333/commits",
-            "method": "POST"
+          "add-commit": {
+            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/33333333-3333-4333-3333-333333333333/commits"
           },
           "self": {
             "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/33333333-3333-4333-3333-333333333333"
@@ -54,9 +53,8 @@ describe('digestInboxesFormatAsHal', function() {
         "inboxId": "33333333-3333-4333-3333-333333333333",
       }, {
         "_links": {
-          "inbox-commits": {
-            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/55555555-5555-4555-5555-555555555555/commits",
-            "method": "POST"
+          "add-commit": {
+            "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/55555555-5555-4555-5555-555555555555/commits"
           },
           "self": {
             "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/55555555-5555-4555-5555-555555555555"
