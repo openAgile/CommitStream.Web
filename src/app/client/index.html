@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src='http://localhost/VersionOne.Web/TeamRoomPlugins/team-room-messenger.js'></script> 
     <style type="text/css">
       .side-panel-scrollable {
         overflow-y: auto;
@@ -39,9 +40,24 @@ $(function() {
     $('#commits').html('<div class="commitStream-TR-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
   }
 
+    
+  <script src='http://localhost/VersionOne.Web/TeamRoomPlugins/team-room-messenger.js'></script> 
+  
   $.getScript('app',
     function(data, status, jqxhr) {
       CommitStream.commitsDisplay('#commits', workitem, handleError, digestId, instanceId, apiKey);
+      // TRP
+      var messenger = new TeamRoomMessenger({ debug:true });
+
+      messenger.send('init', onInit);
+
+      function onInit(err, args) {        
+        console.log('args inside CommitStream:');
+        console.log(args);
+          var panelArgs = { name : args.Name || 'Plugin' , url : 'http://localhost:6565/?instanceId=e97da0f9-2211-4e93-9fd6-3189055457e0&digestId=5ce92c9b-b66b-47cb-b1d5-8e1d318dde7b&workitem=null&apiKey=9ecddd78-3dcc-4079-9723-7c0e836e6bc0' };
+          messenger.send('add-panel', panelArgs);
+      }      
+
     });
 });
     </script>
