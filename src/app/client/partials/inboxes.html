@@ -121,7 +121,7 @@
 </style>
 
 <div ng-if='inboxesVisible()'>
-  <p>
+  <p ng-if='isInstanceMode()'>
     <input 
       data-on='Enabled'
       data-off='Disabled'
@@ -152,7 +152,8 @@
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list'>
-    <h3>Setup Global Repositories</h3>
+    <h3 ng-if='isInstanceMode()'>Setup Global Repositories</h3>
+    <h3 ng-if='isDigestMode()'>Add Repositories</h3>
     <div class='well well-sm'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>

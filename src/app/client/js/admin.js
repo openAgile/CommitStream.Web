@@ -147,10 +147,14 @@
             $rootScope.resources = resources;
             if (!configGetUrl) return {
               data: {
+                configMode: {
+                  type: 'digest',
+                  digestId: ''
+                },
                 serviceUrl: serviceUrl,
                 instanceId: '',
                 apiKey: '',
-                globalDigestId: '',
+                globalDigestId: '',               
                 configured: false,
                 enabled: false
               }
@@ -331,6 +335,14 @@
         }
 
         inboxesUpdate($rootScope.config.enabled);
+
+        $scope.isInstanceMode = function() {
+          return $rootScope.config.configMode.type === 'instance';
+        };
+
+        $scope.isDigestMode = function() {
+          return $rootScope.config.configMode.type === 'digest';
+        };
 
         $scope.enabledChanged = function() {
           $scope.newInbox.url = '';
