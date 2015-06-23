@@ -112,8 +112,21 @@
       };
     });
 
-    app.controller('InstancesController', ['$rootScope', '$scope', '$http', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
-      function($rootScope, $scope, $http, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl) {
+    var isDigestMode = function(config) {
+      return config.configMode && config.configMode.type === 'digest';
+    };
+
+    var isDigestConfigured = function(config) {
+      return config.configMode.configured;
+    };
+
+    var isInstanceMode = function(config) {
+      if (!config.configMode) return true;
+      return config.configMode === 'instance';
+    };  
+
+    app.controller('InstancesController', ['$rootScope', '$scope', '$http', '$q', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
+      function($rootScope, $scope, $http, $q, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl) {
         var config;
 
         $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
@@ -141,6 +154,18 @@
           return $scope.error.value !== '';
         };
 
+        // For teamroom settings:
+        var configDigestModeSave = function(configMode) {
+          console.log('the mode');
+          console.log(configMode);
+          if (!configMode.configured) {
+            if (configSaveUrl) return $http.post(configSaveUrl, configMode);
+            return $q.when(true);
+          }
+          // TODO: do we even need this below?
+          return $q.when(true);
+        };        
+
         CommitStreamApi
           .load()
           .then(function(resources) {
@@ -149,7 +174,8 @@
               data: {
                 configMode: {
                   type: 'digest',
-                  digestId: ''
+                  digestId: '',
+                  configured: false
                 },
                 serviceUrl: serviceUrl,
                 instanceId: '',
@@ -180,25 +206,52 @@
             if (instance) {
               persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
               $rootScope.instance = instance;
-              if (config.configured) {
-                return $rootScope.resources.$get('digest', {
-                  instanceId: config.instanceId,
-                  digestId: config.globalDigestId
-                });
+              
+              if (isInstanceMode(config)) {
+                if (config.configured) {
+                  return $rootScope.resources.$get('digest', {
+                    instanceId: config.instanceId,
+                    digestId: config.globalDigestId
+                  });
+                } else {
+                  return instance.$post('digest-create', {}, {
+                    description: 'Global Repositories List'
+                  });
+                }
+              } else if (isDigestMode(config)) {
+                if (isDigestConfigured(config)) {
+                  return $rootScope.resources.$get('digest', {
+                    instanceId: config.instanceId,
+                    digestId: config.configMode.digestId
+                  });
+                } else {
+                  return instance.$post('digest-create', {}, {
+                    description: 'Repositories List'
+                  });     
+                }
               } else {
-                return instance.$post('digest-create', {}, {
-                  description: 'Global Repositories List'
-                });
+                // Don't know what state it's in here, but probably didn't get here naturally, so just return false
+                return false;
               }
-            } else {
-              return false;
             }
           })
           .then(function(digest) {
             if (digest) {
               $rootScope.digest = digest;
             }
-            $location.path('/inboxes');
+            // Check if we are in digestMode and need to save
+            if (isDigestMode(config) && !isDigestConfigured(config)) {
+              config.configMode.digestId = digest.digestId;
+              configDigestModeSave(config.configMode)
+              .then(function(configModeSaveResult) {
+                console.log('configModeSave:');
+                console.log(configModeSaveResult);
+                $location.path('/inboxes');
+              })
+              .catch(errorHandler);
+            } else {
+              $location.path('/inboxes');
+            }
           })
           .catch(errorHandler);
       }
@@ -301,7 +354,7 @@
             if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
             return $q.when(true);
           }
-        };
+        };        
 
         var inboxConfigure = function(inbox) {
           var links = inbox.$links();
