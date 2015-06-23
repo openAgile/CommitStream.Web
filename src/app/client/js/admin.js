@@ -156,8 +156,6 @@
 
         // For teamroom settings:
         var configDigestModeSave = function(configMode) {
-          console.log('the mode');
-          console.log(configMode);
           if (!configMode.configured) {
             if (configSaveUrl) return $http.post(configSaveUrl, configMode);
             return $q.when(true);
@@ -173,7 +171,7 @@
             if (!configGetUrl) return {
               data: {
                 configMode: {
-                  type: 'digest',
+                  type: 'instance',
                   digestId: '',
                   configured: false
                 },
