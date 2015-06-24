@@ -3,7 +3,6 @@
 		var controllers = [
 			'import',
 			'query',
-			'settings',
 			'digests/digests',
 			'inboxes/inboxes'
 		];
