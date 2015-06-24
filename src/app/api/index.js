@@ -6,7 +6,6 @@
 			'import',
 			'inboxes/inboxes',
 			'query',
-			'settings'
 		];
 		controllers.forEach(function(controllerPrefix) {
 			var controller = require('./' + controllerPrefix + 'Controller');
