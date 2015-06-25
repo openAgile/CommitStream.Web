@@ -207,15 +207,20 @@
   if (!window.CommitStream) {
     window.CommitStream = {
       commitsDisplay: function(commitStreamDomId, workitem, errorHandler, digestId, instanceId, apiKey) {
+
+        function setCheckboxVisibility(model, digestId) {
+          if (digestId) {
+            model.showAutoRefreshCheckbox = true;
+          }
+        }
+
         try {
           var queryCallBack = function(commitStreamDomId, model) {
             if (thereAreNoCommits(model)) {
               errorHandler();
             } else {
               configureModel(model);
-              if (digestId) {
-                model.enableAutoRefresh = true;
-              }
+              setCheckboxVisibility(model, digestId);
               renderCommitsContainer(commitStreamDomId, model, errorHandler);
             }
           }
