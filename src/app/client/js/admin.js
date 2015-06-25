@@ -122,7 +122,7 @@
 
     var isInstanceMode = function(config) {
       if (!config.configMode) return true;
-      return config.configMode === 'instance';
+      return config.configMode.type === 'instance';
     };  
 
     app.controller('InstancesController', ['$rootScope', '$scope', '$http', '$q', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
