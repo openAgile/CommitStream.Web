@@ -131,17 +131,18 @@
   function getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey) {
     if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
       return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
-    } else if (workitem) {
+    } else if (workitem || digestId) {
       var url = '{{{apiUrl}}}' + instanceId;      
       if (digestId !== null && digestId !== undefined) {
         url += '/digests/' + digestId + '/commits';
       } else {        
         url += '/commits/tags/versionone/workitems/' + workitem;
       }
+
       url += '?apiKey=' + apiKey;
       return url;
     } else {
-      throw 'It was not possible to get the url to query.'
+      throw 'Must specify either workitem or digestId as a URL query parameter in order to query CommitStream'
     }
   }
 
@@ -206,15 +207,20 @@
   if (!window.CommitStream) {
     window.CommitStream = {
       commitsDisplay: function(commitStreamDomId, workitem, errorHandler, digestId, instanceId, apiKey) {
+
+        function setCheckboxVisibility(model, digestId) {
+          if (digestId) {
+            model.showAutoRefreshCheckbox = true;
+          }
+        }
+
         try {
           var queryCallBack = function(commitStreamDomId, model) {
             if (thereAreNoCommits(model)) {
               errorHandler();
             } else {
               configureModel(model);
-              if (workitem.toLowerCase() === 'all') {
-                model.enableAutoRefresh = true;
-              }
+              setCheckboxVisibility(model, digestId);
               renderCommitsContainer(commitStreamDomId, model, errorHandler);
             }
           }
