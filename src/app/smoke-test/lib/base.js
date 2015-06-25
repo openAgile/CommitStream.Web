@@ -69,6 +69,11 @@
       if (LOGGING) {
         console.log('After getting this HAL response:\n\n');
         console.log('```json\n' + JSON.stringify(halResponse, ' ', 2) + '\n```\n\n');
+        if (halResponse._links['teamroom-view']) {
+          console.log('TEAMROOM LINK:');
+          console.log(halResponse._links['teamroom-view'].href + '&apiKey=' + getApiKey());
+        }
+
       }
       if (halResponse.apiKey) apiKey = halResponse.apiKey; // Cheap n dirty
       var link = getLink(halResponse, linkName);

@@ -15,6 +15,9 @@
         },
         "inboxes": {
           "href": href("/api/" + instanceId + "/digests/" + data.digestId + "/inboxes")
+        },
+        "teamroom-view": {
+          "href": href("/?instanceId=" + instanceId + "&digestId=" + data.digestId)
         }
       }
     };

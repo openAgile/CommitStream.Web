@@ -17,7 +17,10 @@ var expected = {
     },
     "inboxes": {
       "href": "/api/11111111-1111-4111-1111-111111111111/digests/22222222-2222-4222-2222-222222222222/inboxes"
-    }
+    },
+    "teamroom-view": {
+      "href": "/?instanceId=11111111-1111-4111-1111-111111111111&digestId=22222222-2222-4222-2222-222222222222"
+    }    
   },
   "description": "some random description",
   "digestId": "22222222-2222-4222-2222-222222222222"
