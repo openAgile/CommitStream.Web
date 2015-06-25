@@ -112,6 +112,11 @@
       };
     });
 
+    var isInstanceMode = function(config) {
+      if (!config.configMode) return true;
+      return config.configMode.type === 'instance';
+    };
+
     var isDigestMode = function(config) {
       return config.configMode && config.configMode.type === 'digest';
     };
@@ -119,11 +124,6 @@
     var isDigestConfigured = function(config) {
       return config.configMode.configured;
     };
-
-    var isInstanceMode = function(config) {
-      if (!config.configMode) return true;
-      return config.configMode.type === 'instance';
-    };  
 
     app.controller('InstancesController', ['$rootScope', '$scope', '$http', '$q', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
       function($rootScope, $scope, $http, $q, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl) {
@@ -388,11 +388,11 @@
         inboxesUpdate($rootScope.config.enabled);
 
         $scope.isInstanceMode = function() {
-          return $rootScope.config.configMode.type === 'instance';
+          return isInstanceMode($rootScope.config);
         };
 
         $scope.isDigestMode = function() {
-          return $rootScope.config.configMode.type === 'digest';
+          return isDigestMode($rootScope.config);
         };
 
         $scope.enabledChanged = function() {
