@@ -15,7 +15,8 @@
 
     var rootElementId = scriptEl.attr('data-commitstream-root');
     var commitStreamRoot = $('#' + rootElementId);
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/manage.css');
+    // TODO: enable after new styles are released in V1 Prod
+    //prependStyleSheet(commitStreamRoot, serviceUrl + '/css/manage.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
