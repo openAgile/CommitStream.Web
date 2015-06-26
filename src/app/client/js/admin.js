@@ -125,11 +125,6 @@
       return config.configMode.configured;
     };
 
-    var isInstanceMode = function(config) {
-      if (!config.configMode) return true;
-      return config.configMode.type === 'instance';
-    };  
-
     app.controller('InstancesController', ['$rootScope', '$scope', '$http', '$q', '$location', 'CommitStreamApi', 'serviceUrl', 'configGetUrl', 'configSaveUrl',
       function($rootScope, $scope, $http, $q, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl) {
         var config;
@@ -247,8 +242,6 @@
               config.configMode.digestId = digest.digestId;
               configDigestModeSave(config.configMode)
               .then(function(configModeSaveResult) {
-                console.log('configModeSave:');
-                console.log(configModeSaveResult);
                 $location.path('/inboxes');
               })
               .catch(errorHandler);
