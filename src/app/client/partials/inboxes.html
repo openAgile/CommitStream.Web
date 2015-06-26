@@ -131,18 +131,19 @@
       ng-model='enabledState.enabled'
       ng-change='enabledChanged()'
       toggle-checkbox
-    >
+    />
 
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
-   <div ng-if="messageActive()" class='message prompt'>
+
+  <div ng-if="messageActive()" class='message prompt'>
     <div class="alert alert-success alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>{{message.value}}</strong>
     </div>
   </div>
 
-   <div ng-if="errorActive()" class='error prompt'>
+  <div ng-if="errorActive()" class='error prompt'>
     <div class="alert alert-warning alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>{{error.value}}</strong>
@@ -160,7 +161,7 @@
       </p>
       <form ng-submit='inboxCreate()' name='inboxesForm'>
         <div class='input-group'>
-          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
+          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL' />
           <span class='input-group-btn'>
             <button class='repo-add' type='button' ng-disabled='inboxCreating' ng-click='inboxCreate()' ng-hide='inboxesForm.$invalid'>Add</button>
             <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
