@@ -161,7 +161,7 @@
       </p>
       <form ng-submit='inboxCreate()' name='inboxesForm'>
         <div class='input-group'>
-          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL' />
+          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
           <span class='input-group-btn'>
             <button class='repo-add' type='button' ng-disabled='inboxCreating' ng-click='inboxCreate()' ng-hide='inboxesForm.$invalid'>Add</button>
             <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
@@ -181,7 +181,7 @@
         <tr ng-repeat-start='inbox in inboxes'>
           <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
-            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true' />
+            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true'>
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
