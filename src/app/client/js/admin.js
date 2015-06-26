@@ -242,8 +242,6 @@
               config.configMode.digestId = digest.digestId;
               configDigestModeSave(config.configMode)
               .then(function(configModeSaveResult) {
-                console.log('configModeSave:');
-                console.log(configModeSaveResult);
                 $location.path('/inboxes');
               })
               .catch(errorHandler);
