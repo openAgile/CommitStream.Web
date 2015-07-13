@@ -173,7 +173,9 @@
                 configMode: {
                   type: 'instance',
                   digestId: '',
-                  configured: false
+                  configured: false,
+                  enabled: false,
+                  useGlobalDigestId: false
                 },
                 serviceUrl: serviceUrl,
                 instanceId: '',
@@ -236,15 +238,17 @@
           .then(function(digest) {
             if (digest) {
               $rootScope.digest = digest;
-            }
-            // Check if we are in digestMode and need to save
-            if (isDigestMode(config) && !isDigestConfigured(config)) {
-              config.configMode.digestId = digest.digestId;
-              configDigestModeSave(config.configMode)
-              .then(function(configModeSaveResult) {
+              // Check if we are in digestMode and need to save
+              if (isDigestMode(config) && !isDigestConfigured(config)) {
+                config.configMode.digestId = digest.digestId;
+                configDigestModeSave(config.configMode)
+                .then(function(configModeSaveResult) {
+                  $location.path('/inboxes');
+                })
+                .catch(errorHandler);
+              } else {
                 $location.path('/inboxes');
-              })
-              .catch(errorHandler);
+              }
             } else {
               $location.path('/inboxes');
             }
@@ -261,6 +265,23 @@
         $scope.inboxesVisible = function() {
           // Only display when we actually have the config in $scope!
           return $rootScope.config;
+        };
+
+        var isCustomDigest = function() {
+          return $scope.digestConfig.selection === 'useCustomDigest';
+        };
+
+        $scope.inboxesVisible2 = function() {
+          return $scope.config.configMode === 'instance' || $scope.digestConfig.selection !== 'disabled';
+        };
+
+        $scope.editAllowed = function() {
+          return $scope.config.configMode === 'instance' || $scope.digestConfig.selection === 'useCustomDigest';
+        };
+
+        $scope.getHeading = function() {
+          if ($scope.isInstanceMode()) return 'Setup Global Repositories';
+          if ($scope.isDigestMode()) return isCustomDigest() ? 'Setup TeamRoom Repositories' : 'Active Global Repositories';
         };
 
         if (!$rootScope.config) {
@@ -308,6 +329,12 @@
         };
 
         $scope.urlPattern = /^https?\:\/\/.{1,}\/.{1,}$/;
+
+        $scope.digestConfig = {
+          selection: 'disabled'
+        };
+
+
 
         $scope.inboxName = function() {
           if (!$scope.newInbox.url || $scope.newInbox.url.length < 1) return '...';
