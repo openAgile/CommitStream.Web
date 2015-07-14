@@ -121,7 +121,7 @@
 </style>
 
 <div ng-if='inboxesVisible()'>
-  <p>
+  <p ng-if='isInstanceMode()'>
     <input 
       data-on='Enabled'
       data-off='Disabled'
@@ -131,18 +131,19 @@
       ng-model='enabledState.enabled'
       ng-change='enabledChanged()'
       toggle-checkbox
-    >
+    />
 
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
-   <div ng-if="messageActive()" class='message prompt'>
+
+  <div ng-if="messageActive()" class='message prompt'>
     <div class="alert alert-success alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>{{message.value}}</strong>
     </div>
   </div>
 
-   <div ng-if="errorActive()" class='error prompt'>
+  <div ng-if="errorActive()" class='error prompt'>
     <div class="alert alert-warning alert-dismissible" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <strong>{{error.value}}</strong>
@@ -152,7 +153,8 @@
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list'>
-    <h3>Setup Global Repositories</h3>
+    <h3 ng-if='isInstanceMode()'>Setup Global Repositories</h3>
+    <h3 ng-if='isDigestMode()'>Setup TeamRoom Repositories</h3>
     <div class='well well-sm'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
@@ -179,7 +181,7 @@
         <tr ng-repeat-start='inbox in inboxes'>
           <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
-            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true' />
+            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true'>
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
