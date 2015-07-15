@@ -162,7 +162,7 @@
           }
           // TODO: do we even need this below?
           return $q.when(true);
-        };        
+        };
 
         CommitStreamApi
           .load()
@@ -180,7 +180,7 @@
                 serviceUrl: serviceUrl,
                 instanceId: '',
                 apiKey: '',
-                globalDigestId: '',               
+                globalDigestId: '',
                 configured: false,
                 enabled: false
               }
@@ -206,7 +206,7 @@
             if (instance) {
               persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
               $rootScope.instance = instance;
-              
+
               if (isInstanceMode(config)) {
                 if (config.configured) {
                   return $rootScope.resources.$get('digest', {
@@ -227,7 +227,7 @@
                 } else {
                   return instance.$post('digest-create', {}, {
                     description: 'Repositories List'
-                  });     
+                  });
                 }
               } else {
                 // Don't know what state it's in here, but probably didn't get here naturally, so just return false
@@ -272,11 +272,11 @@
         };
 
         $scope.inboxesVisible2 = function() {
-          return $scope.config.configMode === 'instance' || $scope.digestConfig.selection !== 'disabled';
+          return $scope.config.configMode.type === 'instance' || $scope.digestConfig.selection !== 'disabled';
         };
 
         $scope.editAllowed = function() {
-          return $scope.config.configMode === 'instance' || $scope.digestConfig.selection === 'useCustomDigest';
+          return $scope.config.configMode.type === 'instance' || $scope.digestConfig.selection === 'useCustomDigest';
         };
 
         $scope.getHeading = function() {
@@ -321,7 +321,7 @@
           return $scope.error.value !== '';
         };
 
-        // NOTE: this is a bit of a hack to remove errors upon network request to clear 
+        // NOTE: this is a bit of a hack to remove errors upon network request to clear
         // out the UI prompts
         persistentOptions.transformUrl = function(url) {
           $scope.error.value = '';
@@ -377,7 +377,7 @@
             if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
             return $q.when(true);
           }
-        };        
+        };
 
         var inboxConfigure = function(inbox) {
           var links = inbox.$links();
