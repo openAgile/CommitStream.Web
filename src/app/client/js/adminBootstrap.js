@@ -85,7 +85,8 @@
       serviceUrl + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
       serviceUrl + '/bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js',
       serviceUrl + '/js/admin.js',
-      serviceUrl + '/js/controllers.js'
+      serviceUrl + '/js/controllers.js',
+      serviceUrl + '/js/directives.js'
     ];
 
     loadScripts(scripts);
