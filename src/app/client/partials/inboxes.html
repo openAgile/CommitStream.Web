@@ -24,10 +24,10 @@
     z-index: 3;
     overflow: hidden;
   }
-  .commitstream-admin .repo-add:hover { 
+  .commitstream-admin .repo-add:hover {
     color: #fff;
   }
-  .commitstream-admin .repo-add, .commitstream-admin .repo-add-disabled, .commitstream-admin .repo-remove { 
+  .commitstream-admin .repo-add, .commitstream-admin .repo-add-disabled, .commitstream-admin .repo-remove {
     border: none;
     margin-top: 0px;
     margin-left: 15px;
@@ -52,7 +52,7 @@
     width: 115px;
     height: 32px;
     line-height: 29px;
-  }  
+  }
   .commitstream-admin .repo-add-disabled {
     background: lightgray !important;
   }
@@ -122,7 +122,7 @@
 
 <div ng-if='inboxesVisible()'>
   <p ng-if='isInstanceMode()'>
-    <input 
+    <input
       data-on='Enabled'
       data-off='Disabled'
       data-style='slow'
@@ -137,7 +137,7 @@
   </p>
 
   <p ng-if='isDigestMode()'>
-    <select ng-model='digestConfig.selection'>
+    <select ng-model='digestConfig.selection' ng-change='magicWorks(digestConfig.selection)'>
       <option value='disabled'>Disable for this TeamRoom</option>
       <option value='useGlobalDigest'>Display the Global Repository List commits in this TeamRoom</option>
       <option value='useCustomDigest'>Use a Custom Repository List for this TeamRoom</option>
@@ -165,7 +165,7 @@
     <div class='well well-sm' ng-if='editAllowed()'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
-      </p>    
+      </p>
       <form ng-submit='inboxCreate()' name='inboxesForm'>
         <div class='input-group'>
           <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
@@ -174,7 +174,7 @@
             <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
           </span>
         </div>
-        <div class='repo-instruction'>Example: http://versioncontrol.com/acme/repo-name</div>      
+        <div class='repo-instruction'>Example: http://versioncontrol.com/acme/repo-name</div>
       </form>
     </div>
     <div ng-if='inboxes.length > 0'>
@@ -192,7 +192,7 @@
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
-            <button ng-if='editAllowed()' class='repo-remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove <span class='glyphicon glyphicon-minus-sign alert-warning' title='Remove' aria-hidden='true'></span></button>         
+            <button ng-if='editAllowed()' class='repo-remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove <span class='glyphicon glyphicon-minus-sign alert-warning' title='Remove' aria-hidden='true'></span></button>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
@@ -205,7 +205,7 @@
           <td><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
-      </table>      
+      </table>
     </div>
   </div>
 </div>
