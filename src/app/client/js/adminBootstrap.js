@@ -42,19 +42,25 @@
           } else {
             // Bootstrap time...
             var config = angular.module('commitStreamAdmin.config', []);
-            config.provider('serviceUrl', function () {
+            config.provider('serviceUrl', function() {
               return {
-                $get: function () { return serviceUrl; }
+                $get: function() {
+                  return serviceUrl;
+                }
               }
             });
             config.provider('configGetUrl', function() {
               return {
-                $get: function () { return configGetUrl; }
+                $get: function() {
+                  return configGetUrl;
+                }
               }
             });
             config.provider('configSaveUrl', function() {
               return {
-                $get: function () { return configSaveUrl; }
+                $get: function() {
+                  return configSaveUrl;
+                }
               }
             });
 
@@ -78,7 +84,8 @@
       serviceUrl + '/bower_components/rfc6570/rfc6570.js',
       serviceUrl + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
       serviceUrl + '/bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js',
-      serviceUrl + '/js/admin.js'
+      serviceUrl + '/js/admin.js',
+      serviceUrl + '/js/controllers.js'
     ];
 
     loadScripts(scripts);
