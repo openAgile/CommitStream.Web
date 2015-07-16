@@ -15,7 +15,7 @@ var isDigestConfigured = function(config) {
   return config.configMode.configured;
 };
 
-commitStreamAdminControllers.controller('InstancesController', [
+commitStreamAdminControllers.controller('CommitStreamController', [
   '$rootScope',
   '$scope',
   '$http',
@@ -125,9 +125,9 @@ commitStreamAdminControllers.controller('InstancesController', [
                 digestId: config.configMode.digestId
               });
             } else {
-              return instance.$post('digest-create', {}, {
-                description: 'Repositories List'
-              });
+              // return instance.$post('digest-create', {}, {
+              //   description: 'Repositories List'
+              // });
             }
           } else {
             // Don't know what state it's in here, but probably didn't get here naturally, so just return false
@@ -140,12 +140,12 @@ commitStreamAdminControllers.controller('InstancesController', [
           $rootScope.digest = digest;
           // Check if we are in digestMode and need to save
           if (isDigestMode(config) && !isDigestConfigured(config)) {
-            config.configMode.digestId = digest.digestId;
-            configDigestModeSave(config.configMode)
-              .then(function(configModeSaveResult) {
-                $location.path('/inboxes');
-              })
-              .catch(errorHandler);
+            //   config.configMode.digestId = digest.digestId;
+            //   configDigestModeSave(config.configMode)
+            //     .then(function(configModeSaveResult) {
+            //       $location.path('/inboxes');
+            //     })
+            //     .catch(errorHandler);
           } else {
             $location.path('/inboxes');
           }
@@ -184,7 +184,12 @@ commitStreamAdminControllers.controller('InboxesController', [
       // 'disabled'
       // 'useGlobalDigest'
       // 'useCustomDigest'
-      //alert(value);
+      //alert(value);            
+      if (isCustomDigest()) {
+        console.log(isDigestConfigured($scope.config))
+        console.log($rootScope.instance)
+      }
+
     }
 
     $scope.inboxesVisible2 = function() {
