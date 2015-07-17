@@ -15,7 +15,7 @@ var isDigestConfigured = function(config) {
   return config.configMode.configured;
 };
 
-commitStreamAdminControllers.controller('CommitStreamController', [
+commitStreamAdminControllers.controller('InstancesController', [
   '$rootScope',
   '$scope',
   '$http',
@@ -54,15 +54,6 @@ commitStreamAdminControllers.controller('CommitStreamController', [
       return $scope.error.value !== '';
     };
 
-    // For teamroom settings:
-    var configDigestModeSave = function(configMode) {
-      if (!configMode.configured) {
-        if (configSaveUrl) return $http.post(configSaveUrl, configMode);
-        return $q.when(true);
-      }
-      // TODO: do we even need this below?
-      return $q.when(true);
-    };
 
     CommitStreamApi
       .load()
@@ -120,10 +111,10 @@ commitStreamAdminControllers.controller('CommitStreamController', [
             }
           } else if (isDigestMode(config)) {
             if (isDigestConfigured(config)) {
-              return $rootScope.resources.$get('digest', {
-                instanceId: config.instanceId,
-                digestId: config.configMode.digestId
-              });
+              // return $rootScope.resources.$get('digest', {
+              //   instanceId: config.instanceId,
+              //   digestId: config.configMode.digestId
+              // });
             } else {
               // return instance.$post('digest-create', {}, {
               //   description: 'Repositories List'
@@ -180,14 +171,48 @@ commitStreamAdminControllers.controller('InboxesController', [
       return $scope.digestConfig.selection === 'useCustomDigest';
     };
 
+    var createDigest = function() {
+      return $rootScope.instance.$post('digest-create', {}, {
+        description: 'Repositories List'
+      });
+    }
+
+    var getDigest = function() {
+      return $rootScope.resources.$get('digest', {
+        instanceId: $rootScope.config.instanceId,
+        digestId: $rootScope.config.configMode.digestId
+      });
+    }
+
+    // For teamroom settings:
+    var configDigestModeSave = function(configMode) {
+      if (!configMode.configured) {
+        if (configSaveUrl) return $http.post(configSaveUrl, configMode);
+        return $q.when(true);
+      }
+      // TODO: do we even need this below?
+      return $q.when(true);
+    };
+
     $scope.magicWorks = function(value) {
       // 'disabled'
       // 'useGlobalDigest'
       // 'useCustomDigest'
       //alert(value);            
       if (isCustomDigest()) {
-        console.log(isDigestConfigured($scope.config))
-        console.log($rootScope.instance)
+        if (!isDigestConfigured($rootScope.config)) {
+          createDigest().then(function(digest) {
+            $rootScope.digest = digest;
+            $rootScope.config.configMode.digestId = digest.digestId;
+            configDigestModeSave($rootScope.config.configMode);
+          });
+        } else {
+          getDigest().then(function(digest) {
+            $rootScope.digest = digest;
+            inboxesUpdate($rootScope.config.enabled);
+          });
+          console.log("MEffel configurado!!!!")
+        }
       }
 
     }
