@@ -171,7 +171,21 @@ commitStreamAdminControllers.controller('InboxesController', [
       return $scope.digestConfig.selection === 'useCustomDigest';
     };
 
-    var getDigest = function(config) {
+    var isGlobalDigest = function() {
+      return $scope.digestConfig.selection === 'useGlobalDigest';
+    }
+
+    var getGlobalDigest = function(config) {
+      if (isDigestConfigured(config)) {
+        return $rootScope.resources.$get('digest', {
+          instanceId: $rootScope.config.instanceId,
+          digestId: $rootScope.config.globalDigestId
+        })
+      } else {
+        //IS THERE A CASE FOR THIS?
+      }
+    }
+    var getCustomDigest = function(config) {
       if (!isDigestConfigured(config)) {
         return $rootScope.instance.$post('digest-create', {}, {
           description: 'Repositories List'
@@ -203,7 +217,7 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     var customDigestSelected = function(firstCall) {
-      getDigest($rootScope.config).then(function(digestResponse) {
+      getCustomDigest($rootScope.config).then(function(digestResponse) {
         $rootScope.digest = digestResponse.digest;
         $rootScope.config.configMode.digestId = digestResponse.digest.digestId;
         $rootScope.config.configMode.useGlobalDigestId = false;
@@ -211,6 +225,21 @@ commitStreamAdminControllers.controller('InboxesController', [
         if (!firstCall) configDigestModeSave($rootScope.config.configMode);
         if (!digestResponse.created) inboxesUpdate($rootScope.config.enabled);
       });
+    }
+    var globalDigestSelected = function(firstCall) {
+      getGlobalDigest($rootScope.config).then(function(digest) {
+        $rootScope.digest = digest;
+        $rootScope.config.configMode.useGlobalDigestId = true;
+        $rootScope.config.configMode.enabled = true;
+        if (!firstCall) configDigestModeSave($rootScope.config.configMode);
+        inboxesUpdate($rootScope.config.enabled);
+      })
+    }
+
+    var disabledDigestSelected = function(firstCall) {
+      $rootScope.config.configMode.useGlobalDigestId = false;
+      $rootScope.config.configMode.enabled = false;
+      if (!firstCall) configDigestModeSave($rootScope.config.configMode);
     }
 
     $scope.magicWorks = function(value) {
@@ -220,6 +249,12 @@ commitStreamAdminControllers.controller('InboxesController', [
       //alert(value);            
       if (isCustomDigest()) {
         customDigestSelected(false);
+      } else {
+        if (isGlobalDigest()) {
+          globalDigestSelected(false);
+        } else {
+          disabledDigestSelected(false);
+        }
       }
 
     }
@@ -293,12 +328,14 @@ commitStreamAdminControllers.controller('InboxesController', [
       // 'useCustomDigest'      
       if ($rootScope.config.configMode.enabled) {
         if (!$rootScope.config.configMode.useGlobalDigestId) {
-          $scope.digestConfig.selection = 'useCustomDigest'
+          $scope.digestConfig.selection = 'useCustomDigest';
+          customDigestSelected(true);
         } else {
           $scope.digestConfig.selection = 'useGlobalDigest'
+          globalDigestSelected(true);
         }
       }
-      customDigestSelected(true);
+
     }
 
     getSelection();
