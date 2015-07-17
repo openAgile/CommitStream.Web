@@ -171,27 +171,35 @@ commitStreamAdminControllers.controller('InboxesController', [
       return $scope.digestConfig.selection === 'useCustomDigest';
     };
 
-    var createDigest = function() {
-      return $rootScope.instance.$post('digest-create', {}, {
-        description: 'Repositories List'
-      });
-    }
-
-    var getDigest = function() {
-      return $rootScope.resources.$get('digest', {
-        instanceId: $rootScope.config.instanceId,
-        digestId: $rootScope.config.configMode.digestId
-      });
+    var getDigest = function(config) {
+      if (!isDigestConfigured(config)) {
+        return $rootScope.instance.$post('digest-create', {}, {
+          description: 'Repositories List'
+        }).then(function(digest) {
+          return {
+            digest: digest,
+            created: true
+          }
+        });
+      } else {
+        return $rootScope.resources.$get('digest', {
+          instanceId: $rootScope.config.instanceId,
+          digestId: $rootScope.config.configMode.digestId
+        }).then(function(digest) {
+          return {
+            digest: digest,
+            created: false
+          }
+        });
+      }
     }
 
     // For teamroom settings:
     var configDigestModeSave = function(configMode) {
-      if (!configMode.configured) {
-        if (configSaveUrl) return $http.post(configSaveUrl, configMode);
-        return $q.when(true);
-      }
-      // TODO: do we even need this below?
+
+      if (configSaveUrl) return $http.post(configSaveUrl, configMode);
       return $q.when(true);
+
     };
 
     $scope.magicWorks = function(value) {
@@ -200,19 +208,14 @@ commitStreamAdminControllers.controller('InboxesController', [
       // 'useCustomDigest'
       //alert(value);            
       if (isCustomDigest()) {
-        if (!isDigestConfigured($rootScope.config)) {
-          createDigest().then(function(digest) {
-            $rootScope.digest = digest;
-            $rootScope.config.configMode.digestId = digest.digestId;
-            configDigestModeSave($rootScope.config.configMode);
-          });
-        } else {
-          getDigest().then(function(digest) {
-            $rootScope.digest = digest;
-            inboxesUpdate($rootScope.config.enabled);
-          });
-          console.log("MEffel configurado!!!!")
-        }
+        getDigest($rootScope.config).then(function(digestResponse) {
+          $rootScope.digest = digestResponse.digest;
+          $rootScope.config.configMode.digestId = digestResponse.digest.digestId;
+          $rootScope.config.configMode.useGlobalDigestId = false;
+          $rootScope.config.configMode.enabled = true;
+          configDigestModeSave($rootScope.config.configMode);
+          if (!digestResponse.created) inboxesUpdate($rootScope.config.enabled);
+        });
       }
 
     }
