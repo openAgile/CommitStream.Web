@@ -202,20 +202,24 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     };
 
+    var customDigestSelected = function(firstCall) {
+      getDigest($rootScope.config).then(function(digestResponse) {
+        $rootScope.digest = digestResponse.digest;
+        $rootScope.config.configMode.digestId = digestResponse.digest.digestId;
+        $rootScope.config.configMode.useGlobalDigestId = false;
+        $rootScope.config.configMode.enabled = true;
+        if (!firstCall) configDigestModeSave($rootScope.config.configMode);
+        if (!digestResponse.created) inboxesUpdate($rootScope.config.enabled);
+      });
+    }
+
     $scope.magicWorks = function(value) {
       // 'disabled'
       // 'useGlobalDigest'
       // 'useCustomDigest'
       //alert(value);            
       if (isCustomDigest()) {
-        getDigest($rootScope.config).then(function(digestResponse) {
-          $rootScope.digest = digestResponse.digest;
-          $rootScope.config.configMode.digestId = digestResponse.digest.digestId;
-          $rootScope.config.configMode.useGlobalDigestId = false;
-          $rootScope.config.configMode.enabled = true;
-          configDigestModeSave($rootScope.config.configMode);
-          if (!digestResponse.created) inboxesUpdate($rootScope.config.enabled);
-        });
+        customDigestSelected(false);
       }
 
     }
@@ -283,6 +287,21 @@ commitStreamAdminControllers.controller('InboxesController', [
       selection: 'disabled'
     };
 
+    var getSelection = function() {
+      // 'disabled'
+      // 'useGlobalDigest'
+      // 'useCustomDigest'      
+      if ($rootScope.config.configMode.enabled) {
+        if (!$rootScope.config.configMode.useGlobalDigestId) {
+          $scope.digestConfig.selection = 'useCustomDigest'
+        } else {
+          $scope.digestConfig.selection = 'useGlobalDigest'
+        }
+      }
+      customDigestSelected(true);
+    }
+
+    getSelection();
 
 
     $scope.inboxName = function() {
