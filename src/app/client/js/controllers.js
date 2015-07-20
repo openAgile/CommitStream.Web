@@ -176,16 +176,16 @@ commitStreamAdminControllers.controller('InboxesController', [
     }
 
     var getGlobalDigest = function(config) {
-      if (isDigestConfigured(config)) {
-        return $rootScope.resources.$get('digest', {
-          instanceId: $rootScope.config.instanceId,
-          digestId: $rootScope.config.globalDigestId
-        })
-      } else {
-        //IS THERE A CASE FOR THIS?
-      }
+      console.log("meffel getGlobal")
+      console.log(config)
+      return $rootScope.resources.$get('digest', {
+        instanceId: $rootScope.config.instanceId,
+        digestId: $rootScope.config.globalDigestId
+      });
     }
     var getCustomDigest = function(config) {
+      console.log("meffel getCustom")
+      console.log(config)
       if (!isDigestConfigured(config)) {
         return $rootScope.instance.$post('digest-create', {}, {
           description: 'Repositories List'
@@ -210,8 +210,9 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     // For teamroom settings:
     var configDigestModeSave = function(configMode) {
-      //check the config object the first time.
-      if (configSaveUrl) return $http.post(configSaveUrl, configMode);
+      if (configSaveUrl) {
+        return $http.post(configSaveUrl, configMode);
+      }
       return $q.when(true);
 
     };
@@ -222,6 +223,7 @@ commitStreamAdminControllers.controller('InboxesController', [
         $rootScope.config.configMode.digestId = digestResponse.digest.digestId;
         $rootScope.config.configMode.useGlobalDigestId = false;
         $rootScope.config.configMode.enabled = true;
+        $rootScope.config.configMode.configured = true;
         if (!firstCall) configDigestModeSave($rootScope.config.configMode);
         if (!digestResponse.created) inboxesUpdate($rootScope.config.enabled);
       });
@@ -243,6 +245,7 @@ commitStreamAdminControllers.controller('InboxesController', [
     }
 
     $scope.magicWorks = function(value) {
+      $scope.inboxes = [];
       if (isCustomDigest()) {
         customDigestSelected(false);
       } else {
