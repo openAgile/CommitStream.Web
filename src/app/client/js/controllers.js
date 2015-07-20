@@ -236,24 +236,20 @@ commitStreamAdminControllers.controller('InboxesController', [
       })
     }
 
-    var disabledDigestSelected = function(firstCall) {
+    var disabledDigestSelected = function() {
       $rootScope.config.configMode.useGlobalDigestId = false;
       $rootScope.config.configMode.enabled = false;
-      if (!firstCall) configDigestModeSave($rootScope.config.configMode);
+      configDigestModeSave($rootScope.config.configMode);
     }
 
     $scope.magicWorks = function(value) {
-      // 'disabled'
-      // 'useGlobalDigest'
-      // 'useCustomDigest'
-      //alert(value);            
       if (isCustomDigest()) {
         customDigestSelected(false);
       } else {
         if (isGlobalDigest()) {
           globalDigestSelected(false);
         } else {
-          disabledDigestSelected(false);
+          disabledDigestSelected();
         }
       }
 
@@ -323,9 +319,6 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     var getSelection = function() {
-      // 'disabled'
-      // 'useGlobalDigest'
-      // 'useCustomDigest'      
       if ($rootScope.config.configMode.enabled) {
         if (!$rootScope.config.configMode.useGlobalDigestId) {
           $scope.digestConfig.selection = 'useCustomDigest';
@@ -335,9 +328,7 @@ commitStreamAdminControllers.controller('InboxesController', [
           globalDigestSelected(true);
         }
       }
-
     }
-
     getSelection();
 
 
