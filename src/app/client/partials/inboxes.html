@@ -136,12 +136,20 @@
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
 
-  <p ng-if='isDigestMode()'>
-    <select ng-model='digestConfig.selection' ng-change='magicWorks(digestConfig.selection)'>
-      <option value='disabled'>Disable for this TeamRoom</option>
-      <option value='useGlobalDigest'>Display the Global Repository List commits in this TeamRoom</option>
-      <option value='useCustomDigest'>Use a Custom Repository List for this TeamRoom</option>
-    </select>
+  <p ng-if='isDigestMode()'>   
+    <label>
+        <input type="radio" name="response" value='disabled' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
+            Disable for this TeamRoom
+    </label>
+    <label>
+        <input type="radio" name="response" value='useGlobalDigest' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
+            Display the Global Repository List commits in this TeamRoom
+    </label>
+    <label>
+        <input type="radio" name="response" value='useCustomDigest' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
+            Use a Custom Repository List for this TeamRoom
+    </label>
+
   </p>
 
   <div ng-if="messageActive()" class='message prompt'>

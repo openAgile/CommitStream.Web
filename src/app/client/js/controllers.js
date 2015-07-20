@@ -210,7 +210,7 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     // For teamroom settings:
     var configDigestModeSave = function(configMode) {
-
+      //check the config object the first time.
       if (configSaveUrl) return $http.post(configSaveUrl, configMode);
       return $q.when(true);
 
