@@ -89,7 +89,6 @@ commitStreamAdminControllers.controller('InstancesController', [
             instanceId: config.instanceId
           });
         } else {
-          // return $rootScope.resources.$post('instances');
           return false;
         }
       })
@@ -109,17 +108,6 @@ commitStreamAdminControllers.controller('InstancesController', [
                 description: 'Global Repositories List'
               });
             }
-          } else if (isDigestMode(config)) {
-            if (isDigestConfigured(config)) {
-              // return $rootScope.resources.$get('digest', {
-              //   instanceId: config.instanceId,
-              //   digestId: config.configMode.digestId
-              // });
-            } else {
-              // return instance.$post('digest-create', {}, {
-              //   description: 'Repositories List'
-              // });
-            }
           } else {
             // Don't know what state it's in here, but probably didn't get here naturally, so just return false
             return false;
@@ -129,20 +117,8 @@ commitStreamAdminControllers.controller('InstancesController', [
       .then(function(digest) {
         if (digest) {
           $rootScope.digest = digest;
-          // Check if we are in digestMode and need to save
-          if (isDigestMode(config) && !isDigestConfigured(config)) {
-            //   config.configMode.digestId = digest.digestId;
-            //   configDigestModeSave(config.configMode)
-            //     .then(function(configModeSaveResult) {
-            //       $location.path('/inboxes');
-            //     })
-            //     .catch(errorHandler);
-          } else {
-            $location.path('/inboxes');
-          }
-        } else {
-          $location.path('/inboxes');
         }
+        $location.path('/inboxes');
       })
       .catch(errorHandler);
   }
@@ -176,16 +152,12 @@ commitStreamAdminControllers.controller('InboxesController', [
     }
 
     var getGlobalDigest = function(config) {
-      console.log("meffel getGlobal")
-      console.log(config)
       return $rootScope.resources.$get('digest', {
         instanceId: $rootScope.config.instanceId,
         digestId: $rootScope.config.globalDigestId
       });
     }
     var getCustomDigest = function(config) {
-      console.log("meffel getCustom")
-      console.log(config)
       if (!isDigestConfigured(config)) {
         return $rootScope.instance.$post('digest-create', {}, {
           description: 'Repositories List'
@@ -332,8 +304,6 @@ commitStreamAdminControllers.controller('InboxesController', [
         }
       }
     }
-    getSelection();
-
 
     $scope.inboxName = function() {
       if (!$scope.newInbox.url || $scope.newInbox.url.length < 1) return '...';
@@ -409,8 +379,6 @@ commitStreamAdminControllers.controller('InboxesController', [
       inboxesGet();
     }
 
-    inboxesUpdate($rootScope.config.enabled);
-
     $scope.isInstanceMode = function() {
       return isInstanceMode($rootScope.config);
     };
@@ -454,12 +422,6 @@ commitStreamAdminControllers.controller('InboxesController', [
       $('.repos-section .overlay').height(repolistHeight);
       $('.repos-section .overlay').width(repolistWidth);
     };
-
-    // A jQuery based way of handling resizing of the window to adjust the overlay
-    // when CS is disabled.
-    // $(window).resize(function(){
-    //   $scope.adjustOverlay();
-    // });
 
     $scope.inboxCreating = false;
 
@@ -531,6 +493,9 @@ commitStreamAdminControllers.controller('InboxesController', [
         inboxHighlight(el);
       }, 0);
     };
+
+    getSelection();
+    inboxesUpdate($rootScope.config.enabled);
 
   }
 ]);
