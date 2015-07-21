@@ -79,9 +79,17 @@ commitStreamAdminControllers.controller('InstancesController', [
         return $http.get(configGetUrl);
       })
       .then(function(configRes) {
-        // TODO handle null case?
-        console.log(configRes)
+        // TODO handle null case?        
         config = configRes.data;
+        if (!config.configMode) {
+          config.configMode = {
+            type: 'instance',
+            digestId: '',
+            configured: false,
+            enabled: false,
+            useGlobalDigestId: false
+          };
+        }
         $rootScope.config = config;
 
         if (config.configured) {
