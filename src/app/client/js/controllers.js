@@ -494,7 +494,7 @@ commitStreamAdminControllers.controller('InboxesController', [
       }, 0);
     };
 
-    getSelection();
+    if (isDigestMode()) getSelection();
     inboxesUpdate($rootScope.config.enabled);
 
   }
