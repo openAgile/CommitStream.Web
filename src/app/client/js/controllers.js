@@ -80,6 +80,7 @@ commitStreamAdminControllers.controller('InstancesController', [
       })
       .then(function(configRes) {
         // TODO handle null case?
+        console.log(configRes)
         config = configRes.data;
         $rootScope.config = config;
 
