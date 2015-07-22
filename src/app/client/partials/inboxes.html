@@ -24,10 +24,10 @@
     z-index: 3;
     overflow: hidden;
   }
-  .commitstream-admin .repo-add:hover { 
+  .commitstream-admin .repo-add:hover {
     color: #fff;
   }
-  .commitstream-admin .repo-add, .commitstream-admin .repo-add-disabled, .commitstream-admin .repo-remove { 
+  .commitstream-admin .repo-add, .commitstream-admin .repo-add-disabled, .commitstream-admin .repo-remove {
     border: none;
     margin-top: 0px;
     margin-left: 15px;
@@ -52,7 +52,7 @@
     width: 115px;
     height: 32px;
     line-height: 29px;
-  }  
+  }
   .commitstream-admin .repo-add-disabled {
     background: lightgray !important;
   }
@@ -118,11 +118,27 @@
     box-shadow: none !important;
     background: white !important;
   }
+
+  .btn-group .btn-default.selected {
+    background-color: #00a9e0 !important;
+    color: #fff !important;
+  }
+  .btn-group .btn-default {
+    height: auto !important;
+    text-align: left !important;
+    text-transform: capitalize !important;
+    font-weight: normal !important; 
+    background-color: #e6e6e6 !important;
+  }
+  span.glyphicon {
+      padding-right: 5px;
+  }
+
 </style>
 
 <div ng-if='inboxesVisible()'>
   <p ng-if='isInstanceMode()'>
-    <input 
+    <input
       data-on='Enabled'
       data-off='Disabled'
       data-style='slow'
@@ -135,6 +151,30 @@
 
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
+
+  <div ng-if='isDigestMode()'>   
+    <h4>You may choose between two types of repositories for your TeamRoom: <strong>Global</strong> (created and mantained by your admin) or <strong>Custom</strong> (created and mantained by you). Selecting <strong>None</strong> simply removes repos from your TeamRoom view.</h4>
+    <div aria-label="Large button group" role="group" class="well well-sm btn-group btn-group-lg">
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span>None</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span>Global</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span>Custom</button>
+    </div>
+
+    <!--
+    <label>
+        <input type="radio" name="response" value='disabled' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
+            Disable for this TeamRoom
+    </label>
+    <label>
+        <input type="radio" name="response" value='useGlobalDigest' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
+            Display the Global Repository List commits in this TeamRoom
+    </label>
+    <label>
+        <input type="radio" name="response" value='useCustomDigest' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
+            Use a Custom Repository List for this TeamRoom
+    </label>
+    -->
+  </div>
 
   <div ng-if="messageActive()" class='message prompt'>
     <div class="alert alert-success alert-dismissible" role="alert">
@@ -152,10 +192,9 @@
 
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
-  <div class='repos-list'>
-    <h3 ng-if='isInstanceMode()'>Setup Global Repositories</h3>
-    <h3 ng-if='isDigestMode()'>Setup TeamRoom Repositories</h3>
-    <div class='well well-sm'>
+  <div class='repos-list' ng-if='inboxesVisible2()'>
+    <h3>{{getHeading()}}</h3>
+    <div class='well well-sm' ng-if='editAllowed()'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
       </p>
@@ -167,12 +206,12 @@
             <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
           </span>
         </div>
-        <div class='repo-instruction'>Example: http://versioncontrol.com/acme/repo-name</div>      
+        <div class='repo-instruction'>Example: http://versioncontrol.com/acme/repo-name</div>
       </form>
     </div>
     <div ng-if='inboxes.length > 0'>
-      <h4>Active Repositories</h4>
-      <table class='table table-striped table-bordered'>
+      <h4 ng-if='editAllowed()'>Active Repositories</h4>
+      <table ng-if='editAllowed()' class='table table-striped table-bordered'>
         <tr>
           <th>Repository Name</th>
           <th>Webhook URL</th>
@@ -185,8 +224,17 @@
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
-            <button class='repo-remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove <span class='glyphicon glyphicon-minus-sign alert-warning' title='Remove' aria-hidden='true'></span></button>         
+            <button ng-if='editAllowed()' class='repo-remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove <span class='glyphicon glyphicon-minus-sign alert-warning' title='Remove' aria-hidden='true'></span></button>
           </td>
+        </tr>
+        <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
+      </table>
+      <table ng-if='!editAllowed()' class='table table-striped table-bordered'>
+        <tr>
+          <th>Repository Name</th>
+        </tr>
+        <tr ng-repeat-start='inbox in inboxes'>
+          <td><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
       </table>
