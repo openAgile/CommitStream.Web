@@ -1,4 +1,6 @@
 <style>
+  .commitstream-admin {color: #454545;}
+  .commitstream-admin h3 {font-size: 1.2em; padding-top:0; margin-top:0; font-weight: bold;}
   .commitstream-admin .prompt {
     position: absolute;
     top:0;
@@ -67,7 +69,7 @@
     font-style: italic;
   }
   .commitstream-admin .btn-default, .commitstream-admin .btn-primary {
-    background-image: none;
+    background-image: none !important;
     text-transform: uppercase;
     font-weight: bolder;
     text-shadow: 0 0 0 transparent !important;
@@ -110,6 +112,7 @@
     box-shadow: none !important;
   }
   .action-cancel {
+    background-image: linear-gradient(to bottom, #fff 0, #fff 100%) !important;
     font-weight: bolder !important;
     text-transform: uppercase;
     text-shadow: 0 0 0 transparent !important;
@@ -119,17 +122,24 @@
     background: white !important;
   }
 
-  .btn-group .btn-default.selected {
+  .btn-group-vertical {margin-bottom: 2em;}
+  .btn-group-vertical .btn-default.selected {
     background-color: #00a9e0 !important;
     color: #fff !important;
   }
-  .btn-group .btn-default {
-    height: auto !important;
+  .btn-group-vertical .btn-default {
+    border: 0 !important;
+    height: 40px !important;
     text-align: left !important;
-    text-transform: capitalize !important;
+    text-transform: none !important;
     font-weight: normal !important; 
-    background-color: #e6e6e6 !important;
+    background-color: #fff !important;
   }
+  .btn-group-vertical .btn-default:hover {
+    background-color: #006e92 !important;
+    color: #fff;
+  }
+
   span.glyphicon {
       padding-right: 5px;
   }
@@ -152,12 +162,12 @@
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
 
-  <div ng-if='isDigestMode()'>   
-    <h4>You may choose between two types of repositories for your TeamRoom: <strong>Global</strong> (created and mantained by your admin) or <strong>Custom</strong> (created and mantained by you). Selecting <strong>None</strong> simply removes repos from your TeamRoom view.</h4>
-    <div aria-label="Large button group" role="group" class="well well-sm btn-group btn-group-lg">
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span>None</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span>Global</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span>Custom</button>
+  <div ng-if='isDigestMode()'> 
+    <h3>CommitStream Panel Options</h3>      
+    <div aria-label="Large button group" role="group" class="btn-group-vertical btn-group">
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span><strong>None:</strong> The panel will not display for your TeamRoom.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
     </div>
 
     <!--
@@ -224,7 +234,7 @@
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
-            <button ng-if='editAllowed()' class='repo-remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove <span class='glyphicon glyphicon-minus-sign alert-warning' title='Remove' aria-hidden='true'></span></button>
+            <button ng-if='editAllowed()' class='create-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
