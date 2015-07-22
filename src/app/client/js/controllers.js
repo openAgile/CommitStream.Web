@@ -274,7 +274,11 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     $scope.getHeading = function() {
       if ($scope.isInstanceMode()) return 'Setup Global Repositories';
-      if ($scope.isDigestMode()) return isCustomDigest() ? 'Setup TeamRoom Repositories' : 'Active Global Repositories';
+      if ($scope.isDigestMode()) {
+        if (isCustomDigest()) {
+          return 'Setup TeamRoom Repositories';
+        } else return ($scope.inboxes.length > 0) ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+      }
     };
 
     if (!$rootScope.config) {

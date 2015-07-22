@@ -152,7 +152,7 @@
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
 
-  <p ng-if='isDigestMode()'>   
+  <div ng-if='isDigestMode()'>   
     <h4>You may choose between two types of repositories for your TeamRoom: <strong>Global</strong> (created and mantained by your admin) or <strong>Custom</strong> (created and mantained by you). Selecting <strong>None</strong> simply removes repos from your TeamRoom view.</h4>
     <div aria-label="Large button group" role="group" class="well well-sm btn-group btn-group-lg">
       <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span>None</button>
@@ -174,7 +174,7 @@
             Use a Custom Repository List for this TeamRoom
     </label>
     -->
-  </p>
+  </div>
 
   <div ng-if="messageActive()" class='message prompt'>
     <div class="alert alert-success alert-dismissible" role="alert">
