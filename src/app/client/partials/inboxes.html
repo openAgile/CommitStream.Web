@@ -119,17 +119,22 @@
     background: white !important;
   }
 
-  .btn-group .btn-default.selected {
+  .btn-group-vertical .btn-default.selected {
     background-color: #00a9e0 !important;
     color: #fff !important;
   }
-  .btn-group .btn-default {
+  .btn-group-vertical .btn-default {
     height: auto !important;
     text-align: left !important;
-    text-transform: capitalize !important;
+    text-transform: none !important;
     font-weight: normal !important; 
-    background-color: #e6e6e6 !important;
+    background-color: #DDE2E9 !important;
   }
+  .btn-group-vertical .btn-default:hover {
+    background-color: #006e92 !important;
+    color: #fff;
+  }
+
   span.glyphicon {
       padding-right: 5px;
   }
@@ -152,12 +157,12 @@
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
 
-  <div ng-if='isDigestMode()'>   
-    <h4>You may choose between two types of repositories for your TeamRoom: <strong>Global</strong> (created and mantained by your admin) or <strong>Custom</strong> (created and mantained by you). Selecting <strong>None</strong> simply removes repos from your TeamRoom view.</h4>
-    <div aria-label="Large button group" role="group" class="well well-sm btn-group btn-group-lg">
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span>None</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span>Global</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span>Custom</button>
+  <div ng-if='isDigestMode()'> 
+    <h3>CommitStream Panel Options</h3>      
+    <div aria-label="Large button group" role="group" class="btn-group-vertical btn-group">
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span><strong>None:</strong> The panel will not display for your TeamRoom.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
     </div>
 
     <!--
