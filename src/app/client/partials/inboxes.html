@@ -1,4 +1,6 @@
 <style>
+  .commitstream-admin {color: #454545;}
+  .commitstream-admin h3 {font-size: 1.2em; padding-top:0; margin-top:0; font-weight: bold;}
   .commitstream-admin .prompt {
     position: absolute;
     top:0;
@@ -67,7 +69,7 @@
     font-style: italic;
   }
   .commitstream-admin .btn-default, .commitstream-admin .btn-primary {
-    background-image: none;
+    background-image: none !important;
     text-transform: uppercase;
     font-weight: bolder;
     text-shadow: 0 0 0 transparent !important;
@@ -110,6 +112,7 @@
     box-shadow: none !important;
   }
   .action-cancel {
+    background-image: linear-gradient(to bottom, #fff 0, #fff 100%) !important;
     font-weight: bolder !important;
     text-transform: uppercase;
     text-shadow: 0 0 0 transparent !important;
@@ -119,16 +122,18 @@
     background: white !important;
   }
 
+  .btn-group-vertical {margin-bottom: 2em;}
   .btn-group-vertical .btn-default.selected {
     background-color: #00a9e0 !important;
     color: #fff !important;
   }
   .btn-group-vertical .btn-default {
-    height: auto !important;
+    border: 0 !important;
+    height: 40px !important;
     text-align: left !important;
     text-transform: none !important;
     font-weight: normal !important; 
-    background-color: #DDE2E9 !important;
+    background-color: #fff !important;
   }
   .btn-group-vertical .btn-default:hover {
     background-color: #006e92 !important;
@@ -229,7 +234,7 @@
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
-            <button ng-if='editAllowed()' class='repo-remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove <span class='glyphicon glyphicon-minus-sign alert-warning' title='Remove' aria-hidden='true'></span></button>
+            <button ng-if='editAllowed()' class='create-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
