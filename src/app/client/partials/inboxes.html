@@ -118,6 +118,22 @@
     box-shadow: none !important;
     background: white !important;
   }
+
+  .btn-group .btn-default.selected {
+    background-color: #00a9e0 !important;
+    color: #fff !important;
+  }
+  .btn-group .btn-default {
+    height: auto !important;
+    text-align: left !important;
+    text-transform: capitalize !important;
+    font-weight: normal !important; 
+    background-color: #e6e6e6 !important;
+  }
+  span.glyphicon {
+      padding-right: 5px;
+  }
+
 </style>
 
 <div ng-if='inboxesVisible()'>
@@ -137,6 +153,14 @@
   </p>
 
   <p ng-if='isDigestMode()'>   
+    <h4>You may choose between two types of repositories for your TeamRoom: <strong>Global</strong> (created and mantained by your admin) or <strong>Custom</strong> (created and mantained by you). Selecting <strong>None</strong> simply removes repos from your TeamRoom view.</h4>
+    <div aria-label="Large button group" role="group" class="well well-sm btn-group btn-group-lg">
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span>None</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span>Global</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span>Custom</button>
+    </div>
+
+    <!--
     <label>
         <input type="radio" name="response" value='disabled' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
             Disable for this TeamRoom
@@ -149,7 +173,7 @@
         <input type="radio" name="response" value='useCustomDigest' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
             Use a Custom Repository List for this TeamRoom
     </label>
-
+    -->
   </p>
 
   <div ng-if="messageActive()" class='message prompt'>

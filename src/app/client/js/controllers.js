@@ -226,6 +226,7 @@ commitStreamAdminControllers.controller('InboxesController', [
     }
 
     $scope.magicWorks = function(value) {
+      $scope.digestConfig.selection = value;
       $scope.inboxes = [];
       if (isCustomDigest()) {
         customDigestSelected(false);
@@ -237,6 +238,30 @@ commitStreamAdminControllers.controller('InboxesController', [
         }
       }
 
+    }
+
+    $scope.radioButtonGlobal = function() {
+      if (isGlobalDigest()) {
+        return 'glyphicon glyphicon-check';
+      } else {
+        return 'glyphicon glyphicon-unchecked'
+      }
+    }
+
+    $scope.radioButtonCustom = function() {
+      if (isCustomDigest()) {
+        return 'glyphicon glyphicon-check';
+      } else {
+        return 'glyphicon glyphicon-unchecked'
+      }
+    }
+
+    $scope.radioButtonDisabled = function() {
+      if (!isCustomDigest() && !isGlobalDigest()) {
+        return 'glyphicon glyphicon-check';
+      } else {
+        return 'glyphicon glyphicon-unchecked'
+      }
     }
 
     $scope.inboxesVisible2 = function() {
