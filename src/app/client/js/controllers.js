@@ -50,79 +50,85 @@ commitStreamAdminControllers.controller('InstancesController', [
       value: ''
     };
 
+    //TODO: duplicated, rename it too
     $scope.errorActive = function() {
       return $scope.error.value !== '';
     };
 
-
-    CommitStreamApi
-      .load()
-      .then(function(resources) {
-        $rootScope.resources = resources;
-        if (!configGetUrl) return {
-          data: {
-            configMode: {
-              type: 'instance',
-              digestId: '',
-              configured: false,
-              enabled: false,
-              useGlobalDigestId: false
-            },
-            serviceUrl: serviceUrl,
-            instanceId: '',
-            apiKey: '',
-            globalDigestId: '',
-            configured: false,
-            enabled: false
-          }
-        }
-        return $http.get(configGetUrl);
-      })
-      .then(function(configRes) {
-        // TODO handle null case?        
-        config = configRes.data;
-        if (!config.configMode) {
-          config.configMode = {
+    function getConfigGet(resources) {
+      //TODO: don't use $rootScope
+      $rootScope.resources = resources;
+      if (!configGetUrl) return {
+        data: {
+          configMode: {
             type: 'instance',
             digestId: '',
             configured: false,
             enabled: false,
             useGlobalDigestId: false
-          };
+          },
+          serviceUrl: serviceUrl,
+          instanceId: '',
+          apiKey: '',
+          globalDigestId: '',
+          configured: false,
+          enabled: false
         }
-        $rootScope.config = config;
+      }
+      return $http.get(configGetUrl);
+    }
 
-        if (config.configured) {
-          persistentOptions.headers.Bearer = config.apiKey;
-          return $rootScope.resources.$get('instance', {
-            instanceId: config.instanceId
-          });
-        } else {
-          return false;
-        }
-      })
-      .then(function(instance) {
-        if (instance) {
-          persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
-          $rootScope.instance = instance;
+    function getInstance(configRes) {
+      // TODO handle null case?
+      config = configRes.data;
+      if (!config.configMode) {
+        config.configMode = {
+          type: 'instance',
+          digestId: '',
+          configured: false,
+          enabled: false,
+          useGlobalDigestId: false
+        };
+      }
 
-          if (isInstanceMode(config)) {
-            if (config.configured) {
-              return $rootScope.resources.$get('digest', {
-                instanceId: config.instanceId,
-                digestId: config.globalDigestId
-              });
-            } else {
-              return instance.$post('digest-create', {}, {
-                description: 'Global Repositories List'
-              });
-            }
-          } else {
-            // Don't know what state it's in here, but probably didn't get here naturally, so just return false
-            return false;
-          }
-        }
-      })
+      $rootScope.config = config;
+
+      if (!config.configured) return false;
+
+      persistentOptions.headers.Bearer = config.apiKey;
+      return $rootScope.resources.$get('instance', {
+        instanceId: config.instanceId
+      });
+
+    }
+
+    function getDigest(instance) {
+      if (!instance) return false;
+
+      persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
+      $rootScope.instance = instance;
+
+      if (isInstanceMode(config) && config.configured) {
+        return $rootScope.resources.$get('digest', {
+          instanceId: config.instanceId,
+          digestId: config.globalDigestId
+        });
+      }
+
+      if (isInstanceMode(config)) {
+        return instance.$post('digest-create', {}, {
+          description: 'Global Repositories List'
+        });
+      }
+      // Don't know what state it's in here, but probably didn't get here naturally, so just return false
+      return false;
+    }
+
+    CommitStreamApi
+      .load()
+      .then(getConfigGet)
+      .then(getInstance)
+      .then(getDigest)
       .then(function(digest) {
         if (digest) {
           $rootScope.digest = digest;
