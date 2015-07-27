@@ -191,7 +191,7 @@
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list' ng-if='inboxesVisible2()'>
-    <h3>{{getHeading()}}</h3>
+    <h3 ng-show='getInboxesDone'>{{getHeading()}}</h3>
     <div class='well well-sm' ng-if='editAllowed()'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>

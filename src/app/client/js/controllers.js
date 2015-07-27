@@ -2,10 +2,6 @@
 
 var commitStreamAdminControllers = angular.module('commitStreamAdminControllers', []);
 
-var isDigestConfigured = function(config) {
-  return config.configMode.configured;
-};
-
 commitStreamAdminControllers.controller('InboxesController', [
   '$scope',
   'CommitStreamApi',
@@ -21,11 +17,11 @@ commitStreamAdminControllers.controller('InboxesController', [
   function($scope, CommitStreamApi, $timeout, serviceUrl,
     configGetUrl, configSaveUrl, $http, $q, prompt, $location, persistentOptions) {
 
-    var config;
-    var loading = true;
-    var resources;
-    var instance;
-    var digest;
+    var loading = true,
+      config,
+      resources,
+      instance,
+      digest;
 
     $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
 
@@ -51,6 +47,10 @@ commitStreamAdminControllers.controller('InboxesController', [
       return $scope.error.value !== '';
     };
 
+    var isDigestConfigured = function(config) {
+      return config.configMode.configured;
+    };
+
     $scope.inboxesVisible = function() {
       // Only display when we actually have the config in $scope!
       return config;
@@ -70,6 +70,7 @@ commitStreamAdminControllers.controller('InboxesController', [
         digestId: config.globalDigestId
       });
     }
+
     var getCustomDigest = function(config) {
       if (!isDigestConfigured(config)) {
         return instance.$post('digest-create', {}, {
@@ -130,9 +131,14 @@ commitStreamAdminControllers.controller('InboxesController', [
       configDigestModeSave(config.configMode);
     }
 
+    var resetInboxes = function() {
+      $scope.getInboxesDone = false;
+      $scope.inboxes = [];
+    }
+
     $scope.onOptionChange = function(value) {
       $scope.digestConfig.selection = value;
-      $scope.inboxes = [];
+      resetInboxes();
       if (isCustomDigest()) {
         customDigestSelected(false);
       } else {
@@ -142,7 +148,6 @@ commitStreamAdminControllers.controller('InboxesController', [
           disabledDigestSelected();
         }
       }
-
     }
 
     $scope.radioButtonGlobal = function() {
@@ -203,6 +208,7 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     $scope.serviceUrl = serviceUrl;
     $scope.inboxes = [];
+    $scope.getInboxesDone = false;
 
     $scope.message = {
       value: ''
@@ -290,6 +296,7 @@ commitStreamAdminControllers.controller('InboxesController', [
               inboxConfigure(inbox);
               $scope.inboxes.unshift(inbox);
             });
+            $scope.getInboxesDone = true;
           })
           .catch(errorHandler);
       }
@@ -456,8 +463,6 @@ commitStreamAdminControllers.controller('InboxesController', [
           useGlobalDigestId: false
         };
       }
-
-      config = config;
 
       if (!config.configured) return false;
 
