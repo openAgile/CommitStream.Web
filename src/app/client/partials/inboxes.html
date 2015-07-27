@@ -167,9 +167,9 @@
   <div ng-if='isDigestMode()'>
     <h3>CommitStream Panel Options</h3>
     <div aria-label="Large button group" role="group" class="btn-group-vertical btn-group">
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span><strong>None:</strong> The panel will not display for your TeamRoom.</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="onOptionChange('disabled')"><span ng-class="radioButtonDisabled()"></span><strong>None:</strong> The panel will not display for your TeamRoom.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="onOptionChange('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="onOptionChange('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
     </div>
 
   </div>
