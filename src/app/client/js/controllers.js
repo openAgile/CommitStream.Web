@@ -2,15 +2,6 @@
 
 var commitStreamAdminControllers = angular.module('commitStreamAdminControllers', []);
 
-var isInstanceMode = function(config) {
-  if (!config.configMode) return true;
-  return config.configMode.type === 'instance';
-};
-
-var isDigestMode = function(config) {
-  return config.configMode && config.configMode.type === 'digest';
-};
-
 var isDigestConfigured = function(config) {
   return config.configMode.configured;
 };
@@ -33,6 +24,7 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     var config;
     var loading = true;
+    var resources;
 
     $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
 
@@ -72,7 +64,7 @@ commitStreamAdminControllers.controller('InboxesController', [
     }
 
     var getGlobalDigest = function(config) {
-      return $rootScope.resources.$get('digest', {
+      return resources.$get('digest', {
         instanceId: config.instanceId,
         digestId: config.globalDigestId
       });
@@ -88,7 +80,7 @@ commitStreamAdminControllers.controller('InboxesController', [
           }
         });
       } else {
-        return $rootScope.resources.$get('digest', {
+        return resources.$get('digest', {
           instanceId: config.instanceId,
           digestId: config.configMode.digestId
         }).then(function(digest) {
@@ -185,11 +177,12 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     $scope.isInstanceMode = function() {
-      return isInstanceMode(config);
+      if (!config.configMode) return true;
+      return config.configMode.type === 'instance';
     };
 
     $scope.isDigestMode = function() {
-      return isDigestMode(config);
+      return config.configMode && config.configMode.type === 'digest';
     };
 
     $scope.getHeading = function() {
@@ -255,7 +248,7 @@ commitStreamAdminControllers.controller('InboxesController', [
       config.enabled = enabled;
 
       if (!config.configured) {
-        return $rootScope.resources.$post('instances')
+        return resources.$post('instances')
           .then(function(instance) {
             persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
             $rootScope.instance = instance;
@@ -427,9 +420,8 @@ commitStreamAdminControllers.controller('InboxesController', [
       }, 0);
     };
 
-    function getConfigGet(resources) {
-      //TODO: don't use $rootScope
-      $rootScope.resources = resources;
+    function getConfigGet(r) {
+      resources = r;
       if (!configGetUrl) return {
         data: {
           configMode: {
@@ -468,7 +460,7 @@ commitStreamAdminControllers.controller('InboxesController', [
       if (!config.configured) return false;
 
       persistentOptions.headers.Bearer = config.apiKey;
-      return $rootScope.resources.$get('instance', {
+      return resources.$get('instance', {
         instanceId: config.instanceId
       });
 
@@ -480,14 +472,14 @@ commitStreamAdminControllers.controller('InboxesController', [
       persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
       $rootScope.instance = instance;
 
-      if (isInstanceMode(config) && config.configured) {
-        return $rootScope.resources.$get('digest', {
+      if ($scope.isInstanceMode() && config.configured) {
+        return resources.$get('digest', {
           instanceId: config.instanceId,
           digestId: config.globalDigestId
         });
       }
 
-      if (isInstanceMode(config)) {
+      if ($scope.isInstanceMode()) {
         return instance.$post('digest-create', {}, {
           description: 'Global Repositories List'
         });
