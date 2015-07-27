@@ -15,23 +15,26 @@ var isDigestConfigured = function(config) {
   return config.configMode.configured;
 };
 
-commitStreamAdminControllers.controller('InstancesController', [
+commitStreamAdminControllers.controller('InboxesController', [
   '$rootScope',
   '$scope',
-  '$http',
-  '$q',
-  '$location',
   'CommitStreamApi',
+  '$timeout',
   'serviceUrl',
   'configGetUrl',
   'configSaveUrl',
+  '$http',
+  '$q',
+  'prompt',
+  '$location',
   'persistentOptions',
-  function($rootScope, $scope, $http, $q, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl, persistentOptions) {
+  function($rootScope, $scope, CommitStreamApi, $timeout, serviceUrl,
+    configGetUrl, configSaveUrl, $http, $q, prompt, $location, persistentOptions) {
+
     var config;
+    var loading = true;
 
     $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
-
-    var loading = true;
 
     $scope.loading = function() {
       return loading;
@@ -124,35 +127,6 @@ commitStreamAdminControllers.controller('InstancesController', [
       return false;
     }
 
-    CommitStreamApi
-      .load()
-      .then(getConfigGet)
-      .then(getInstance)
-      .then(getDigest)
-      .then(function(digest) {
-        if (digest) {
-          $rootScope.digest = digest;
-        }
-        $location.path('/inboxes');
-      })
-      .catch(errorHandler);
-  }
-]);
-
-commitStreamAdminControllers.controller('InboxesController', [
-  '$rootScope',
-  '$scope',
-  '$timeout',
-  'serviceUrl',
-  'configSaveUrl',
-  '$http',
-  '$q',
-  'prompt',
-  '$location',
-  'persistentOptions',
-  function($rootScope, $scope, $timeout, serviceUrl,
-    configSaveUrl, $http, $q, prompt, $location, persistentOptions) {
-
     $scope.inboxesVisible = function() {
       // Only display when we actually have the config in $scope!
       return $rootScope.config;
@@ -215,6 +189,7 @@ commitStreamAdminControllers.controller('InboxesController', [
         if (!digestResponse.created) inboxesUpdate($rootScope.config.enabled);
       });
     }
+
     var globalDigestSelected = function(firstCall) {
       getGlobalDigest($rootScope.config).then(function(digest) {
         $rootScope.digest = digest;
@@ -278,6 +253,14 @@ commitStreamAdminControllers.controller('InboxesController', [
       return $scope.config.configMode.type === 'instance' || $scope.digestConfig.selection === 'useCustomDigest';
     };
 
+    $scope.isInstanceMode = function() {
+      return isInstanceMode($rootScope.config);
+    };
+
+    $scope.isDigestMode = function() {
+      return isDigestMode($rootScope.config);
+    };
+
     $scope.getHeading = function() {
       if ($scope.isInstanceMode()) return 'Setup Global Repositories';
       if ($scope.isDigestMode()) {
@@ -287,10 +270,10 @@ commitStreamAdminControllers.controller('InboxesController', [
       }
     };
 
-    if (!$rootScope.config) {
-      $location.path('/');
-      return;
-    }
+    // if (!$rootScope.config) {
+    //   $location.path('/');
+    //   return;
+    // }
 
     $scope.newInbox = {
       url: '',
@@ -301,27 +284,12 @@ commitStreamAdminControllers.controller('InboxesController', [
     $scope.serviceUrl = serviceUrl;
     $scope.inboxes = [];
 
-    $scope.enabledState = {
-      enabled: $rootScope.config.enabled,
-      applying: false,
-      onText: 'Enabled',
-      offText: 'Disabled'
-    };
-
     $scope.message = {
       value: ''
     };
 
     $scope.messageActive = function() {
       return $scope.message.value !== '';
-    };
-
-    $scope.error = {
-      value: ''
-    };
-
-    $scope.errorActive = function() {
-      return $scope.error.value !== '';
     };
 
     // NOTE: this is a bit of a hack to remove errors upon network request to clear
@@ -355,14 +323,6 @@ commitStreamAdminControllers.controller('InboxesController', [
       if (index < 0) return '...';
       if (index === $scope.newInbox.url.length - 1) return '...';
       return $scope.newInbox.url.substr(index + 1);
-    };
-
-    var errorHandler = function(error) {
-      if (error.data && error.data.errors && error.data.errors.length) {
-        $scope.error.value = error.data.errors[0];
-      } else {
-        $scope.error.value = 'There was an unexpected error when processing your request.';
-      }
     };
 
     var configSave = function(enabled) {
@@ -423,14 +383,6 @@ commitStreamAdminControllers.controller('InboxesController', [
       inboxesGet();
     }
 
-    $scope.isInstanceMode = function() {
-      return isInstanceMode($rootScope.config);
-    };
-
-    $scope.isDigestMode = function() {
-      return isDigestMode($rootScope.config);
-    };
-
     $scope.enabledChanged = function() {
       $scope.newInbox.url = '';
 
@@ -452,13 +404,26 @@ commitStreamAdminControllers.controller('InboxesController', [
         });
     };
 
-    $scope.applying = function() {
-      return $scope.enabledState.applying;
-    };
+    function setupScope() {
 
-    $scope.overlayVisible = function() {
-      return $scope.enabledState.applying || !$rootScope.config.enabled;
-    };
+      $scope.enabledState = {
+        enabled: $rootScope.config.enabled,
+        applying: false,
+        onText: 'Enabled',
+        offText: 'Disabled'
+      };
+
+      $scope.applying = function() {
+        return $scope.enabledState.applying;
+      };
+
+      $scope.overlayVisible = function() {
+        return $scope.enabledState.applying || !$rootScope.config.enabled;
+      };
+
+    }
+
+
 
     $scope.adjustOverlay = function() {
       var repolistWidth = $('.repos-list').width();
@@ -538,8 +503,23 @@ commitStreamAdminControllers.controller('InboxesController', [
       }, 0);
     };
 
-    if ($scope.isDigestMode()) getSelection();
-    inboxesUpdate($rootScope.config.enabled);
+    CommitStreamApi
+      .load()
+      .then(getConfigGet)
+      .then(getInstance)
+      .then(getDigest)
+      .then(function(digest) {
+        if (digest) {
+          $rootScope.digest = digest;
+        }
+
+        setupScope();
+
+        if ($scope.isDigestMode()) getSelection();
+        inboxesUpdate($rootScope.config.enabled);
+        loading = false;
+      })
+      .catch(errorHandler);
 
   }
 ]);

@@ -16,13 +16,6 @@
     app.config(['$sceProvider', '$sceDelegateProvider', '$httpProvider',
       function($sceProvider, $sceDelegateProvider, $httpProvider) {
         $sceProvider.enabled(false);
-        // $sceProvider.enabled(true);
-        // $sceDelegateProvider.resourceUrlWhitelist([
-        //   'self',
-        //   'http://v1commitstream.cloudapp.net:6565/partials/instances.html',
-        //   'http://v1commitstream.cloudapp.net:6565/partials/inboxes.html'
-        // ]);
-
         //initialize get if not there
         if (!$httpProvider.defaults.headers.get) {
           $httpProvider.defaults.headers.get = {};
@@ -57,10 +50,6 @@
       function(serviceUrlProvider, $routeProvider) {
         var serviceUrl = serviceUrlProvider.$get();
         $routeProvider.when('/', {
-          templateUrl: serviceUrl + '/partials/instances.html',
-          controller: 'InstancesController'
-        });
-        $routeProvider.when('/inboxes', {
           templateUrl: serviceUrl + '/partials/inboxes.html',
           controller: 'InboxesController'
         });
