@@ -173,14 +173,6 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       }
     }
 
-    $scope.areRepositoriesVisible = function() {
-      return config.configMode.type === 'instance' || $scope.digestConfig.selection !== 'disabled';
-    };
-
-    $scope.editAllowed = function() {
-      return config.configMode.type === 'instance' || $scope.digestConfig.selection === 'useCustomDigest';
-    };
-
     $scope.isInstanceMode = function() {
       if (!config.configMode) return true;
       return config.configMode.type === 'instance';
@@ -188,6 +180,14 @@ commitStreamControllers.controller('CommitStreamAdminController', [
 
     $scope.isDigestMode = function() {
       return config.configMode && config.configMode.type === 'digest';
+    };
+
+    $scope.areRepositoriesVisible = function() {
+      return $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
+    };
+
+    $scope.editAllowed = function() {
+      return $scope.isInstanceMode() || isCustomDigest();
     };
 
     $scope.getHeading = function() {
@@ -427,7 +427,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       }, 0);
     };
 
-    function getConfigGet(r) {
+    var getConfigGet = function(r) {
       resources = r;
       if (!configGetUrl) return {
         data: {
@@ -449,7 +449,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       return $http.get(configGetUrl);
     }
 
-    function getInstance(configRes) {
+    var getInstance = function(configRes) {
       // TODO handle null case?
       config = configRes.data;
       if (!config.configMode) {
@@ -471,7 +471,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
 
     }
 
-    function getDigest(i) {
+    var getDigest = function(i) {
       if (!i) return false;
 
       instance = i;
