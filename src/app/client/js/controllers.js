@@ -1,8 +1,8 @@
 'use strict';
 
-var commitStreamAdminControllers = angular.module('commitStreamAdminControllers', []);
+var commitStreamControllers = angular.module('commitStreamControllers', []);
 
-commitStreamAdminControllers.controller('InboxesController', [
+commitStreamControllers.controller('CommitStreamAdminController', [
   '$scope',
   'CommitStreamApi',
   '$timeout',
@@ -42,7 +42,6 @@ commitStreamAdminControllers.controller('InboxesController', [
       value: ''
     };
 
-    //TODO: duplicated, rename it too
     $scope.errorActive = function() {
       return $scope.error.value !== '';
     };
@@ -51,7 +50,7 @@ commitStreamAdminControllers.controller('InboxesController', [
       return config.configMode.configured;
     };
 
-    $scope.inboxesVisible = function() {
+    $scope.isAdminPanelVisible = function() {
       // Only display when we actually have the config in $scope!
       return config;
     };
@@ -174,7 +173,7 @@ commitStreamAdminControllers.controller('InboxesController', [
       }
     }
 
-    $scope.inboxesVisible2 = function() {
+    $scope.areRepositoriesVisible = function() {
       return config.configMode.type === 'instance' || $scope.digestConfig.selection !== 'disabled';
     };
 
@@ -285,7 +284,6 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     var inboxesGet = function() {
-      console.log(digest);
       if (digest) {
         digest.$get('inboxes')
           .then(function(inboxesRes) {
@@ -501,12 +499,8 @@ commitStreamAdminControllers.controller('InboxesController', [
       .then(getInstance)
       .then(getDigest)
       .then(function(d) {
-        if (d) {
-          digest = d;
-        }
-
+        if (d) digest = d;
         setupScope();
-
         if ($scope.isDigestMode()) getSelection();
         inboxesUpdate(config.enabled);
         loading = false;

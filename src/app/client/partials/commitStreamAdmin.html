@@ -148,7 +148,7 @@
 
 <img ng-show='loading()' ng-src='{{loaderUrl}}' class='loader' />
 
-<div ng-if='inboxesVisible()'>
+<div ng-if='isAdminPanelVisible()'>
   <p ng-if='isInstanceMode()'>
     <input
       data-on='Enabled'
@@ -190,7 +190,7 @@
 
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
-  <div class='repos-list' ng-if='inboxesVisible2()'>
+  <div class='repos-list' ng-if='areRepositoriesVisible()'>
     <h3 ng-show='getInboxesDone'>{{getHeading()}}</h3>
     <div class='well well-sm' ng-if='editAllowed()'>
       <p>

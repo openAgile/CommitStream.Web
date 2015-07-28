@@ -9,7 +9,7 @@
       'ngRoute',
       'ui.bootstrap',
       'cgPrompt',
-      'commitStreamAdminControllers',
+      'commitStreamControllers',
       'commitStreamAdminDirectives'
     ]);
 
@@ -50,8 +50,8 @@
       function(serviceUrlProvider, $routeProvider) {
         var serviceUrl = serviceUrlProvider.$get();
         $routeProvider.when('/', {
-          templateUrl: serviceUrl + '/partials/inboxes.html',
-          controller: 'InboxesController'
+          templateUrl: serviceUrl + '/partials/commitStreamAdmin.html',
+          controller: 'CommitStreamAdminController'
         });
         $routeProvider.otherwise({
           redirectTo: serviceUrl + '/'
