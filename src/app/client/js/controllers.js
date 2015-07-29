@@ -427,7 +427,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       }, 0);
     };
 
-    var getConfigGet = function(r) {
+    var getConfig = function(r) {
       resources = r;
       if (!configGetUrl) return {
         data: {
@@ -501,7 +501,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
 
     CommitStreamApi
       .load()
-      .then(getConfigGet)
+      .then(getConfig)
       .then(getInstance)
       .then(getDigest)
       .then(function(d) {
