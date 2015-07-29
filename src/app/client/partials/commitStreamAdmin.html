@@ -209,8 +209,7 @@
       ng-change='enabledChanged()'
       toggle-checkbox
     />
-
-    <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
+    <span class="loader" ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
 
   <div ng-if='isDigestMode()'>
