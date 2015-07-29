@@ -22,7 +22,7 @@
     //prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
 
     // XDomain support for IE9 especially
-    commitStreamRoot.prepend($('<scr' + 'ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"'));
+    setTimeout(function() {commitStreamRoot.prepend($('<scr' + 'ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"'));},1000);
 
     // Grab route locations for config-get and config-save, if they exist
 
