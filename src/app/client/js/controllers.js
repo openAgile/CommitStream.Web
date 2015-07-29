@@ -493,6 +493,12 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       return false;
     }
 
+    var preventTabNavigation = function() {
+      $("#commitStreamAdmin :input").each(function() {
+        $(this).attr('tabindex', '-1');
+      });
+    }
+
     CommitStreamApi
       .load()
       .then(getConfigGet)
@@ -504,6 +510,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
         if ($scope.isDigestMode()) getSelection();
         inboxesUpdate(config.enabled);
         loading = false;
+        preventTabNavigation();
       })
       .catch(errorHandler);
 
