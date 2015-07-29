@@ -132,7 +132,7 @@
     height: 40px !important;
     text-align: left !important;
     text-transform: none !important;
-    font-weight: normal !important; 
+    font-weight: normal !important;
     background-color: #fff !important;
   }
   .btn-group-vertical .btn-default:hover {
@@ -146,7 +146,9 @@
 
 </style>
 
-<div ng-if='inboxesVisible()'>
+<img ng-show='loading()' ng-src='{{loaderUrl}}' class='loader' />
+
+<div ng-if='isAdminPanelVisible()'>
   <p ng-if='isInstanceMode()'>
     <input
       data-on='Enabled'
@@ -162,28 +164,14 @@
     <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
 
-  <div ng-if='isDigestMode()'> 
-    <h3>CommitStream Panel Options</h3>      
+  <div ng-if='isDigestMode()'>
+    <h3>CommitStream Panel Options</h3>
     <div aria-label="Large button group" role="group" class="btn-group-vertical btn-group">
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="magicWorks('disabled')"><span ng-class="radioButtonDisabled()"></span><strong>None:</strong> The panel will not display for your TeamRoom.</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="magicWorks('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
-      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="magicWorks('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="onOptionChange('disabled')"><span ng-class="radioButtonDisabled()"></span><strong>None:</strong> The panel will not display for your TeamRoom.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="onOptionChange('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="onOptionChange('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
     </div>
 
-    <!--
-    <label>
-        <input type="radio" name="response" value='disabled' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
-            Disable for this TeamRoom
-    </label>
-    <label>
-        <input type="radio" name="response" value='useGlobalDigest' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
-            Display the Global Repository List commits in this TeamRoom
-    </label>
-    <label>
-        <input type="radio" name="response" value='useCustomDigest' ng-model="digestConfig.selection" ng-change='magicWorks(digestConfig.selection)'/>
-            Use a Custom Repository List for this TeamRoom
-    </label>
-    -->
   </div>
 
   <div ng-if="messageActive()" class='message prompt'>
@@ -202,8 +190,8 @@
 
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
-  <div class='repos-list' ng-if='inboxesVisible2()'>
-    <h3>{{getHeading()}}</h3>
+  <div class='repos-list' ng-if='areRepositoriesVisible()'>
+    <h3 ng-show='getInboxesDone'>{{getHeading()}}</h3>
     <div class='well well-sm' ng-if='editAllowed()'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
