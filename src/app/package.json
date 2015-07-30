@@ -17,6 +17,7 @@
     "express-handlebars": "^1.1.0",
     "istanbul": "^0.3.2",
     "jsonschema": "^1.0.0",
+    "less": "^2.5.1",
     "method-override": "^2.3.3",
     "mocha": "^1.21.5",
     "mocha-tap-reporter": "^0.1.2",
@@ -51,7 +52,8 @@
     "smoke-happy-path": "mocha -u exports -R spec smoke-test/happy-path-end-to-end.tests.js",
     "jenkins-test": "mocha -u exports -R tap test/**/*tests.js",
     "jenkins-smoke": "mocha -u exports -R tap smoke-test/smoke.tests.js",
-    "jenkins-smoke-happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js"
+    "jenkins-smoke-happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js",
+    "generateCss": "generateCss.sh"
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"
