@@ -1,0 +1,1109 @@
+/* TODO copied from _default.less. Need to avoid _reset but still get all the functions and varibles from the global scope to compile this */
+/**
+ * HTML5 ✰ Boilerplate
+ *
+ * style.css contains a reset, font normalization and some base styles.
+ */
+/**
+ * html5doctor.com Reset Stylesheet (Eric Meyer's Reset Reloaded + HTML5 baseline)
+ * v1.6.1 2010-09-17 | Authors: Eric Meyer & Richard Clark
+ * html5doctor.com/html-5-reset-stylesheet/
+ */
+.commitStream-panel {
+  display: block;
+  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  /* Normalize monospace sizing:
+   en.wikipedia.org/wiki/MediaWiki_talk:Common.css/Archive_11#Teletype_style_fix_for_Chrome */
+  /**
+ * Minimal base styles.
+ */
+  /* Always force a scrollbar in non-IE 
+* html { overflow-y: scroll; }
+*/
+  /* Accessible focus treatment: people.opera.com/patrickl/experiments/keyboard/test */
+  /* Remove margins for navigation lists */
+  /* Set sub, sup without affecting line-height: gist.github.com/413930 */
+  /* www.sitepoint.com/blogs/2010/08/20/ie-remove-textarea-scrollbars/ */
+  /* Hand cursor on clickable input elements */
+  /* Webkit browsers add a 2px margin outside the chrome of form elements */
+  /* Make buttons play nice in IE:
+   www.viget.com/inspire/styling-the-button-element-in-internet-explorer/ */
+  /* Bicubic resizing for non-native sized IMG:
+   code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/ */
+  /* -- END of HTML5 Boilerplate, what follows are our reset sizes */
+  /* These are our primary colors, adjust with care! */
+  /* white */
+  /* red */
+  /* orange */
+  /* yellow */
+  /* bright blue */
+  /* blue */
+  /* light blue */
+  /* #f2f2f2 */
+  /* #E6E6E6 */
+  /* #CCC */
+  /* #A6A6A6 */
+  /* WEB gray */
+  /* #454545 */
+  /* #262626 */
+  /* This section is for variables to be used throughout the app.
+	Only define new variables in terms of existing ones, or the primaries. */
+  /* Andrew & Dave's Janky-Assed colors, we're counting on you to refactor this :) */
+  /* TODO: Change this nasty calendar colorscheme when we decide what it should be */
+  /* Details lightbox */
+  /*Display Fields*/
+  /*Branded Colors*/
+  /* === functions used to style specific "panel" of the page === */
+  /* ====================================================================== */
+  /* EMBEDDED FONTS */
+  /* ====================================================================== */
+  /*	we now serve only one font this will cut down on font loading in users' browsers and at the same time open sans has a greater number of subsets to choose from regarding font weights */
+  /*@font-face {
+  font-family: 'Open Sans';
+  src: url("../fonts/openSans/OpenSans-Regular.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  src: url("../fonts/openSans/OpenSans-Light.eot");
+  src: url("../fonts/openSans/OpenSans-Light.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 600;
+  src: url("../fonts/openSans/OpenSans-Semibold.eot");
+  src: url("../fonts/openSans/OpenSans-Semibold.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  src: url("../fonts/openSans/OpenSans-Bold.eot");
+  src: url("../fonts/openSans/OpenSans-Bold.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-Italic.eot");
+  src: url("../fonts/openSans/OpenSans-Italic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-LightItalic.eot");
+  src: url("../fonts/openSans/OpenSans-LightItalic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 600;
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-SemiboldItalic.eot");
+  src: url("../fonts/openSans/OpenSans-SemiboldItalic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-BoldItalic.eot");
+  src: url("../fonts/openSans/OpenSans-BoldItalic.ttf");
+}
+/* New fun fonts (shh! its a secret) */
+  /*	fallback font is 'Lucida Sans Unicode' */
+  /*	Lucida Sans Unicode: a little larger than the above 2 fonts, and will
+		require some font-specific styling w/relative sizing to reduce
+		jankieness (sp. jankeyness?). */
+  /*this set covers the core icons of the app*/
+  /* These are our primary colors, adjust with care! */
+  /* white */
+  /* red */
+  /* orange */
+  /* yellow */
+  /* bright blue */
+  /* blue */
+  /* light blue */
+  /* #f2f2f2 */
+  /* #E6E6E6 */
+  /* #CCC */
+  /* #A6A6A6 */
+  /* WEB gray */
+  /* #454545 */
+  /* #262626 */
+  /* This section is for variables to be used throughout the app.
+	Only define new variables in terms of existing ones, or the primaries. */
+  /* Andrew & Dave's Janky-Assed colors, we're counting on you to refactor this :) */
+  /* TODO: Change this nasty calendar colorscheme when we decide what it should be */
+  /* Details lightbox */
+  /*Display Fields*/
+  /*Branded Colors*/
+  /* ====================================================================== */
+  /* EMBEDDED FONTS */
+  /* ====================================================================== */
+  /*	we now serve only one font this will cut down on font loading in users' browsers and at the same time open sans has a greater number of subsets to choose from regarding font weights */
+  /* New fun fonts (shh! its a secret) */
+  /*	fallback font is 'Lucida Sans Unicode' */
+  /*	Lucida Sans Unicode: a little larger than the above 2 fonts, and will
+		require some font-specific styling w/relative sizing to reduce
+		jankieness (sp. jankeyness?). */
+  /*this set covers the core icons of the app*/
+  /* font normalization inspired by YUI design guides */
+  /* we should KILL all of these and make them either buttons, or links. Not both. */
+  /* I know a lot of resets say top, but that seems wrong - as is in our case. */
+  /* Colors for form validity */
+  /* === Convenience classes, to be used sparingly === */
+  /* New CommitStream Styles */
+}
+.commitStream-panel html,
+.commitStream-panel body,
+.commitStream-panel div,
+.commitStream-panel span,
+.commitStream-panel object,
+.commitStream-panel iframe,
+.commitStream-panel h1,
+.commitStream-panel h2,
+.commitStream-panel h3,
+.commitStream-panel h4,
+.commitStream-panel h5,
+.commitStream-panel h6,
+.commitStream-panel p,
+.commitStream-panel blockquote,
+.commitStream-panel pre,
+.commitStream-panel abbr,
+.commitStream-panel address,
+.commitStream-panel cite,
+.commitStream-panel code,
+.commitStream-panel del,
+.commitStream-panel dfn,
+.commitStream-panel em,
+.commitStream-panel img,
+.commitStream-panel ins,
+.commitStream-panel kbd,
+.commitStream-panel q,
+.commitStream-panel samp,
+.commitStream-panel small,
+.commitStream-panel strong,
+.commitStream-panel sub,
+.commitStream-panel sup,
+.commitStream-panel var,
+.commitStream-panel b,
+.commitStream-panel i,
+.commitStream-panel dl,
+.commitStream-panel dt,
+.commitStream-panel dd,
+.commitStream-panel ol,
+.commitStream-panel ul,
+.commitStream-panel li,
+.commitStream-panel fieldset,
+.commitStream-panel form,
+.commitStream-panel label,
+.commitStream-panel legend,
+.commitStream-panel table,
+.commitStream-panel caption,
+.commitStream-panel tbody,
+.commitStream-panel tfoot,
+.commitStream-panel thead,
+.commitStream-panel tr,
+.commitStream-panel th,
+.commitStream-panel td,
+.commitStream-panel article,
+.commitStream-panel aside,
+.commitStream-panel canvas,
+.commitStream-panel details,
+.commitStream-panel figcaption,
+.commitStream-panel figure,
+.commitStream-panel footer,
+.commitStream-panel header,
+.commitStream-panel hgroup,
+.commitStream-panel menu,
+.commitStream-panel nav,
+.commitStream-panel section,
+.commitStream-panel summary,
+.commitStream-panel time,
+.commitStream-panel mark,
+.commitStream-panel audio,
+.commitStream-panel video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* these are a bit redundant, no? they also cause noise in Firebug/Chrome dev tools
+	font-size: 100%; font: inherit; */
+  vertical-align: baseline;
+}
+.commitStream-panel article,
+.commitStream-panel aside,
+.commitStream-panel details,
+.commitStream-panel figcaption,
+.commitStream-panel figure,
+.commitStream-panel footer,
+.commitStream-panel header,
+.commitStream-panel hgroup,
+.commitStream-panel menu,
+.commitStream-panel nav,
+.commitStream-panel section {
+  display: block;
+}
+.commitStream-panel blockquote,
+.commitStream-panel q {
+  quotes: none;
+}
+.commitStream-panel blockquote:before,
+.commitStream-panel blockquote:after,
+.commitStream-panel q:before,
+.commitStream-panel q:after {
+  content: "";
+  content: none;
+}
+.commitStream-panel ins {
+  background-color: #ffff99;
+  color: black;
+  text-decoration: none;
+}
+.commitStream-panel mark {
+  background-color: #ffff99;
+  color: black;
+  font-style: italic;
+  font-weight: bold;
+}
+.commitStream-panel del {
+  text-decoration: line-through;
+}
+.commitStream-panel abbr[title],
+.commitStream-panel dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+.commitStream-panel table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.commitStream-panel hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #cccccc;
+  margin: 1em 0;
+  padding: 0;
+}
+.commitStream-panel input,
+.commitStream-panel select {
+  vertical-align: middle;
+}
+.commitStream-panel pre,
+.commitStream-panel code,
+.commitStream-panel kbd,
+.commitStream-panel samp {
+  font-family: monospace, sans-serif;
+}
+.commitStream-panel a:hover,
+.commitStream-panel a:active {
+  outline: none;
+}
+.commitStream-panel ol {
+  list-style-type: decimal;
+}
+.commitStream-panel nav ul,
+.commitStream-panel nav li,
+.commitStream-panel ul,
+.commitStream-panel li {
+  margin: 0;
+  list-style: none;
+  list-style-image: none;
+}
+.commitStream-panel small {
+  font-size: 85%;
+}
+.commitStream-panel strong,
+.commitStream-panel th {
+  font-weight: bold;
+}
+.commitStream-panel td {
+  vertical-align: top;
+}
+.commitStream-panel sub,
+.commitStream-panel sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+}
+.commitStream-panel sup {
+  top: -0.5em;
+}
+.commitStream-panel sub {
+  bottom: -0.25em;
+}
+.commitStream-panel pre {
+  /* www.pathf.com/blogs/2008/05/formatting-quoted-code-in-blog-posts-css21-white-space-pre-wrap/ */
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 15px;
+}
+.commitStream-panel textarea {
+  overflow: auto;
+}
+.commitStream-panel .ie6 legend,
+.commitStream-panel .ie7 legend {
+  margin-left: -7px;
+}
+.commitStream-panel input[type="button"],
+.commitStream-panel input[type="submit"],
+.commitStream-panel input[type="image"],
+.commitStream-panel button {
+  cursor: pointer;
+}
+.commitStream-panel input[type="button"].disabled,
+.commitStream-panel input[type="submit"].disabled,
+.commitStream-panel input[type="image"].disabled,
+.commitStream-panel button.disabled,
+.commitStream-panel input[type="button"][disabled],
+.commitStream-panel input[type="submit"][disabled],
+.commitStream-panel input[type="image"][disabled],
+.commitStream-panel button[disabled] {
+  cursor: auto;
+}
+.commitStream-panel button,
+.commitStream-panel input,
+.commitStream-panel select,
+.commitStream-panel textarea {
+  margin: 0;
+}
+.commitStream-panel button {
+  width: auto;
+  overflow: visible;
+}
+.commitStream-panel .ie7 img {
+  -ms-interpolation-mode: bicubic;
+}
+.commitStream-panel h1 {
+  font-size: 1.6em;
+}
+.commitStream-panel h2 {
+  font-size: 1.4em;
+}
+.commitStream-panel h3 {
+  font-size: 1.2em;
+}
+.commitStream-panel h4 {
+  font-size: 1.1em;
+}
+.commitStream-panel h5 {
+  font-size: 1em;
+}
+.commitStream-panel h6 {
+  font-size: 0.8em;
+}
+@font-face {
+  font-family: Finger_Paint;
+  src: url("fonts/Finger_Paint/FingerPaint-Regular.ttf");
+}
+@font-face {
+  font-family: Love_Ya_Like_A_Sister;
+  src: url("fonts/Love_Ya_Like_A_Sister/LoveYaLikeASister.ttf");
+}
+.commitStream-panel .oldie {
+  font: 1.1em 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  letter-spacing: 0.01em;
+}
+.commitStream-panel .oldie h1,
+.commitStream-panel .oldie h2,
+.commitStream-panel .oldie h3,
+.commitStream-panel .oldie h4,
+.commitStream-panel .oldie h5,
+.commitStream-panel .oldie h6 {
+  line-height: 1.6em;
+}
+.commitStream-panel .oldie #page-container .main-content-nav .project-bar .project-selector .project {
+  vertical-align: middle;
+}
+.commitStream-panel .oldie #page-container .main-content-nav .project-bar .active-filters .filter .clear {
+  margin-top: 3px;
+}
+.commitStream-panel .oldie #page-container .main-content-nav .project-bar .active-filters {
+  vertical-align: top;
+  margin-top: 8px;
+}
+@font-face {
+  font-family: Sitemap;
+  src: url("fonts/Sitemap/Sitemap.eot?#iefix") format('embedded-opentype'), url('fonts/Sitemap/Sitemap.svg') format('svg'), local("Sitemap"), url("fonts/Sitemap/Sitemap.ttf");
+}
+@font-face {
+  font-family: core-icons;
+  src: url("fonts/core-icons/core-icons.eot?#iefix") format('embedded-opentype'), url('fonts/core-icons/core-icons.svg') format('svg'), local("core-icons"), url("fonts/core-icons/core-icons.ttf");
+}
+.commitStream-panel .avatar-image.editable {
+  cursor: pointer;
+}
+.commitStream-panel .avatar-tiny {
+  width: 16px;
+  height: 16px;
+}
+.commitStream-panel .avatar-small {
+  width: 32px;
+  height: 32px;
+}
+.commitStream-panel .avatar-medium {
+  width: 48px;
+  height: 48px;
+}
+.commitStream-panel .avatar-medium-large {
+  width: 64px;
+  height: 64px;
+}
+.commitStream-panel .avatar-large {
+  width: 96px;
+  height: 96px;
+}
+.commitStream-panel .avatar-block .avatar {
+  width: 32px;
+  height: 32px;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url("fonts/openSans/OpenSans-Regular.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  src: url("fonts/openSans/OpenSans-Light.eot");
+  src: url("fonts/openSans/OpenSans-Light.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 600;
+  src: url("../fonts/openSans/OpenSans-Semibold.eot");
+  src: url("../fonts/openSans/OpenSans-Semibold.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  src: url("../fonts/openSans/OpenSans-Bold.eot");
+  src: url("../fonts/openSans/OpenSans-Bold.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-Italic.eot");
+  src: url("../fonts/openSans/OpenSans-Italic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-LightItalic.eot");
+  src: url("../fonts/openSans/OpenSans-LightItalic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 600;
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-SemiboldItalic.eot");
+  src: url("../fonts/openSans/OpenSans-SemiboldItalic.ttf");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 700;
+  font-style: italic;
+  src: url("../fonts/openSans/OpenSans-BoldItalic.eot");
+  src: url("../fonts/openSans/OpenSans-BoldItalic.ttf");
+}
+@font-face {
+  font-family: Finger_Paint;
+  src: url("fonts/Finger_Paint/FingerPaint-Regular.ttf");
+}
+@font-face {
+  font-family: Love_Ya_Like_A_Sister;
+  src: url("fonts/Love_Ya_Like_A_Sister/LoveYaLikeASister.ttf");
+}
+.commitStream-panel .oldie {
+  font: 1.1em 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  letter-spacing: 0.01em;
+}
+.commitStream-panel .oldie h1,
+.commitStream-panel .oldie h2,
+.commitStream-panel .oldie h3,
+.commitStream-panel .oldie h4,
+.commitStream-panel .oldie h5,
+.commitStream-panel .oldie h6 {
+  line-height: 1.6em;
+}
+.commitStream-panel .oldie #page-container .main-content-nav .project-bar .project-selector .project {
+  vertical-align: middle;
+}
+.commitStream-panel .oldie #page-container .main-content-nav .project-bar .active-filters .filter .clear {
+  margin-top: 3px;
+}
+.commitStream-panel .oldie #page-container .main-content-nav .project-bar .active-filters {
+  vertical-align: top;
+  margin-top: 8px;
+}
+@font-face {
+  font-family: Sitemap;
+  src: url("fonts/Sitemap/Sitemap.eot?#iefix") format('embedded-opentype'), url('fonts/Sitemap/Sitemap.svg') format('svg'), local("Sitemap"), url("fonts/Sitemap/Sitemap.ttf");
+}
+@font-face {
+  font-family: core-icons;
+  src: url("fonts/core-icons/core-icons.eot?#iefix") format('embedded-opentype'), url('fonts/core-icons/core-icons.svg') format('svg'), local("core-icons"), url("fonts/core-icons/core-icons.ttf");
+}
+.commitStream-panel html,
+.commitStream-panel body {
+  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  font-size: 14px;
+  line-height: 1.15em;
+  color: #454545;
+}
+.commitStream-panel h1,
+.commitStream-panel h2,
+.commitStream-panel h3,
+.commitStream-panel h4,
+.commitStream-panel h5,
+.commitStream-panel h6 {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.commitStream-panel img {
+  border: 0;
+}
+.commitStream-panel select,
+.commitStream-panel input,
+.commitStream-panel textarea,
+.commitStream-panel button {
+  font-size: 99%;
+}
+.commitStream-panel a {
+  color: #07496b;
+  text-decoration: none;
+}
+.commitStream-panel a:hover {
+  color: #009ff2;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.commitStream-panel a:active {
+  color: #393939;
+}
+.commitStream-panel label {
+  color: #5e5e5e;
+}
+.commitStream-panel input,
+.commitStream-panel textarea,
+.commitStream-panel select {
+  color: #454545;
+}
+.commitStream-panel select,
+.commitStream-panel input[type=color],
+.commitStream-panel input[type=date],
+.commitStream-panel input[type=datetime],
+.commitStream-panel input[type=datetime-local],
+.commitStream-panel input[type=email],
+.commitStream-panel input[type=file],
+.commitStream-panel input[type=image],
+.commitStream-panel input[type=month],
+.commitStream-panel input[type=number],
+.commitStream-panel input[type=password],
+.commitStream-panel input[type=range],
+.commitStream-panel input[type=reset],
+.commitStream-panel input[type=search],
+.commitStream-panel input[type=submit],
+.commitStream-panel input[type=tel],
+.commitStream-panel input[type=text],
+.commitStream-panel input[type=time],
+.commitStream-panel input[type=url],
+.commitStream-panel input[type=week],
+.commitStream-panel textarea {
+  border: 1px solid #a6a6a6;
+  margin-left: 0;
+  /* override chrome user agent stylesheet */
+  transition: box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+  -webkit-transition: -webkit-box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+  -moz-transition: box-shadow 0.2s, border 0.2s;
+  outline: none;
+}
+.commitStream-panel select:focus,
+.commitStream-panel input[type=color]:focus,
+.commitStream-panel input[type=date]:focus,
+.commitStream-panel input[type=datetime]:focus,
+.commitStream-panel input[type=datetime-local]:focus,
+.commitStream-panel input[type=email]:focus,
+.commitStream-panel input[type=file]:focus,
+.commitStream-panel input[type=image]:focus,
+.commitStream-panel input[type=month]:focus,
+.commitStream-panel input[type=number]:focus,
+.commitStream-panel input[type=password]:focus,
+.commitStream-panel input[type=range]:focus,
+.commitStream-panel input[type=reset]:focus,
+.commitStream-panel input[type=search]:focus,
+.commitStream-panel input[type=submit]:focus,
+.commitStream-panel input[type=tel]:focus,
+.commitStream-panel input[type=text]:focus,
+.commitStream-panel input[type=time]:focus,
+.commitStream-panel input[type=url]:focus,
+.commitStream-panel input[type=week]:focus,
+.commitStream-panel textarea:focus,
+.commitStream-panel select .focus,
+.commitStream-panel input[type=color] .focus,
+.commitStream-panel input[type=date] .focus,
+.commitStream-panel input[type=datetime] .focus,
+.commitStream-panel input[type=datetime-local] .focus,
+.commitStream-panel input[type=email] .focus,
+.commitStream-panel input[type=file] .focus,
+.commitStream-panel input[type=image] .focus,
+.commitStream-panel input[type=month] .focus,
+.commitStream-panel input[type=number] .focus,
+.commitStream-panel input[type=password] .focus,
+.commitStream-panel input[type=range] .focus,
+.commitStream-panel input[type=reset] .focus,
+.commitStream-panel input[type=search] .focus,
+.commitStream-panel input[type=submit] .focus,
+.commitStream-panel input[type=tel] .focus,
+.commitStream-panel input[type=text] .focus,
+.commitStream-panel input[type=time] .focus,
+.commitStream-panel input[type=url] .focus,
+.commitStream-panel input[type=week] .focus,
+.commitStream-panel textarea .focus {
+  -moz-box-shadow: 0 0 4px 0 #007ebf;
+  -webkit-box-shadow: 0 0 4px 0 #007ebf;
+  box-shadow: 0 0 4px 0 #007ebf;
+  border: 1px solid #007ebf;
+}
+.commitStream-panel .mceEditor {
+  display: block;
+}
+.commitStream-panel .mceEditor.focus table.mceLayout {
+  transition: box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+  -webkit-transition: -webkit-box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+  -moz-transition: box-shadow 0.2s, border 0.2s;
+  outline: none;
+  -moz-box-shadow: 0 0 4px 0 #007ebf;
+  -webkit-box-shadow: 0 0 4px 0 #007ebf;
+  box-shadow: 0 0 4px 0 #007ebf;
+  border: 1px solid #007ebf;
+}
+.commitStream-panel .mceEditor.focus table.mceLayout:focus,
+.commitStream-panel .mceEditor.focus table.mceLayout .focus {
+  -moz-box-shadow: 0 0 4px 0 #007ebf;
+  -webkit-box-shadow: 0 0 4px 0 #007ebf;
+  box-shadow: 0 0 4px 0 #007ebf;
+  border: 1px solid #007ebf;
+}
+.commitStream-panel input[type=image] {
+  border: none;
+}
+.commitStream-panel input[type=checkbox] {
+  cursor: default;
+}
+.commitStream-panel select {
+  font-size: 0.9em;
+}
+.commitStream-panel .labeled-checkbox input[type=checkbox] {
+  margin-right: 0.25em;
+}
+.commitStream-panel .labeled-checkbox label {
+  vertical-align: middle;
+}
+.commitStream-panel button,
+.commitStream-panel input[type=button],
+.commitStream-panel .button {
+  /* https://github.com/jamesfoster/dotless/commit/4004eff3cab321e31f43d052e35b5538f19443f7 */
+  background: #cccccc;
+  /* for non-css3 browsers */
+  background: -moz-linear-gradient(top, #dadada, #b8b8b8) no-repeat scroll 0 0 transparent;
+  /* FF3.6+ */
+  background: -webkit-linear-gradient(top, #dadada, #b8b8b8) no-repeat scroll 0 0 transparent;
+  /* Saf5.1+, Chrome10+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #dadada), color-stop(1, #b8b8b8)) no-repeat scroll 0 0 transparent;
+  /* Saf4+, Chrome */
+  background: -o-linear-gradient(top, #dadada, #b8b8b8) no-repeat scroll 0 0 transparent;
+  /*Opera*/
+  background: -ms-linear-gradient(top, #dadada, #b8b8b8) no-repeat scroll 0 0 transparent;
+  /*ms*/
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dadada', endColorstr='#b8b8b8', GradientType='0');
+  /* IE6,IE7 */
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #a6a6a6;
+  -moz-box-shadow: inset 0 1px white;
+  -webkit-box-shadow: inset 0 1px white;
+  box-shadow: inset 0 1px white;
+  color: #07496b;
+  font-size: 0.9em;
+  padding: 0.08em 0.4em;
+  text-shadow: 0 1px #e6e6e6;
+  margin: 0.2em;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+  -webkit-transition: -webkit-box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+  -moz-transition: box-shadow 0.2s, border 0.2s;
+  outline: none;
+}
+.commitStream-panel button:hover,
+.commitStream-panel input[type=button]:hover,
+.commitStream-panel .button:hover {
+  /* https://github.com/jamesfoster/dotless/commit/4004eff3cab321e31f43d052e35b5538f19443f7 */
+  background: #e0e0e0;
+  /* for non-css3 browsers */
+  background: -moz-linear-gradient(top, #eeeeee, #cccccc) no-repeat scroll 0 0 transparent;
+  /* FF3.6+ */
+  background: -webkit-linear-gradient(top, #eeeeee, #cccccc) no-repeat scroll 0 0 transparent;
+  /* Saf5.1+, Chrome10+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #eeeeee), color-stop(1, #cccccc)) no-repeat scroll 0 0 transparent;
+  /* Saf4+, Chrome */
+  background: -o-linear-gradient(top, #eeeeee, #cccccc) no-repeat scroll 0 0 transparent;
+  /*Opera*/
+  background: -ms-linear-gradient(top, #eeeeee, #cccccc) no-repeat scroll 0 0 transparent;
+  /*ms*/
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc', GradientType='0');
+  /* IE6,IE7 */
+  -moz-box-shadow: inset 0 1px white, 0 0 2px 1px #abdff9;
+  -webkit-box-shadow: inset 0 1px white, 0 0 2px 1px #abdff9;
+  box-shadow: inset 0 1px white, 0 0 2px 1px #abdff9;
+  color: #009ff2;
+  text-decoration: none;
+}
+.commitStream-panel button:focus,
+.commitStream-panel input[type=button]:focus,
+.commitStream-panel .button:focus,
+.commitStream-panel button .focus,
+.commitStream-panel input[type=button] .focus,
+.commitStream-panel .button .focus {
+  -moz-box-shadow: 0 0 4px 0 #007ebf;
+  -webkit-box-shadow: 0 0 4px 0 #007ebf;
+  box-shadow: 0 0 4px 0 #007ebf;
+  border: 1px solid #007ebf;
+}
+.commitStream-panel button.disabled,
+.commitStream-panel input[type=button].disabled,
+.commitStream-panel .button.disabled,
+.commitStream-panel button[disabled],
+.commitStream-panel input[type=button][disabled],
+.commitStream-panel .button[disabled] {
+  -moz-box-shadow: none ! important;
+  -webkit-box-shadow: none ! important;
+  box-shadow: none ! important;
+  background: #e6e6e6;
+  filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)";
+  border: 1px solid #cccccc;
+  color: #a6a6a6;
+  text-shadow: none;
+}
+.commitStream-panel button.disabled:hover,
+.commitStream-panel input[type=button].disabled:hover,
+.commitStream-panel .button.disabled:hover,
+.commitStream-panel button[disabled]:hover,
+.commitStream-panel input[type=button][disabled]:hover,
+.commitStream-panel .button[disabled]:hover {
+  -moz-box-shadow: none ! important;
+  -webkit-box-shadow: none ! important;
+  box-shadow: none ! important;
+  background: #e6e6e6;
+  filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled = false)";
+  border: 1px solid #cccccc;
+  color: #a6a6a6;
+  text-shadow: none;
+}
+.commitStream-panel .msie7 button,
+.commitStream-panel .msie7 input[type=button],
+.commitStream-panel .msie7 .button {
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}
+.commitStream-panel a.button:hover {
+  text-decoration: none;
+}
+.commitStream-panel fieldset input,
+.commitStream-panel fieldset textarea,
+.commitStream-panel fieldset select {
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}
+.commitStream-panel table {
+  width: 100%;
+}
+.commitStream-panel td,
+.commitStream-panel th {
+  vertical-align: middle;
+}
+.commitStream-panel input:invalid,
+.commitStream-panel textarea:invalid,
+.commitStream-panel select:invalid {
+  -moz-border-radius: 1px;
+  -webkit-border-radius: 1px;
+  border-radius: 1px;
+  -moz-box-shadow: 0px 0px 2px 2px rgba(141, 10, 57, 0.5);
+  -webkit-box-shadow: 0px 0px 2px 2px rgba(141, 10, 57, 0.5);
+  box-shadow: 0px 0px 2px 2px rgba(141, 10, 57, 0.5);
+  border-color: #8d0a39;
+  background-color: #feeff4;
+}
+.commitStream-panel input.invalid,
+.commitStream-panel textarea.invalid,
+.commitStream-panel select.invalid {
+  -moz-border-radius: 1px;
+  -webkit-border-radius: 1px;
+  border-radius: 1px;
+  -moz-box-shadow: 0px 0px 2px 2px rgba(141, 10, 57, 0.5);
+  -webkit-box-shadow: 0px 0px 2px 2px rgba(141, 10, 57, 0.5);
+  box-shadow: 0px 0px 2px 2px rgba(141, 10, 57, 0.5);
+  border-color: #8d0a39;
+  background-color: #feeff4;
+}
+.commitStream-panel input.watermarked,
+.commitStream-panel textarea.watermarked,
+.commitStream-panel select.watermarked {
+  color: #c4c4c4;
+}
+.commitStream-panel input:-moz-placeholder,
+.commitStream-panel textarea:-moz-placeholder,
+.commitStream-panel select:-moz-placeholder {
+  color: #c4c4c4;
+}
+.commitStream-panel input::-webkit-input-placeholder,
+.commitStream-panel textarea::-webkit-input-placeholder,
+.commitStream-panel select::-webkit-input-placeholder {
+  color: #c4c4c4;
+}
+.commitStream-panel .hidden {
+  display: none;
+}
+.commitStream-panel .disabledname,
+.commitStream-panel .closed {
+  text-decoration: line-through !important;
+}
+.commitStream-panel .deleted {
+  text-decoration: line-through !important;
+  color: #c4c4c4;
+  /* is this always used for links? */
+}
+.commitStream-panel .errors {
+  background-color: #feeff4;
+  border: 1px solid #8d0a39;
+  color: #8d0a39;
+}
+.commitStream-panel .errors > * {
+  margin: 1em;
+}
+.commitStream-panel .error {
+  color: #8d0a39;
+  margin-left: .25em;
+}
+.commitStream-panel .unsupported {
+  padding: 2em 1em 2em 2em;
+}
+.commitStream-panel .unsupported #player1 {
+  vertical-align: middle;
+  display: inline-block;
+  width: 612px;
+  height: 482px;
+  padding: 0;
+  background: #282828;
+}
+.commitStream-panel .unsupported .browsers {
+  padding-top: 10px;
+  overflow: hidden;
+}
+.commitStream-panel .unsupported .browsers .chrome {
+  background-image: url("images/browsers/chrome.png");
+  padding-left: 70px;
+}
+.commitStream-panel .unsupported .browsers .ff {
+  background-image: url("images/browsers/ff.png");
+  padding-left: 70px;
+}
+.commitStream-panel .unsupported .browsers .ie-logo {
+  background-image: url("images/browsers/ie.png");
+  padding-left: 70px;
+}
+.commitStream-panel .unsupported .video {
+  float: left;
+  margin: 1em;
+}
+.commitStream-panel .unsupported .vid-link {
+  padding: 3px;
+}
+.commitStream-panel .unsupported .vid-link img {
+  display: block;
+  padding-bottom: 5px;
+  border: 1px solid #a6a6a6;
+}
+.commitStream-panel .unsupported .ab-history,
+.commitStream-panel .unsupported .abh-timeline {
+  height: 362px;
+}
+.commitStream-panel .unsupported .abh {
+  margin: 2em 1em 2em 0;
+  width: 99%;
+}
+.commitStream-panel .unsupported .ab-history {
+  position: relative;
+  border: 1px solid #e6e6e6;
+  background: #e6e6e6;
+}
+.commitStream-panel .unsupported .abh-timetick {
+  height: 59px;
+  width: 93px;
+  background: url('images/browsers/ab-h-tt.png') no-repeat top center;
+  position: absolute;
+  top: 2px;
+  left: 0;
+}
+.commitStream-panel .unsupported .abh-timeline {
+  overflow-y: hidden;
+  overflow-x: auto;
+  position: relative;
+}
+.commitStream-panel .unsupported .time-scroll {
+  height: 362px;
+  width: 1765px;
+  background: white url('images/browsers/ab-h-bg.png') no-repeat top left;
+}
+.commitStream-panel .disabled,
+.commitStream-panel [disabled] {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: "Alpha(Opacity=50)";
+  -khtml-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+.commitStream-panel .loading {
+  background: url('../loading-spin-888.svg') no-repeat scroll center center transparent;
+}
+.commitStream-panel .main-panel-scroller .loading {
+  height: 70px;
+}
+.commitStream-panel .tree-panel .loading {
+  height: 55px;
+}
+.commitStream-panel .gadget.loading {
+  min-height: 55px;
+}
+.commitStream-panel h3 .reload {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-left: 0.3em;
+  cursor: pointer;
+}
+.commitStream-panel h3 .reload {
+  background: url('../sprite-refresh.png') no-repeat scroll left top;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  width: 13px;
+  height: 13px;
+  background-position: 0 0;
+}
+.commitStream-panel h3 .reload:hover {
+  background-position: 0 -26px;
+}
+.commitStream-panel h3 .requesting {
+  background-image: url('gray-refresh-anim.gif');
+}
+.commitStream-panel h3 .requesting:hover {
+  background-position: 0 0;
+}
+.commitStream-panel div.window .remaining,
+.commitStream-panel div.window .remaining {
+  text-align: center;
+  padding-bottom: 1em;
+}
+.commitStream-panel div.window .remaining .loading,
+.commitStream-panel div.window .remaining .loading,
+.commitStream-panel div.window .remaining .finished,
+.commitStream-panel div.window .remaining .finished {
+  display: none;
+}
+.commitStream-panel div.window .remaining .loading,
+.commitStream-panel div.window .remaining .loading {
+  height: .5em;
+}
+.commitStream-panel div.window > ol,
+.commitStream-panel div.window > ol {
+  padding: 0.8em;
+}
+.commitStream-panel div.window .remaining .loading,
+.commitStream-panel div.window .remaining .loading {
+  display: block;
+}
+.commitStream-panel div.window .remaining .more,
+.commitStream-panel div.window .remaining .more {
+  display: none;
+}
+.commitStream-panel div.window .remaining .finished,
+.commitStream-panel div.window .remaining .finished {
+  display: block;
+  font-size: 0.855em;
+  color: #a6a6a6;
+}
+.commitStream-panel div.window .remaining .more,
+.commitStream-panel div.window .remaining .more {
+  display: none;
+}
+.commitStream-panel .toggle-cs-autorefresh-label {
+  display: inline-block;
+  color: #a6a6a6;
+  font-weight: 600;
+  font-size: 0.8em;
+  padding: 0.2em 0;
+}
+.commitStream-panel .cs-refresh {
+  margin-bottom: .4em;
+  margin-top: 0;
+}
+.commitStream-panel .toggle-cs-autorefresh {
+  margin-left: 1em;
+}
+.commitStream-panel h3 {
+  margin: 0;
+  padding: 0.4em 0.8em 0.7em .8em;
+  font-size: 1.1em;
+  color: #8d0a39;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.commitStream-panel p {
+  color: #454545;
+  font-size: 13px;
+  word-wrap: break-word;
+  line-height: 16.1000003814697px;
+}
+.commitStream-panel ol {
+  -webkit-margin-before: 0;
+  -webkit-padding-start: 0;
+}
+.commitStream-panel ol li {
+  border-top: 1px solid #dedede;
+  padding: 1em .2em;
+}
+.commitStream-panel .csInfo {
+  padding: 10px 20px 0px 20px;
+  background-image: url(../icon-github-16x16.png);
+  background-repeat: no-repeat;
+  background-position-y: 12px;
+  min-height: 25px;
+}
+.commitStream-panel .csMessage {
+  padding-left: 20px;
+  color: #8c8c8c;
+  white-space: pre-wrap;
+}
+.commitStream-panel .side-panel-scrollable {
+  top: 63px;
+}
+.commitStream-panel .commitStreamTime {
+  font-size: 0.8em;
+  color: #a6a6a6;
+  text-transform: uppercase;
+}
+.inline-asset-detail div.window > ol,
+div.window > ol {
+  padding: 0 .8em .8em .8em;
+}
+.inline-asset-detail .commitStream-panel h3 {
+  /*color:#474c54;
+  margin-top:4px;
+  font-size: 1.2em;
+  padding: 0.4em 0.8em 0.7em .6em; */
+}
