@@ -36,7 +36,7 @@ $(function() {
   var workitem = getQueryVariable('workitem');
 
   function handleError(data, status) {
-    $('#commits').html('<div class="commitStream-TR-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
+    $('#commits').html('<div class="commitStream-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
   }
 
   $.getScript('app',
@@ -48,7 +48,7 @@ $(function() {
   </head>
 
   <body>
-    <link type="text/css" rel="stylesheet" href="commitStream.css">
+    <link type="text/css" rel="stylesheet" href="css/commitStream.css">
     <div id="commits"></div>
   </body>
 </html>

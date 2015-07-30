@@ -18,11 +18,13 @@
     // TODO: enable after new styles are released in V1 Prod
     //prependStyleSheet(commitStreamRoot, serviceUrl + '/css/manage.css');
     prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap.min.css');
+    //prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-theme.min.css');
+    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/glyphicon.css');
 
     // XDomain support for IE9 especially
-    commitStreamRoot.prepend($('<scr' + 'ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"'));
+    setTimeout(function() {
+      commitStreamRoot.prepend($('<scr' + 'ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"'));
+    }, 1000);
 
     // Grab route locations for config-get and config-save, if they exist
 

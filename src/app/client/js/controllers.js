@@ -1,37 +1,29 @@
 'use strict';
 
-var commitStreamAdminControllers = angular.module('commitStreamAdminControllers', []);
+var commitStreamControllers = angular.module('commitStreamControllers', []);
 
-var isInstanceMode = function(config) {
-  if (!config.configMode) return true;
-  return config.configMode.type === 'instance';
-};
-
-var isDigestMode = function(config) {
-  return config.configMode && config.configMode.type === 'digest';
-};
-
-var isDigestConfigured = function(config) {
-  return config.configMode.configured;
-};
-
-commitStreamAdminControllers.controller('InstancesController', [
-  '$rootScope',
+commitStreamControllers.controller('CommitStreamAdminController', [
   '$scope',
-  '$http',
-  '$q',
-  '$location',
   'CommitStreamApi',
+  '$timeout',
   'serviceUrl',
   'configGetUrl',
   'configSaveUrl',
+  '$http',
+  '$q',
+  'prompt',
+  '$location',
   'persistentOptions',
-  function($rootScope, $scope, $http, $q, $location, CommitStreamApi, serviceUrl, configGetUrl, configSaveUrl, persistentOptions) {
-    var config;
+  function($scope, CommitStreamApi, $timeout, serviceUrl,
+    configGetUrl, configSaveUrl, $http, $q, prompt, $location, persistentOptions) {
+
+    var loading = true,
+      config,
+      resources,
+      instance,
+      digest;
 
     $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
-
-    var loading = true;
 
     $scope.loading = function() {
       return loading;
@@ -54,102 +46,13 @@ commitStreamAdminControllers.controller('InstancesController', [
       return $scope.error.value !== '';
     };
 
+    var isDigestConfigured = function(config) {
+      return config.configMode.configured;
+    };
 
-    CommitStreamApi
-      .load()
-      .then(function(resources) {
-        $rootScope.resources = resources;
-        if (!configGetUrl) return {
-          data: {
-            configMode: {
-              type: 'instance',
-              digestId: '',
-              configured: false,
-              enabled: false,
-              useGlobalDigestId: false
-            },
-            serviceUrl: serviceUrl,
-            instanceId: '',
-            apiKey: '',
-            globalDigestId: '',
-            configured: false,
-            enabled: false
-          }
-        }
-        return $http.get(configGetUrl);
-      })
-      .then(function(configRes) {
-        // TODO handle null case?        
-        config = configRes.data;
-        if (!config.configMode) {
-          config.configMode = {
-            type: 'instance',
-            digestId: '',
-            configured: false,
-            enabled: false,
-            useGlobalDigestId: false
-          };
-        }
-        $rootScope.config = config;
-
-        if (config.configured) {
-          persistentOptions.headers.Bearer = config.apiKey;
-          return $rootScope.resources.$get('instance', {
-            instanceId: config.instanceId
-          });
-        } else {
-          return false;
-        }
-      })
-      .then(function(instance) {
-        if (instance) {
-          persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
-          $rootScope.instance = instance;
-
-          if (isInstanceMode(config)) {
-            if (config.configured) {
-              return $rootScope.resources.$get('digest', {
-                instanceId: config.instanceId,
-                digestId: config.globalDigestId
-              });
-            } else {
-              return instance.$post('digest-create', {}, {
-                description: 'Global Repositories List'
-              });
-            }
-          } else {
-            // Don't know what state it's in here, but probably didn't get here naturally, so just return false
-            return false;
-          }
-        }
-      })
-      .then(function(digest) {
-        if (digest) {
-          $rootScope.digest = digest;
-        }
-        $location.path('/inboxes');
-      })
-      .catch(errorHandler);
-  }
-]);
-
-commitStreamAdminControllers.controller('InboxesController', [
-  '$rootScope',
-  '$scope',
-  '$timeout',
-  'serviceUrl',
-  'configSaveUrl',
-  '$http',
-  '$q',
-  'prompt',
-  '$location',
-  'persistentOptions',
-  function($rootScope, $scope, $timeout, serviceUrl,
-    configSaveUrl, $http, $q, prompt, $location, persistentOptions) {
-
-    $scope.inboxesVisible = function() {
+    $scope.isAdminPanelVisible = function() {
       // Only display when we actually have the config in $scope!
-      return $rootScope.config;
+      return config;
     };
 
     var isCustomDigest = function() {
@@ -161,14 +64,15 @@ commitStreamAdminControllers.controller('InboxesController', [
     }
 
     var getGlobalDigest = function(config) {
-      return $rootScope.resources.$get('digest', {
-        instanceId: $rootScope.config.instanceId,
-        digestId: $rootScope.config.globalDigestId
+      return resources.$get('digest', {
+        instanceId: config.instanceId,
+        digestId: config.globalDigestId
       });
     }
+
     var getCustomDigest = function(config) {
       if (!isDigestConfigured(config)) {
-        return $rootScope.instance.$post('digest-create', {}, {
+        return instance.$post('digest-create', {}, {
           description: 'Repositories List'
         }).then(function(digest) {
           return {
@@ -177,9 +81,9 @@ commitStreamAdminControllers.controller('InboxesController', [
           }
         });
       } else {
-        return $rootScope.resources.$get('digest', {
-          instanceId: $rootScope.config.instanceId,
-          digestId: $rootScope.config.configMode.digestId
+        return resources.$get('digest', {
+          instanceId: config.instanceId,
+          digestId: config.configMode.digestId
         }).then(function(digest) {
           return {
             digest: digest,
@@ -199,35 +103,41 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     var customDigestSelected = function(firstCall) {
-      getCustomDigest($rootScope.config).then(function(digestResponse) {
-        $rootScope.digest = digestResponse.digest;
-        $rootScope.config.configMode.digestId = digestResponse.digest.digestId;
-        $rootScope.config.configMode.useGlobalDigestId = false;
-        $rootScope.config.configMode.enabled = true;
-        $rootScope.config.configMode.configured = true;
-        if (!firstCall) configDigestModeSave($rootScope.config.configMode);
-        if (!digestResponse.created) inboxesUpdate($rootScope.config.enabled);
+      getCustomDigest(config).then(function(digestResponse) {
+        digest = digestResponse.digest;
+        config.configMode.digestId = digestResponse.digest.digestId;
+        config.configMode.useGlobalDigestId = false;
+        config.configMode.enabled = true;
+        config.configMode.configured = true;
+        if (!firstCall) configDigestModeSave(config.configMode);
+        if (!digestResponse.created) inboxesUpdate(config.enabled);
       });
     }
+
     var globalDigestSelected = function(firstCall) {
-      getGlobalDigest($rootScope.config).then(function(digest) {
-        $rootScope.digest = digest;
-        $rootScope.config.configMode.useGlobalDigestId = true;
-        $rootScope.config.configMode.enabled = true;
-        if (!firstCall) configDigestModeSave($rootScope.config.configMode);
-        inboxesUpdate($rootScope.config.enabled);
+      getGlobalDigest(config).then(function(d) {
+        digest = d;
+        config.configMode.useGlobalDigestId = true;
+        config.configMode.enabled = true;
+        if (!firstCall) configDigestModeSave(config.configMode);
+        inboxesUpdate(config.enabled);
       })
     }
 
     var disabledDigestSelected = function() {
-      $rootScope.config.configMode.useGlobalDigestId = false;
-      $rootScope.config.configMode.enabled = false;
-      configDigestModeSave($rootScope.config.configMode);
+      config.configMode.useGlobalDigestId = false;
+      config.configMode.enabled = false;
+      configDigestModeSave(config.configMode);
     }
 
-    $scope.magicWorks = function(value) {
-      $scope.digestConfig.selection = value;
+    var resetInboxes = function() {
+      $scope.getInboxesDone = false;
       $scope.inboxes = [];
+    }
+
+    $scope.onOptionChange = function(value) {
+      $scope.digestConfig.selection = value;
+      resetInboxes();
       if (isCustomDigest()) {
         customDigestSelected(false);
       } else {
@@ -237,7 +147,6 @@ commitStreamAdminControllers.controller('InboxesController', [
           disabledDigestSelected();
         }
       }
-
     }
 
     $scope.radioButtonGlobal = function() {
@@ -264,12 +173,21 @@ commitStreamAdminControllers.controller('InboxesController', [
       }
     }
 
-    $scope.inboxesVisible2 = function() {
-      return $scope.config.configMode.type === 'instance' || $scope.digestConfig.selection !== 'disabled';
+    $scope.isInstanceMode = function() {
+      if (!config.configMode) return true;
+      return config.configMode.type === 'instance';
+    };
+
+    $scope.isDigestMode = function() {
+      return config.configMode && config.configMode.type === 'digest';
+    };
+
+    $scope.areRepositoriesVisible = function() {
+      return $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
     };
 
     $scope.editAllowed = function() {
-      return $scope.config.configMode.type === 'instance' || $scope.digestConfig.selection === 'useCustomDigest';
+      return $scope.isInstanceMode() || isCustomDigest();
     };
 
     $scope.getHeading = function() {
@@ -281,11 +199,6 @@ commitStreamAdminControllers.controller('InboxesController', [
       }
     };
 
-    if (!$rootScope.config) {
-      $location.path('/');
-      return;
-    }
-
     $scope.newInbox = {
       url: '',
       name: '',
@@ -294,13 +207,7 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     $scope.serviceUrl = serviceUrl;
     $scope.inboxes = [];
-
-    $scope.enabledState = {
-      enabled: $rootScope.config.enabled,
-      applying: false,
-      onText: 'Enabled',
-      offText: 'Disabled'
-    };
+    $scope.getInboxesDone = false;
 
     $scope.message = {
       value: ''
@@ -308,14 +215,6 @@ commitStreamAdminControllers.controller('InboxesController', [
 
     $scope.messageActive = function() {
       return $scope.message.value !== '';
-    };
-
-    $scope.error = {
-      value: ''
-    };
-
-    $scope.errorActive = function() {
-      return $scope.error.value !== '';
     };
 
     // NOTE: this is a bit of a hack to remove errors upon network request to clear
@@ -332,8 +231,8 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     var getSelection = function() {
-      if ($rootScope.config.configMode.enabled) {
-        if (!$rootScope.config.configMode.useGlobalDigestId) {
+      if (config.configMode.enabled) {
+        if (!config.configMode.useGlobalDigestId) {
           $scope.digestConfig.selection = 'useCustomDigest';
           customDigestSelected(true);
         } else {
@@ -351,37 +250,29 @@ commitStreamAdminControllers.controller('InboxesController', [
       return $scope.newInbox.url.substr(index + 1);
     };
 
-    var errorHandler = function(error) {
-      if (error.data && error.data.errors && error.data.errors.length) {
-        $scope.error.value = error.data.errors[0];
-      } else {
-        $scope.error.value = 'There was an unexpected error when processing your request.';
-      }
-    };
-
     var configSave = function(enabled) {
-      $rootScope.config.enabled = enabled;
+      config.enabled = enabled;
 
-      if (!$rootScope.config.configured) {
-        return $rootScope.resources.$post('instances')
-          .then(function(instance) {
+      if (!config.configured) {
+        return resources.$post('instances')
+          .then(function(i) {
             persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
-            $rootScope.instance = instance;
+            instance = i;
             return instance.$post('digest-create', {}, {
               description: 'Global Repositories List'
             });
           })
-          .then(function(digest) {
-            $rootScope.digest = digest;
-            $rootScope.config.instanceId = $rootScope.instance.instanceId;
-            $rootScope.config.globalDigestId = digest.digestId;
-            $rootScope.config.apiKey = $rootScope.instance.apiKey;
-            $rootScope.config.configured = true;
-            if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
+          .then(function(d) {
+            digest = d;
+            config.instanceId = instance.instanceId;
+            config.globalDigestId = digest.digestId;
+            config.apiKey = instance.apiKey;
+            config.configured = true;
+            if (configSaveUrl) return $http.post(configSaveUrl, config);
             return $q.when(true);
           });
       } else {
-        if (configSaveUrl) return $http.post(configSaveUrl, $rootScope.config);
+        if (configSaveUrl) return $http.post(configSaveUrl, config);
         return $q.when(true);
       }
     };
@@ -393,8 +284,8 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     var inboxesGet = function() {
-      if ($rootScope.digest) {
-        $rootScope.digest.$get('inboxes')
+      if (digest) {
+        digest.$get('inboxes')
           .then(function(inboxesRes) {
             return inboxesRes.$get('inboxes');
           }).then(function(inboxes) {
@@ -403,6 +294,7 @@ commitStreamAdminControllers.controller('InboxesController', [
               inboxConfigure(inbox);
               $scope.inboxes.unshift(inbox);
             });
+            $scope.getInboxesDone = true;
           })
           .catch(errorHandler);
       }
@@ -416,14 +308,6 @@ commitStreamAdminControllers.controller('InboxesController', [
       }
       inboxesGet();
     }
-
-    $scope.isInstanceMode = function() {
-      return isInstanceMode($rootScope.config);
-    };
-
-    $scope.isDigestMode = function() {
-      return isDigestMode($rootScope.config);
-    };
 
     $scope.enabledChanged = function() {
       $scope.newInbox.url = '';
@@ -446,13 +330,24 @@ commitStreamAdminControllers.controller('InboxesController', [
         });
     };
 
-    $scope.applying = function() {
-      return $scope.enabledState.applying;
-    };
+    function setupScope() {
 
-    $scope.overlayVisible = function() {
-      return $scope.enabledState.applying || !$rootScope.config.enabled;
-    };
+      $scope.enabledState = {
+        enabled: config.enabled,
+        applying: false,
+        onText: 'Enabled',
+        offText: 'Disabled'
+      };
+
+      $scope.applying = function() {
+        return $scope.enabledState.applying;
+      };
+
+      $scope.overlayVisible = function() {
+        return $scope.enabledState.applying || !config.enabled;
+      };
+
+    }
 
     $scope.adjustOverlay = function() {
       var repolistWidth = $('.repos-list').width();
@@ -470,7 +365,7 @@ commitStreamAdminControllers.controller('InboxesController', [
         var index = $scope.newInbox.url.lastIndexOf('/');
         $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
 
-        $rootScope.digest.$post('inbox-create', {}, $scope.newInbox)
+        digest.$post('inbox-create', {}, $scope.newInbox)
           .then(function(inbox) {
             inboxConfigure(inbox);
             $scope.inboxes.unshift(inbox);
@@ -515,7 +410,7 @@ commitStreamAdminControllers.controller('InboxesController', [
     };
 
     var inboxHighlight = function(el) {
-      if ($rootScope.config.enabled) {
+      if (config.enabled) {
         el.focus();
         el.select();
       }
@@ -532,8 +427,92 @@ commitStreamAdminControllers.controller('InboxesController', [
       }, 0);
     };
 
-    if ($scope.isDigestMode()) getSelection();
-    inboxesUpdate($rootScope.config.enabled);
+    var getConfig = function(r) {
+      resources = r;
+      if (!configGetUrl) return {
+        data: {
+          configMode: {
+            type: 'instance',
+            digestId: '',
+            configured: false,
+            enabled: false,
+            useGlobalDigestId: false
+          },
+          serviceUrl: serviceUrl,
+          instanceId: '',
+          apiKey: '',
+          globalDigestId: '',
+          configured: false,
+          enabled: false
+        }
+      }
+      return $http.get(configGetUrl);
+    }
+
+    var getInstance = function(configRes) {
+      // TODO handle null case?
+      config = configRes.data;
+      if (!config.configMode) {
+        config.configMode = {
+          type: 'instance',
+          digestId: '',
+          configured: false,
+          enabled: false,
+          useGlobalDigestId: false
+        };
+      }
+
+      if (!config.configured) return false;
+
+      persistentOptions.headers.Bearer = config.apiKey;
+      return resources.$get('instance', {
+        instanceId: config.instanceId
+      });
+
+    }
+
+    var getDigest = function(i) {
+      if (!i) return false;
+
+      instance = i;
+      persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
+
+      if ($scope.isInstanceMode() && config.configured) {
+        return resources.$get('digest', {
+          instanceId: config.instanceId,
+          digestId: config.globalDigestId
+        });
+      }
+
+      if ($scope.isInstanceMode()) {
+        return instance.$post('digest-create', {}, {
+          description: 'Global Repositories List'
+        });
+      }
+      // Don't know what state it's in here, but probably didn't get here naturally, so just return false
+      return false;
+    }
+
+    var preventTabNavigation = function() {
+      $("#commitStreamAdmin :input").each(function() {
+        $(this).attr('tabindex', '-1');
+      });
+    }
+
+    CommitStreamApi
+      .load()
+      .then(getConfig)
+      .then(getInstance)
+      .then(getDigest)
+      .then(function(d) {
+        if (d) digest = d;
+        setupScope();
+        if ($scope.isDigestMode()) getSelection();
+        inboxesUpdate(config.enabled);
+        loading = false;
+        preventTabNavigation();
+      })
+      .catch(errorHandler);
 
   }
 ]);
