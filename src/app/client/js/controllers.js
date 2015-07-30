@@ -256,8 +256,8 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       if (!config.configured) {
         return resources.$post('instances')
           .then(function(i) {
-            persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
             instance = i;
+            persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
             return instance.$post('digest-create', {}, {
               description: 'Global Repositories List'
             });
