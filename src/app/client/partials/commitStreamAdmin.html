@@ -1,6 +1,51 @@
 <style>
+/* Modal Bootstrap Extracted Styles */
+	.modal-open{overflow:hidden}.modal
+	{display:none;overflow:hidden;position:fixed;top:0;right:0;bottom:0;left:0;z-index:1050;-webkit-overflow-scrolling:touch;outline:0}
+	.modal.fade .modal-dialog{-webkit-transform:translate(0, -25%);-ms-transform:translate(0, -25%);-o-transform:translate(0, -25%);transform:translate(0, -25%);-webkit-transition:-webkit-transform 0.3s ease-out;-o-transition:-o-transform 0.3s ease-out;transition:transform 0.3s ease-out}
+	.modal.in .modal-dialog{-webkit-transform:translate(0, 0);-ms-transform:translate(0, 0);-o-transform:translate(0, 0);transform:translate(0, 0)}
+	.modal-open .modal{overflow-x:hidden;overflow-y:auto}
+	.modal-dialog{position:relative;width:auto;margin:10px}
+	.modal-content{position:relative;background-color:#fff;border:1px solid #999;border:1px solid rgba(0,0,0,0.2);border-radius:6px;-webkit-box-shadow:0 3px 9px rgba(0,0,0,0.5);box-shadow:0 3px 9px rgba(0,0,0,0.5);-webkit-background-clip:padding-box;background-clip:padding-box;outline:0}
+	.modal-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1040;background-color:#000}
+	.modal-backdrop.fade{opacity:0;filter:alpha(opacity=0)}
+	.modal-backdrop.in{opacity:.5;filter:alpha(opacity=50)}
+	.modal-header{padding:15px;border-bottom:1px solid #e5e5e5;min-height:16.42857143px}
+	.modal-header .close{margin-top:-7px; float: right;}
+	.modal-title {margin:0; float: left; font-weight: 300; font-size: 1.714em; letter-spacing: -0.025em;}
+	.modal-body{position:relative;padding:15px}
+	.modal-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}
+	.modal-footer .btn+.btn{margin-left:5px;margin-bottom:0}
+	.modal-footer .btn-group .btn+.btn{margin-left:-1px}
+	.modal-footer .btn-block+.btn-block{margin-left:0}
+	.modal-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}
+	@media (min-width:768px){.modal-dialog{width:600px;margin:30px auto}
+	.modal-content{-webkit-box-shadow:0 5px 15px rgba(0,0,0,0.5);box-shadow:0 5px 15px rgba(0,0,0,0.5)}
+	.modal-sm{width:300px}
+	}
+	@media (min-width:992px) { 
+		.modal-lg {width:900px}
+	}
+  /* Repo List Table */
+  .commitstream-admin .initialLoader {position: absolute; top: 50%; left: 50%;}
+  .commitstream-admin .repos-list {margin-top: 2em;}
+  .commitstream-admin .repos-list table {background-color: #fff; border: 0 !important;}
+  .commitstream-admin .repos-list .table-bordered>thead>tr>th, .commitstream-admin .table-bordered>tbody>tr>th, .commitstream-admin .table-bordered>tfoot>tr>th, .commitstream-admin .table-bordered>thead>tr>td, .commitstream-admin .table-bordered>tbody>tr>td, .commitstream-admin .table-bordered>tfoot>tr>td {border-left: none; border-right: none; border-bottom: none; padding: 13px;}
+  .commitstream-admin .table>thead>tr>th, .commitstream-admin .table>tbody>tr>th, .commitstream-admin .table>tfoot>tr>th, .commitstream-admin .table>thead>tr>td, .commitstream-admin .table>tbody>tr>td, .commitstream-admin .table>tfoot>tr>td {text-align: left; border-top: 1px solid #dde2e9 !important; border-width: 1px 0; border-color: transparent transparent #dde2e9;}
+  .commitstream-admin .repos-list .table-striped>tbody>tr:nth-of-type(odd) {background-color:#fff;}
   .commitstream-admin {color: #454545;}
-  .commitstream-admin h3 {font-size: 1.2em; padding-top:0; margin-top:0; font-weight: bold;}
+  .commitstream-admin h1 {
+  	margin-top: 1em;
+    padding: 0px .5em !important;
+    font-weight: 300;
+    min-height: 42px;
+    line-height: 42px;
+    font-size: 1.714em;
+    letter-spacing: -0.025em;
+  	background-color: #EDF0F3;
+  }
+  .commitstream-admin .repos-list input {padding: .4em; width: 85%;}
+  /* End Repo List Table */
   .commitstream-admin .prompt {
     position: absolute;
     top:0;
@@ -11,7 +56,12 @@
     text-align: center;
   }
   .commitstream-admin .well {
-    background: #f2f2f2;
+    background: #fff;
+    box-shadow: none;
+    padding: 15px;
+  }
+  .commitstream-admin .well p {
+  	padding-bottom: .5em;
   }
   .commitstream-admin .vcs-link {
     font-size: 12px;
@@ -21,7 +71,7 @@
   }
   .commitstream-admin .repos-section .overlay {
     position: absolute;
-    top: 47px;
+    top: 0px;
     opacity: .6;
     z-index: 3;
     overflow: hidden;
@@ -33,14 +83,15 @@
     border: none;
     margin-top: 0px;
     margin-left: 15px;
-    width: 50px;
+    width: 50px !important;
     text-transform: uppercase;
     font-weight: bolder;
     color: #fff;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Proxima Nova', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+    -webkit-font-smoothing: antialiased;
     font-size: 12px;
     border-radius: 6px;
-    height: 32px;
+    height: 32px !important;
     line-height: 32px;
   }
   .commitstream-admin .repo-add {
@@ -64,29 +115,30 @@
   .commitstream-admin .repo-instruction {
     font-size: 80%;
     margin-top: 8px;
-    margin-left: 12px;
+    margin-left: 7px;
     color: #909090;
     font-style: italic;
   }
   .commitstream-admin .btn-default, .commitstream-admin .btn-primary {
     background-image: none !important;
-    text-transform: uppercase;
-    font-weight: bolder;
+    border: none !important;
     text-shadow: 0 0 0 transparent !important;
   }
+/* Enable/Disable Admin Panel toggle */
+  .commitstream-admin .toggle {height: 20px !important;}
+  .commitstream-admin .toggle.btn {min-height: 0;}
   .commitstream-admin .toggle-handle {
     border-radius: 0px;
     width: 50px;
   }
-  .commitstream-admin .btn-primary {
-    background: #eb6c00;
-  }
   .commitstream-admin .toggle-on.btn {
-    padding-right:35px;
-    background: #00a7e2;;
+  	font-weight: 600;
+    padding-right:60px;
+    background: #00a7e2;
   }
   .commitstream-admin .toggle-off.btn {
-    padding-left:35px;
+    padding-left:60px;
+    font-weight: 600;
   }
   .commitstream-admin .validation-error {
     font-size: 80%;
@@ -121,8 +173,6 @@
     box-shadow: none !important;
     background: white !important;
   }
-
-  .btn-group-vertical {margin-bottom: 2em;}
   .btn-group-vertical .btn-default.selected {
     background-color: #00a9e0 !important;
     color: #fff !important;
@@ -139,14 +189,14 @@
     background-color: #006e92 !important;
     color: #fff;
   }
-
+  .commitstream-admin .btn-default:active, .commitstream-admin .btn-default.active, .commitstream-admin .open>.dropdown-toggle.btn-default {background-color: #b7bcc4; box-shadow: none;}
   span.glyphicon {
       padding-right: 5px;
   }
 
 </style>
 
-<img ng-show='loading()' ng-src='{{loaderUrl}}' class='loader' />
+<img ng-show='loading()' ng-src='{{loaderUrl}}' class='initialLoader' />
 
 <div ng-if='isAdminPanelVisible()'>
   <p ng-if='isInstanceMode()'>
@@ -160,8 +210,7 @@
       ng-change='enabledChanged()'
       toggle-checkbox
     />
-
-    <span ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
+    <span class="loader" ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
   </p>
 
   <div ng-if='isDigestMode()'>
@@ -171,7 +220,6 @@
       <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="onOptionChange('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
       <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="onOptionChange('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
     </div>
-
   </div>
 
   <div ng-if="messageActive()" class='message prompt'>
@@ -191,7 +239,7 @@
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list' ng-if='areRepositoriesVisible()'>
-    <h3 ng-show='getInboxesDone'>{{getHeading()}}</h3>
+    <h1 ng-show='getInboxesDone'>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
@@ -208,7 +256,7 @@
       </form>
     </div>
     <div ng-if='inboxes.length > 0'>
-      <h4 ng-if='editAllowed()'>Active Repositories</h4>
+      <h1 ng-if='editAllowed()'>Active Repositories</h1>
       <table ng-if='editAllowed()' class='table table-striped table-bordered'>
         <tr>
           <th>Repository Name</th>
