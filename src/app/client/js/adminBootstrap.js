@@ -3,7 +3,7 @@
 
   var prependStyleSheet = function(el, href) {
     el.prepend($('<link type="text/css" rel="stylesheet" href="' + href + '">'));
-  }
+  };
 
   var getServiceUrl = function(scriptEl) {
     var src = scriptEl.attr('src');
@@ -11,7 +11,7 @@
       return src.substr(0, src.indexOf('/js/adminBootstrap.js'));
     }
     return '';
-  }
+  };
 
   var callAngular = function() {
     var config = angular.module('commitStreamAdmin.config', []);
@@ -39,9 +39,9 @@
     });
 
     CommitStreamAdminBoot($('#' + rootElementId));
-  }
+  };
 
-  var loadScripts = function(scripts) {
+  var loadScripts = function(scripts, cb) {
     if (!scripts || !scripts.length) {
       return;
     }
@@ -49,9 +49,9 @@
     $.getScript(currentScript)
       .done(function() {
         if (scripts.length > 0) {
-          loadScripts(scripts);
+          loadScripts(scripts, cb);
         } else {
-          callAngular();
+          cb();
         }
       })
       .fail(onLoadScriptsFailure);
@@ -61,7 +61,7 @@
     console.error('CommitStream dependency loading exception for script:' + currentScript);
     console.error('CommitStream dependency loading exception details:');
     console.error(exception);
-  }
+  };
 
   var prependXdomain = function(commitStreamRoot) {
     setTimeout(function() {
@@ -72,7 +72,7 @@
         $('<scr' + 'ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"')
       );
     }, 1000);
-  }
+  };
 
   try {
 
@@ -85,16 +85,21 @@
     var rootElementId = scriptEl.attr('data-commitstream-root');
     var commitStreamRoot = $('#' + rootElementId);
 
+    var bowerUrl = serviceUrl + '/bower_components/';
+
+    var loadOnceScripts = [
+      bowerUrl + 'angular/angular.min.js',
+      bowerUrl + 'angular-route/angular-route.min.js',
+      bowerUrl + 'angular-bootstrap/ui-bootstrap.min.js',
+      bowerUrl + 'angular-bootstrap/ui-bootstrap-tpls.min.js',
+      bowerUrl + 'angular-prompt/dist/angular-prompt.min.js',
+      bowerUrl + 'angular-hal/angular-hal.js',
+      bowerUrl + 'rfc6570/rfc6570.js',
+      bowerUrl + 'bootstrap/dist/js/bootstrap.min.js',
+      bowerUrl + 'bootstrap-toggle/js/bootstrap-toggle.min.js',
+    ];
+
     var scripts = [
-      serviceUrl + '/bower_components/angular/angular.min.js',
-      serviceUrl + '/bower_components/angular-route/angular-route.min.js',
-      serviceUrl + '/bower_components/angular-bootstrap/ui-bootstrap.min.js',
-      serviceUrl + '/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      serviceUrl + '/bower_components/angular-prompt/dist/angular-prompt.min.js',
-      serviceUrl + '/bower_components/angular-hal/angular-hal.js',
-      serviceUrl + '/bower_components/rfc6570/rfc6570.js',
-      serviceUrl + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
-      serviceUrl + '/bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js',
       serviceUrl + '/js/admin.js',
       serviceUrl + '/js/controllers.js',
       serviceUrl + '/js/directives.js'
@@ -109,7 +114,15 @@
     // XDomain support for IE9 especially
     prependXdomain(commitStreamRoot);
 
-    loadScripts(scripts);
+    //only load angular and friends once
+    if (window.angular) {
+      loadScripts(scripts, callAngular);
+    } else {
+      loadScripts(loadOnceScripts, function() {
+        loadScripts(scripts, callAngular);
+      });
+    }
+
   } catch (ex) {
     console.error('CommitStream adminBootstrap error:');
     console.error(ex);

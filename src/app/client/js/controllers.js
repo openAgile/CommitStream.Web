@@ -61,14 +61,14 @@ commitStreamControllers.controller('CommitStreamAdminController', [
 
     var isGlobalDigest = function() {
       return $scope.digestConfig.selection === 'useGlobalDigest';
-    }
+    };
 
     var getGlobalDigest = function(config) {
       return resources.$get('digest', {
         instanceId: config.instanceId,
         digestId: config.globalDigestId
       });
-    }
+    };
 
     var getCustomDigest = function(config) {
       if (!isDigestConfigured(config)) {
@@ -91,7 +91,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
           }
         });
       }
-    }
+    };
 
     // For teamroom settings:
     var configDigestModeSave = function(configMode) {
@@ -112,7 +112,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
         if (!firstCall) configDigestModeSave(config.configMode);
         if (!digestResponse.created) inboxesUpdate(config.enabled);
       });
-    }
+    };
 
     var globalDigestSelected = function(firstCall) {
       getGlobalDigest(config).then(function(d) {
@@ -122,18 +122,18 @@ commitStreamControllers.controller('CommitStreamAdminController', [
         if (!firstCall) configDigestModeSave(config.configMode);
         inboxesUpdate(config.enabled);
       })
-    }
+    };
 
     var disabledDigestSelected = function() {
       config.configMode.useGlobalDigestId = false;
       config.configMode.enabled = false;
       configDigestModeSave(config.configMode);
-    }
+    };
 
     var resetInboxes = function() {
       $scope.getInboxesDone = false;
       $scope.inboxes = [];
-    }
+    };
 
     $scope.onOptionChange = function(value) {
       $scope.digestConfig.selection = value;
@@ -147,7 +147,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
           disabledDigestSelected();
         }
       }
-    }
+    };
 
     $scope.radioButtonGlobal = function() {
       if (isGlobalDigest()) {
@@ -155,7 +155,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       } else {
         return 'glyphicon glyphicon-unchecked'
       }
-    }
+    };
 
     $scope.radioButtonCustom = function() {
       if (isCustomDigest()) {
@@ -163,7 +163,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       } else {
         return 'glyphicon glyphicon-unchecked'
       }
-    }
+    };
 
     $scope.radioButtonDisabled = function() {
       if (!isCustomDigest() && !isGlobalDigest()) {
@@ -171,7 +171,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       } else {
         return 'glyphicon glyphicon-unchecked'
       }
-    }
+    };
 
     $scope.isInstanceMode = function() {
       if (!config.configMode) return true;
@@ -240,7 +240,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
           globalDigestSelected(true);
         }
       }
-    }
+    };
 
     $scope.inboxName = function() {
       if (!$scope.newInbox.url || $scope.newInbox.url.length < 1) return '...';
@@ -312,7 +312,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
         });
       }
       inboxesGet();
-    }
+    };
 
     $scope.enabledChanged = function() {
       $scope.newInbox.url = '';
@@ -352,7 +352,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
         return $scope.enabledState.applying || !config.enabled;
       };
 
-    }
+    };
 
     $scope.adjustOverlay = function() {
       var repolistWidth = $('.repos-list').width();
@@ -452,7 +452,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
         }
       }
       return $http.get(configGetUrl);
-    }
+    };
 
     var getInstance = function(configRes) {
       // TODO handle null case?
@@ -473,8 +473,7 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       return resources.$get('instance', {
         instanceId: config.instanceId
       });
-
-    }
+    };
 
     var getDigest = function(i) {
       if (!i) return false;
@@ -496,13 +495,13 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       }
       // Don't know what state it's in here, but probably didn't get here naturally, so just return false
       return false;
-    }
+    };
 
     var preventTabNavigation = function() {
       $("#commitStreamAdmin :input").each(function() {
         $(this).attr('tabindex', '-1');
       });
-    }
+    };
 
     var allowTabNavigation = function() {
       $("#commitStreamAdmin :input").each(function() {
