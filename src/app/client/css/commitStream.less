@@ -11,7 +11,8 @@
  */
 .commitStream-panel {
   display: block;
-  font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif; 
+  font-family: 'Proxima Nova', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
 
 html,
 body,
@@ -253,7 +254,7 @@ button {
   -ms-interpolation-mode: bicubic;
 }
 /* -- END of HTML5 Boilerplate, what follows are our reset sizes */
-h1 {
+/*h1 {
   font-size: 1.6em;
 }
 h2 {
@@ -270,7 +271,7 @@ h5 {
 }
 h6 {
   font-size: 0.8em;
-}
+}*/
 /* These are our primary colors, adjust with care! */
 /* white */
 /* red */
@@ -977,23 +978,27 @@ select::-webkit-input-placeholder {
 .gadget.loading {
   min-height: 55px;
 }
+
+h3 {
+    margin-top: -.42em;
+    font-size: 1.1em;
+    font-weight: 300;
+    color: #8d0a39;
+}
+
 h3 .reload {
+  background: url('../sprite-refresh.png') no-repeat scroll left top;
   display: inline-block;
   width: 16px;
   height: 16px;
   vertical-align: middle;
   margin-left: 0.3em;
   cursor: pointer;
-}
-h3 .reload {
-  background: url('../sprite-refresh.png') no-repeat scroll left top;
-  display: inline-block;
   zoom: 1;
   *display: inline;
-  width: 13px;
-  height: 13px;
   background-position: 0 0;
 }
+
 h3 .reload:hover {
   background-position: 0 -26px;
 }
@@ -1020,7 +1025,7 @@ div.window .remaining .loading {
 }
 div.window > ol,
 div.window > ol {
-  padding: 0.8em;
+  /*padding: 0.8em;*/
 }
 div.window .remaining .loading,
 div.window .remaining .loading {
@@ -1059,19 +1064,12 @@ div.window .remaining .more {
 }
 
 
-  h3 {
-    margin: 0; 
-    padding: 0.4em 0.8em 0.7em .8em; 
-    font-size: 1.1em; 
-    color:#8d0a39; 
-    font-weight: 600; 
-    letter-spacing: -0.03em;
-  }
+
 	 p {
     color:#454545; 
     font-size: 13px; 
     word-wrap: break-word; 
-    line-height: 16.1000003814697px;
+    line-height: 1.15em;
   }
    ol {
     -webkit-margin-before: 0; 
@@ -1080,6 +1078,7 @@ div.window .remaining .more {
   	 ol li {
       border-top: 1px solid #dedede; 
       padding: 1em .2em; 
+      display: block;
     }  
    .csInfo {
     padding: 10px 20px 0px 20px; 
@@ -1090,7 +1089,7 @@ div.window .remaining .more {
   }  
    .csMessage {
     padding-left: 20px; 
-    color:#8c8c8c;
+    color: #454545;
     white-space: pre-wrap;
   }	
    .side-panel-scrollable {
@@ -1109,9 +1108,10 @@ div.window .remaining .more {
   padding: 0 .8em .8em .8em;
 }
 .inline-asset-detail .commitStream-panel h3 {
-  /*color:#474c54;
-  margin-top:4px;
-  font-size: 1.2em;
-  padding: 0.4em 0.8em 0.7em .6em; */
+    margin: -5.4px 0 0 0; 
+    font-size: 1.143em;
+    font-weight: 700;
+    color: #454545;
+    letter-spacing: -0.03em;
 }
 

@@ -304,6 +304,11 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       if (enabled) {
         $timeout(function() {
           $('.inbox-url').select().focus();
+          allowTabNavigation();
+        });
+      } else {
+        $timeout(function() {
+          preventTabNavigation();
         });
       }
       inboxesGet();
@@ -499,6 +504,12 @@ commitStreamControllers.controller('CommitStreamAdminController', [
       });
     }
 
+    var allowTabNavigation = function() {
+      $("#commitStreamAdmin :input").each(function() {
+        $(this).removeAttr('tabindex');
+      });
+    }
+
     CommitStreamApi
       .load()
       .then(getConfig)
@@ -510,7 +521,6 @@ commitStreamControllers.controller('CommitStreamAdminController', [
         if ($scope.isDigestMode()) getSelection();
         inboxesUpdate(config.enabled);
         loading = false;
-        preventTabNavigation();
       })
       .catch(errorHandler);
 
