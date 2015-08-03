@@ -356,10 +356,12 @@
       };
 
       $scope.adjustOverlay = function() {
-        var repolistWidth = $('.repos-list').width();
-        var repolistHeight = $('.repos-list').height();
-        $('.repos-section .overlay').height(repolistHeight);
-        $('.repos-section .overlay').width(repolistWidth);
+        $timeout(function() {
+          var repolistWidth = $('.repos-list').width();
+          var repolistHeight = $('.repos-list').height();
+          $('.repos-section .overlay').height(repolistHeight);
+          $('.repos-section .overlay').width(repolistWidth);
+        })
       };
 
       $scope.inboxCreating = false;
