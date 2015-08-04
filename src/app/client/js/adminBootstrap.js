@@ -115,7 +115,7 @@
     prependXdomain(commitStreamRoot);
 
     //only load angular and friends once
-    if (window.angular) {
+    if (window.CommitStreamAdminBoot) {
       loadScripts(scripts, callAngular);
     } else {
       loadScripts(loadOnceScripts, function() {
