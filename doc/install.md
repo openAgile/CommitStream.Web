@@ -6,6 +6,13 @@ This is a work in progress. As this evolves, we update this narrative.
 
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
 * NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
+	* There are two special snowflake packages that need to be installed globally
+		* bower - npm install -g bower 
+		* babel - npm install -g babel
+* Bower components need to be installed for client side code to get served correctly.
+  * Navigate to CommitStream.Web/src/app/client on the command line.
+  * Run the command: bower install
+  * You should have seen all of the bower components defined in CommitStream.Web/src/app/client/bower.json get installed.
 
 # How to run just the CommitStream application (no dependency on the VersionOne application)
 
