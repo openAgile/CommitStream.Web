@@ -28,6 +28,7 @@
 	}
   /* Repo List Table */
   .commitstream-admin .initialLoader {position: absolute; top: 50%; left: 50%;}
+  .commitstream-admin .loader img {vertical-align: bottom;}
   .commitstream-admin .repos-list {margin-top: 2em;}
   .commitstream-admin .repos-list table {background-color: #fff; border: 0 !important;}
   .commitstream-admin .repos-list .table-bordered>thead>tr>th, .commitstream-admin .table-bordered>tbody>tr>th, .commitstream-admin .table-bordered>tfoot>tr>th, .commitstream-admin .table-bordered>thead>tr>td, .commitstream-admin .table-bordered>tbody>tr>td, .commitstream-admin .table-bordered>tfoot>tr>td {border-left: none; border-right: none; border-bottom: none; padding: 13px;}
@@ -75,6 +76,7 @@
     opacity: .6;
     z-index: 3;
     overflow: hidden;
+    margin-top: 2em;
   }
   .commitstream-admin .repo-add:hover {
     color: #fff;
@@ -212,6 +214,21 @@
     cursor: pointer;
     padding: 0;
 }
+
+.commitstream-admin .alert-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+}
+
+.commitstream-admin .alert-success hr {
+    border-top-color: #c9e2b3;
+}
+
+.commitstream-admin .alert-success .alert-link {
+    color: #2b542c;
+}
+
 
 .commitstream-admin .close {
     color: #000;
