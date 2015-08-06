@@ -2,6 +2,7 @@
   var validateUUID = require('../validateUUID'),
     eventStore = require('../helpers/eventStoreClient'),
     translator = require('../translators/githubTranslator'),
+    translatorFactory = require('../translators/translatorFactory'),
     commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal'),
     githubValidator = require('../helpers/githubValidator');
 
@@ -13,6 +14,16 @@
     validateUUID('inbox', inboxId);
 
     var eventType = githubValidator(req.headers);
+
+    var translatorNew = translatorFactory.create(req);
+
+    if(translatorNew) {
+
+    } else {
+      // log to error somewhere and respond approriately
+    }
+
+
 
     if (eventType === 'push') {
       var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
@@ -35,6 +46,7 @@
           res.hal(hypermedia, 201);
         });
     } else if (eventType === 'ping') {
+      // THIS CAN BE DELETED, WHEN CREATING A GITHUB WEBHOOK THEY DON'T NEED US TO REPLY
       res.json({
         message: 'Pong.'
       });
