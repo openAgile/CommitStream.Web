@@ -9,12 +9,16 @@ var validateUUID = sinon.stub(),
     translatePush: sinon.stub()
   },
   commitsAddedFormatAsHal = sinon.stub(),
-  githubValidator = sinon.stub();
+  githubValidator = sinon.stub(),
+  translatorFactory = {
+    create: sinon.spy()
+  };
 
 var handler = proxyquire('../../api/inboxes/commitsCreate', {
   '../validateUUID': validateUUID,
   '../helpers/eventStoreClient': eventStore,
   '../translators/githubTranslator': translator,
+  '../translators/translatorFactory': translatorFactory,
   './commitsAddedFormatAsHal': commitsAddedFormatAsHal,
   '../helpers/githubValidator': githubValidator
 });
@@ -106,6 +110,9 @@ describe('commitsCreate', function() {
       response.hal.should.have.been.calledWith(formattedCommits, 201);
     });
 
+    it('should call translatorFactory.create with correct args', function() {
+      translatorFactory.create.should.have.been.calledWithExactly(request);
+    });
   });
 
   describe('when posting a ping event', function() {
