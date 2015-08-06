@@ -262,6 +262,18 @@
     width: 500px;
 }
 
+.commitstream-admin .vcs-families button {
+  border: 1px solid darkgray;
+}
+
+.commitstream-admin .vcs-families .family-selected {
+  background: limegreen;
+  color: white;
+}
+
+.commitstream-admin .vcs-families img {
+  vertical-align: text-top;
+}
 </style>
 
 <img ng-show='loading()' ng-src='{{loaderUrl}}' class='initialLoader' />
@@ -307,12 +319,14 @@
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list' ng-if='areRepositoriesVisible()'>
-    <button type='button' ng-click='familySelect("GitLab")'>GitLab</button> <button type='button' ng-click='familySelect("GitHub")'>GitHub</button>
     <h1 ng-show='getInboxesDone'>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
-      <p>
-        <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
-      </p>
+      <div class='vcs-families'>
+        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}'><img ng-src='{{serviceUrl}}/icon-github-16x16.png' />&nbsp;GitHub</button>&nbsp;<button type='button' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'><img ng-src='{{serviceUrl}}/icon-gitlab-16x16.png' />&nbsp;GitLab</button>
+        <p>
+          <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to learn more about supported version control systems.</a>
+        </p>
+      </div>
       <form ng-submit='inboxCreate()' name='inboxesForm'>
         <div class='input-group'>
           <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
