@@ -205,10 +205,19 @@
         }
       };
 
-      $scope.newInbox = {
-        url: '',
-        name: '',
-        family: 'GitHub' // Until we support other systems, hard-code this.
+      var family = 'GitHub';
+
+      $scope.familySelect = function(newFamily) {
+        family = newFamily;
+        setupNewInbox(family);
+      };
+
+      var setupNewInbox = function(selectedFamily) {
+        $scope.newInbox = {
+          url: '',
+          name: '',
+          family: selectedFamily
+        };
       };
 
       $scope.serviceUrl = serviceUrl;
@@ -358,6 +367,7 @@
           return $scope.enabledState.applying || !config.enabled;
         };
 
+        setupNewInbox(family);
       };
 
       $scope.adjustOverlay = function() {
@@ -520,7 +530,7 @@
         .then(getConfig)
         .then(getInstance)
         .then(getDigest)
-        .then(function(d) {
+        .then(function(d) {
           if (d) digest = d;
           setupScope();
           if ($scope.isDigestMode()) getSelection();
