@@ -1,0 +1,1 @@
+./node_modules/.bin/babel client/js/es6/adminBootstrap.es6 --out-file client/js/adminBootstrap.js && ./node_modules/.bin/babel client/js/es6/controllers.es6 --out-file client/js/controllers.js
