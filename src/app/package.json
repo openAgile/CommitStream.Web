@@ -48,6 +48,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha -u exports -R spec test/**/*tests.js",
+    "compile-es6": "./node_modules/.bin/babel api/translators/gitLabTranslator.es6.js --out-file api/translators/gitLabTranslator.js",
     "spike": "mocha -u exports -R spec smoke-test/instance-support.tests.js",
     "smoke": "mocha -u exports -R spec smoke-test/**/*tests.js",
     "smoke-happy-path": "mocha -u exports -R spec smoke-test/happy-path-end-to-end.tests.js",
