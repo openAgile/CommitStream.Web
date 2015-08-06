@@ -307,7 +307,8 @@
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list' ng-if='areRepositoriesVisible()'>
-    <h1>{{getHeading()}}</h1>
+    <button type='button' ng-click='familySelect("GitLab")'>GitLab</button> <button type='button' ng-click='familySelect("GitHub")'>GitHub</button>
+    <h1 ng-show='getInboxesDone'>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>
