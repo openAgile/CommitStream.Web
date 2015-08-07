@@ -190,16 +190,30 @@
       }
     };
 
-    var family = 'GitHub';
+    var family = '';
+    var showAllVcs = true;
 
     $scope.familySelect = function (newFamily) {
+      showAllVcs = false;
       family = newFamily;
       setupNewInbox(family);
     };
 
     $scope.familyIsSelected = function (familyName) {
-      var className = family === familyName ? 'family-selected' : '';
+      var className = family === familyName && !showAllVcs ? 'family-selected' : '';
       return className;
+    };
+
+    $scope.familyIsVisible = function (familyName) {
+      return familyName === family || showAllVcs;
+    };
+
+    $scope.allVcsVisible = function () {
+      return showAllVcs;
+    };
+
+    $scope.showAllVcs = function () {
+      showAllVcs = true;
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
