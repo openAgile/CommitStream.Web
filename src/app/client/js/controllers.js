@@ -215,6 +215,10 @@
       showAllVcs = true;
     };
 
+    $scope.familyIcon = function (familyName) {
+      return serviceUrl + '/icon-' + familyName.toLowerCase() + '-16x16.png';
+    };
+
     var setupNewInbox = function setupNewInbox(selectedFamily) {
       $scope.newInbox = {
         url: '',
@@ -305,13 +309,13 @@
           return inboxesRes.$get('inboxes');
         }).then(function (inboxes) {
           $scope.inboxes.length = 0;
-          if (inboxes.length > 0) {
-            $scope.familySelect(inboxes[0].family);
-          }
           inboxes.forEach(function (inbox) {
             inboxConfigure(inbox);
             $scope.inboxes.unshift(inbox);
           });
+          if ($scope.inboxes.length > 0) {
+            $scope.familySelect($scope.inboxes[0].family);
+          }
           $scope.getInboxesDone = true;
         })['catch'](errorHandler);
       }
@@ -444,8 +448,8 @@
       }, 0);
     };
 
-    var getConfig = function getConfig(r) {
-      resources = r;
+    var getConfig = function getConfig(_resources) {
+      resources = _resources;
       if (!configGetUrl) return {
         data: {
           configMode: {
@@ -487,10 +491,10 @@
       });
     };
 
-    var getDigest = function getDigest(i) {
-      if (!i) return false;
+    var getDigest = function getDigest(_instance) {
+      if (!_instance) return false;
 
-      instance = i;
+      instance = _instance;
       persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
 
       if ($scope.isInstanceMode() && config.configured) {
@@ -521,8 +525,8 @@
       });
     };
 
-    CommitStreamApi.load().then(getConfig).then(getInstance).then(getDigest).then(function (d) {
-      if (d) digest = d;
+    CommitStreamApi.load().then(getConfig).then(getInstance).then(getDigest).then(function (_digest) {
+      if (_digest) digest = _digest;
       setupScope();
       if ($scope.isDigestMode()) getSelection();
       inboxesUpdate(config.enabled);

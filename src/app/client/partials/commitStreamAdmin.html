@@ -274,6 +274,10 @@
 .commitstream-admin .vcs-families img {
   vertical-align: text-top;
 }
+
+.commitstream-admin .inbox-link img {
+  vertical-align: text-top;
+}
 </style>
 
 <img ng-show='loading()' ng-src='{{loaderUrl}}' class='initialLoader' />
@@ -318,8 +322,8 @@
 
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
-  <div class='repos-list' ng-if='areRepositoriesVisible()'>
-    <h1 ng-show='getInboxesDone'>{{getHeading()}}</h1>
+  <div ng-show='getInboxesDone' class='repos-list' ng-if='areRepositoriesVisible()'>
+    <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
         <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}' ng-show='familyIsVisible("GitHub")'><img ng-src='{{serviceUrl}}/icon-github-16x16.png' />&nbsp;GitHub</button>&nbsp;<button type='button' ng-show='familyIsVisible("GitLab")' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'><img ng-src='{{serviceUrl}}/icon-gitlab-16x16.png' />&nbsp;GitLab</button>
@@ -347,7 +351,7 @@
           <th>&nbsp;</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td style='width: 25%'><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true'>
           </td>
@@ -363,7 +367,7 @@
           <th>Repository Name</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td><a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link'><img ng-src='{{familyIcon(inbox.family)}}' />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
       </table>
