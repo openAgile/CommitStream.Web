@@ -11,16 +11,14 @@ var validateUUID = sinon.stub(),
   commitsAddedFormatAsHal = sinon.stub(),
   githubValidator = sinon.stub(),
   translatorFactory = {
-    create: sinon.spy()
+    create: sinon.stub()
   };
 
 var handler = proxyquire('../../api/inboxes/commitsCreate', {
   '../validateUUID': validateUUID,
   '../helpers/eventStoreClient': eventStore,
-  '../translators/githubTranslator': translator,
   '../translators/translatorFactory': translatorFactory,
-  './commitsAddedFormatAsHal': commitsAddedFormatAsHal,
-  '../helpers/githubValidator': githubValidator
+  './commitsAddedFormatAsHal': commitsAddedFormatAsHal
 });
 
 describe('commitsCreate', function() {
@@ -32,7 +30,8 @@ describe('commitsCreate', function() {
     request,
     response,
     inboxData,
-    formattedCommits;
+    formattedCommits,
+    events;
 
   before(function() {
     eventStore.queryStatePartitionById.resolves({
@@ -42,9 +41,9 @@ describe('commitsCreate', function() {
     formattedCommits = sinon.spy();
     commitsAddedFormatAsHal.returns(formattedCommits);
 
-    translator.translatePush.returns({
-      some: 'value'
-    });
+    translatorFactory.create.returns(translator);
+
+    translator.translatePush.returns(events);
 
     request = httpMocks.createRequest({
       method: 'POST',
@@ -73,9 +72,7 @@ describe('commitsCreate', function() {
 
     postToStreamArgs = {
       name: 'inboxCommits-' + inboxId,
-      events: {
-        "some": "value"
-      }
+      events: events
     };
 
   });
@@ -88,10 +85,6 @@ describe('commitsCreate', function() {
 
     it('should call validateUUID with correct args', function() {
       validateUUID.should.have.been.calledWith('inbox', inboxId);
-    });
-
-    it('should call githubValidator with correct args', function() {
-      githubValidator.should.have.been.calledWith(request.headers);
     });
 
     it('should call translator.translatePush with correct args', function() {
@@ -113,29 +106,6 @@ describe('commitsCreate', function() {
     it('should call translatorFactory.create with correct args', function() {
       translatorFactory.create.should.have.been.calledWithExactly(request);
     });
-  });
-
-  describe('when posting a ping event', function() {
-    before(function() {
-      githubValidator.returns('ping');
-      response.json = sinon.stub();
-      handler(request, response);
-    });
-
-    it('should call validateUUID with correct args', function() {
-      validateUUID.should.have.been.calledWith('inbox', inboxId);
-    });
-
-    it('should call githubValidator with correct args', function() {
-      githubValidator.should.have.been.calledWith(request.headers);
-    });
-
-    it('should call res.status.send with correct args', function() {
-      response.json.should.have.been.calledWith({
-        message: 'Pong.'
-      });
-    });
-
   });
 
 });

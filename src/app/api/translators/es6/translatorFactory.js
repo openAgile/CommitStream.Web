@@ -1,7 +1,7 @@
 (() => {
-    var gitHubTranslator = require('../translators/githubTranslator'),
+    let gitHubTranslator = require('../translators/githubTranslator'),
         githubValidator = require('../helpers/githubValidator');
-	
+
     let TranslatorFactory = class {
 
         create(request) {
