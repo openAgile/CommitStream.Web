@@ -13,20 +13,21 @@
 
     validateUUID('inbox', inboxId);
 
-    var eventType = githubValidator(req.headers);
+    // var eventType = githubValidator(req.headers);
 
     var translatorNew = translatorFactory.create(req);
 
+    // if(translatorNew) {
+
+    // } else {
+    //   // log to error somewhere and respond approriately
+    // }
+
+
     if(translatorNew) {
-
-    } else {
-      // log to error somewhere and respond approriately
-    }
-
-
-
-    if (eventType === 'push') {
-      var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
+    // if (eventType === 'push') {
+      // var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
+      var events = translatorNew.translatePush(req.body, instanceId, digestId, inboxId);
 
       var postArgs = {
         name: 'inboxCommits-' + inboxId,
@@ -50,6 +51,8 @@
       res.json({
         message: 'Pong.'
       });
+    } else {
+      // log to error somewhere and respond approriately
     }
 
   };
