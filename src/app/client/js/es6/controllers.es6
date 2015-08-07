@@ -43,7 +43,7 @@
       let isDigestConfigured = config => config.configMode.configured;
 
       // Only display when we actually have the config in $scope!
-      $scope.isAdminPanelVisible = () => config
+      $scope.isAdminPanelVisible = () => config && instance
 
       let isCustomDigest = () => $scope.digestConfig.selection === 'useCustomDigest';
 
@@ -162,17 +162,11 @@
         return config.configMode.type === 'instance';
       };
 
-      $scope.isDigestMode = () => {
-        return config.configMode && config.configMode.type === 'digest';
-      };
+      $scope.isDigestMode = () => config.configMode && config.configMode.type === 'digest';
 
-      $scope.areRepositoriesVisible = () => {
-        return $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
-      };
+      $scope.areRepositoriesVisible = () => $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
 
-      $scope.editAllowed = () => {
-        return $scope.isInstanceMode() || isCustomDigest();
-      };
+      $scope.editAllowed = () => $scope.isInstanceMode() || isCustomDigest();
 
       $scope.getHeading = () => {
         if ($scope.isInstanceMode()) return 'Setup Global Repositories';
@@ -197,7 +191,7 @@
         return className;
       };
 
-      $scope.familyIsVisible = familyName => {        
+      $scope.familyIsVisible = familyName => {
         return familyName === family || showAllVcs;
       };
 
@@ -205,11 +199,11 @@
         return showAllVcs;
       }
 
-      $scope.showAllVcs = () => {        
+      $scope.showAllVcs = () => {
         showAllVcs = true;
       };
 
-      var setupNewInbox = selectedFamily => {
+      let setupNewInbox = selectedFamily => {
         $scope.newInbox = {
           url: '',
           name: '',
@@ -300,6 +294,9 @@
               return inboxesRes.$get('inboxes');
             }).then(inboxes => {
               $scope.inboxes.length = 0;
+              if (inboxes.length > 0) {
+                $scope.familySelect(inboxes[0].family);
+              }
               inboxes.forEach(inbox => {
                 inboxConfigure(inbox);
                 $scope.inboxes.unshift(inbox);
@@ -376,7 +373,7 @@
         //TODO: put the first 3 lines after the try in a promise
         try {
           $scope.inboxCreating = true;
-          var index = $scope.newInbox.url.lastIndexOf('/');
+          let index = $scope.newInbox.url.lastIndexOf('/');
           $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
 
           digest.$post('inbox-create', {}, $scope.newInbox)
@@ -411,7 +408,7 @@
         }).then(() => {
           inbox.$del('self').then(result => {
             $scope.message.value = 'Successfully removed repository';
-            var index = $scope.inboxes.indexOf(inbox);
+            let index = $scope.inboxes.indexOf(inbox);
             $scope.inboxes.splice(index, 1);
             $timeout(() => {
               $('.commitstream-admin .message').fadeOut('slow', () => {
@@ -510,7 +507,7 @@
         });
       };
 
-      var allowTabNavigation = () => {
+      let allowTabNavigation = () => {
         $("#commitStreamAdmin :input").each(function() {
           $(this).removeAttr('tabindex');
         });

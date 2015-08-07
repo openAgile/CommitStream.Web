@@ -44,7 +44,6 @@
           return instance;
         }
         // Otherwise, just check if we have the config yet:
-      return config;
     };
 
     var isCustomDigest = function isCustomDigest() {
@@ -306,6 +305,9 @@
           return inboxesRes.$get('inboxes');
         }).then(function (inboxes) {
           $scope.inboxes.length = 0;
+          if (inboxes.length > 0) {
+            $scope.familySelect(inboxes[0].family);
+          }
           inboxes.forEach(function (inbox) {
             inboxConfigure(inbox);
             $scope.inboxes.unshift(inbox);
