@@ -4,9 +4,8 @@
   let TranslatorFactory = class {
 
     create(request) {
-      let eventType = githubValidator(request.headers);
 
-      if (eventType === 'push') {
+      if (gitHubTranslator.canTranslate(request)) {
         return gitHubTranslator; // return correct translator
       } else {
         return undefined;
