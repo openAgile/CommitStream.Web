@@ -42,7 +42,6 @@ describe('commitsCreate', function() {
     commitsAddedFormatAsHal.returns(formattedCommits);
 
     translatorFactory.create.returns(translator);
-
     translator.translatePush.returns(events);
 
     request = httpMocks.createRequest({
@@ -79,7 +78,6 @@ describe('commitsCreate', function() {
 
   describe('when posting a push event', function() {
     before(function() {
-      githubValidator.returns('push');
       handler(request, response);
     });
 

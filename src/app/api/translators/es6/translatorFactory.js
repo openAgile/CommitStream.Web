@@ -1,24 +1,23 @@
 (() => {
-    let gitHubTranslator = require('../translators/githubTranslator'),
-        githubValidator = require('../helpers/githubValidator');
+  let gitHubTranslator = require('../translators/githubTranslator');
 
-    let TranslatorFactory = class {
+  let TranslatorFactory = class {
 
-        create(request) {
-            let eventType = githubValidator(request.headers);
+    create(request) {
+      let eventType = githubValidator(request.headers);
 
-            if(eventType === 'push') {
-                return gitHubTranslator; // return correct translator
-            } else {
-                return undefined;
-            }
-        }
-
-        pickTranslator(request) {
-            // pick the correct translator based on what is inspected out of the request.
-        }
+      if (eventType === 'push') {
+        return gitHubTranslator; // return correct translator
+      } else {
+        return undefined;
+      }
     }
 
-    module.exports = new TranslatorFactory();
+    pickTranslator(request) {
+      // pick the correct translator based on what is inspected out of the request.
+    }
+  }
+
+  module.exports = new TranslatorFactory();
 
 })();
