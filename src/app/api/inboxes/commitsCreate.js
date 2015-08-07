@@ -1,10 +1,8 @@
 (function() {
   var validateUUID = require('../validateUUID'),
     eventStore = require('../helpers/eventStoreClient'),
-    translator = require('../translators/githubTranslator'),
     translatorFactory = require('../translators/translatorFactory'),
-    commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal'),
-    githubValidator = require('../helpers/githubValidator');
+    commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal');
 
   module.exports = function(req, res) {
     var instanceId = req.instance.instanceId,
@@ -16,7 +14,6 @@
     // var eventType = githubValidator(req.headers);
 
     var translatorNew = translatorFactory.create(req);
-
     // if(translatorNew) {
 
     // } else {
@@ -24,8 +21,8 @@
     // }
 
 
-    if(translatorNew) {
-    // if (eventType === 'push') {
+    if (translatorNew) {
+      // if (eventType === 'push') {
       // var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
       var events = translatorNew.translatePush(req.body, instanceId, digestId, inboxId);
 
@@ -46,11 +43,11 @@
           //res.location(responseData._links['query-digest'].href);
           res.hal(hypermedia, 201);
         });
-    } else if (eventType === 'ping') {
-      // THIS CAN BE DELETED, WHEN CREATING A GITHUB WEBHOOK THEY DON'T NEED US TO REPLY
-      res.json({
-        message: 'Pong.'
-      });
+      // } else if (eventType === 'ping') {
+      //   // THIS CAN BE DELETED, WHEN CREATING A GITHUB WEBHOOK THEY DON'T NEED US TO REPLY
+      //   res.json({
+      //     message: 'Pong.'
+      //   });
     } else {
       // log to error somewhere and respond approriately
     }
