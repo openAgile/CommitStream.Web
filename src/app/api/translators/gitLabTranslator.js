@@ -28,6 +28,35 @@
 
 // http://requestb.in/1mazrmi1?inspect
 
-"use strict";
+'use strict';
 
-(function () {})();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+(function () {
+
+  var GitLabTranslator = (function () {
+    function GitLabTranslator() {
+      _classCallCheck(this, GitLabTranslator);
+    }
+
+    _createClass(GitLabTranslator, [{
+      key: 'canTranslate',
+      value: function canTranslate(request) {
+        console.log('trying to translate for gitlab');
+        var headers = request.headers;
+        console.log('headers are');
+        console.log(headers);
+        if (headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook') {
+          return true;
+        }
+        return false;
+      }
+    }]);
+
+    return GitLabTranslator;
+  })();
+
+  module.exports = new GitLabTranslator();
+})();
