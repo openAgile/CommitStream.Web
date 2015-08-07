@@ -30,4 +30,17 @@
 
 (() => {
 
+  let GitLabTranslator = class {
+    canTranslate(request) {
+      var headers = request.headers;
+
+      if (headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook') {
+        return true;
+      }
+      return false;
+    }
+  }
+
+  module.exports = new GitLabTranslator();
+
 })();
