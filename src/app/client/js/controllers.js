@@ -53,7 +53,7 @@
 
       $scope.isAdminPanelVisible = function() {
         // Only display when we actually have the config in $scope!
-        return config;
+        return config && instance;
       };
 
       var isCustomDigest = function() {
