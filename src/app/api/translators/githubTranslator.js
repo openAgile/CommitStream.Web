@@ -57,8 +57,8 @@
     }
   };
 
-  githubTranslator.canTranslate = function(req) {
-    var headers = req.headers;
+  githubTranslator.canTranslate = function(request) {
+    var headers = request.headers;
     if (headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push') {
       return true;
     }
