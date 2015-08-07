@@ -43,7 +43,7 @@
       let isDigestConfigured = config => config.configMode.configured;
 
       // Only display when we actually have the config in $scope!
-      $scope.isAdminPanelVisible = () => config && instance
+      $scope.isAdminPanelVisible = () => config && instance;
 
       let isCustomDigest = () => $scope.digestConfig.selection === 'useCustomDigest';
 
@@ -203,6 +203,8 @@
         showAllVcs = true;
       };
 
+      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-16x16.png`;      
+
       let setupNewInbox = selectedFamily => {
         $scope.newInbox = {
           url: '',
@@ -293,14 +295,14 @@
             .then(inboxesRes => {
               return inboxesRes.$get('inboxes');
             }).then(inboxes => {
-              $scope.inboxes.length = 0;
-              if (inboxes.length > 0) {
-                $scope.familySelect(inboxes[0].family);
-              }
+              $scope.inboxes.length = 0;              
               inboxes.forEach(inbox => {
                 inboxConfigure(inbox);
                 $scope.inboxes.unshift(inbox);
               });
+              if ($scope.inboxes.length > 0) {
+                $scope.familySelect($scope.inboxes[0].family);
+              }
               $scope.getInboxesDone = true;
             })
             .catch(errorHandler);
@@ -436,8 +438,8 @@
         }, 0);
       };
 
-      let getConfig = r => {
-        resources = r;
+      let getConfig = _resources => {
+        resources = _resources;
         if (!configGetUrl) return {
           data: {
             configMode: {
@@ -479,10 +481,10 @@
         });
       };
 
-      let getDigest = i => {
-        if (!i) return false;
+      let getDigest = _instance => {
+        if (!_instance) return false;
 
-        instance = i;
+        instance = _instance;
         persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
 
         if ($scope.isInstanceMode() && config.configured) {
@@ -518,8 +520,8 @@
         .then(getConfig)
         .then(getInstance)
         .then(getDigest)
-        .then(d => {
-          if (d) digest = d;
+        .then(_digest => {
+          if (_digest) digest = _digest;
           setupScope();
           if ($scope.isDigestMode()) getSelection();
           inboxesUpdate(config.enabled);
