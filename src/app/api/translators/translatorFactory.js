@@ -17,10 +17,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       key: 'create',
       value: function create(request) {
         if (gitHubTranslator.canTranslate(request)) {
-          return gitHubTranslator; // return correct translator
-        } else if (gitLabTranslator.canTranslate(request)) console.log('gitLab can translate this.');else {
-            return undefined;
-          }
+          return gitHubTranslator;
+        } else if (gitLabTranslator.canTranslate(request)) {
+          return gitLabTranslator;
+        } else {
+          return undefined;
+        }
       }
     }, {
       key: 'pickTranslator',
