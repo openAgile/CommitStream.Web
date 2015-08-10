@@ -44,7 +44,7 @@ describe('gitLabTranslator', function() {
       // as a stub for these tests.
       request = {};
 
-      // Set hasCorrectHeaders to be a spy to ensure it's been called.
+      // Set hasCorrectHeaders to be a stub to ensure it's been called.
       originalHasCorrectHeaders = gitLabTranslator.hasCorrectHeaders;
       gitLabTranslator.hasCorrectHeaders = sinon.stub();
       gitLabTranslator.hasCorrectHeaders.returns(true);
@@ -63,7 +63,34 @@ describe('gitLabTranslator', function() {
     });
 
     after(function() {
-      // reset hasCorrectHeaders back to the real implementation, not our spy.
+      // reset hasCorrectHeaders back to the real implementation, not our stub.
+      gitLabTranslator.hasCorrectHeaders = originalHasCorrectHeaders;
+    });
+  });
+
+  describe('with incorrect headers', function() {
+
+    var originalHasCorrectHeaders;
+    var request;
+
+    before(function() {
+      // What is in the request does not matter for these, because the component that
+      // actually uses the request (gitLabTranslator.hasCorrectHeaders) is being set
+      // as a stub for these tests.
+      request = {};
+
+      // Set hasCorrectHeaders to be a stub to ensure it's been called.
+      originalHasCorrectHeaders = gitLabTranslator.hasCorrectHeaders;
+      gitLabTranslator.hasCorrectHeaders = sinon.stub();
+      gitLabTranslator.hasCorrectHeaders.returns(false);
+    });
+
+    it('canTranslate should return true when valid headers are available', function() {
+      gitLabTranslator.canTranslate(request).should.equal(false);
+    });
+
+    after(function() {
+      // reset hasCorrectHeaders back to the real implementation, not our stub.
       gitLabTranslator.hasCorrectHeaders = originalHasCorrectHeaders;
     });
   });
