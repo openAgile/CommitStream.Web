@@ -7,8 +7,9 @@
       create(request) {
         if (gitHubTranslator.canTranslate(request)) {
           return gitHubTranslator;
-        } else if (gitLabTranslator.canTranslate(request))
-        else {
+        } else if (gitLabTranslator.canTranslate(request)) {
+          return gitLabTranslator;
+        } else {
           return undefined;
         }
       }
