@@ -24,11 +24,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return undefined;
         }
       }
-    }, {
-      key: 'pickTranslator',
-      value: function pickTranslator(request) {
-        // pick the correct translator based on what is inspected out of the request.
-      }
     }]);
 
     return TranslatorFactory;
