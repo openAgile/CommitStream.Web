@@ -11,20 +11,10 @@
 
     validateUUID('inbox', inboxId);
 
-    // var eventType = githubValidator(req.headers);
+    var translator = translatorFactory.create(req);
 
-    var translatorNew = translatorFactory.create(req);
-    // if(translatorNew) {
-
-    // } else {
-    //   // log to error somewhere and respond approriately
-    // }
-
-
-    if (translatorNew) {
-      // if (eventType === 'push') {
-      // var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
-      var events = translatorNew.translatePush(req.body, instanceId, digestId, inboxId);
+    if (translator) {
+      var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
 
       var postArgs = {
         name: 'inboxCommits-' + inboxId,
