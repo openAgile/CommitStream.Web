@@ -13,10 +13,6 @@
           return undefined;
         }
       }
-
-      pickTranslator(request) {
-        // pick the correct translator based on what is inspected out of the request.
-      }
     } // close the class
 
   module.exports = new TranslatorFactory();
