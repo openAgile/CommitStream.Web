@@ -39,11 +39,10 @@ describe('gitLabTranslator', function() {
     var request;
 
     before(function() {
-      request = {
-        'headers': {
-          'x-gitlab-event': 'Push Hook'
-        }
-      };
+      // What is in the request does not matter for these, because the component that
+      // actually uses the request (gitLabTranslator.hasCorrectHeaders) is being set
+      // as a stub for these tests.
+      request = {};
 
       // Set hasCorrectHeaders to be a spy to ensure it's been called.
       originalHasCorrectHeaders = gitLabTranslator.hasCorrectHeaders;
