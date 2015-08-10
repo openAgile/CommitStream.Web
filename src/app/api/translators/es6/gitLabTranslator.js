@@ -28,19 +28,19 @@
 
 // http://requestb.in/1mazrmi1?inspect
 
-(() => {
+((gitLabTranslator) => {
 
-  let GitLabTranslator = class {
-    canTranslate(request) {
-      var headers = request.headers;
-
-      if (headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook') {
-        return true;
-      }
-      return false;
-    }
+  gitLabTranslator.hasCorrectHeaders = (headers) => {
+    return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook';
   }
 
-  module.exports = new GitLabTranslator();
+  gitLabTranslator.canTranslate = (request) => {
+    var headers = request.headers;
 
-})();
+    if (gitLabTranslator.hasCorrectHeaders(headers)) {
+      return true;
+    }
+    return false;
+  }
+
+})(module.exports);
