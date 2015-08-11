@@ -113,18 +113,10 @@ describe('commitsCreate', function() {
     });
 
     it('it should throw a MalformedPushEvent error.', function() {
-      // used a try-catch here with validation on expected properties because checking like this
-      // expect(handler(request, response)).to.throw(new malformedPushEventError());
-      // was always giving a CSError, and that type is not the same type as I'm trying to assert on.
-      // not sure why, but the try-catch satisfies me for now.
-
-      try {
+      var invokeCommitsCreate = function() {
         handler(request, response);
-      } catch (exception) {
-        exception.errors.errors[0].should.equal('There are no translators that understand the payload you are sending.');
-        exception.statusCode.should.equal(400);
       }
-    })
-  })
-
+      invokeCommitsCreate.should.throw(malformedPushEventError);
+    });
+  });
 });
