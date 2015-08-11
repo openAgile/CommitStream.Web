@@ -43,7 +43,7 @@
       let isDigestConfigured = config => config.configMode.configured;
 
       // Only display when we actually have the config in $scope!
-      $scope.isAdminPanelVisible = () => config && instance;
+      $scope.isAdminPanelVisible = () => config && (instance || config.configured);
 
       let isCustomDigest = () => $scope.digestConfig.selection === 'useCustomDigest';
 

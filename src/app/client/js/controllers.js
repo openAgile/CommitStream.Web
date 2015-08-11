@@ -40,7 +40,7 @@
 
         // If we have the config, and an instance, but the instance isn't 
         // loaded, don't display yet:
-        if (config && config.configured) {
+      return config && (instance || config.configured);
           return instance;
         }
         // Otherwise, just check if we have the config yet:
