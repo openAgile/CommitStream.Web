@@ -12,8 +12,7 @@
     '$q',
     'prompt',
     '$location',
-    'persistentOptions',
-    ($scope, CommitStreamApi, $timeout, serviceUrl, configGetUrl, configSaveUrl, $http, $q, prompt, $location, persistentOptions) => {
+    'persistentOptions', ($scope, CommitStreamApi, $timeout, serviceUrl, configGetUrl, configSaveUrl, $http, $q, prompt, $location, persistentOptions) => {
 
       let loading = true,
         config,
@@ -50,9 +49,9 @@
       let isGlobalDigest = () => $scope.digestConfig.selection === 'useGlobalDigest';
 
       let getGlobalDigest = (config) => resources.$get('digest', {
-          instanceId: config.instanceId,
-          digestId: config.globalDigestId
-        });
+        instanceId: config.instanceId,
+        digestId: config.globalDigestId
+      });
 
       let getCustomDigest = config => {
         if (!isDigestConfigured(config)) {
@@ -132,22 +131,22 @@
         }
       };
 
-      $scope.radioButtonGlobal = () => 
+      $scope.radioButtonGlobal = () =>
         isGlobalDigest() ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
 
-      $scope.radioButtonCustom = () => 
+      $scope.radioButtonCustom = () =>
         isCustomDigest() ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
 
       $scope.radioButtonDisabled = () =>
-        (!isCustomDigest() && !isGlobalDigest()) ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';     
+        (!isCustomDigest() && !isGlobalDigest()) ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
 
-      $scope.isInstanceMode = () => 
-        !config.configMode ? true : config.configMode.type === 'instance';      
+      $scope.isInstanceMode = () =>
+        !config.configMode ? true : config.configMode.type === 'instance';
 
-      $scope.isDigestMode = () => 
+      $scope.isDigestMode = () =>
         config.configMode && config.configMode.type === 'digest';
 
-      $scope.areRepositoriesVisible = () => 
+      $scope.areRepositoriesVisible = () =>
         $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
 
       $scope.editAllowed = () => $scope.isInstanceMode() || isCustomDigest();
@@ -170,23 +169,23 @@
         setupNewInbox(family);
       };
 
-      $scope.familyIsSelected = familyName => 
-        (family === familyName && !showAllVcs) ? 'family-selected' : '';        
+      $scope.familyIsSelected = familyName =>
+        (family === familyName && !showAllVcs) ? 'family-selected' : '';
 
-      $scope.familyIsVisible = familyName => familyName === family || showAllVcs;      
+      $scope.familyIsVisible = familyName => familyName === family || showAllVcs;
 
-      $scope.allVcsVisible = () => showAllVcs;      
+      $scope.allVcsVisible = () => showAllVcs;
 
       $scope.showAllVcs = () => showAllVcs = true;
 
-      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-16x16.png`;      
+      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-16x16.png`;
 
-      let setupNewInbox = selectedFamily => 
+      let setupNewInbox = selectedFamily =>
         $scope.newInbox = {
           url: '',
           name: '',
           family: selectedFamily
-        };      
+        };
 
       $scope.serviceUrl = serviceUrl;
       $scope.inboxes = [];
@@ -270,7 +269,7 @@
             .then(inboxesRes => {
               return inboxesRes.$get('inboxes');
             }).then(inboxes => {
-              $scope.inboxes.length = 0;              
+              $scope.inboxes.length = 0;
               inboxes.forEach(inbox => {
                 inboxConfigure(inbox);
                 $scope.inboxes.unshift(inbox);
@@ -334,7 +333,7 @@
         setupNewInbox(family);
       };
 
-      $scope.adjustOverlay = () => 
+      $scope.adjustOverlay = () =>
         $timeout(() => {
           let repolistWidth = $('.repos-list').width();
           let repolistHeight = $('.repos-list').height();
@@ -366,7 +365,7 @@
         }
       };
 
-      $scope.inboxRemove = inbox => 
+      $scope.inboxRemove = inbox =>
         prompt({
           title: 'Remove Repository?',
           message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
@@ -390,8 +389,8 @@
               });
             }, 4000);
           })
-          .catch(errorHandler);
-        });      
+            .catch(errorHandler);
+        });
 
       let inboxHighlight = el => {
         if (config.enabled) {
@@ -402,11 +401,11 @@
 
       $scope.inboxHighlight = evt => inboxHighlight(evt.currentTarget);
 
-      $scope.inboxHighlightTop = () => 
+      $scope.inboxHighlightTop = () =>
         $timeout(() => {
           let el = $($('.commitstream-admin .inbox')[0]);
           inboxHighlight(el);
-        }, 0);      
+        }, 0);
 
       let getConfig = _resources => {
         resources = _resources;
@@ -472,15 +471,15 @@
         return false;
       };
 
-      let preventTabNavigation = () => 
+      let preventTabNavigation = () =>
         $("#commitStreamAdmin :input").each(function() {
           $(this).attr('tabindex', '-1');
         });
 
-      let allowTabNavigation = () => 
+      let allowTabNavigation = () =>
         $("#commitStreamAdmin :input").each(function() {
           $(this).removeAttr('tabindex');
-        });      
+        });
 
       CommitStreamApi
         .load()
