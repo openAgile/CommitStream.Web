@@ -40,6 +40,8 @@
 
         // If we have the config, and an instance, but the instance isn't 
         // loaded, don't display yet:
+    // Only display when we actually have the config in $scope!
+    $scope.isAdminPanelVisible = function () {
       return config && (instance || !config.configured);
           return instance;
         }
@@ -105,8 +107,8 @@
     };
 
     var globalDigestSelected = function globalDigestSelected(firstCall) {
-      getGlobalDigest(config).then(function (d) {
-        digest = d;
+      getGlobalDigest(config).then(function (_digest) {
+        digest = _digest;
         config.configMode.useGlobalDigestId = true;
         config.configMode.enabled = true;
         if (!firstCall) configDigestModeSave(config.configMode);
@@ -140,32 +142,19 @@
     };
 
     $scope.radioButtonGlobal = function () {
-      if (isGlobalDigest()) {
-        return 'glyphicon glyphicon-check';
-      } else {
-        return 'glyphicon glyphicon-unchecked';
-      }
+      return isGlobalDigest() ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
     };
 
     $scope.radioButtonCustom = function () {
-      if (isCustomDigest()) {
-        return 'glyphicon glyphicon-check';
-      } else {
-        return 'glyphicon glyphicon-unchecked';
-      }
+      return isCustomDigest() ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
     };
 
     $scope.radioButtonDisabled = function () {
-      if (!isCustomDigest() && !isGlobalDigest()) {
-        return 'glyphicon glyphicon-check';
-      } else {
-        return 'glyphicon glyphicon-unchecked';
-      }
+      return !isCustomDigest() && !isGlobalDigest() ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
     };
 
     $scope.isInstanceMode = function () {
-      if (!config.configMode) return true;
-      return config.configMode.type === 'instance';
+      return !config.configMode ? true : config.configMode.type === 'instance';
     };
 
     $scope.isDigestMode = function () {
@@ -199,8 +188,7 @@
     };
 
     $scope.familyIsSelected = function (familyName) {
-      var className = family === familyName && !showAllVcs ? 'family-selected' : '';
-      return className;
+      return family === familyName && !showAllVcs ? 'family-selected' : '';
     };
 
     $scope.familyIsVisible = function (familyName) {
@@ -212,7 +200,7 @@
     };
 
     $scope.showAllVcs = function () {
-      showAllVcs = true;
+      return showAllVcs = true;
     };
 
     $scope.familyIcon = function (familyName) {
@@ -220,7 +208,7 @@
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
-      $scope.newInbox = {
+      return $scope.newInbox = {
         url: '',
         name: '',
         family: selectedFamily
@@ -276,14 +264,14 @@
       config.enabled = enabled;
 
       if (!config.configured) {
-        return resources.$post('instances').then(function (i) {
-          instance = i;
+        return resources.$post('instances').then(function (_instance) {
+          instance = _instance;
           persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
           return instance.$post('digest-create', {}, {
             description: 'Global Repositories List'
           });
-        }).then(function (d) {
-          digest = d;
+        }).then(function (_digest) {
+          digest = _digest;
           config.instanceId = instance.instanceId;
           config.globalDigestId = digest.digestId;
           config.apiKey = instance.apiKey;
@@ -355,7 +343,6 @@
     };
 
     var setupScope = function setupScope() {
-
       $scope.enabledState = {
         enabled: config.enabled,
         applying: false,
@@ -375,7 +362,7 @@
     };
 
     $scope.adjustOverlay = function () {
-      $timeout(function () {
+      return $timeout(function () {
         var repolistHeight = $('.repos-list').height();
         $('.repos-section .overlay').height(repolistHeight);
       });
@@ -384,7 +371,6 @@
     $scope.inboxCreating = false;
 
     $scope.inboxCreate = function () {
-      //TODO: put the first 3 lines after the try in a promise
       try {
         $scope.inboxCreating = true;
         var index = $scope.newInbox.url.lastIndexOf('/');
@@ -404,7 +390,7 @@
     };
 
     $scope.inboxRemove = function (inbox) {
-      prompt({
+      return prompt({
         title: 'Remove Repository?',
         message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
         buttons: [{
@@ -442,7 +428,7 @@
     };
 
     $scope.inboxHighlightTop = function () {
-      $timeout(function () {
+      return $timeout(function () {
         var el = $($('.commitstream-admin .inbox')[0]);
         inboxHighlight(el);
       }, 0);
@@ -471,7 +457,6 @@
     };
 
     var getInstance = function getInstance(configRes) {
-      // TODO handle null case?
       config = configRes.data;
       if (!config.configMode) {
         config.configMode = {
@@ -514,13 +499,13 @@
     };
 
     var preventTabNavigation = function preventTabNavigation() {
-      $("#commitStreamAdmin :input").each(function () {
+      return $("#commitStreamAdmin :input").each(function () {
         $(this).attr('tabindex', '-1');
       });
     };
 
     var allowTabNavigation = function allowTabNavigation() {
-      $("#commitStreamAdmin :input").each(function () {
+      return $("#commitStreamAdmin :input").each(function () {
         $(this).removeAttr('tabindex');
       });
     };

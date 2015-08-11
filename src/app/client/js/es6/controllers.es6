@@ -83,7 +83,6 @@
           return $http.post(configSaveUrl, configMode);
         }
         return $q.when(true);
-
       };
 
       let customDigestSelected = firstCall => {
@@ -99,8 +98,8 @@
       };
 
       let globalDigestSelected = firstCall => {
-        getGlobalDigest(config).then(d => {
-          digest = d;
+        getGlobalDigest(config).then(_digest => {
+          digest = _digest;
           config.configMode.useGlobalDigestId = true;
           config.configMode.enabled = true;
           if (!firstCall) configDigestModeSave(config.configMode);
@@ -133,38 +132,23 @@
         }
       };
 
-      $scope.radioButtonGlobal = () => {
-        if (isGlobalDigest()) {
-          return 'glyphicon glyphicon-check';
-        } else {
-          return 'glyphicon glyphicon-unchecked'
-        }
-      };
+      $scope.radioButtonGlobal = () => 
+        isGlobalDigest() ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
 
-      $scope.radioButtonCustom = () => {
-        if (isCustomDigest()) {
-          return 'glyphicon glyphicon-check';
-        } else {
-          return 'glyphicon glyphicon-unchecked'
-        }
-      };
+      $scope.radioButtonCustom = () => 
+        isCustomDigest() ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';
 
-      $scope.radioButtonDisabled = () => {
-        if (!isCustomDigest() && !isGlobalDigest()) {
-          return 'glyphicon glyphicon-check';
-        } else {
-          return 'glyphicon glyphicon-unchecked'
-        }
-      };
+      $scope.radioButtonDisabled = () =>
+        (!isCustomDigest() && !isGlobalDigest()) ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked';     
 
-      $scope.isInstanceMode = () => {
-        if (!config.configMode) return true;
-        return config.configMode.type === 'instance';
-      };
+      $scope.isInstanceMode = () => 
+        !config.configMode ? true : config.configMode.type === 'instance';      
 
-      $scope.isDigestMode = () => config.configMode && config.configMode.type === 'digest';
+      $scope.isDigestMode = () => 
+        config.configMode && config.configMode.type === 'digest';
 
-      $scope.areRepositoriesVisible = () => $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
+      $scope.areRepositoriesVisible = () => 
+        $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
 
       $scope.editAllowed = () => $scope.isInstanceMode() || isCustomDigest();
 
@@ -186,32 +170,23 @@
         setupNewInbox(family);
       };
 
-      $scope.familyIsSelected = familyName => {
-        let className = (family === familyName && !showAllVcs) ? 'family-selected' : '';
-        return className;
-      };
+      $scope.familyIsSelected = familyName => 
+        (family === familyName && !showAllVcs) ? 'family-selected' : '';        
 
-      $scope.familyIsVisible = familyName => {
-        return familyName === family || showAllVcs;
-      };
+      $scope.familyIsVisible = familyName => familyName === family || showAllVcs;      
 
-      $scope.allVcsVisible = () => {
-        return showAllVcs;
-      }
+      $scope.allVcsVisible = () => showAllVcs;      
 
-      $scope.showAllVcs = () => {
-        showAllVcs = true;
-      };
+      $scope.showAllVcs = () => showAllVcs = true;
 
       $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-16x16.png`;      
 
-      let setupNewInbox = selectedFamily => {
+      let setupNewInbox = selectedFamily => 
         $scope.newInbox = {
           url: '',
           name: '',
           family: selectedFamily
-        };
-      };
+        };      
 
       $scope.serviceUrl = serviceUrl;
       $scope.inboxes = [];
@@ -261,15 +236,15 @@
 
         if (!config.configured) {
           return resources.$post('instances')
-            .then(i => {
-              instance = i;
+            .then(_instance => {
+              instance = _instance;
               persistentOptions.headers.Bearer = instance.apiKey; // Ensure apiKey for NEW instance
               return instance.$post('digest-create', {}, {
                 description: 'Global Repositories List'
               });
             })
-            .then(d => {
-              digest = d;
+            .then(_digest => {
+              digest = _digest;
               config.instanceId = instance.instanceId;
               config.globalDigestId = digest.digestId;
               config.apiKey = instance.apiKey;
@@ -345,7 +320,6 @@
       };
 
       let setupScope = () => {
-
         $scope.enabledState = {
           enabled: config.enabled,
           applying: false,
@@ -360,19 +334,17 @@
         setupNewInbox(family);
       };
 
-      $scope.adjustOverlay = () => {
+      $scope.adjustOverlay = () => 
         $timeout(() => {
           let repolistWidth = $('.repos-list').width();
           let repolistHeight = $('.repos-list').height();
           $('.repos-section .overlay').height(repolistHeight);
           $('.repos-section .overlay').width(repolistWidth);
-        })
-      };
+        });
 
       $scope.inboxCreating = false;
 
       $scope.inboxCreate = () => {
-        //TODO: put the first 3 lines after the try in a promise
         try {
           $scope.inboxCreating = true;
           let index = $scope.newInbox.url.lastIndexOf('/');
@@ -394,7 +366,7 @@
         }
       };
 
-      $scope.inboxRemove = inbox => {
+      $scope.inboxRemove = inbox => 
         prompt({
           title: 'Remove Repository?',
           message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
@@ -419,8 +391,7 @@
             }, 4000);
           })
           .catch(errorHandler);
-        });
-      };
+        });      
 
       let inboxHighlight = el => {
         if (config.enabled) {
@@ -431,12 +402,11 @@
 
       $scope.inboxHighlight = evt => inboxHighlight(evt.currentTarget);
 
-      $scope.inboxHighlightTop = () => {
+      $scope.inboxHighlightTop = () => 
         $timeout(() => {
           let el = $($('.commitstream-admin .inbox')[0]);
           inboxHighlight(el);
-        }, 0);
-      };
+        }, 0);      
 
       let getConfig = _resources => {
         resources = _resources;
@@ -461,7 +431,6 @@
       };
 
       let getInstance = configRes => {
-        // TODO handle null case?
         config = configRes.data;
         if (!config.configMode) {
           config.configMode = {
@@ -503,17 +472,15 @@
         return false;
       };
 
-      let preventTabNavigation = () => {
+      let preventTabNavigation = () => 
         $("#commitStreamAdmin :input").each(function() {
           $(this).attr('tabindex', '-1');
         });
-      };
 
-      let allowTabNavigation = () => {
+      let allowTabNavigation = () => 
         $("#commitStreamAdmin :input").each(function() {
           $(this).removeAttr('tabindex');
-        });
-      }
+        });      
 
       CommitStreamApi
         .load()
