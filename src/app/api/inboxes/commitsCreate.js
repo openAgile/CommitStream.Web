@@ -2,7 +2,8 @@
   var validateUUID = require('../validateUUID'),
     eventStore = require('../helpers/eventStoreClient'),
     translatorFactory = require('../translators/translatorFactory'),
-    commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal');
+    commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal'),
+    createCustomError = require('custom-error-generator');
 
   module.exports = function(req, res) {
     var instanceId = req.instance.instanceId,
@@ -39,7 +40,21 @@
       //     message: 'Pong.'
       //   });
     } else {
+      // This would be the case where a translator was not found that could process the
+      // payload.
       // log to error somewhere and respond approriately
+      var pushEventError = createCustomError('MalformedPushEventError', null, function(error, pushEvent) {
+        this.statusCode = 400;
+        this.originalError = error;
+        this.errors = [error.toString()];
+        this.pushEvent = pushEvent;
+      });
+
+      var errorMessage = 'There are no translators that understand the payload you are sending.';
+      throw new pushEventError(errorMessage, req.body)
+
+      console.log('There are no translators that understand the payload you are sending.')
+      console.log('We support translators for GitHub and GitLab.')
     }
 
   };

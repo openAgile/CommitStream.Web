@@ -76,7 +76,7 @@ describe('commitsCreate', function() {
 
   });
 
-  describe('when posting a push event', function() {
+  describe('when posting a translatable push event', function() {
     before(function() {
       handler(request, response);
     });
@@ -105,5 +105,9 @@ describe('commitsCreate', function() {
       translatorFactory.create.should.have.been.calledWithExactly(request);
     });
   });
+
+  describe('when posting a non-translatable push event', function() {
+
+  })
 
 });
