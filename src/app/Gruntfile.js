@@ -1,9 +1,14 @@
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
+  var es6Locations = [
+    'api/**/es6/*.js',
+    'middleware/**/es6/*.js'
+  ];
+
   var babelFiles = {
     expand: true,
-    src: ['api/**/es6/*.js'],
+    src: es6Locations,
     dest: '',
     ext: '.js',
     rename: function(dest, src) {
@@ -16,13 +21,13 @@ module.exports = function(grunt) {
       es6: {
         files: [babelFiles]
       },
-      options:{
+      options: {
         optional: 'runtime'
       }
     },
     watch: {
       babel: {
-        files: ['api/**/es6/*.js'],
+        files: es6Locations,
         tasks: ['babel'],
         options: {
           spawn: false
