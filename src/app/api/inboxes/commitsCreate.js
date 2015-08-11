@@ -30,15 +30,8 @@
           };
 
           var hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
-          //TODO: ask about this
-          //res.location(responseData._links['query-digest'].href);
           res.hal(hypermedia, 201);
         });
-      // } else if (eventType === 'ping') {
-      //   // THIS CAN BE DELETED, WHEN CREATING A GITHUB WEBHOOK THEY DON'T NEED US TO REPLY
-      //   res.json({
-      //     message: 'Pong.'
-      //   });
     } else {
       // This would be the case where a translator was not found that could process the
       // payload.
