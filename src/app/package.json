@@ -6,6 +6,7 @@
   "repository": "https://github.com/openAgile/CommitStream.Web",
   "dependencies": {
     "async": "^0.9.0",
+    "babel-runtime": "^5.8.20",
     "bluebird": "^2.9.24",
     "body-parser": "^1.6.3",
     "chai": "^1.10.0",

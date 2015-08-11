@@ -15,6 +15,9 @@ module.exports = function(grunt) {
     babel: {
       es6: {
         files: [babelFiles]
+      },
+      options:{
+        optional: 'runtime'
       }
     },
     watch: {
