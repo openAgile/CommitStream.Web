@@ -52,8 +52,13 @@
       };
 
       $scope.isAdminPanelVisible = function() {
-        // Only display when we actually have the config in $scope!
-        return config && instance;
+        // If we have the config, and an instance, but the instance isn't 
+        // loaded, don't display yet:
+        if (config && config.configured) {
+          return instance;
+        }
+        // Otherwise, just check if we have the config yet:
+        return config;
       };
 
       var isCustomDigest = function() {
