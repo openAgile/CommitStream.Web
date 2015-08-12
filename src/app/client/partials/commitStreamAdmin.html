@@ -352,7 +352,7 @@
     <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
-        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}' ng-show='familyIsVisible("GitHub")'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/GitHub-Mark-32px.png' /></button>&nbsp;<button type='button' ng-show='familyIsVisible("GitLab")' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/GitLab-logo-square-bw.png' style="height:32px;" /></button>
+        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}' ng-show='familyIsVisible("GitHub")'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/icon-github-32x32.png' /></button>&nbsp;<button type='button' ng-show='familyIsVisible("GitLab")' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/icon-gitlab-32x32.png' style="height:32px;" /></button>
         
         <a class='vcs-link' ng-click="showAllVcs()" ng-hide='allVcsVisible()' target='_blank'>change VCS</a>     
       </div>
