@@ -2,7 +2,8 @@ var chai = require('chai'),
   should = chai.should(),
   proxyquire = require('proxyquire'),
   sinon = require('sinon'),
-  gitLabTranslator = require('../../../api/translators/gitLabTranslator');
+  gitLabTranslator = require('../../../api/translators/gitLabTranslator'),
+  GitLabCommitMalformedError = require('../../../middleware/gitLabCommitMalformedError');
 
 describe('gitLabTranslator', function() {
 
@@ -124,4 +125,18 @@ describe('gitLabTranslator', function() {
     });
   });
 
+  describe('with malformed push events', function() {
+    it('it should throw a GitLabCommitMalformedError.', function() {
+      var invokeTranslatePush = function() {
+        var malformedPushEvent = {};
+        var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
+          digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
+          inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
+
+        gitLabTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId);
+      }
+
+      invokeTranslatePush.should.throw(GitLabCommitMalformedError);
+    })
+  });
 });

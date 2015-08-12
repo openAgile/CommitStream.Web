@@ -74,8 +74,9 @@
 */
 
 ((gitLabTranslator) => {
-  var _ = require('underscore'),
-    uuid = require('uuid-v4');
+  let _ = require('underscore'),
+    uuid = require('uuid-v4'),
+    GitLabCommitMalformedError = require('../../middleware/gitLabCommitMalformedError');
 
   gitLabTranslator.hasCorrectHeaders = (headers) => {
     return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook';
@@ -85,7 +86,7 @@
 
     // gitLab does not have a pusheEvent.repository.id field, and github does
     // gitLab does not have a commit.committer object, and github does
-    var headers = request.headers;
+    let headers = request.headers;
 
     if (gitLabTranslator.hasCorrectHeaders(headers)) {
       return true;
@@ -95,15 +96,15 @@
 
   gitLabTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) => {
     try {
-      var branch = pushEvent.ref.split('/').pop();
-      var repository = {
+      let branch = pushEvent.ref.split('/').pop();
+      let repository = {
         // gitLab does not have a repository id
         // id: pushEvent.repository.id,
         name: pushEvent.repository.name
       };
 
-      var events = _.map(pushEvent.commits, function(aCommit) {
-        var commit = {
+      let events = _.map(pushEvent.commits, function(aCommit) {
+        let commit = {
           sha: aCommit.id,
           commit: {
             author: aCommit.author,
@@ -139,9 +140,8 @@
 
       return events;
     } catch (ex) {
-      console.log('GitLabException:')
       console.log(ex);
-      throw ex;
+      throw new GitLabCommitMalformedError(ex, pushEvent);
     }
   }
 
