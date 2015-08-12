@@ -2,7 +2,7 @@
   var csError = require('./csError');
 
   var MalformedPushEventError = csError.createCustomError('MalformedPushEventError', function() {
-    var message = 'There are no translators that understand the payload you are sending.';
+    var message = 'Push event could not be processed.';
     var errors = [message];
     MalformedPushEventError.prototype.constructor.call(this, errors, 400);
   });
