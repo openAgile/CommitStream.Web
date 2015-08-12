@@ -3,7 +3,7 @@
     eventStore = require('../helpers/eventStoreClient'),
     translatorFactory = require('../translators/translatorFactory'),
     commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal'),
-    malformedPushEventError = require('../../middleware/malformedPushEventError');
+    MalformedPushEventError = require('../../middleware/malformedPushEventError');
 
   module.exports = function(req, res) {
     var instanceId = req.instance.instanceId,
@@ -33,7 +33,7 @@
           res.hal(hypermedia, 201);
         });
     } else {
-      throw new malformedPushEventError();
+      throw new MalformedPushEventError();
     }
   };
 }());
