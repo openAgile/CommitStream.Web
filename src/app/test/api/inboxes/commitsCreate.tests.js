@@ -1,5 +1,5 @@
 require('../handler-base')();
-var malformedPushEventError = require('../../../middleware/malformedPushEventError');
+var MalformedPushEventError = require('../../../middleware/malformedPushEventError');
 
 var validateUUID = sinon.stub(),
   eventStore = {
@@ -116,7 +116,7 @@ describe('commitsCreate', function() {
       var invokeCommitsCreate = function() {
         handler(request, response);
       }
-      invokeCommitsCreate.should.throw(malformedPushEventError);
+      invokeCommitsCreate.should.throw(MalformedPushEventError);
     });
   });
 });
