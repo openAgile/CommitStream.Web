@@ -28,6 +28,7 @@
 	}
   /* Repo List Table */
   .commitstream-admin .initialLoader {position: absolute; top: 50%; left: 50%;}
+  .commitstream-admin .loader img {vertical-align: bottom;}
   .commitstream-admin .repos-list {margin-top: 2em;}
   .commitstream-admin .repos-list table {background-color: #fff; border: 0 !important;}
   .commitstream-admin .repos-list .table-bordered>thead>tr>th, .commitstream-admin .table-bordered>tbody>tr>th, .commitstream-admin .table-bordered>tfoot>tr>th, .commitstream-admin .table-bordered>thead>tr>td, .commitstream-admin .table-bordered>tbody>tr>td, .commitstream-admin .table-bordered>tfoot>tr>td {border-left: none; border-right: none; border-bottom: none; padding: 13px;}
@@ -75,6 +76,7 @@
     opacity: .6;
     z-index: 3;
     overflow: hidden;
+    margin-top: 2em;
   }
   .commitstream-admin .repo-add:hover {
     color: #fff;
@@ -213,6 +215,21 @@
     padding: 0;
 }
 
+.commitstream-admin .alert-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+}
+
+.commitstream-admin .alert-success hr {
+    border-top-color: #c9e2b3;
+}
+
+.commitstream-admin .alert-success .alert-link {
+    color: #2b542c;
+}
+
+
 .commitstream-admin .close {
     color: #000;
     float: right;
@@ -249,6 +266,20 @@
 
 <img ng-show='loading()' ng-src='{{loaderUrl}}' class='initialLoader' />
 
+<div ng-if="messageActive()" class='message prompt'>
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{message.value}}</strong>
+  </div>
+</div>
+
+<div ng-if="errorActive()" class='error prompt'>
+  <div class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{error.value}}</strong>
+  </div>
+</div>
+
 <div ng-if='isAdminPanelVisible()'>
   <p ng-if='isInstanceMode()'>
     <input
@@ -271,26 +302,12 @@
       <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="onOptionChange('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
       <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="onOptionChange('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
     </div>
-  </div>
-
-  <div ng-if="messageActive()" class='message prompt'>
-    <div class="alert alert-success alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <strong>{{message.value}}</strong>
-    </div>
-  </div>
-
-  <div ng-if="errorActive()" class='error prompt'>
-    <div class="alert alert-warning alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <strong>{{error.value}}</strong>
-    </div>
-  </div>
+  </div>  
 
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
   <div class='repos-list' ng-if='areRepositoriesVisible()'>
-    <h1 ng-show='getInboxesDone'>{{getHeading()}}</h1>
+    <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <p>
         <a class='vcs-link' href='https://community.versionone.com/Help-Center/Administration/CommitStream#list' target='_blank'>Click here to see a list of supported version control systems.</a>

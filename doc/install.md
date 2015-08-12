@@ -6,6 +6,18 @@ This is a work in progress. As this evolves, we update this narrative.
 
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
 * NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
+	* There are two special snowflake packages that need to be installed globally
+		* bower - npm install -g bower 
+		* babel - npm install -g babel
+* Bower components need to be installed for client side code to get served correctly.
+  * Navigate to CommitStream.Web/src/app/client on the command line.
+  * Run the command: bower install
+  * You should have seen all of the bower components defined in CommitStream.Web/src/app/client/bower.json get installed.
+* Grunt and Babel: These two are being used in order to transpile our ES2015 files to the appropriate locations within the project. In order for this to work appropriately though, you must first execute from your command line
+  * npm install -g grunt-cli
+  * Note that installing grunt-cli does not install the Grunt task runner! The job of the Grunt CLI is simple: run the version of Grunt which has been installed next to a Gruntfile. This allows multiple versions of Grunt to be installed on the same machine simultaneously.
+  * If you would like to run the watcher for ES2015 files while you make code changes run:
+    * grunt watch --verbose
 
 # How to run just the CommitStream application (no dependency on the VersionOne application)
 
