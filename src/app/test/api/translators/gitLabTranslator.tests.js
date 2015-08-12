@@ -5,45 +5,12 @@ var chai = require('chai'),
   gitLabTranslator = require('../../../api/translators/gitLabTranslator');
 
 describe('gitLabTranslator', function() {
-  it('should report incorrect headers if x-gitlab-event header is missing', function() {
-    var request = {
-      'headers': {}
-    }
-
-    gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(false);
-  });
-
-  it('should report incorrect headers if  x-gitlab-event header is wrong', function() {
-    var request = {
-      'headers': {
-        'x-gitlab-event': 'Wrong Header Value'
-      }
-    }
-
-    gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(false);
-  });
-
-  it('should report correct headers if x-gitlab-event header is Push Hook', function() {
-    var request = {
-      'headers': {
-        'x-gitlab-event': 'Push Hook'
-      }
-    }
-
-    gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(true);
-  });
 
   describe('with appropriate headers', function() {
 
     var originalHasCorrectHeaders;
-    var request;
 
     before(function() {
-      // What is in the request does not matter for these, because the component that
-      // actually uses the request (gitLabTranslator.hasCorrectHeaders) is being set
-      // as a stub for these tests.
-      request = {};
-
       // Set hasCorrectHeaders to be a stub to ensure it's been called.
       originalHasCorrectHeaders = gitLabTranslator.hasCorrectHeaders;
       gitLabTranslator.hasCorrectHeaders = sinon.stub();
@@ -51,6 +18,8 @@ describe('gitLabTranslator', function() {
     });
 
     it('canTranslate should check for appropriate headers', function() {
+      var request = {};
+
       // Act, which should cause the call to hasCorrectHeaders
       gitLabTranslator.canTranslate(request);
 
@@ -59,7 +28,19 @@ describe('gitLabTranslator', function() {
     });
 
     it('canTranslate should return true when valid headers are available', function() {
+      var request = {};
+
       gitLabTranslator.canTranslate(request).should.equal(true);
+    });
+
+    it('should report correct headers if x-gitlab-event header is "Push Hook"', function() {
+      var request = {
+        'headers': {
+          'x-gitlab-event': 'Push Hook'
+        }
+      }
+
+      gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(true);
     });
 
     after(function() {
@@ -71,13 +52,8 @@ describe('gitLabTranslator', function() {
   describe('with incorrect headers', function() {
 
     var originalHasCorrectHeaders;
-    var request;
 
     before(function() {
-      // What is in the request does not matter for these, because the component that
-      // actually uses the request (gitLabTranslator.hasCorrectHeaders) is being set
-      // as a stub for these tests.
-      request = {};
 
       // Set hasCorrectHeaders to be a stub to ensure it's been called.
       originalHasCorrectHeaders = gitLabTranslator.hasCorrectHeaders;
@@ -85,8 +61,61 @@ describe('gitLabTranslator', function() {
       gitLabTranslator.hasCorrectHeaders.returns(false);
     });
 
-    it('canTranslate should return true when valid headers are available', function() {
+    it('canTranslate should return false when invalid headers are present', function() {
+      // What is in the request does not matter for this one, because the component that
+      // actually uses the request (gitLabTranslator.hasCorrectHeaders) is being set
+      // as a stub for this tests.
+
+      var request = {};
       gitLabTranslator.canTranslate(request).should.equal(false);
+    });
+
+    it('should report incorrect headers if x-gitlab-event header is missing', function() {
+      var request = {
+        'headers': {}
+      }
+
+      gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(false);
+    });
+
+    it('should report incorrect headers if  x-gitlab-event header is "Tag Push Hook"', function() {
+      var request = {
+        'headers': {
+          'x-gitlab-event': 'Tag Push Hook'
+        }
+      }
+
+      gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(false);
+    });
+
+    it('should report incorrect headers if  x-gitlab-event header is "Issue Hook"', function() {
+      var request = {
+        'headers': {
+          'x-gitlab-event': 'Issue Hook'
+        }
+      }
+
+      gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(false);
+    });
+
+    it('should report incorrect headers if  x-gitlab-event header is "Note Hook"', function() {
+      var request = {
+        'headers': {
+          'x-gitlab-event': 'Note Hook'
+        }
+      }
+
+      gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(false);
+    });
+
+    it('should report incorrect headers if  x-gitlab-event header is "Merge Request Hook"', function() {
+      var request = {
+        'headers': {
+          'x-gitlab-event': 'Merge Request Hook'
+        }
+      }
+
+      gitLabTranslator.hasCorrectHeaders(request.headers).should.equal(false);
     });
 
     after(function() {
