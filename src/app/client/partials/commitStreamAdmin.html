@@ -59,13 +59,13 @@
   .commitstream-admin .well {
     background: #fff;
     box-shadow: none;
-    padding: 15px;
+    padding: 15px 15px 0px 15px;
   }
   .commitstream-admin .well p {
-  	padding-bottom: .5em;
+  	padding-bottom: 0px;
   }
   .commitstream-admin .vcs-link {
-    font-size: 12px;
+    font-size: 14px;
   }
   .commitstream-admin .repos-section {
     position: relative;
@@ -86,8 +86,8 @@
     margin-top: 0px;
     margin-left: 15px;
     width: 50px !important;
-    text-transform: uppercase;
-    font-weight: bolder;
+    text-transform: capitalize;
+    font-weight: 400;
     color: #fff;
     font-family: 'Proxima Nova', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -263,21 +263,47 @@
 }
 
 .commitstream-admin .vcs-families button {
-  border: 1px solid lightgray;
+  outline: none !important;
+  border: none !important;
+  padding: 5px 10px;
+  border-radius: 6px;
+  margin-right: 10px;
+  background-color: #ffffff;
+  font-size: 16px;
+  color: #474c54;
 }
 
 .commitstream-admin .vcs-families .family-selected {
-  background: #ea6c02;
-  color: white;
+  background-color: #ea6c02;
+  color: #ffffff;
+
+}
+
+.commitstream-admin .vcs-families button:hover{
+  background-color: #00a9e0; /*light blue hover*/
+  color: #ffffff;
 }
 
 .commitstream-admin .vcs-families img {
-  vertical-align: text-top;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+.commitstream-admin .vcs-families .family-selected {
+  background-color: #00a9e0;
+  color: #ffffff;
 }
 
 .commitstream-admin .inbox-link img {
-  vertical-align: text-top;
+  vertical-align: middle;
+  margin-right: 10px;
 }
+
+.commitstream-admin input{
+  box-shadow: none !important;
+  border:1px solid #dde2e9 !important;
+} 
+
 </style>
 
 <img ng-show='loading()' ng-src='{{loaderUrl}}' class='initialLoader' />
@@ -326,7 +352,7 @@
     <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
-        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}' ng-show='familyIsVisible("GitHub")'><img ng-src='{{serviceUrl}}/icon-github-16x16.png' />&nbsp;GitHub</button>&nbsp;<button type='button' ng-show='familyIsVisible("GitLab")' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'><img ng-src='{{serviceUrl}}/icon-gitlab-16x16.png' />&nbsp;GitLab</button>
+        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}' ng-show='familyIsVisible("GitHub")'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/GitHub-Mark-32px.png' /></button>&nbsp;<button type='button' ng-show='familyIsVisible("GitLab")' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/GitLab-logo-square-bw.png' style="height:32px;" /></button>
         
         <a class='vcs-link' ng-click="showAllVcs()" ng-hide='allVcsVisible()' target='_blank'>change VCS</a>     
       </div>
@@ -351,7 +377,7 @@
           <th>&nbsp;</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:32px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true'>
           </td>
@@ -367,7 +393,7 @@
           <th>Repository Name</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link'><img ng-src='{{familyIcon(inbox.family)}}' />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link'><img ng-src='{{familyIcon(inbox.family)}}' style="height:32px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
       </table>

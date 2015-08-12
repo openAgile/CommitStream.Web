@@ -178,7 +178,7 @@
 
       $scope.showAllVcs = () => showAllVcs = true;
 
-      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-16x16.png`;
+      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-32x32.png`;
 
       let setupNewInbox = selectedFamily =>
         $scope.newInbox = {
