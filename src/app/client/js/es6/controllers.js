@@ -335,10 +335,8 @@
 
       $scope.adjustOverlay = () =>
         $timeout(() => {
-          let repolistWidth = $('.repos-list').width();
           let repolistHeight = $('.repos-list').height();
           $('.repos-section .overlay').height(repolistHeight);
-          $('.repos-section .overlay').width(repolistWidth);
         });
 
       $scope.inboxCreating = false;

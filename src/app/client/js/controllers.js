@@ -38,14 +38,9 @@
       return config.configMode.configured;
     };
 
-        // If we have the config, and an instance, but the instance isn't 
-        // loaded, don't display yet:
     // Only display when we actually have the config in $scope!
     $scope.isAdminPanelVisible = function () {
       return config && (instance || !config.configured);
-          return instance;
-        }
-        // Otherwise, just check if we have the config yet:
     };
 
     var isCustomDigest = function isCustomDigest() {
