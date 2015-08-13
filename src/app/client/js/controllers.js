@@ -120,6 +120,7 @@
     var resetInboxes = function resetInboxes() {
       $scope.getInboxesDone = false;
       $scope.inboxes = [];
+      resetFamily();
     };
 
     $scope.onOptionChange = function (value) {
@@ -174,28 +175,18 @@
     };
 
     var family = '';
-    var showAllVcs = true;
 
     $scope.familySelect = function (newFamily) {
-      showAllVcs = false;
       family = newFamily;
       setupNewInbox(family);
     };
 
     $scope.familyIsSelected = function (familyName) {
-      return family === familyName && !showAllVcs ? 'family-selected' : '';
+      return family === familyName ? 'family-selected' : '';
     };
 
-    $scope.familyIsVisible = function (familyName) {
-      return familyName === family || showAllVcs;
-    };
-
-    $scope.allVcsVisible = function () {
-      return showAllVcs;
-    };
-
-    $scope.showAllVcs = function () {
-      return showAllVcs = true;
+    $scope.familyHasBeenSelected = function () {
+      return family !== '';
     };
 
     $scope.familyIcon = function (familyName) {
@@ -208,6 +199,10 @@
         name: '',
         family: selectedFamily
       };
+    };
+
+    var resetFamily = function resetFamily() {
+      return $scope.familySelect('');
     };
 
     $scope.serviceUrl = serviceUrl;
