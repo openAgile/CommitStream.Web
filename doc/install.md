@@ -18,6 +18,15 @@ This is a work in progress. As this evolves, we update this narrative.
   * Note that installing grunt-cli does not install the Grunt task runner! The job of the Grunt CLI is simple: run the version of Grunt which has been installed next to a Gruntfile. This allows multiple versions of Grunt to be installed on the same machine simultaneously.
   * If you would like to run the watcher for ES2015 files while you make code changes run:
     * grunt watch --verbose
+  * In the Gruntfile there is a task created for developers
+    * grunt dev
+  * This wil run the following tasks:
+    * Compile your .less files 
+    * Compile your ES2015 files
+    * Start the node server
+    * Watch for .less file changes and compile them. 
+    * Watch for ES2015 files changes and compile them
+    * Watch for changes in the js files on the server side (api, middleware and server.js), if so it will restart the server.
 
 # How to run just the CommitStream application (no dependency on the VersionOne application)
 
