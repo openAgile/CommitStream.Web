@@ -28,6 +28,19 @@
         branchHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName + "/tree/" + e.branch,
         repoHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName
       };
+
+      // github push events include svn_url, could that be used in place of
+      // "https://github.com/" + repo.repoOwner + "/" + repo.repoName
+      // if so, has that been captured for all historical commits?
+
+      // comperable gitlab branchHref
+      // http://v1cs-gitlab-dev.cloudapp.net/user/gitlab-project-test/tree/master
+      // comperable gitlab repoHref
+      // http://v1cs-gitlab-dev.cloudapp.net/user/gitlab-project-test
+      //
+      // similarly for gitlab, it sends a homepage property, could this be the counterpart
+      // to svn_url from the github payload.
+
     });
     var response = {
       commits: commits
