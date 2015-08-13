@@ -15,7 +15,8 @@
 	.modal-title {margin:0; float: left; font-weight: 300; font-size: 1.714em; letter-spacing: -0.025em;}
 	.modal-body{position:relative;padding:15px}
 	.modal-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}
-	.modal-footer .btn+.btn{margin-left:5px;margin-bottom:0}
+	   .modal-footer button {padding: 0 12px !important;}
+  .modal-footer .btn+.btn{margin-left:5px;margin-bottom:0}
 	.modal-footer .btn-group .btn+.btn{margin-left:-1px}
 	.modal-footer .btn-block+.btn-block{margin-left:0}
 	.modal-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}
@@ -94,7 +95,7 @@
     font-size: 12px;
     border-radius: 6px;
     height: 32px !important;
-    line-height: 32px;
+    line-height: 32px
   }
   .commitstream-admin .repo-add {
     background: #eb6c00 !important;
@@ -181,7 +182,7 @@
   }
   .btn-group-vertical .btn-default {
     border: 0 !important;
-    height: 40px !important;
+    /*height: 40px !important;*/
     text-align: left !important;
     text-transform: none !important;
     font-weight: normal !important;
@@ -267,7 +268,7 @@
   border: none !important;
   padding: 5px 10px;
   border-radius: 6px;
-  margin-right: 10px;
+  margin-right: 15px;
   background-color: #ffffff;
   font-size: 16px;
   color: #474c54;
@@ -382,7 +383,7 @@
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
-            <button ng-if='editAllowed()' class='create-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
+            <button ng-if='editAllowed()' class='cancel-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
