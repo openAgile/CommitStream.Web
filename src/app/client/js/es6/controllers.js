@@ -115,6 +115,7 @@
       let resetInboxes = () => {
         $scope.getInboxesDone = false;
         $scope.inboxes = [];
+        resetFamily();
       };
 
       $scope.onOptionChange = value => {
@@ -161,22 +162,16 @@
       };
 
       let family = '';
-      let showAllVcs = true;
 
       $scope.familySelect = newFamily => {
-        showAllVcs = false;
         family = newFamily;
         setupNewInbox(family);
       };
 
       $scope.familyIsSelected = familyName =>
-        (family === familyName && !showAllVcs) ? 'family-selected' : '';
+        (family === familyName) ? 'family-selected' : '';
 
-      $scope.familyIsVisible = familyName => familyName === family || showAllVcs;
-
-      $scope.allVcsVisible = () => showAllVcs;
-
-      $scope.showAllVcs = () => showAllVcs = true;
+      $scope.familyHasBeenSelected = () => family !== '';
 
       $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-32x32.png`;
 
@@ -186,6 +181,8 @@
           name: '',
           family: selectedFamily
         };
+
+      let resetFamily = () => $scope.familySelect('');
 
       $scope.serviceUrl = serviceUrl;
       $scope.inboxes = [];

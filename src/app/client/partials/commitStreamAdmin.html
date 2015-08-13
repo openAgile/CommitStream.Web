@@ -352,12 +352,11 @@
     <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
-        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}' ng-show='familyIsVisible("GitHub")'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/icon-github-32x32.png' /></button>&nbsp;<button type='button' ng-show='familyIsVisible("GitLab")' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/icon-gitlab-32x32.png' style="height:32px;" /></button>
-        
-        <a class='vcs-link' ng-click="showAllVcs()" ng-hide='allVcsVisible()' target='_blank'>change VCS</a>     
+        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/icon-github-32x32.png' /></button>&nbsp;<button type='button' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/icon-gitlab-32x32.png' style="height:32px;" /></button>
+                     
       </div>
       <br />
-      <form ng-submit='inboxCreate()' name='inboxesForm' ng-hide='allVcsVisible()'>
+      <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()'>
         <div class='input-group'>
           <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
           <span class='input-group-btn'>
