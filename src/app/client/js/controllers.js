@@ -294,9 +294,9 @@
           if ($scope.inboxes.length > 0) {
             $scope.familySelect($scope.inboxes[0].family);
           }
-          $scope.getInboxesDone = true;
         })['catch'](errorHandler);
       }
+      $scope.getInboxesDone = true;
     };
 
     var inboxesUpdate = function inboxesUpdate(enabled) {
