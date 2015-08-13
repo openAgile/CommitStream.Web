@@ -1,46 +1,57 @@
+//TODO: RENAME THE MODULE
 (function() {
   var _ = require('underscore'),
     moment = require('moment');
 
-  var getRepoOwnerName = function(commit) {
-    var repoArray = commit.html_url.split('/commit')[0].split('/');
-    return result = {
-      repoName: repoArray.pop(),
-      repoOwner: repoArray.pop()
+  var getRepoInfo = function(commitUrl) {
+    var repoArray = commitUrl.split('/commit')[0].split('/');
+
+    var r = {};
+    r.repoName = repoArray.pop();
+    r.repoOwner = repoArray.pop();
+    r.serverUrl = repoArray.pop();
+
+    if (repoArray.pop() === '') {
+      r.serverUrl = repoArray.pop() + '//' + r.serverUrl;
     }
+
+    return r;
   };
+
+  var getFamily = function(eventType) {
+    return eventType.slice(0, -14);
+  };
+
+  var getRepoHref = function(repoInfo) {
+    // https://serverUrl/repoOwner/repoName
+    return repoInfo.serverUrl + '/' + repoInfo.repoOwner + '/' + repoInfo.repoName;
+  }
+
+  var getBranchHref = function(repoHref, branch) {
+    // http://serverUrl/repoOwner/reponame/tree/branch
+    return repoHref + '/tree/' + branch;
+  }
 
   module.exports = function(entries) {
     var commits = _.map(entries, function(entry) {
       var e = JSON.parse(entry.data);
-      var repo = getRepoOwnerName(e);
+      var repoInfo = getRepoInfo(e.html_url);
+      var family = getFamily(entry.eventType);
+
       return {
         commitDate: e.commit.committer.date,
         timeFormatted: moment(e.commit.committer.date).fromNow(),
         author: e.commit.committer.name,
         sha1Partial: e.sha.substring(0, 6),
-        family: entry.eventType.slice(0, -14),
+        family: family,
         action: "committed",
         message: e.commit.message,
         commitHref: e.html_url,
-        repo: repo.repoOwner + '/' + repo.repoName,
+        repo: repoInfo.repoOwner + '/' + repoInfo.repoName,
         branch: e.branch,
-        branchHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName + "/tree/" + e.branch,
-        repoHref: "https://github.com/" + repo.repoOwner + "/" + repo.repoName
+        branchHref: getBranchHref(getRepoHref(repoInfo), e.branch),
+        repoHref: getRepoHref(repoInfo)
       };
-
-      // github push events include svn_url, could that be used in place of
-      // "https://github.com/" + repo.repoOwner + "/" + repo.repoName
-      // if so, has that been captured for all historical commits?
-
-      // comperable gitlab branchHref
-      // http://v1cs-gitlab-dev.cloudapp.net/user/gitlab-project-test/tree/master
-      // comperable gitlab repoHref
-      // http://v1cs-gitlab-dev.cloudapp.net/user/gitlab-project-test
-      //
-      // similarly for gitlab, it sends a homepage property, could this be the counterpart
-      // to svn_url from the github payload.
-
     });
     var response = {
       commits: commits
