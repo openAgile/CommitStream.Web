@@ -354,7 +354,7 @@
 
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
-  <div ng-show='getInboxesDone' class='repos-list' ng-if='areRepositoriesVisible()'>
+  <div class='repos-list' ng-if='areRepositoriesVisible()'>
     <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
