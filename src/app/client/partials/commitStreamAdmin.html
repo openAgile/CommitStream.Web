@@ -24,7 +24,7 @@
 	.modal-content{-webkit-box-shadow:0 5px 15px rgba(0,0,0,0.5);box-shadow:0 5px 15px rgba(0,0,0,0.5)}
 	.modal-sm{width:300px}
 	}
-	@media (min-width:992px) { 
+	@media (min-width:992px) {
 		.modal-lg {width:900px}
 	}
   /* Repo List Table */
@@ -308,7 +308,11 @@
 .commitstream-admin input{
   box-shadow: none !important;
   border:1px solid #dde2e9 !important;
-} 
+}
+
+.commitstream-admin .inboxes-form {
+  padding-bottom: 8px;
+}
 
 </style>
 
@@ -350,7 +354,7 @@
       <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="onOptionChange('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
       <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="onOptionChange('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
     </div>
-  </div>  
+  </div>
 
   <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
 
@@ -359,10 +363,10 @@
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
         <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/icon-github-32x32.png' /></button>&nbsp;<button type='button' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/icon-gitlab-32x32.png' style="height:32px;" /></button>
-                     
+
       </div>
       <br />
-      <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()'>
+      <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
         <div class='input-group'>
           <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
           <span class='input-group-btn'>
