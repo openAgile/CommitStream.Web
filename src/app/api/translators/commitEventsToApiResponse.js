@@ -1,4 +1,3 @@
-//TODO: RENAME THE MODULE
 (function() {
   var _ = require('underscore'),
     moment = require('moment');

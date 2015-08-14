@@ -1,6 +1,6 @@
 (function(controller) {
   var config = require('../config'),
-    gitHubEventsToApiResponse = require('./translators/gitHubEventsToApiResponse'),
+    gitHubEventsToApiResponse = require('./translators/commitEventsToApiResponse'),
     es = require('./helpers/eventStoreClient'),
     _ = require('underscore'),
     uuid = require('uuid-v4'),
