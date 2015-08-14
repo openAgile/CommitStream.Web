@@ -1,7 +1,7 @@
 (function() {
   var config = require('../../config'),
     _ = require('underscore'),
-    gitHubEventsToApiResponse = require('../translators/gitHubEventsToApiResponse'),
+    gitHubEventsToApiResponse = require('../translators/commitEventsToApiResponse'),
     eventStore = require('../helpers/eventStoreClient'),
     pager = require('../helpers/pager'),
     csError = require('../../middleware/csError');
