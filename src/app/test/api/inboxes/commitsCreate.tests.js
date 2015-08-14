@@ -10,7 +10,6 @@ var validateUUID = sinon.stub(),
     translatePush: sinon.stub()
   },
   commitsAddedFormatAsHal = sinon.stub(),
-  githubValidator = sinon.stub(),
   translatorFactory = {
     create: sinon.stub()
   };
