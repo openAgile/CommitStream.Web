@@ -18,7 +18,6 @@
     "express-handlebars": "^1.1.0",
     "istanbul": "^0.3.2",
     "jsonschema": "^1.0.0",
-    "less": "^2.5.1",
     "method-override": "^2.3.3",
     "mocha": "^1.21.5",
     "mocha-tap-reporter": "^0.1.2",
@@ -46,7 +45,9 @@
     "babel": "^5.8.20",
     "grunt": "^0.4.5",
     "grunt-babel": "^5.0.1",
+    "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-server": "^0.5.1",
     "load-grunt-tasks": "^3.2.0"
   },
   "scripts": {
@@ -57,8 +58,7 @@
     "smoke-happy-path": "mocha -u exports -R spec smoke-test/happy-path-end-to-end.tests.js",
     "jenkins-test": "mocha -u exports -R tap test/**/*tests.js",
     "jenkins-smoke": "mocha -u exports -R tap smoke-test/smoke.tests.js",
-    "jenkins-smoke-happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js",
-    "generateCss": "generateCss.sh"
+    "jenkins-smoke-happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js"
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"
