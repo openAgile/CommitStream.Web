@@ -27,6 +27,7 @@
     "xdomain": "~0.7.3"
   },
   "resolutions": {
-    "angular": "1.4.4"
+    "angular": "1.4.4",
+    "angular-bootstrap": "~0.13.3"
   }
 }
