@@ -1,11 +1,17 @@
-(function() {
-  'use strict';
+'use strict';
 
-  var prependStyleSheet = function(el, href) {
+(function () {
+  var serviceUrl = undefined,
+      configGetUrl = undefined,
+      configSaveUrl = undefined,
+      rootElementId = undefined,
+      commitStreamRoot = undefined;
+
+  var prependStyleSheet = function prependStyleSheet(el, href) {
     el.prepend($('<link type="text/css" rel="stylesheet" href="' + href + '">'));
   };
 
-  var getServiceUrl = function(scriptEl) {
+  var getServiceUrl = function getServiceUrl(scriptEl) {
     var src = scriptEl.attr('src');
     if (src.indexOf('/') !== 0) {
       return src.substr(0, src.indexOf('/js/adminBootstrap.js'));
@@ -13,116 +19,98 @@
     return '';
   };
 
-  var callAngular = function() {
+  var callAngular = function callAngular() {
     var config = angular.module('commitStreamAdmin.config', []);
 
-    config.provider('serviceUrl', function() {
+    config.provider('serviceUrl', function () {
       return {
-        $get: function() {
+        $get: function $get() {
           return serviceUrl;
         }
-      }
+      };
     });
-    config.provider('configGetUrl', function() {
+    config.provider('configGetUrl', function () {
       return {
-        $get: function() {
+        $get: function $get() {
           return configGetUrl;
         }
-      }
+      };
     });
-    config.provider('configSaveUrl', function() {
+    config.provider('configSaveUrl', function () {
       return {
-        $get: function() {
+        $get: function $get() {
           return configSaveUrl;
         }
-      }
+      };
     });
 
     CommitStreamAdminBoot($('#' + rootElementId));
   };
 
-  var loadScripts = function(scripts, cb) {
+  var loadScripts = function loadScripts(scripts, cb) {
     if (!scripts || !scripts.length) {
       return;
     }
     var currentScript = scripts.shift();
-    $.getScript(currentScript)
-      .done(function() {
-        if (scripts.length > 0) {
-          loadScripts(scripts, cb);
-        } else {
-          cb();
-        }
-      })
-      .fail(onLoadScriptsFailure);
+    $.getScript(currentScript).done(function () {
+      if (scripts.length > 0) {
+        loadScripts(scripts, cb);
+      } else {
+        cb();
+      }
+    }).fail(onLoadScriptsFailure);
   };
 
-  var onLoadScriptsFailure = function(jqXhr, settings, exception) {
+  var onLoadScriptsFailure = function onLoadScriptsFailure(jqXhr, settings, exception) {
     console.error('CommitStream dependency loading exception for script:' + currentScript);
     console.error('CommitStream dependency loading exception details:');
     console.error(exception);
   };
 
-  var prependXdomain = function(commitStreamRoot) {
-    setTimeout(function() {
+  var prependXdomain = function prependXdomain(commitStreamRoot) {
+    setTimeout(function () {
       if (window.xdomain) {
         return;
       }
-      commitStreamRoot.prepend(
-        $('<scr' + 'ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr' + 'ipt>"')
-      );
+      commitStreamRoot.prepend($('<scr' + ('ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr') + 'ipt>"'));
     }, 1000);
   };
 
   try {
+    (function () {
+      var scriptEl = $($('script[data-commitstream-root]')[0]);
 
-    var scriptEl = $($('script[data-commitstream-root]')[0]);
+      serviceUrl = getServiceUrl(scriptEl);
+      configGetUrl = scriptEl.attr('data-commitstream-config-get-url');
+      configSaveUrl = scriptEl.attr('data-commitstream-config-save-url');
 
-    var serviceUrl = getServiceUrl(scriptEl);
-    var configGetUrl = scriptEl.attr('data-commitstream-config-get-url');
-    var configSaveUrl = scriptEl.attr('data-commitstream-config-save-url');
+      rootElementId = scriptEl.attr('data-commitstream-root');
+      commitStreamRoot = $('#' + rootElementId);
 
-    var rootElementId = scriptEl.attr('data-commitstream-root');
-    var commitStreamRoot = $('#' + rootElementId);
+      var bowerUrl = serviceUrl + '/bower_components/';
 
-    var bowerUrl = serviceUrl + '/bower_components/';
+      var loadOnceScripts = [bowerUrl + 'angular/angular.min.js', bowerUrl + 'angular-route/angular-route.min.js', bowerUrl + 'angular-bootstrap/ui-bootstrap.min.js', bowerUrl + 'angular-bootstrap/ui-bootstrap-tpls.min.js', bowerUrl + 'angular-prompt/dist/angular-prompt.min.js', bowerUrl + 'angular-hal/angular-hal.js', bowerUrl + 'rfc6570/rfc6570.js', bowerUrl + 'bootstrap/dist/js/bootstrap.min.js', bowerUrl + 'bootstrap-toggle/js/bootstrap-toggle.min.js'];
 
-    var loadOnceScripts = [
-      bowerUrl + 'angular/angular.min.js',
-      bowerUrl + 'angular-route/angular-route.min.js',
-      bowerUrl + 'angular-bootstrap/ui-bootstrap.min.js',
-      bowerUrl + 'angular-bootstrap/ui-bootstrap-tpls.min.js',
-      bowerUrl + 'angular-prompt/dist/angular-prompt.min.js',
-      bowerUrl + 'angular-hal/angular-hal.js',
-      bowerUrl + 'rfc6570/rfc6570.js',
-      bowerUrl + 'bootstrap/dist/js/bootstrap.min.js',
-      bowerUrl + 'bootstrap-toggle/js/bootstrap-toggle.min.js',
-    ];
+      var scripts = [serviceUrl + '/js/admin.js', serviceUrl + '/js/controllers.js', serviceUrl + '/js/directives.js'];
 
-    var scripts = [
-      serviceUrl + '/js/admin.js',
-      serviceUrl + '/js/controllers.js',
-      serviceUrl + '/js/directives.js'
-    ];
+      // TODO: enable after new styles are released in V1 Prod
+      prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
+      prependStyleSheet(commitStreamRoot, serviceUrl + '/css/glyphicon.css');
 
-    // TODO: enable after new styles are released in V1 Prod
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
-    prependStyleSheet(commitStreamRoot, serviceUrl + '/css/glyphicon.css');
+      // XDomain support for IE9 especially
+      prependXdomain(commitStreamRoot);
 
-    // XDomain support for IE9 especially
-    prependXdomain(commitStreamRoot);
-
-    //only load angular and friends once
-    if (window.CommitStreamAdminBoot) {
-      loadScripts(scripts, callAngular);
-    } else {
-      loadScripts(loadOnceScripts, function() {
+      //only load angular and friends once
+      if (window.CommitStreamAdminBoot) {
         loadScripts(scripts, callAngular);
-      });
-    }
-
+      } else {
+        loadScripts(loadOnceScripts, function () {
+          loadScripts(scripts, callAngular);
+        });
+      }
+    })();
   } catch (ex) {
     console.error('CommitStream adminBootstrap error:');
     console.error(ex);
   }
-}());
+})();

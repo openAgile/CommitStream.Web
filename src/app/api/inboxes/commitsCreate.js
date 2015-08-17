@@ -1,9 +1,9 @@
 (function() {
   var validateUUID = require('../validateUUID'),
     eventStore = require('../helpers/eventStoreClient'),
-    translator = require('../translators/githubTranslator'),
+    translatorFactory = require('../translators/translatorFactory'),
     commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal'),
-    githubValidator = require('../helpers/githubValidator');
+    MalformedPushEventError = require('../../middleware/malformedPushEventError');
 
   module.exports = function(req, res) {
     var instanceId = req.instance.instanceId,
@@ -12,9 +12,9 @@
 
     validateUUID('inbox', inboxId);
 
-    var eventType = githubValidator(req.headers);
+    var translator = translatorFactory.create(req);
 
-    if (eventType === 'push') {
+    if (translator) {
       var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
 
       var postArgs = {
@@ -30,15 +30,10 @@
           };
 
           var hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
-          //TODO: ask about this
-          //res.location(responseData._links['query-digest'].href);
           res.hal(hypermedia, 201);
         });
-    } else if (eventType === 'ping') {
-      res.json({
-        message: 'Pong.'
-      });
+    } else {
+      throw new MalformedPushEventError();
     }
-
   };
 }());

@@ -18,7 +18,7 @@
   /**
  * Minimal base styles.
  */
-  /* Always force a scrollbar in non-IE 
+  /* Always force a scrollbar in non-IE
 * html { overflow-y: scroll; }
 */
   /* Accessible focus treatment: people.opera.com/patrickl/experiments/keyboard/test */
@@ -1074,10 +1074,15 @@ h6 {
 }
 .commitStream-panel .csInfo {
   padding: 10px 20px 0px 20px;
-  background-image: url(../icon-github-16x16.png);
+  min-height: 25px;
   background-repeat: no-repeat;
   background-position-y: 12px;
-  min-height: 25px;
+}
+.commitStream-panel .csGitHub {
+  background-image: url(../icon-github-16x16.png);
+}
+.commitStream-panel .csGitLab {
+  background-image: url(../icon-gitlab-16x16.png);
 }
 .commitStream-panel .csMessage {
   padding-left: 20px;

@@ -1,4 +1,5 @@
 require('../handler-base')();
+var MalformedPushEventError = require('../../../middleware/malformedPushEventError');
 
 var validateUUID = sinon.stub(),
   eventStore = {
@@ -9,14 +10,15 @@ var validateUUID = sinon.stub(),
     translatePush: sinon.stub()
   },
   commitsAddedFormatAsHal = sinon.stub(),
-  githubValidator = sinon.stub();
+  translatorFactory = {
+    create: sinon.stub()
+  };
 
 var handler = proxyquire('../../api/inboxes/commitsCreate', {
   '../validateUUID': validateUUID,
   '../helpers/eventStoreClient': eventStore,
-  '../translators/githubTranslator': translator,
-  './commitsAddedFormatAsHal': commitsAddedFormatAsHal,
-  '../helpers/githubValidator': githubValidator
+  '../translators/translatorFactory': translatorFactory,
+  './commitsAddedFormatAsHal': commitsAddedFormatAsHal
 });
 
 describe('commitsCreate', function() {
@@ -28,7 +30,8 @@ describe('commitsCreate', function() {
     request,
     response,
     inboxData,
-    formattedCommits;
+    formattedCommits,
+    events;
 
   before(function() {
     eventStore.queryStatePartitionById.resolves({
@@ -38,9 +41,8 @@ describe('commitsCreate', function() {
     formattedCommits = sinon.spy();
     commitsAddedFormatAsHal.returns(formattedCommits);
 
-    translator.translatePush.returns({
-      some: 'value'
-    });
+    translatorFactory.create.returns(translator);
+    translator.translatePush.returns(events);
 
     request = httpMocks.createRequest({
       method: 'POST',
@@ -69,25 +71,18 @@ describe('commitsCreate', function() {
 
     postToStreamArgs = {
       name: 'inboxCommits-' + inboxId,
-      events: {
-        "some": "value"
-      }
+      events: events
     };
 
   });
 
-  describe('when posting a push event', function() {
+  describe('when posting a translatable push event', function() {
     before(function() {
-      githubValidator.returns('push');
       handler(request, response);
     });
 
     it('should call validateUUID with correct args', function() {
       validateUUID.should.have.been.calledWith('inbox', inboxId);
-    });
-
-    it('should call githubValidator with correct args', function() {
-      githubValidator.should.have.been.calledWith(request.headers);
     });
 
     it('should call translator.translatePush with correct args', function() {
@@ -106,29 +101,21 @@ describe('commitsCreate', function() {
       response.hal.should.have.been.calledWith(formattedCommits, 201);
     });
 
+    it('should call translatorFactory.create with correct args', function() {
+      translatorFactory.create.should.have.been.calledWithExactly(request);
+    });
   });
 
-  describe('when posting a ping event', function() {
+  describe('when posting a non-translatable push event', function() {
     before(function() {
-      githubValidator.returns('ping');
-      response.json = sinon.stub();
-      handler(request, response);
+      translatorFactory.create.returns(undefined);
     });
 
-    it('should call validateUUID with correct args', function() {
-      validateUUID.should.have.been.calledWith('inbox', inboxId);
+    it('it should throw a MalformedPushEvent error.', function() {
+      var invokeCommitsCreate = function() {
+        handler(request, response);
+      }
+      invokeCommitsCreate.should.throw(MalformedPushEventError);
     });
-
-    it('should call githubValidator with correct args', function() {
-      githubValidator.should.have.been.calledWith(request.headers);
-    });
-
-    it('should call res.status.send with correct args', function() {
-      response.json.should.have.been.calledWith({
-        message: 'Pong.'
-      });
-    });
-
   });
-
 });
