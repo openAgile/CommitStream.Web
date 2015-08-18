@@ -1,9 +1,10 @@
-var assert = require('assert'),
-  gitHubEventsToApiResponse = require('../../../api/translators/commitEventsToApiResponse');
+var chai = require('chai'),
+  should = chai.should(),
+  commitEventsToApiResponse = require('../../../api/translators/commitEventsToApiResponse');
 
 var eventsData = {};
 
-eventsData.Single = [{
+eventsData.single = [{
   eventId: 'e4a5c39b-6495-44f4-9079-e028ad9acb98',
   eventType: 'GitHubCommitReceived',
   eventNumber: 2,
@@ -27,19 +28,48 @@ eventsData.Single = [{
 }];
 
 describe('gitHubEventsToApiResponse', function() {
+
   describe('when 0 events present', function() {
     it('returns an empty array', function() {
-      assert.deepEqual(gitHubEventsToApiResponse([]), {
+      var actual = commitEventsToApiResponse([]);
+      actual.should.deep.equal({
         commits: []
-      })
+      });
     });
   });
 
   describe('when 1 event present', function() {
-    var events = eventsData.Single;
-    var actual = gitHubEventsToApiResponse(events);
+
+    var actual = commitEventsToApiResponse(eventsData.single);
+
     it('returns 1 mapped event', function() {
-      assert.equal(actual.commits.length, 1);
+      actual.commits.length.should.equal(1);
     });
+
+    it('has the right repoHref', function() {
+      actual.commits[0].repoHref.should.equal(
+        'https://github.com/kunzimariano/CommitService.DemoRepo'
+      );
+    });
+
+    it('has the right branchHref', function() {
+      actual.commits[0].branchHref.should.equal(
+        'https://github.com/kunzimariano/CommitService.DemoRepo/tree/master'
+      );
+    });
+
+    it('has the right family', function() {
+      actual.commits[0].family.should.equal(
+        'GitHub'
+      );
+    });
+
+    it('has the right repo', function() {
+      actual.commits[0].repo.should.equal(
+        'kunzimariano/CommitService.DemoRepo'
+      );
+    });
+
   });
+
 });
