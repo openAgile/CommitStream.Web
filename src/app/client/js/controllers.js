@@ -118,7 +118,6 @@
     };
 
     var resetInboxes = function resetInboxes() {
-      $scope.getInboxesDone = false;
       $scope.inboxes = [];
       resetFamily();
     };
@@ -216,7 +215,6 @@
 
     $scope.serviceUrl = serviceUrl;
     $scope.inboxes = [];
-    $scope.getInboxesDone = false;
 
     $scope.message = {
       value: ''
@@ -305,7 +303,6 @@
           }
         })['catch'](errorHandler);
       }
-      $scope.getInboxesDone = true;
     };
 
     var inboxesUpdate = function inboxesUpdate(enabled) {
