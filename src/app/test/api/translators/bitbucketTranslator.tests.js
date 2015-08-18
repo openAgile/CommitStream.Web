@@ -20,6 +20,10 @@ describe('bitbucketTranslator', function() {
       bitbucketTranslator.canTranslate(request).should.equal(true);
     });
 
+  });
+
+  describe('with incorrect headers', function() {
+
     it('canTranslate should return false when invalid headers are present', function() {
       var request = {
         headers: {
