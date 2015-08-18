@@ -1,5 +1,4 @@
-var assert = require('assert'),
-  chai = require('chai'),
+var chai = require('chai'),
   should = chai.should(),
   commitEventsToApiResponse = require('../../../api/translators/commitEventsToApiResponse');
 
