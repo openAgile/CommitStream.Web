@@ -328,11 +328,11 @@
         $timeout(function () {
           $('.inbox-url').select().focus();
           allowTabNavigation();
-        });
+        }, 1000);
       } else {
         $timeout(function () {
           preventTabNavigation();
-        });
+        }, 1000);
       }
       inboxesGet();
     };
@@ -513,13 +513,19 @@
     };
 
     var preventTabNavigation = function preventTabNavigation() {
-      return $("#commitStreamAdmin :input").each(function () {
+      $("#commitStreamAdmin :input").each(function () {
+        $(this).attr('tabindex', '-1');
+      });
+      $("#commitStreamAdmin :button").each(function () {
         $(this).attr('tabindex', '-1');
       });
     };
 
     var allowTabNavigation = function allowTabNavigation() {
-      return $("#commitStreamAdmin :input").each(function () {
+      $("#commitStreamAdmin :input").each(function () {
+        $(this).removeAttr('tabindex');
+      });
+      $("#commitStreamAdmin :button").each(function () {
         $(this).removeAttr('tabindex');
       });
     };

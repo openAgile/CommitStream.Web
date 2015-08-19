@@ -305,11 +305,11 @@
           $timeout(() => {
             $('.inbox-url').select().focus();
             allowTabNavigation();
-          });
+          }, 1000);
         } else {
           $timeout(() => {
             preventTabNavigation();
-          });
+          }, 1000);
         }
         inboxesGet();
       };
@@ -486,15 +486,23 @@
         return false;
       };
 
-      let preventTabNavigation = () =>
+      let preventTabNavigation = () => {
         $("#commitStreamAdmin :input").each(function() {
           $(this).attr('tabindex', '-1');
         });
+        $("#commitStreamAdmin :button").each(function() {
+          $(this).attr('tabindex', '-1');
+        });
+      }
 
-      let allowTabNavigation = () =>
+      let allowTabNavigation = () => {
         $("#commitStreamAdmin :input").each(function() {
           $(this).removeAttr('tabindex');
         });
+        $("#commitStreamAdmin :button").each(function() {
+          $(this).removeAttr('tabindex');
+        });
+      }
 
       CommitStreamApi
         .load()
