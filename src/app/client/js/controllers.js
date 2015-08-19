@@ -11,6 +11,17 @@
         instance = undefined,
         digest = undefined;
 
+    var inboxesDone = false;
+
+    var getInboxesDone = function getInboxesDone() {
+      loading = false;
+      inboxesDone = true;
+    };
+
+    var isInboxesDone = function isInboxesDone() {
+      return inboxesDone;
+    };
+
     $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
 
     $scope.loading = function () {
@@ -118,6 +129,7 @@
     };
 
     var resetInboxes = function resetInboxes() {
+      inboxesDone = false;
       $scope.inboxes = [];
       resetFamily();
     };
@@ -157,7 +169,7 @@
     };
 
     $scope.areRepositoriesVisible = function () {
-      return $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
+      return ($scope.isInstanceMode() || isGlobalDigest() || isCustomDigest()) && isInboxesDone();
     };
 
     $scope.editAllowed = function () {
@@ -165,11 +177,13 @@
     };
 
     $scope.getHeading = function () {
-      if ($scope.isInstanceMode()) return 'Setup Global Repositories';
-      if ($scope.isDigestMode()) {
-        if (isCustomDigest()) {
-          return 'Setup TeamRoom Repositories';
-        } else return $scope.inboxes.length > 0 ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+      if (isInboxesDone()) {
+        if ($scope.isInstanceMode()) return 'Setup Global Repositories';
+        if ($scope.isDigestMode()) {
+          if (isCustomDigest()) {
+            return 'Setup TeamRoom Repositories';
+          } else return $scope.inboxes.length > 0 ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+        }
       }
     };
 
@@ -289,6 +303,7 @@
     };
 
     var inboxesGet = function inboxesGet() {
+      loading = true;
       if (digest) {
         digest.$get('inboxes').then(function (inboxesRes) {
           return inboxesRes.$get('inboxes');
@@ -301,7 +316,10 @@
           if ($scope.inboxes.length > 0) {
             $scope.familySelect($scope.inboxes[0].family);
           }
+          getInboxesDone();
         })['catch'](errorHandler);
+      } else {
+        getInboxesDone();
       }
     };
 
@@ -509,8 +527,11 @@
     CommitStreamApi.load().then(getConfig).then(getInstance).then(getDigest).then(function (_digest) {
       if (_digest) digest = _digest;
       setupScope();
-      if ($scope.isDigestMode()) getSelection();
-      inboxesUpdate(config.enabled);
+      if ($scope.isDigestMode()) {
+        getSelection();
+      } else {
+        inboxesUpdate(config.enabled);
+      }
       loading = false;
     })['catch'](errorHandler);
   }]);

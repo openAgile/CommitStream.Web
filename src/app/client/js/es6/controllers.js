@@ -20,6 +20,15 @@
         instance,
         digest;
 
+      let inboxesDone = false;
+
+      let getInboxesDone = () => {
+        loading = false;
+        inboxesDone = true;
+      }
+
+      let isInboxesDone = () => inboxesDone;
+
       $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
 
       $scope.loading = () => loading;
@@ -110,9 +119,11 @@
         config.configMode.useGlobalDigestId = false;
         config.configMode.enabled = false;
         configDigestModeSave(config.configMode);
+
       };
 
       let resetInboxes = () => {
+        inboxesDone = false;
         $scope.inboxes = [];
         resetFamily();
       };
@@ -147,16 +158,18 @@
         config.configMode && config.configMode.type === 'digest';
 
       $scope.areRepositoriesVisible = () =>
-        $scope.isInstanceMode() || isGlobalDigest() || isCustomDigest();
+        ($scope.isInstanceMode() || isGlobalDigest() || isCustomDigest()) && isInboxesDone();
 
       $scope.editAllowed = () => $scope.isInstanceMode() || isCustomDigest();
 
       $scope.getHeading = () => {
-        if ($scope.isInstanceMode()) return 'Setup Global Repositories';
-        if ($scope.isDigestMode()) {
-          if (isCustomDigest()) {
-            return 'Setup TeamRoom Repositories';
-          } else return ($scope.inboxes.length > 0) ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+        if (isInboxesDone()) {
+          if ($scope.isInstanceMode()) return 'Setup Global Repositories';
+          if ($scope.isDigestMode()) {
+            if (isCustomDigest()) {
+              return 'Setup TeamRoom Repositories';
+            } else return ($scope.inboxes.length > 0) ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+          }
         }
       };
 
@@ -265,6 +278,7 @@
       };
 
       let inboxesGet = () => {
+        loading = true;
         if (digest) {
           digest.$get('inboxes')
             .then(inboxesRes => {
@@ -278,8 +292,11 @@
               if ($scope.inboxes.length > 0) {
                 $scope.familySelect($scope.inboxes[0].family);
               }
+              getInboxesDone();
             })
             .catch(errorHandler);
+        } else {
+          getInboxesDone();
         }
       };
 
@@ -487,8 +504,11 @@
         .then(_digest => {
           if (_digest) digest = _digest;
           setupScope();
-          if ($scope.isDigestMode()) getSelection();
-          inboxesUpdate(config.enabled);
+          if ($scope.isDigestMode()) {
+            getSelection();
+          } else {
+            inboxesUpdate(config.enabled);
+          }
           loading = false;
         })
         .catch(errorHandler);
