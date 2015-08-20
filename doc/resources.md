@@ -1,46 +1,51 @@
 Keep this document up-to-date to reflect resources that CommitStream uses in production, staging, and other configurations.
-
-# DEV account Azure resources
-See https://manage.windowsazure.com/VersionOne.onmicrosoft.com#Workspaces/All/dashboard for details. Contact Tom Hall to get added to the account.
-
-<table>
-  <tr>
-    <th>Resource</th><th>Description</th><th>Type</th><th>URL(s)</th><th>branches<th>Notes</th>
-  </tr>
-  <tr>
-    <td>v1CommitStream</td><td>Public web site and API host for CommitStream</td><td>Web Site</td><td>http://v1commitstream.azurewebsites.net</td><td><a href="https://github.com/openAgile/CommitStream.Web/tree/master">master</a></td><td>Browse to test page like:
-    http://v1commitstream.azurewebsites.net or http://v1commitstream.azurewebsites.net?S-48324
-    </td>
-  </tr>
-  <tr>
-    <td>v1commitstream-staging</td><td>Staging web site for v1commitstream</td><td>Web Site</td><td>http://v1commitstream-staging.azurewebsites.net</td><td><a href="https://github.com/openAgile/CommitStream.Web/tree/staging">staging</a></td><td>Browse to test page like:
-    http://v1commitstream-staging.azurewebsites.net or http://v1commitstream-staging.azurewebsites.net?S-48324
-    
-    </td>
-  </tr> 
-  <tr>
-    <td>v1commitstream.cloudapp.net</td><td>VM hosting:
-      <ul>
-        <li><a href="https://www.myget.org/feed/versionone/package/CommitStreamVersionOne">CommitStreamVersionOne Chocolatey package</a></li>
-        <li><a href="https://www.myget.org/feed/versionone/package/eventstore">EventStore 3.0 stable Chocolatey package</a></li>
-      </ul>
-    </td>
-    <td>Virtual Machine</td>
-    <td>
-      <ul>
-        <li><a href="http://v1commitstream.cloudapp.net">VersionOne</a> (admin / admin)</li>
-        <li><a href="http://v1commitstream.cloudapp.net:2113">EventStore</a>(admin / changeit)</li>
-      </ul>
-    </td>
-    <td></td>
-    <td></td>
-  </tr>  
-</table>
+Contact Tom Hall to get added to the accounts in Azure to see these resources.
 
 # PROD account Azure resources
 
-The dashboard for PROD is currently https://manage.windowsazure.com/@VersionOne.onmicrosoft.com#Workspaces/All/dashboard. 
+## Web Apps
 
-(That appears to be just one character different from the DEV account. Tom, is this correct?)
+* `commitstream`: PROD system
+  * `commitstream(staging)`: Staging slot of PROD
 
-No current resources in use under PROD.
+## Cloud Services (Virtual machines and related resources)
+
+* CLUSTER: `eventstore-cluster`: Clustered EventStore configuration that PROD Web App uses
+  * Virtual Network: `EventStore`
+  * Storage Account: `eventstorecluster`
+  * VM Nodes: 
+    * `eventstore-01`
+    * `eventstore-02`
+    * `eventstore-03`
+
+# DEV account Azure resources
+
+## Web Apps
+
+* `v1-cs-test`: For testing new features end-to-end
+* `v1cs-demo`: For demoing to customers
+* `v1cs-dev`: TODO: unknown
+
+## Cloud Services (Virtual machines and related resources)
+
+* `v1commitstream`: For the VM that hosts test/demo EventStore instance and a VersionOne instance for testing and demoing
+  * VM Nodes:
+    * `v1commitstream`
+      * Disk: `https://portalvhdsw36vjbsgqb26p.blob.core.windows.net/vhds/24mvbv14.zly201409291806190790.vhd`
+* `cs-eventstore-cluster`: For testing EventStore clustered configuration
+  * Virtual Network: `CS-EventStore`
+  * Storage Account: `cseventstoreerotstnevesc`
+  * VM Nodes:
+    * `cs-eventstore-1`
+    * `cs-eventstore-2`
+    * `cs-eventstore-3`
+
+## Virtual Machine Images
+
+* `v1cs-base`: Baseline setup for CommitStream with EventStore installed
+* `v1cs-stressMarch`: VM that has JMeter setup and ready to test against a CS instance when needed
+
+## Unknowns
+
+* Web Apps: `v1cs-dev`
+* VM Image: `EventStore-Stress-Test`
