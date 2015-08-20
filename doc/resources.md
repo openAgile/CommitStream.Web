@@ -24,7 +24,6 @@ Contact Tom Hall to get added to the accounts in Azure to see these resources.
 
 * `v1-cs-test`: For testing new features end-to-end
 * `v1cs-demo`: For demoing to customers
-* `v1cs-dev`: TODO: unknown
 
 ## Cloud Services (Virtual machines and related resources)
 
@@ -44,8 +43,3 @@ Contact Tom Hall to get added to the accounts in Azure to see these resources.
 
 * `v1cs-base`: Baseline setup for CommitStream with EventStore installed
 * `v1cs-stressMarch`: VM that has JMeter setup and ready to test against a CS instance when needed
-
-## Unknowns
-
-* Web Apps: `v1cs-dev`
-* VM Image: `EventStore-Stress-Test`
