@@ -4,7 +4,7 @@
 
 # Environments Summary
 
-See [resources.md (TODO: needs update)](resources.md) for all Azure resources in use for CommitStream, including some that are used temporarily or only on-demand. Note also that we are evolving toward the [Gitflow Workflow approach](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) approach for branches.
+See [resources.md](resources.md) for all Azure resources in use for CommitStream, including some that are used temporarily or only on-demand. Note also that we are evolving toward the [Gitflow Workflow approach](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) approach for branches.
 
 * [DEV](http://localhost:6565): Do feature branch work here in your local environment
 * [TEST](https://v1-cs-test.azurewebsites.net): Test work from [develop](https://github.com/openAgile/CommitStream.Web/tree/develop) branch here in Azure before merging into [staging](https://github.com/openAgile/CommitStream.Web/tree/staging) branch. OK to also deploy from different feature branches when needed before merging into develop.
