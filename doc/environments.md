@@ -90,8 +90,13 @@ Use this to demonstrate CommitStream to customers or others with code deployed f
 ### Configuration
 
 * EventStore: https://v1commitstream.cloudapp.net:2113
-* App: https://v1cs-demo.azurewebsites.net, 
+* App: https://v1cs-demo.azurewebsites.net
+* VersionOne Instance: https://v1commitstream.cloudapp.net/V1Demo
 * Branch: https://github.com/openAgile/CommitStream.Web/tree/v1cs-demo
+* TODO: Should we have some setup for GitHub, GitLab, etc repos already configured and pointed here
+  * And: Should we have an EventStore backup that we can just roll back onto for Demos?
+    * And: How cool would it be to automate this with a `grunt` command?
+      * Precedent automation via Powershell remoting exists in the Clarity Project, including scripts that can upload and deploy a new VersionOne build into Azure.
 
 ### How to Deploy
 
