@@ -29,15 +29,15 @@ All work happens on feature branches developing locally by developers. See [cont
 
 Get all setup with [install.md](install.md).
 
-* EventStore: http://localhost:2113
-* App: http://localhost:6565
+* EventStore: [http://localhost:2113](http://localhost:2113)
+* App: [http://localhost:6565](http://localhost:2113)
 * Branch: It depends on what you're working on :-D
 
 #### Cheatsheet
 
 ##### Point your VersionOne at your local CommitStream
 
-This will point CommitStream at http://localhost:6565:
+This will point CommitStream at [http://localhost:6565](http://localhost:2113):
 
 ```bash
 bundle exec rake generate:userconfig
