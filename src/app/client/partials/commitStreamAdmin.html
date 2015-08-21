@@ -373,9 +373,11 @@
     <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
-        <button type='button' ng-click='familySelect("GitHub")' ng-mouseenter='familyHover("GitHub")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitHub")}}'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitHub")}}' /></button>&nbsp;
-        <button type='button' ng-click='familySelect("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
-        <button type='button' ng-click='familySelect("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Bitbucket")}}'>Bitbucket&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
+        <button ng-repeat='family in families'
+          ng-click='familySelect(family)'
+          ng-mouseenter='familyHover(family)'
+          ng-mouseleave='familyHover("")'
+          class='{{familyIsSelected(family)}}'>{{family}}&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon(family)}}' style='height:32px' /></button>
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
