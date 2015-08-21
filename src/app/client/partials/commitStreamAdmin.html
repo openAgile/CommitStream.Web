@@ -88,14 +88,16 @@
     margin-left: 15px;
     width: 50px !important;
     text-transform: capitalize;
-    font-weight: 400;
+    font-weight: 600;
     color: #fff;
     font-family: 'Proxima Nova', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
     -webkit-font-smoothing: antialiased;
-    font-size: 12px;
+    font-size: 14px;
     border-radius: 6px;
-    height: 32px !important;
-    line-height: 32px
+    height: 24px !important;
+    line-height: 24px;
+    outline: none;
+    vertical-align: middle;
   }
   .commitstream-admin .repo-add {
     background: #eb6c00 !important;
@@ -189,7 +191,7 @@
     background-color: #fff !important;
   }
   .btn-group-vertical .btn-default:hover {
-    background-color: #006e92 !important;
+    background-color: #005293 !important;
     color: #fff;
   }
   .commitstream-admin .btn-default:active, .commitstream-admin .btn-default.active, .commitstream-admin .open>.dropdown-toggle.btn-default {background-color: #b7bcc4; box-shadow: none;}
@@ -279,14 +281,8 @@
   letter-spacing: .03em;
 }
 
-.commitstream-admin .vcs-families .family-selected {
-  background-color: #ea6c02;
-  color: #ffffff;
-
-}
-
 .commitstream-admin .vcs-families button:hover{
-  background-color: #005293; /*light blue hover*/
+  background-color: #005293; /* dark blue hover*/
   color: #ffffff;
 }
 
@@ -297,6 +293,12 @@
 
 .commitstream-admin .vcs-families .family-selected {
   background-color: #00a9e0;
+  color: #ffffff;
+}
+
+.commitstream-admin .vcs-families .family-selected:hover {
+  background-color: #00a9e0;
+  transition: .2s all linear !important;
   color: #ffffff;
 }
 
@@ -312,6 +314,10 @@
 
 .commitstream-admin .inboxes-form {
   padding-bottom: 8px;
+}
+
+.button .actions .grid-row-btn {
+  height: 32px !important;
 }
 
 </style>
@@ -362,7 +368,8 @@
     <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
-        <button type='button' ng-click='familySelect("GitHub")' class='{{familyIsSelected("GitHub")}}'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/icon-github-32x32.png' /></button>&nbsp;<button type='button' ng-click='familySelect("GitLab")' class='{{familyIsSelected("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/icon-gitlab-32x32.png' style="height:32px;" /></button>
+        <button type='button' ng-click='familySelect("GitHub")' ng-mouseenter='familyHover("GitHub")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitHub")}}'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitHub")}}' /></button>&nbsp;
+        <button type='button' ng-click='familySelect("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
 
       </div>
       <br />
@@ -386,13 +393,13 @@
           <th>&nbsp;</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:32px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true'>
           </td>
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
-            <button ng-if='editAllowed()' class='cancel-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
+            <button ng-if='editAllowed()' class='actions grid-row-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>

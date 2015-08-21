@@ -1073,19 +1073,20 @@ h6 {
   display: block;
 }
 .commitStream-panel .csInfo {
-  padding: 10px 20px 0px 20px;
-  min-height: 25px;
+  padding: 10px 20px 0px 22px;
+  min-height: 15px;
   background-repeat: no-repeat;
-  background-position-y: 12px;
+  background-position-y: 10px;
+  background-size: 16px;
 }
 .commitStream-panel .csGitHub {
-  background-image: url(../icon-github-16x16.png);
+  background-image: url(../icon-github-selected-32x32.png);
 }
 .commitStream-panel .csGitLab {
-  background-image: url(../icon-gitlab-16x16.png);
+  background-image: url(../icon-gitlab-selected-32x32.png);
 }
 .commitStream-panel .csMessage {
-  padding-left: 20px;
+  padding-left: 22px;
   color: #454545;
   white-space: pre-wrap;
 }

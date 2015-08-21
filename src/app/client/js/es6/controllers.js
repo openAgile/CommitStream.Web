@@ -161,18 +161,24 @@
       };
 
       let family = '';
+      let familyHover = '';
 
       $scope.familySelect = newFamily => {
         family = newFamily;
         setupNewInbox(family);
       };
 
-      $scope.familyIsSelected = familyName =>
+      $scope.familyHover = familyName => familyHover = familyName;
+
+      $scope.familyIsSelectedClass = familyName =>
         (family === familyName) ? 'family-selected' : '';
+
+      $scope.familyIsSelectedIcon = familyName =>
+        (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
 
       $scope.familyHasBeenSelected = () => family !== '';
 
-      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-32x32.png`;
+      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
 
       let setupNewInbox = selectedFamily =>
         $scope.newInbox = {

@@ -174,14 +174,23 @@
     };
 
     var family = '';
+    var familyHover = '';
 
     $scope.familySelect = function (newFamily) {
       family = newFamily;
       setupNewInbox(family);
     };
 
-    $scope.familyIsSelected = function (familyName) {
+    $scope.familyHover = function (familyName) {
+      return familyHover = familyName;
+    };
+
+    $scope.familyIsSelectedClass = function (familyName) {
       return family === familyName ? 'family-selected' : '';
+    };
+
+    $scope.familyIsSelectedIcon = function (familyName) {
+      return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
     };
 
     $scope.familyHasBeenSelected = function () {
@@ -189,7 +198,7 @@
     };
 
     $scope.familyIcon = function (familyName) {
-      return serviceUrl + '/icon-' + familyName.toLowerCase() + '-32x32.png';
+      return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
