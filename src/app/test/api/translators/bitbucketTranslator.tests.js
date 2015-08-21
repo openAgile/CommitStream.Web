@@ -116,7 +116,7 @@ describe('bitbucketTranslator', function() {
     it('canTranslate should return true when valid headers are present', function() {
       var request = {
         headers: {
-          'User-Agent': 'Bitbucket-Webhooks/2.0'
+          'x-event-key': 'repo:push'
         }
       };
       bitbucketTranslator.canTranslate(request).should.equal(true);
@@ -129,7 +129,7 @@ describe('bitbucketTranslator', function() {
     it('canTranslate should return false when invalid headers are present', function() {
       var request = {
         headers: {
-          'User-Agent': 'Bitbucket-Webhooks'
+          'x-event-key': 'dummy value'
         }
       };
       bitbucketTranslator.canTranslate(request).should.equal(false);
