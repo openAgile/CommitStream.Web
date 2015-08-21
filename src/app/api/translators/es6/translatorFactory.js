@@ -1,6 +1,7 @@
 (() => {
   let gitHubTranslator = require('../translators/githubTranslator'),
-    gitLabTranslator = require('../translators/gitLabTranslator');
+    gitLabTranslator = require('../translators/gitLabTranslator'),
+    bitbucketTranslator = require('../translators/bitbucketTranslator');
 
   let TranslatorFactory = class {
 
@@ -9,6 +10,8 @@
           return gitHubTranslator;
         } else if (gitLabTranslator.canTranslate(request)) {
           return gitLabTranslator;
+        } else if (bitbucketTranslator.canTranslate(request)) {
+          return bitbucketTranslator;
         } else {
           return undefined;
         }
