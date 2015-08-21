@@ -3,8 +3,7 @@ import uuid from 'uuid-v4';
 
 let bitbucketTranslator = {};
 
-//X-Event-Key: repo:push
-let hasCorrectHeaders = headers => headers.hasOwnProperty('User-Agent') && headers['User-Agent'] === 'Bitbucket-Webhooks/2.0';
+let hasCorrectHeaders = headers => headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
 
 bitbucketTranslator.canTranslate = request => hasCorrectHeaders(request.headers);
 

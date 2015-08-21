@@ -16,9 +16,8 @@ var _uuidV42 = _interopRequireDefault(_uuidV4);
 
 var bitbucketTranslator = {};
 
-//X-Event-Key: repo:push
 var hasCorrectHeaders = function hasCorrectHeaders(headers) {
-  return headers.hasOwnProperty('User-Agent') && headers['User-Agent'] === 'Bitbucket-Webhooks/2.0';
+  return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
 };
 
 bitbucketTranslator.canTranslate = function (request) {
