@@ -6,7 +6,8 @@ var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default
 
 (function () {
   var gitHubTranslator = require('../translators/githubTranslator'),
-      gitLabTranslator = require('../translators/gitLabTranslator');
+      gitLabTranslator = require('../translators/gitLabTranslator'),
+      bitbucketTranslator = require('../translators/bitbucketTranslator');
 
   var TranslatorFactory = (function () {
     function TranslatorFactory() {
@@ -20,6 +21,8 @@ var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default
           return gitHubTranslator;
         } else if (gitLabTranslator.canTranslate(request)) {
           return gitLabTranslator;
+        } else if (bitbucketTranslator.canTranslate(request)) {
+          return bitbucketTranslator;
         } else {
           return undefined;
         }
