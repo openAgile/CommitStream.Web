@@ -20,7 +20,7 @@
         instance,
         digest;
 
-      $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
+    $scope.loaderUrl = serviceUrl + '/ajax-loader.gif';
 
       $scope.loading = () => loading;
 
@@ -113,6 +113,7 @@
       };
 
       let resetInboxes = () => {
+        $scope.getInboxesDone = false;
         $scope.inboxes = [];
         resetFamily();
       };
@@ -191,6 +192,7 @@
 
       $scope.serviceUrl = serviceUrl;
       $scope.inboxes = [];
+      $scope.getInboxesDone = false;
 
       $scope.message = {
         value: ''
@@ -281,6 +283,7 @@
             })
             .catch(errorHandler);
         }
+        $scope.getInboxesDone = true;
       };
 
       let inboxesUpdate = enabled => {

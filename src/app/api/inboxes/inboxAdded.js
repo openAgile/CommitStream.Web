@@ -45,7 +45,8 @@
         "type": "string",
         "enum": [
           "GitHub",
-          "GitLab"
+          "GitLab",
+          "BitBucket"
         ]
       },
       "name": {

@@ -375,7 +375,7 @@
       <div class='vcs-families'>
         <button type='button' ng-click='familySelect("GitHub")' ng-mouseenter='familyHover("GitHub")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitHub")}}'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitHub")}}' /></button>&nbsp;
         <button type='button' ng-click='familySelect("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
-
+        <button type='button' ng-click='familySelect("BitBucket")' ng-mouseenter='familyHover("BitBucket")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("BitBucket")}}'>BitBucket&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("BitBucket")}}' style="height:32px;" /></button>
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
