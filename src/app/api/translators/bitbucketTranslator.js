@@ -14,6 +14,10 @@ var _uuidV4 = require('uuid-v4');
 
 var _uuidV42 = _interopRequireDefault(_uuidV4);
 
+var _middlewareBitbucketCommitMalformedError = require('../../middleware/bitbucketCommitMalformedError');
+
+var _middlewareBitbucketCommitMalformedError2 = _interopRequireDefault(_middlewareBitbucketCommitMalformedError);
+
 var bitbucketTranslator = {};
 
 var hasCorrectHeaders = function hasCorrectHeaders(headers) {
@@ -69,9 +73,7 @@ bitbucketTranslator.translatePush = function (pushEvent, instanceId, digestId, i
 
     if (typeof _ret === 'object') return _ret.v;
   } catch (ex) {
-    console.log(ex);
-    throw ex;
-    //throw new BitbucketCommitMalformedError(ex, pushEvent);
+    throw new _middlewareBitbucketCommitMalformedError2['default'](ex, pushEvent);
   }
 };
 

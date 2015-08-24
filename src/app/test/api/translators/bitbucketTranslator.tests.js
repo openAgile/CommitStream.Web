@@ -2,6 +2,7 @@ var chai = require('chai'),
   should = chai.should(),
   proxyquire = require('proxyquire'),
   sinon = require('sinon'),
+  BitbucketCommitMalformedError = require('../../../middleware/bitbucketCommitMalformedError'),
   uuidStub = sinon.stub(),
   bitbucketTranslator = proxyquire('../../../api/translators/bitbucketTranslator', {
     'uuid-v4': uuidStub
@@ -200,7 +201,11 @@ describe('bitbucketTranslator', function() {
   });
 
   describe('with invalid body', function() {
-    //TODO: do it
-  })
+
+    var invokeTranslatePush = function() {
+      bitbucketTranslator.translatePush({}, '111', '222', '333')
+    }
+    invokeTranslatePush.should.throw(BitbucketCommitMalformedError);
+  });
 
 });
