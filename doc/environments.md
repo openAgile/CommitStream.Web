@@ -101,7 +101,7 @@ Use this to demonstrate CommitStream to customers or others with code deployed f
 ### How to Deploy
 
 * PUSH commits to develop branch
-* Azure will redploy from the branch
+* Azure will re-deploy from the branch
 
 ## STAGING
 
@@ -119,7 +119,7 @@ Test UI and read-only functional changes on [staging](https://github.com/openAgi
 ### How to Deploy
 
 * PUSH commits to staging branch
-* Azure will redploy from the branch
+* Azure will re-deploy from the branch
 
 ## PROD
 
