@@ -23,7 +23,7 @@ See [resources.md](resources.md) for all Azure resources in use for CommitStream
 
 ### Purpose
 
-All work happens on feature branches developing locally by developers. See [contributing.md](contributing.md) for branching and pull-request approach.
+All work happens on feature branches, done by developers developing locally. See [contributing.md](contributing.md) for branching and pull-request approach.
 
 ### Configuration
 
