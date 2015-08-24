@@ -31,12 +31,18 @@ bitbucketTranslator.canTranslate = function (request) {
 bitbucketTranslator.translatePush = function (pushEvent, instanceId, digestId, inboxId) {
   try {
     var _ret = (function () {
-      var branch = pushEvent.push.changes[0]['new'].name;
+      var latestCommit = pushEvent.push.changes[0]['new'];
+      //TODO: we only have the branch and date of the newest commit in the push.
+      //Do we want to use it for every commit?
+      var branch = latestCommit.name;
+      var date = latestCommit.target.date;
       var repository = {
         id: pushEvent.repository.uuid,
         name: pushEvent.repository.name
       };
-      var events = _underscore2['default'].map(pushEvent.push.changes[0].commits, function (aCommit) {
+      // Bitbucket puts the newest commits firts hence the reverse
+      var commits = pushEvent.push.changes[0].commits.reverse();
+      var events = _underscore2['default'].map(commits, function (aCommit) {
         var commit = {
           sha: aCommit.hash,
           commit: {
@@ -45,7 +51,7 @@ bitbucketTranslator.translatePush = function (pushEvent, instanceId, digestId, i
             committer: {
               name: aCommit.author.user.display_name,
               email: aCommit.author.raw,
-              date: ''
+              date: date
             },
             message: aCommit.message
           },

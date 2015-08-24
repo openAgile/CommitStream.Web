@@ -156,7 +156,7 @@ describe('bitbucketTranslator', function() {
         commit: {
           author: "kunzimariano",
           committer: {
-            date: "",
+            date: "2015-08-18T18:43:11+00:00",
             email: "Mariano Kunzi <kunzi.mariano@gmail.com>",
             name: "Mariano Kunzi"
           },

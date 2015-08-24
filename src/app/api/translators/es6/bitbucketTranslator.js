@@ -10,12 +10,18 @@ bitbucketTranslator.canTranslate = request => hasCorrectHeaders(request.headers)
 
 bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) => {
   try {
-    let branch = pushEvent.push.changes[0].new.name;
+    let latestCommit = pushEvent.push.changes[0].new;
+    //TODO: we only have the branch and date of the newest commit in the push.
+    //Do we want to use it for every commit?
+    let branch = latestCommit.name;
+    let date = latestCommit.target.date;
     let repository = {
       id: pushEvent.repository.uuid,
       name: pushEvent.repository.name
     };
-    let events = _.map(pushEvent.push.changes[0].commits, aCommit => {
+    // Bitbucket puts the newest commits firts hence the reverse
+    let commits = pushEvent.push.changes[0].commits.reverse();
+    let events = _.map(commits, aCommit => {
       let commit = {
         sha: aCommit.hash,
         commit: {
@@ -24,7 +30,7 @@ bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) =
           committer: {
             name: aCommit.author.user.display_name,
             email: aCommit.author.raw,
-            date: ''
+            date: date
           },
           message: aCommit.message
         },
