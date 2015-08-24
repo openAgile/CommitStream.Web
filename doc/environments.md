@@ -79,7 +79,7 @@ Test work from [develop](https://github.com/openAgile/CommitStream.Web/tree/deve
 ### How to Deploy
 
 * PUSH commits to develop branch
-* Azure will redploy from the branch
+* Azure will re-deploy from the branch
 
 ## DEMO
 
