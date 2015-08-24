@@ -190,6 +190,8 @@
     var family = '';
     var familyHover = '';
 
+    $scope.families = ['GitHub', 'GitLab', 'Bitbucket'];
+
     $scope.familySelect = function (newFamily) {
       family = newFamily;
       setupNewInbox(family);
