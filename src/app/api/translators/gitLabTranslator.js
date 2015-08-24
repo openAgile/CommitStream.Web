@@ -70,7 +70,6 @@
 
       if (typeof _ret === 'object') return _ret.v;
     } catch (ex) {
-      console.log(ex);
       throw new GitLabCommitMalformedError(ex, pushEvent);
     }
   };

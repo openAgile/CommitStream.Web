@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import uuid from 'uuid-v4';
+import BitbucketCommitMalformedError from '../../middleware/bitbucketCommitMalformedError';
 
 let bitbucketTranslator = {};
 
@@ -46,9 +47,7 @@ bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) =
 
     return events;
   } catch (ex) {
-    console.log(ex);
-    throw ex;
-    //throw new BitbucketCommitMalformedError(ex, pushEvent);
+    throw new BitbucketCommitMalformedError(ex, pushEvent);
   }
 };
 

@@ -62,7 +62,6 @@
 
       return events;
     } catch (ex) {
-      console.log(ex);
       throw new GitLabCommitMalformedError(ex, pushEvent);
     }
   }
