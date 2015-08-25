@@ -1079,6 +1079,9 @@ h6 {
   background-position-y: 10px;
   background-size: 16px;
 }
+.commitStream-panel .csBitbucket {
+  background-image: url(../icon-bitbucket-selected-32x32.png);
+}
 .commitStream-panel .csGitHub {
   background-image: url(../icon-github-selected-32x32.png);
 }

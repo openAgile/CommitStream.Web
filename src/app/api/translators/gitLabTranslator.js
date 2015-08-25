@@ -5,17 +5,14 @@
       uuid = require('uuid-v4'),
       GitLabCommitMalformedError = require('../../middleware/gitLabCommitMalformedError');
 
-  gitLabTranslator.hasCorrectHeaders = function (headers) {
+  var hasCorrectHeaders = function hasCorrectHeaders(headers) {
     return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook';
   };
 
   gitLabTranslator.canTranslate = function (request) {
-
     // gitLab does not have a pusheEvent.repository.id field, and github does
     // gitLab does not have a commit.committer object, and github does
-    var headers = request.headers;
-
-    if (gitLabTranslator.hasCorrectHeaders(headers)) {
+    if (hasCorrectHeaders(request.headers)) {
       return true;
     }
     return false;
@@ -73,7 +70,6 @@
 
       if (typeof _ret === 'object') return _ret.v;
     } catch (ex) {
-      console.log(ex);
       throw new GitLabCommitMalformedError(ex, pushEvent);
     }
   };
