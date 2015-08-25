@@ -11,7 +11,7 @@ bitbucketTranslator.canTranslate = request => hasCorrectHeaders(request.headers)
 bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) => {
   try {
     let latestCommit = pushEvent.push.changes[0].new;
-    //TODO: we only have the branch and date of the newest commit in the push.
+    //TODO: we only have the date of the newest commit in the push.
     //Do we want to use it for every commit?
     let branch = latestCommit.name;
     let date = latestCommit.target.date;
