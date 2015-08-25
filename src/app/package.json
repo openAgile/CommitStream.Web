@@ -62,7 +62,8 @@
   },
   "author": "VersionOne, Inc.",
   "contributors": [
-   "Gough, Josh <josh.gough@versionone.com>"
+   "Gough, Josh <josh.gough@versionone.com>",
+   "Kunzi, Mariano <kunzi.mariano@gmail.com>"
   ],
   "license": "MIT"
 }
