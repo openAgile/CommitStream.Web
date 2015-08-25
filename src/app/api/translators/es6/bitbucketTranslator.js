@@ -30,7 +30,7 @@ bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) =
           committer: {
             name: aCommit.author.user.display_name,
             email: aCommit.author.raw,
-            date: date
+            date
           },
           message: aCommit.message
         },

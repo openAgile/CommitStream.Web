@@ -42,7 +42,7 @@
       return repoHref + '/tree/' + branch;
     }
 
-    if (family === 'bitbucket') {
+    if (family === 'Bitbucket') {
       // https://bitbucket.org/kunzimariano/test/branch/master for bitbucket
       return repoHref + '/branch/' + branch;
     }
