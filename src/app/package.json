@@ -61,5 +61,8 @@
     "jenkins-smoke-happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js"
   },
   "author": "VersionOne, Inc.",
+  "contributors": [
+   "Gough, Josh <josh.gough@versionone.com>"
+  ],
   "license": "MIT"
 }
