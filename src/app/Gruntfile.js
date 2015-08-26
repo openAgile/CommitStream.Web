@@ -1,3 +1,4 @@
+
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
@@ -17,6 +18,8 @@ module.exports = function(grunt) {
     }
   };
 
+  var sourceBranch = grunt.option('source');
+  
   grunt.initConfig({
     express: {
       options: {
@@ -77,7 +80,7 @@ module.exports = function(grunt) {
     gitpush: {
       'deploy-test': {
         options: {
-          branch: 'v1-cs-test',
+          branch: sourceBranch + ':v1-cs-test',
           force: true
         }
       }
