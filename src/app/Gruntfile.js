@@ -17,6 +17,8 @@ module.exports = function(grunt) {
     }
   };
 
+  var sourceBranch = grunt.option('source');
+  
   grunt.initConfig({
     express: {
       options: {
@@ -72,7 +74,17 @@ module.exports = function(grunt) {
           spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded 
         }
       }
-    }
+    },
+    // Goal: git push origin ${current-branch}:v1-cs-demo -f
+    gitpush: {
+      'deploy-test': {
+        options: {
+          // Note: this gets replaced by the event below...
+          branch: sourceBranch + ':v1-cs-test',
+          force: true
+        }
+      }
+    }    
   });
 
   grunt.event.on('watch', function(action, filepath) {
@@ -80,8 +92,14 @@ module.exports = function(grunt) {
     grunt.config('babel.es6.files', [babelFiles]);
   });
 
+  grunt.event.on('gitpush', function(action) {
+    var branch = sourceBranch + ':v1-cs-test';
+    grunt.config('gitpush.deploy-test.branch', branch);
+  });  
+
   grunt.registerTask('dev', ['less', 'babel', 'express', 'watch']);
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-git');
 };
