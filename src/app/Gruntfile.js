@@ -1,4 +1,3 @@
-
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
@@ -80,6 +79,7 @@ module.exports = function(grunt) {
     gitpush: {
       'deploy-test': {
         options: {
+          // Note: this gets replaced by the event below...
           branch: sourceBranch + ':v1-cs-test',
           force: true
         }
@@ -91,6 +91,11 @@ module.exports = function(grunt) {
     babelFiles.src = [filepath];
     grunt.config('babel.es6.files', [babelFiles]);
   });
+
+  grunt.event.on('gitpush', function(action) {
+    var branch = sourceBranch + ':v1-cs-test';
+    grunt.config('gitpush.deploy-test.branch', branch);
+  });  
 
   grunt.registerTask('dev', ['less', 'babel', 'express', 'watch']);
   grunt.loadNpmTasks('grunt-contrib-watch');
