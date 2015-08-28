@@ -25,6 +25,11 @@
       let getInboxesDone = () => {
         loading = false;
         inboxesDone = true;
+        if (config.enabled) {
+          allowTabNavigation();
+        } else {
+          preventTabNavigation();
+        }
       }
 
       let isInboxesDone = () => inboxesDone;
@@ -304,11 +309,6 @@
         if (enabled) {
           $timeout(() => {
             $('.inbox-url').select().focus();
-            allowTabNavigation();
-          }, 1000);
-        } else {
-          $timeout(() => {
-            preventTabNavigation();
           }, 1000);
         }
         inboxesGet();
@@ -487,21 +487,31 @@
       };
 
       let preventTabNavigation = () => {
-        $("#commitStreamAdmin :input").each(function() {
-          $(this).attr('tabindex', '-1');
-        });
-        $("#commitStreamAdmin :button").each(function() {
-          $(this).attr('tabindex', '-1');
-        });
+        $timeout(() => {
+          $("#commitStreamAdmin :input").each(function() {
+            $(this).attr('tabindex', '-1');
+          });
+          $("#commitStreamAdmin :button").each(function() {
+            $(this).attr('tabindex', '-1');
+          });
+          $("#commitStreamAdmin :link").each(function() {
+            $(this).attr('tabindex', '-1');
+          });
+        }, 1000);
       }
 
       let allowTabNavigation = () => {
-        $("#commitStreamAdmin :input").each(function() {
-          $(this).removeAttr('tabindex');
-        });
-        $("#commitStreamAdmin :button").each(function() {
-          $(this).removeAttr('tabindex');
-        });
+        $timeout(() => {
+          $("#commitStreamAdmin :input").each(function() {
+            $(this).removeAttr('tabindex');
+          });
+          $("#commitStreamAdmin :button").each(function() {
+            $(this).removeAttr('tabindex');
+          });
+          $("#commitStreamAdmin :link").each(function() {
+            $(this).removeAttr('tabindex');
+          });
+        }, 1000);
       }
 
       CommitStreamApi
