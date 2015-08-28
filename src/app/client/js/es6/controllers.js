@@ -494,6 +494,9 @@
           $("#commitStreamAdmin :button").each(function() {
             $(this).attr('tabindex', '-1');
           });
+          $("#commitStreamAdmin :link").each(function() {
+            $(this).attr('tabindex', '-1');
+          });
         }, 1000);
       }
 
@@ -503,6 +506,9 @@
             $(this).removeAttr('tabindex');
           });
           $("#commitStreamAdmin :button").each(function() {
+            $(this).removeAttr('tabindex');
+          });
+          $("#commitStreamAdmin :link").each(function() {
             $(this).removeAttr('tabindex');
           });
         }, 1000);
