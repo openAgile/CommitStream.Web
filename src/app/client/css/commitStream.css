@@ -44,9 +44,6 @@ h3 {
 h4 {
   font-size: 1.1em;
 }
-h5 {
-  font-size: 1em;
-}
 h6 {
   font-size: 0.8em;
 }*/
@@ -631,7 +628,9 @@ h6 {
   font-size: 1.429em;
   font-weight: 300;
 }
-.commitStream-panel h3,
+.commitStream-panel h3 {
+  font-size: initial;
+}
 .commitStream-panel h4,
 .commitStream-panel h5,
 .commitStream-panel h6 {
@@ -1059,7 +1058,7 @@ h6 {
 }
 .commitStream-panel h3 {
   margin-top: -0.42em;
-  font-size: 1.25em;
+  font-size: 20px;
   font-weight: 300;
   color: #474c54;
   padding: 0.2em 0.6em;
