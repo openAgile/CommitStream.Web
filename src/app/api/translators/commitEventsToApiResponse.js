@@ -51,25 +51,30 @@
   }
 
   module.exports = function(entries) {
-    var commits = _.map(entries, function(entry) {
-      var e = JSON.parse(entry.data);
-      var family = getFamily(entry.eventType);
-      var repoInfo = getRepoInfo(family, e.html_url);
+    var commits = [];    
+    _.each(entries, function(entry) {
+      try {
+        var e = JSON.parse(entry.data);
+        var family = getFamily(entry.eventType);
+        var repoInfo = getRepoInfo(family, e.html_url);
 
-      return {
-        commitDate: e.commit.committer.date,
-        timeFormatted: moment(e.commit.committer.date).fromNow(),
-        author: e.commit.committer.name,
-        sha1Partial: e.sha.substring(0, 6),
-        family: family,
-        action: "committed",
-        message: e.commit.message,
-        commitHref: e.html_url,
-        repo: repoInfo.repoOwner + '/' + repoInfo.repoName,
-        branch: e.branch,
-        branchHref: getBranchHref(family, getRepoHref(repoInfo), e.branch),
-        repoHref: getRepoHref(repoInfo)
-      };
+        commits.push({
+          commitDate: e.commit.committer.date,
+          timeFormatted: moment(e.commit.committer.date).fromNow(),
+          author: e.commit.committer.name,
+          sha1Partial: e.sha.substring(0, 6),
+          family: family,
+          action: "committed",
+          message: e.commit.message,
+          commitHref: e.html_url,
+          repo: repoInfo.repoOwner + '/' + repoInfo.repoName,
+          branch: e.branch,
+          branchHref: getBranchHref(family, getRepoHref(repoInfo), e.branch),
+          repoHref: getRepoHref(repoInfo)
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
     });
     var response = {
       commits: commits

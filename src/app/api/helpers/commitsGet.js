@@ -1,7 +1,7 @@
 (function() {
   var config = require('../../config'),
     _ = require('underscore'),
-    gitHubEventsToApiResponse = require('../translators/commitEventsToApiResponse'),
+    commitEventsToApiResponse = require('../translators/commitEventsToApiResponse'),
     eventStore = require('../helpers/eventStoreClient'),
     pager = require('../helpers/pager'),
     csError = require('../../middleware/csError');
@@ -35,10 +35,10 @@
     return eventStore.getFromStream(args)
       .then(function(response) {
         var links = response.links;
-        var apiResponse = gitHubEventsToApiResponse(response.entries);
+        var apiResponse = commitEventsToApiResponse(response.entries);
         var pagedResponse = pager.getPagedResponse(apiResponse, links, currentPage, buildUri, cache);
         return pagedResponse;
-      }).catch(function(error) {
+      }).catch(function(error) {        
         // TODO: not sure how clean this approach is, of totally ignoring ANY error. Maybe it should catch a specific error type...
         return {
           commits: [],
