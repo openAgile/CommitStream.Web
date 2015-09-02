@@ -37,7 +37,7 @@
   }
 
   var getBranchHref = function(family, repoHref, branch) {
-    if (family === 'GitHub' || family || 'GitLab') {
+    if (family === 'GitHub' || family === 'GitLab') {
       // http://serverUrl/repoOwner/reponame/tree/branchName
       return repoHref + '/tree/' + branch;
     }
