@@ -34,6 +34,15 @@ This is a work in progress. As this evolves, we update this narrative.
 * Clone this repo if you have not already done so
 * As Administrator, open Powershell and navigate to the root of the cloned repo
 * Type `Get-ExecutionPolicy` and if the result is not **Unrestricted**, then type `Set-ExecutionPolicy unrestricted`
+* Ensure the GIT path has been added to your environment variables in order for the following script to work:
+* 	Open Windows Environment Variables/Path Window
+	Right-Click on My Computer
+	Click Advanced System Settings link from the left side column
+	Click Environment Variables in the bottom of the window
+	Then under System Variables look for the path variable and click edit
+	Add the pwd to git's bin and cmd at the end of the string like this:
+	;C:\Program Files (x86)\Git\bin;C:\Program Files (x86)\Git\cmd
+	Now test it out in PowerShell; type git and see if it recognizes the command.
 * Run the install script by typing:
 ```powershell
 .\install.ps1 [insert-access-token-here]
