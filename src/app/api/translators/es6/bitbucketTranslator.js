@@ -24,16 +24,18 @@ bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) =
     let events = _.map(commits, aCommit => {
       const author = aCommit.author;
       const email = author.raw;
-      let name;
-      if (_.has(author, 'user.display_name')) name = author.user.display_name;
+      let display_name, username;
+      if (_.has(author, 'user.display_name')) display_name = author.user.display_name;
       else name = 'unknown';
+      if (_.has(author, 'user.username')) username = author.user.username;
+      else username = 'unknown';
       let commit = {
         sha: aCommit.hash,
         commit: {
-          author: aCommit.author.user.username,
+          author: username,
           // bitbucket does not have a commit.committer object. Using the same thing as author for now.
           committer: {
-            name: name,
+            name: display_name,
             email: email,
             date
           },
