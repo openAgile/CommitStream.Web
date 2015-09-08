@@ -45,10 +45,13 @@ export default function(query, stream, buildUri) {
       return getUntilQueryIsDone(queryArgs).then(function(status) {
         return eventStore.queryGetState(queryArgs)
           .then(function(response) {
-            let entries = JSON.parse(response.body).events;
-            _.each(entries, function(entry) {
-              entry.data = JSON.stringify(entry.data);
-            });
+            let entries = [];
+            if (response.body) {
+              entries = JSON.parse(response.body).events;
+              _.each(entries, function(entry) {
+                entry.data = JSON.stringify(entry.data);
+              });
+            }
             return commitEventsToApiResponse(entries);
           });
       });
