@@ -26,7 +26,7 @@ bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) =
       const email = author.raw;
       let display_name, username;
       if (_.has(author, 'user.display_name')) display_name = author.user.display_name;
-      else name = 'unknown';
+      else display_name = 'unknown';
       if (_.has(author, 'user.username')) username = author.user.username;
       else username = 'unknown';
       let commit = {
