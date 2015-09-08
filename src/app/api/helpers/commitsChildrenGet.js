@@ -70,10 +70,13 @@ exports['default'] = function (query, stream, buildUri) {
 
     return getUntilQueryIsDone(queryArgs).then(function (status) {
       return _helpersEventStoreClient2['default'].queryGetState(queryArgs).then(function (response) {
-        var entries = JSON.parse(response.body).events;
-        _underscore2['default'].each(entries, function (entry) {
-          entry.data = JSON.stringify(entry.data);
-        });
+        var entries = [];
+        if (response.body) {
+          entries = JSON.parse(response.body).events;
+          _underscore2['default'].each(entries, function (entry) {
+            entry.data = JSON.stringify(entry.data);
+          });
+        }
         return (0, _translatorsCommitEventsToApiResponse2['default'])(entries);
       });
     });
