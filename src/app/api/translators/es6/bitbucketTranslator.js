@@ -22,14 +22,19 @@ bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) =
     // Bitbucket puts the newest commits firts hence the reverse
     let commits = pushEvent.push.changes[0].commits.reverse();
     let events = _.map(commits, aCommit => {
+      const author = aCommit.author;
+      const email = author.raw;
+      let name;
+      if (_.has(author, 'user.display_name')) name = author.user.display_name;
+      else name = 'unknown';
       let commit = {
         sha: aCommit.hash,
         commit: {
           author: aCommit.author.user.username,
           // bitbucket does not have a commit.committer object. Using the same thing as author for now.
           committer: {
-            name: aCommit.author.user.display_name,
-            email: aCommit.author.raw,
+            name: name,
+            email: email,
             date
           },
           message: aCommit.message
