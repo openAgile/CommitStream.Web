@@ -26,7 +26,7 @@
     var events = args.events;
     if (!_.isArray(events)) {
       events = [events];
-    };
+    }
     events = JSON.stringify(events);
 
     var postArgs = {
@@ -40,9 +40,21 @@
 
   client.getFromStream = function(args) {
     var getArgs = _.pick(args, 'name', 'count', 'pageUrl', 'embed');
-    
+
     return client.streams.getAsync(getArgs)
       .then(statusCodeValidator.validateGetStream(args.name));
+  };
+
+  client.queryCreate = function(args) {
+    return client.query.postAsync(args);
+  };
+
+  client.queryGetState = function(args) {
+    return client.query.getStateAsync(args);
+  };
+
+  client.queryGetStatus = function(args) {
+    return client.query.getStatusAsync(args);
   };
 
   module.exports = client;
