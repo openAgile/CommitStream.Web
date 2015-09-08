@@ -12,7 +12,7 @@
 .commitStream-panel {
   display: block;
   font-family: 'Proxima Nova', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-  -webkit-font-smoothing: antialiased;
+  margin: 0 -8px;
   /* Normalize monospace sizing:
    en.wikipedia.org/wiki/MediaWiki_talk:Common.css/Archive_11#Teletype_style_fix_for_Chrome */
   /**
@@ -622,6 +622,7 @@ h6 {
   font-size: 14px;
   line-height: 1.15em;
   color: #454545;
+  margin: 0 !important;
 }
 .commitStream-panel h1,
 .commitStream-panel h2 {
@@ -1064,25 +1065,22 @@ h6 {
   padding: 0.2em 0.6em;
 }
 .commitStream-panel h3 .reload {
-  background: url('../sprite-refresh.png') no-repeat scroll left top;
+  background: url('../refresh.svg') no-repeat scroll left top;
   display: inline-block;
   width: 16px;
   height: 16px;
   vertical-align: middle;
-  margin-left: 0.3em;
+  margin: 0 3px;
   cursor: pointer;
   zoom: 1;
   *display: inline;
-  background-position: 0 0;
+  opacity: .3;
 }
 .commitStream-panel h3 .reload:hover {
-  background-position: 0 -26px;
+  opacity: .7;
 }
 .commitStream-panel h3 .requesting {
-  background-image: url('gray-refresh-anim.gif');
-}
-.commitStream-panel h3 .requesting:hover {
-  background-position: 0 0;
+  background-image: url('../refesh.svg');
 }
 .commitStream-panel div.window .remaining,
 .commitStream-panel div.window .remaining {
@@ -1122,11 +1120,12 @@ h6 {
   display: none;
 }
 .commitStream-panel .toggle-cs-autorefresh-label {
-  display: inline-block;
-  color: #a6a6a6;
+  display: block;
+  color: #fff;
+  background-color: #878C94 ;
   font-weight: 300;
   font-size: 0.8em;
-  padding: 0.2em 0;
+  padding: 5px 15px;
 }
 .commitStream-panel .cs-refresh {
   margin-bottom: .4em;
@@ -1150,6 +1149,9 @@ h6 {
   padding: 1em .2em;
   display: block;
 }
+.commitStream-panel ol li:first-child {
+  border-top-color: transparent;
+}
 .commitStream-panel .csInfo {
   padding: 10px 20px 0px 22px;
   min-height: 15px;
@@ -1172,7 +1174,8 @@ h6 {
   white-space: pre-wrap;
 }
 .commitStream-panel .side-panel-scrollable {
-  top: 63px;
+  top: 56px;
+  background-color: #fff;
 }
 .commitStream-panel .commitStreamTime {
   font-size: 0.8em;
