@@ -6,10 +6,6 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _underscore = require('underscore');
-
-var _underscore2 = _interopRequireDefault(_underscore);
-
 var _config = require('../../config');
 
 var _config2 = _interopRequireDefault(_config);
@@ -73,8 +69,8 @@ exports['default'] = function (query, stream, buildUri) {
         var entries = [];
         if (response.body) {
           entries = JSON.parse(response.body).events;
-          _underscore2['default'].each(entries, function (entry) {
-            entry.data = JSON.stringify(entry.data);
+          entries.forEach(function (entry) {
+            return entry.data = JSON.stringify(entry.data);
           });
         }
         return (0, _translatorsCommitEventsToApiResponse2['default'])(entries);
