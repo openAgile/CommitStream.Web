@@ -18,16 +18,16 @@
     "tests"
   ],
   "dependencies": {
-    "angular-bootstrap": "~0.13.3",
-    "angular-route": "~1.4.4",
-    "bootstrap": "~3.3.4",
-    "bootstrap-toggle": "~2.2.0",
+    "angular-bootstrap": "0.13.3",
+    "angular-route": "1.4.4",
+    "bootstrap": "3.3.4",
+    "bootstrap-toggle": "2.2.0",
     "angular-hal": "git://github.com/openAgile/angular-hal.git#c9ddf6789e",
-    "angular-prompt": "~1.1.1",
-    "xdomain": "~0.7.3"
+    "angular-prompt": "1.1.1",
+    "xdomain": "0.7.3"
   },
   "resolutions": {
     "angular": "1.4.4",
-    "angular-bootstrap": "~0.13.3"
+    "angular-bootstrap": "0.13.3"
   }
 }
