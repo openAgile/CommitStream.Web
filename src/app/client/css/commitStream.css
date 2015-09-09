@@ -12,7 +12,6 @@
 .commitStream-panel {
   display: block;
   font-family: 'Proxima Nova', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-  margin: 0 -8px;
   /* Normalize monospace sizing:
    en.wikipedia.org/wiki/MediaWiki_talk:Common.css/Archive_11#Teletype_style_fix_for_Chrome */
   /**
@@ -1124,8 +1123,9 @@ h6 {
   color: #fff;
   background-color: #878C94 ;
   font-weight: 300;
-  font-size: 0.8em;
-  padding: 5px 15px;
+  font-size: 14px;
+  padding: 8px;
+  margin: 1px -8px;
 }
 .commitStream-panel .cs-refresh {
   margin-bottom: .4em;
@@ -1133,6 +1133,7 @@ h6 {
 }
 .commitStream-panel .toggle-cs-autorefresh {
   margin-left: 1em;
+  vertical-align: -15%;
 }
 .commitStream-panel p {
   color: #454545;
@@ -1174,7 +1175,7 @@ h6 {
   white-space: pre-wrap;
 }
 .commitStream-panel .side-panel-scrollable {
-  top: 56px;
+  top: 64px;
   background-color: #fff;
 }
 .commitStream-panel .commitStreamTime {
