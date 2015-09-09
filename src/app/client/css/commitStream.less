@@ -31,7 +31,8 @@
 
   display: block;
   font-family: 'Proxima Nova', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
-  -webkit-font-smoothing: antialiased;
+  margin: 0 -8px;
+ 
 
 html,
 body,
@@ -561,6 +562,7 @@ body {
   font-size: 14px;
   line-height: 1.15em;
   color: #454545;
+  margin: 0 !important;
 }
 h1,
 h2{
@@ -1005,29 +1007,27 @@ h3 {
     font-weight: 300;
     color: #474c54;
     padding: 0.2em 0.6em;
+
 }
 
 h3 .reload {
-  background: url('../sprite-refresh.png') no-repeat scroll left top;
+  background: url('../refresh.svg') no-repeat scroll left top;
   display: inline-block;
   width: 16px;
   height: 16px;
   vertical-align: middle;
-  margin-left: 0.3em;
+  margin: 0 3px;
   cursor: pointer;
   zoom: 1;
   *display: inline;
-  background-position: 0 0;
+  opacity: .3;
 }
 
 h3 .reload:hover {
-  background-position: 0 -26px;
+  opacity:.7;
 }
 h3 .requesting {
-  background-image: url('gray-refresh-anim.gif');
-}
-h3 .requesting:hover {
-  background-position: 0 0;
+  background-image: url('../refesh.svg');
 }
 div.window .remaining,
 div.window .remaining {
@@ -1070,18 +1070,19 @@ div.window .remaining .more {
 
 /* New CommitStream Styles */
 .toggle-cs-autorefresh-label {
-  display: inline-block;
-  color: #a6a6a6;
+  display: block;
+  color: #fff;
+  background-color: #878C94 ;
   font-weight: 300;
   font-size: 0.8em;
-  padding: 0.2em 0;
-
-
+  padding: 5px 15px;
 }
+
 .cs-refresh {
    margin-bottom: .4em;
    margin-top:0;
 }
+
 .toggle-cs-autorefresh {
   margin-left: 1em;
 }
@@ -1102,6 +1103,10 @@ div.window .remaining .more {
       border-top: 1px solid #dedede;
       padding: 1em .2em;
       display: block;
+
+      &:first-child {
+        border-top-color: transparent;
+      }
     }
    .csInfo {
      padding: 10px 20px 0px 22px;
@@ -1125,7 +1130,8 @@ div.window .remaining .more {
     white-space: pre-wrap;
   }
    .side-panel-scrollable {
-    top: 63px;
+    top: 56px;
+    background-color: #fff;
   }
 .commitStreamTime {
   font-size: 0.8em;
