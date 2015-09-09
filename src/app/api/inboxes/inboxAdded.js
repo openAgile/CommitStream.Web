@@ -44,7 +44,9 @@
         "title": "Version Control System type",
         "type": "string",
         "enum": [
-          "GitHub"
+          "GitHub",
+          "GitLab",
+          "Bitbucket"
         ]
       },
       "name": {
