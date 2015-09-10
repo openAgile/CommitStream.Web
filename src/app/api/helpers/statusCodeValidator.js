@@ -74,7 +74,7 @@ statusCodeValidator.validateStreamsPost = function () {
 var QueryError = _middlewareCsError2['default'].createCustomError('QueryError', function (message) {
   message = message || 'Query Error';
   var errors = [message];
-  QueryError.prototype.constructor.call(undefined, errors, 404);
+  QueryError.prototype.constructor.call(undefined, errors, 500);
 });
 _middlewareCsError2['default'].QueryError = QueryError;
 
@@ -82,7 +82,32 @@ statusCodeValidator.validateQueryGetState = function (response) {
   if (response.statusCode !== 200) {
     throw new QueryError('An error happend when try to query');
   }
-  return !response.body || response.body.length < 1 ? { 'events': [] } : JSON.parse(response.body);
+  return !response.body || response.body.length < 1 ? {
+    'events': []
+  } : JSON.parse(response.body);
+};
+
+statusCodeValidator.validateQueryCreate = function (response) {
+  if (response.statusCode !== 201) {
+    throw new QueryError('An error happend when try to create query');
+  }
+  return !response.body || response.body.length < 1 ? {} : JSON.parse(response.body);
+};
+
+statusCodeValidator.validateQueryGetStatus = function (response) {
+  if (response.statusCode !== 200) {
+    throw new QueryError('An error happend when try to get the query\'s status');
+  }
+  if (!response.body || response.body.length < 1) {
+    throw new QueryError('An error happend when try to get the query\'s status');
+  } else {
+    var body = JSON.parse(response.body);
+    if (body.status === 'Faulted') {
+      throw new QueryError('An error happend when try to get the query\'s status: Faulted');
+    } else {
+      return body;
+    }
+  }
 };
 
 exports['default'] = statusCodeValidator;

@@ -46,7 +46,8 @@
   };
 
   client.queryCreate = function(args) {
-    return client.query.postAsync(args);
+    return client.query.postAsync(args)
+      .then(statusCodeValidator.validateQueryCreate);
   };
 
   client.queryGetState = function(args) {
@@ -55,7 +56,8 @@
   };
 
   client.queryGetStatus = function(args) {
-    return client.query.getStatusAsync(args);
+    return client.query.getStatusAsync(args)
+      .then(statusCodeValidator.validateQueryGetStatus);
   };
 
   module.exports = client;
