@@ -46,8 +46,16 @@ describe('instanceCommitsGet', function() {
 
     var stream = 'versionOne_CommitsWithWorkitems-1234_S-00011';
 
+    it('should call cacheCreate once', function() {
+      cacheCreate.should.have.been.calledOnce;
+    });
+
     it('should call commitsGet with the proper arguments', function() {
       commitsGet.should.have.been.calledWith(request.query, stream, sinon.match.func, cache);
+    });
+
+    it('should call response.send with the proper args', function() {
+      response.send.should.have.been.calledWith(commitsSpy);
     });
   });
 
@@ -60,8 +68,16 @@ describe('instanceCommitsGet', function() {
 
     var streams = ['versionOne_CommitsWithWorkitems-1234_S-00001', 'versionOne_CommitsWithWorkitems-1234_T-00002'];
 
+    it('should call cacheCreate once', function() {
+      cacheCreate.should.have.been.calledOnce;
+    });
+
     it('should call commitsChildrenGet with the proper arguments', function() {
       commitsChildrenGet.should.have.been.calledWith(request.query, streams, sinon.match.func);
+    });
+
+    it('should call response.send with the proper args', function() {
+      response.send.should.have.been.calledWith(commitsSpy);
     });
   });
 
