@@ -50,7 +50,8 @@
   };
 
   client.queryGetState = function(args) {
-    return client.query.getStateAsync(args);
+    return client.query.getStateAsync(args)
+      .then(statusCodeValidator.validateQueryGetState);
   };
 
   client.queryGetStatus = function(args) {

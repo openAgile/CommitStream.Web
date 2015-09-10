@@ -20,11 +20,11 @@ let getStatus = queryArgs => eventStore.queryGetStatus(queryArgs);
 
 let getUntilQueryIsDone = queryArgs =>
   Promise.delay(500).then(() => getStatus(queryArgs))
-    .then(response => {
-      let status = JSON.parse(response.body).status;
-      return status === 'Completed/Stopped/Writing results' ?
-        status : getUntilQueryIsDone(queryArgs);
-    });
+  .then(response => {
+    let status = JSON.parse(response.body).status;
+    return status === 'Completed/Stopped/Writing results' ?
+      status : getUntilQueryIsDone(queryArgs);
+  });
 
 export default function(query, stream, buildUri) {
   let args = {
@@ -42,10 +42,8 @@ export default function(query, stream, buildUri) {
         return eventStore.queryGetState(queryArgs)
           .then(response => {
             let entries = [];
-            if (response.body) {
-              entries = JSON.parse(response.body).events;
-              entries.forEach(entry => entry.data = JSON.stringify(entry.data));
-            }
+            entries = response.events;
+            entries.forEach(entry => entry.data = JSON.stringify(entry.data));
             return commitEventsToApiResponse(entries);
           });
       });
