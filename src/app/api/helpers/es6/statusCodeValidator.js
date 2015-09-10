@@ -63,7 +63,7 @@ statusCodeValidator.validateStreamsPost = () => {
 let QueryError = csError.createCustomError('QueryError', (message) => {
   message = message || 'Query Error';
   let errors = [message];
-  QueryError.prototype.constructor.call(this, errors, 404);
+  QueryError.prototype.constructor.call(this, errors, 500);
 });
 csError.QueryError = QueryError;
 
@@ -71,8 +71,35 @@ statusCodeValidator.validateQueryGetState = (response) => {
   if (response.statusCode !== 200) {
     throw new QueryError('An error happend when try to query');
   }
-  return (!response.body || response.body.length < 1) ? {'events':[]} : JSON.parse(response.body);
+  return (!response.body || response.body.length < 1) ? {
+    'events': []
+  } : JSON.parse(response.body);
 };
+
+statusCodeValidator.validateQueryCreate = (response) => {
+  if (response.statusCode !== 201) {
+    throw new QueryError('An error happend when try to create query');
+  }
+  return (!response.body || response.body.length < 1) ? {} : JSON.parse(response.body);
+};
+
+statusCodeValidator.validateQueryGetStatus = (response) => {
+  if (response.statusCode !== 200) {
+    throw new QueryError(`An error happend when try to get the query's status`);
+  }
+  if (!response.body || response.body.length < 1) {
+    throw new QueryError(`An error happend when try to get the query's status`);
+  } else {
+    let body = JSON.parse(response.body);
+    if (body.status === 'Faulted') {
+      throw new QueryError(`An error happend when try to get the query's status: Faulted`);
+    } else {
+      return body;
+    }
+  }
+};
+
+
 
 
 export default statusCodeValidator;

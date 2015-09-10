@@ -48,7 +48,7 @@ var getUntilQueryIsDone = function getUntilQueryIsDone(queryArgs) {
   return _bluebird2['default'].delay(500).then(function () {
     return getStatus(queryArgs);
   }).then(function (response) {
-    var status = JSON.parse(response.body).status;
+    var status = response.status;
     return status === 'Completed/Stopped/Writing results' ? status : getUntilQueryIsDone(queryArgs);
   });
 };
@@ -59,7 +59,6 @@ exports['default'] = function (query, stream, buildUri) {
     projection: 'fromStreams(["' + stream.join('", "') + '"]).when({"$init": function(s, e) {return { events: [], keys: {}}},"$any": function(s,e) {  var eventId = JSON.parse(e.linkMetadataRaw).$causedBy; if (!s.keys[eventId]){s.keys[eventId] = true;s.events.unshift(e);}}})'
   };
   return _helpersEventStoreClient2['default'].queryCreate(args).then(function (response) {
-    response = JSON.parse(response.body);
     var queryArgs = {
       id: response.name
     };

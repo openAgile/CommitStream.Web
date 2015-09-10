@@ -21,7 +21,7 @@ let getStatus = queryArgs => eventStore.queryGetStatus(queryArgs);
 let getUntilQueryIsDone = queryArgs =>
   Promise.delay(500).then(() => getStatus(queryArgs))
   .then(response => {
-    let status = JSON.parse(response.body).status;
+    let status = response.status;
     return status === 'Completed/Stopped/Writing results' ?
       status : getUntilQueryIsDone(queryArgs);
   });
@@ -33,7 +33,6 @@ export default function(query, stream, buildUri) {
   };
   return eventStore.queryCreate(args)
     .then(response => {
-      response = JSON.parse(response.body);
       let queryArgs = {
         id: response.name
       };
