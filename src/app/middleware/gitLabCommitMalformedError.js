@@ -29,5 +29,4 @@ var GitLabCommitMalformedError = (function (_CsError) {
 })(_CsError3['default']);
 
 exports['default'] = GitLabCommitMalformedError;
-L;
 module.exports = exports['default'];

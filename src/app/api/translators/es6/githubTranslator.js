@@ -1,34 +1,19 @@
-'use strict';
-
-var _get = require('babel-runtime/helpers/get')['default'];
-
-var _inherits = require('babel-runtime/helpers/inherits')['default'];
-
-var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
-
-(function (githubTranslator) {
+﻿(function(githubTranslator) {
   var _ = require('underscore'),
-      util = require('util'),
-      uuid = require('uuid-v4'),
-      CSError = require('../../middleware/csError');
+    util = require('util'),
+    uuid = require('uuid-v4'),
+    CSError = require('../../middleware/csError');
 
   //TODO: do we want this kind of library to know about status codes?
-
-  var GitHubCommitMalformedError = (function (_CSError) {
-    _inherits(GitHubCommitMalformedError, _CSError);
-
-    function GitHubCommitMalformedError(error, pushEvent) {
-      _classCallCheck(this, GitHubCommitMalformedError);
-
-      _get(Object.getPrototypeOf(GitHubCommitMalformedError.prototype), 'constructor', this).call(this, [error.toString()]);
+  class GitHubCommitMalformedError extends CSError {
+    constructor(error, pushEvent) {
+      super([error.toString()])
       this.originalError = error;
-      this.pushEvent = pushEvent;
+      this.pushEvent = pushEvent;      
     }
+  }
 
-    return GitHubCommitMalformedError;
-  })(CSError);
-
-  githubTranslator.translatePush = function (pushEvent, instanceId, digestId, inboxId) {
+  githubTranslator.translatePush = function(pushEvent, instanceId, digestId, inboxId) {
     try {
       var branch = pushEvent.ref.split('/').pop();
       var repository = {
@@ -36,7 +21,7 @@ var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default
         name: pushEvent.repository.name
       };
 
-      var events = _.map(pushEvent.commits, function (aCommit) {
+      var events = _.map(pushEvent.commits, function(aCommit) {
         var commit = {
           sha: aCommit.id,
           commit: {
@@ -72,11 +57,12 @@ var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default
     }
   };
 
-  githubTranslator.canTranslate = function (request) {
+  githubTranslator.canTranslate = function(request) {
     var headers = request.headers;
     if (headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push') {
       return true;
     }
     return false;
   };
+
 })(module.exports);

@@ -12,9 +12,9 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
-var _CsError = require('./CsError');
+var _csError = require('./csError');
 
-var _CsError2 = _interopRequireDefault(_CsError);
+var _csError2 = _interopRequireDefault(_csError);
 
 var BitbucketCommitMalformedError = (function (_CSError) {
 	_inherits(BitbucketCommitMalformedError, _CSError);
@@ -28,7 +28,7 @@ var BitbucketCommitMalformedError = (function (_CSError) {
 	}
 
 	return BitbucketCommitMalformedError;
-})(CSError);
+})(_csError2['default']);
 
 exports['default'] = BitbucketCommitMalformedError;
 module.exports = exports['default'];

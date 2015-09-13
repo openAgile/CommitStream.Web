@@ -1,4 +1,4 @@
-import CsError from './CsError';
+import CSError from './csError';
 
 class BitbucketCommitMalformedError extends CSError {
 	constructor(error, pushEvent) {

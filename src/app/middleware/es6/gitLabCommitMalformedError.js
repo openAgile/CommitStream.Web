@@ -6,4 +6,4 @@ class GitLabCommitMalformedError extends CsError {
 	}
 }
 
-export default GitLabCommitMalformedError;L
+export default GitLabCommitMalformedError;
