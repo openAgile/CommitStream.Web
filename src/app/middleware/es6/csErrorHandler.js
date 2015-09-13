@@ -26,6 +26,6 @@ export default function errorHandler(err, req, res, next) {
       console.error(err.internalMessage);
     }
   } else {
-    sendError(CsError.create(500));
+    sendError(CSError.create(500));
   }
 }
