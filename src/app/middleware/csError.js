@@ -1,43 +1,63 @@
-(function() {
-  var _ = require('underscore'),
-    util = require('util'),
-    createCustomError = require('custom-error-generator');
+'use strict';
 
-  var UNEXPECTED_ERROR_MSG = 'There was an unexpected error when processing your request.';
+var _get = require('babel-runtime/helpers/get')['default'];
 
-  var CSError = createCustomError('CSError', null, function(errors, statusCode, internalMessage) {
+var _inherits = require('babel-runtime/helpers/inherits')['default'];
+
+var _createClass = require('babel-runtime/helpers/create-class')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _es6Error = require('es6-error');
+
+var _es6Error2 = _interopRequireDefault(_es6Error);
+
+var UNEXPECTED_ERROR_MSG = 'There was an unexpected error when processing your request.';
+
+var CSError = (function (_ExtendableError) {
+  _inherits(CSError, _ExtendableError);
+
+  function CSError() {
+    var errors = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var statusCode = arguments.length <= 1 || arguments[1] === undefined ? 400 : arguments[1];
+    var internalMessage = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+    _classCallCheck(this, CSError);
+
+    _get(Object.getPrototypeOf(CSError.prototype), 'constructor', this).call(this);
     this.errors = {
-      errors: errors || []
+      errors: errors
     };
-    this.statusCode = statusCode || 400;
-    this.internalMessage = internalMessage || null;
+    this.statusCode = statusCode;
+    this.internalMessage = internalMessage;
     if (this.internalMessage !== null) {
       this.errors = {
         errors: [UNEXPECTED_ERROR_MSG]
       };
     }
-  });
+  }
 
-  var csError = function(errors, status) {
-    var status = status || 400;
-    var _errors = [];
+  _createClass(CSError, null, [{
+    key: 'create',
+    value: function create(status, errors) {
+      if (status === undefined) status = 400;
 
-    if (_.isArray(errors)) {
-      _errors = errors;
-    } else if (_.isString(errors)) {
-      _errors.push(errors);
-    } else {
-      _errors.push(UNEXPECTED_ERROR_MSG)
-    }
+      var _errors = [];
 
-    return new CSError(_errors, status);
-  };
-
-  csError.errorHandler = function(err, req, res, next) {
-    console.error("\nEXCEPTION RAISED BY API ROUTE: " + util.inspect(req.route, {
-      showHidden: true,
-      depth: null
-    }).substr(0, 5000));
+      if (_.isArray(errors)) {
+        _errors = errors;
+      } else if (_.isString(errors)) {
+        _errors.push(errors);
+      } else {
+        _errors.push(UNEXPECTED_ERROR_MSG);
+      }
+      return new CSError(_errors, status);
     console.error("\nURL: " + util.inspect(req.originalUrl, {
       showHidden: true,
       depth: null
@@ -50,36 +70,11 @@
       showHidden: true,
       depth: null
     }).substr(0, 5000));
-    console.error("STACK TRACE:");
-    console.error(err.stack);
-    console.error("CAUGHT ERROR DETAILS:");
-    console.error(util.inspect(err, {
-      showHidden: true,
-      depth: null
-    }).substr(0, 5000));
-
-    function sendError(error) {
-      res.status(error.statusCode).json(error.errors);
     }
+  }]);
 
-    if (err instanceof CSError) {
-      sendError(err);
-      if (err.internalMessage !== null) {
-        console.error("INTERNAL MESSAGE:");
-        console.error(err.internalMessage);
-      }
-    } else {
-      sendError(csError([UNEXPECTED_ERROR_MSG], 500));
-    }
-  };
+  return CSError;
+})(_es6Error2['default']);
 
-  csError.createCustomError = function(errorName, ctor, baseErrorCtor) {
-    var customError = createCustomError(errorName, null, ctor);
-    baseErrorCtor = baseErrorCtor || CSError;
-    customError.prototype = Object.create(baseErrorCtor.prototype);
-    return customError;
-  };
-
-  module.exports = csError;
-
-})();
+exports['default'] = CSError;
+module.exports = exports['default'];

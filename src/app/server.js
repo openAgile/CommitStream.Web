@@ -4,7 +4,7 @@ var express = require('express'),
   config = require('./config'),
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
-  csError = require('./middleware/csError'),
+  csErrorHandler = require('./middleware/csErrorHandler'),
   instanceAuthenticator = require('./middleware/instanceAuthenticator'),
   instanceToDigestValidator = require('./middleware/instanceToDigestValidator'),
   instanceToInboxValidator = require('./middleware/instanceToInboxValidator'),
@@ -104,7 +104,7 @@ app.all('/api/*', apiRoutesRequireContentTypeAppJson);
 api.init(app);
 
 // DO NOT MOVE THIS. It must be here to catch unhandled errors.
-app.use(csError.errorHandler);
+app.use(csErrorHandler);
 
 function getHostSettings(req) {
   return {

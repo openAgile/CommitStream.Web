@@ -3,15 +3,16 @@
     util = require('util'),
     uuid = require('uuid-v4'),
     createCustomError = require('custom-error-generator'),
-    csError = require('../../middleware/csError');
+    CsError = require('../../middleware/CsError');
 
   //TODO: do we want this kind of library to know about status codes?
-  githubTranslator.GitHubCommitMalformedError = createCustomError('GitHubCommitMalformedError', null, function(error, pushEvent) {
-    this.statusCode = 400;
-    this.originalError = error;
-    this.errors = [error.toString()];
-    this.pushEvent = pushEvent;
-  });
+  class GitHubCommitMalformedError extends CsError {
+    constructor(error, pushEvent) {
+      super([error.toString()])
+      this.originalError = error;
+      this.pushEvent = pushEvent;      
+    }
+  }
 
   githubTranslator.translatePush = function(pushEvent, instanceId, digestId, inboxId) {
     try {
@@ -51,7 +52,7 @@
       });
       return events;
     } catch (ex) {
-      var otherEx = new githubTranslator.GitHubCommitMalformedError(ex, pushEvent);
+      var otherEx = new GitHubCommitMalformedError(ex, pushEvent);
       //console.log(otherEx, otherEx.originalError.stack);
       throw otherEx;
     }

@@ -1,9 +1,11 @@
-import csError from './csError';
+import CsError from './CsError';
 
-let BitbucketCommitMalformedError = csError.createCustomError('BitbucketCommitMalformedError', (error, pushEvent) => {
-  let message = 'There was an unexpected error when processing your Bitbucket push event.';
-  let errors = [message];
-  BitbucketCommitMalformedError.prototype.constructor.call(this, errors, 400);
-});
+class BitbucketCommitMalformedError extends CSError {
+	constructor(error, pushEvent) {
+		const message = 'There was an unexpected error when processing your Bitbucket push event.';
+		const errors = [message];
+		super(errors);
+	}
+}
 
 export default BitbucketCommitMalformedError;
