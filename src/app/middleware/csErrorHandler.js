@@ -43,7 +43,7 @@ function errorHandler(err, req, res, next) {
       console.error(err.internalMessage);
     }
   } else {
-    sendError(CsError.create(500));
+    sendError(_csError2['default'].create(500));
   }
 }
 

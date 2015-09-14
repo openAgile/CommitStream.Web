@@ -6,77 +6,94 @@ var _inherits = require('babel-runtime/helpers/inherits')['default'];
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-(function (githubTranslator) {
-  var _ = require('underscore'),
-      util = require('util'),
-      uuid = require('uuid-v4'),
-      CSError = require('../../middleware/csError');
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-  //TODO: do we want this kind of library to know about status codes?
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-  var GitHubCommitMalformedError = (function (_CSError) {
-    _inherits(GitHubCommitMalformedError, _CSError);
+var _util = require('util');
 
-    function GitHubCommitMalformedError(error, pushEvent) {
-      _classCallCheck(this, GitHubCommitMalformedError);
+var _util2 = _interopRequireDefault(_util);
 
-      _get(Object.getPrototypeOf(GitHubCommitMalformedError.prototype), 'constructor', this).call(this, [error.toString()]);
-      this.originalError = error;
-      this.pushEvent = pushEvent;
-    }
+var _uuidV4 = require('uuid-v4');
 
-    return GitHubCommitMalformedError;
-  })(CSError);
+var _uuidV42 = _interopRequireDefault(_uuidV4);
 
-  githubTranslator.translatePush = function (pushEvent, instanceId, digestId, inboxId) {
+var _middlewareCsError = require('../../middleware/csError');
+
+var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
+
+//TODO: do we want this kind of library to know about status codes?
+
+var GitHubCommitMalformedError = (function (_CSError) {
+  _inherits(GitHubCommitMalformedError, _CSError);
+
+  function GitHubCommitMalformedError(error, pushEvent) {
+    _classCallCheck(this, GitHubCommitMalformedError);
+
+    _get(Object.getPrototypeOf(GitHubCommitMalformedError.prototype), 'constructor', this).call(this, [error.toString()]);
+    this.originalError = error;
+    this.pushEvent = pushEvent;
+  }
+
+  return GitHubCommitMalformedError;
+})(_middlewareCsError2['default']);
+
+var githubTranslator = {
+  translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
-      var branch = pushEvent.ref.split('/').pop();
-      var repository = {
-        id: pushEvent.repository.id,
-        name: pushEvent.repository.name
-      };
+      var _ret = (function () {
+        var branch = pushEvent.ref.split('/').pop();
+        var repository = {
+          id: pushEvent.repository.id,
+          name: pushEvent.repository.name
+        };
 
-      var events = _.map(pushEvent.commits, function (aCommit) {
-        var commit = {
-          sha: aCommit.id,
-          commit: {
-            author: aCommit.author,
-            committer: {
-              name: aCommit.committer.name,
-              email: aCommit.committer.email,
-              date: aCommit.timestamp
-            },
-            message: aCommit.message
-          },
-          html_url: aCommit.url,
-          repository: repository,
-          branch: branch,
-          originalMessage: aCommit
-        };
         return {
-          eventId: uuid(),
-          eventType: 'GitHubCommitReceived',
-          data: commit,
-          metadata: {
-            instanceId: instanceId,
-            digestId: digestId,
-            inboxId: inboxId
-          }
+          v: pushEvent.commits.map(function (aCommit) {
+            var commit = {
+              sha: aCommit.id,
+              commit: {
+                author: aCommit.author,
+                committer: {
+                  name: aCommit.committer.name,
+                  email: aCommit.committer.email,
+                  date: aCommit.timestamp
+                },
+                message: aCommit.message
+              },
+              html_url: aCommit.url,
+              repository: repository,
+              branch: branch,
+              originalMessage: aCommit
+            };
+            return {
+              eventId: (0, _uuidV42['default'])(),
+              eventType: 'GitHubCommitReceived',
+              data: commit,
+              metadata: {
+                instanceId: instanceId,
+                digestId: digestId,
+                inboxId: inboxId
+              }
+            };
+          })
         };
-      });
-      return events;
+      })();
+
+      if (typeof _ret === 'object') return _ret.v;
     } catch (ex) {
       var otherEx = new GitHubCommitMalformedError(ex, pushEvent);
       //console.log(otherEx, otherEx.originalError.stack);
       throw otherEx;
     }
-  };
-
-  githubTranslator.canTranslate = function (request) {
+  },
+  canTranslate: function canTranslate(request) {
     var headers = request.headers;
-    if (headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push') {
-      return true;
-    }
-    return false;
-  };
-})(module.exports);
+    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+  }
+};
+
+exports['default'] = githubTranslator;
+module.exports = exports['default'];
