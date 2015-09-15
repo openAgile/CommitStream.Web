@@ -1,29 +1,50 @@
 (function() {
   var handlebarsUrl = '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min',
-    requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js';
+    requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js',
+    commitStreamDomId,
+    instanceId,
+    digestId,
+    workitem,
+    getAssetAndChildNumbersUrl,
+    apiKey,
+    errorHandler,
+    commitsContainerTmpl,
+    commitsListTmpl,
+    autoRefreshIntervalId,
+    showChildrenChecked,
+    children;
 
-  function configureCommitStreamDependencies() {
+  var configureCommitStreamDependencies = function() {
     require.config({
       paths: {
         handlebars: handlebarsUrl
       }
     });
-  }
+  };
 
   var deps = ['handlebars'];
 
-  function hasAllDeps() {
+  var hasAllDeps = function() {
     if (!window.requirejs) return false;
     for (var i = 0; i < deps.length; i++) {
       if (!requirejs.defined(deps[i])) return false;
     }
     return true;
-  }
+  };
 
-  var commitsContainerTmpl = null;
-  var commitsListTmpl = null;
+  var bindShowChildrenAction = function() {
+    var el = $(commitStreamDomId);
+    el.find('.toggle-cs-childrenasset').bind('click', function() {
+      showChildrenChecked = $(this).is(':checked');
+      if (showChildrenChecked) {
+        queryCommitStream(getQueryWithChildrenUrl(), queryCallback);
+      } else {
+        queryCommitStream(getUrlToQuery(), queryCallback);
+      }
+    });
+  };
 
-  function bindRefreshActions(commitStreamDomId) {
+  var bindRefreshActions = function() {
     var el = $(commitStreamDomId);
     el.find('.cs-refresh').unbind('click');
     el.find('.cs-refresh').bind('click', queryCommitStreamRefresh);
@@ -32,11 +53,11 @@
     if (autoRefreshIntervalId) {
       el.find('.toggle-cs-autorefresh').prop('checked', true);
     }
-  }
+  };
 
-  function renderCommitsContainer(commitStreamDomId, model, errorHandler) {
+  var renderCommitsContainer = function(model) {
     try {
-      if (commitsContainerTmpl === null) {
+      if (!commitsContainerTmpl) {
         getCompiledTemplate('commitsList.html', function(tmpl) {
           commitsListTmpl = tmpl;
           registerPartial('commitsList', tmpl, function() {
@@ -44,201 +65,245 @@
               commitsContainerTmpl = tmpl;
               var content = tmpl(model);
               $(commitStreamDomId).html(content);
-              checkIfNextPage(commitStreamDomId, model, errorHandler);
-              bindRefreshActions(commitStreamDomId);
-            }, errorHandler);
-          }, errorHandler);
-        }, errorHandler);
+              checkIfNextPage(model);
+              bindRefreshActions();
+              bindShowChildrenAction();
+            });
+          });
+        });
       } else {
         var content = commitsContainerTmpl(model);
         $(commitStreamDomId).html(content);
-        checkIfNextPage(commitStreamDomId, model, errorHandler);
-        bindRefreshActions(commitStreamDomId);
+        checkIfNextPage(model);
+        bindRefreshActions();
+        bindShowChildrenAction();
       }
     } catch (ex) {
       errorHandler();
     }
-  }
+  };
 
-  function renderCommitsList(commitStreamDomId, model, errorHandler) {
+  var renderCommitsList = function(model) {
     try {
-      if (commitsListTmpl === null) {
+      if (!commitsListTmpl) {
         getCompiledTemplate('commitsList.html', function(tmpl) {
           commitsListTmpl = tmpl;
           var content = tmpl(model);
           $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-          checkIfNextPage(commitStreamDomId, model, errorHandler);
-        }, errorHandler);
+          checkIfNextPage(model);
+        });
       } else {
         var content = commitsListTmpl(model);
         $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-        checkIfNextPage(commitStreamDomId, model, errorHandler);
+        checkIfNextPage(model);
       }
     } catch (ex) {
       errorHandler();
     }
-  }
+  };
 
-  function compileSource(source, cb, errorHandler) {
+  var compileSource = function(source, cb) {
     require(deps, function(handlebars) {
       cb(handlebars.default.compile(source));
     }, errorHandler);
-  }
+  };
 
-  function registerPartial(partialName, template, cb, errorHandler) {
+  var registerPartial = function(partialName, template, cb) {
     require(deps, function(handlebars) {
       handlebars.default.registerPartial(partialName, template);
       cb();
     }, errorHandler);
+  };
 
-  }
-
-  function getTemplate(template, cb, errorHandler) {
+  var getTemplate = function(template, cb) {
     var tmplUrl = '{{{resourcePath}}}' + template;
     $.get(tmplUrl).done(cb).fail(errorHandler);
-  }
+  };
 
-  function getCompiledTemplate(template, cb, errorHandler) {
+  var getCompiledTemplate = function(template, cb) {
     getTemplate(template, function(source) {
-      compileSource(source, cb, errorHandler);
-    }, errorHandler);
-  }
+      compileSource(source, cb);
+    });
+  };
 
-  function configureModel(model) {
+  var configureModel = function(model) {
     model.noCommits = model.commits.length < 1;
     model.protocol = '{{{protocol}}}';
     model.resourcePath = '{{{resourcePath}}}';
     model.lastPage = false;
+    model.showChildrenChecked = showChildrenChecked;
     if (!model._links || !model._links.next) {
       model.lastPage = true;
     }
-  }
+  };
 
-  function checkIfNextPage(commitStreamDomId, model, errorHandler) {
+  var checkIfNextPage = function(model) {
     if (!model._links || !model._links.next) {
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
+      $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
     } else {
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
       $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
-      bindScrollEvent(commitStreamDomId, errorHandler);
+      bindScrollEvent();
     }
-  }
+  };
 
-  function thereAreNoCommits(model) {
+  var thereAreNoCommits = function(model) {
     return (!model || !model.commits);
-  }
+  };
 
-  function getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey) {
-    if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
-      return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
-    } else if (workitem || digestId) {
-      var url = '{{{apiUrl}}}' + instanceId;      
-      if (digestId !== null && digestId !== undefined) {
-        url += '/digests/' + digestId + '/commits';
-      } else {        
-        url += '/commits/tags/versionone/workitems/' + workitem;
-      }
-
-      url += '?apiKey=' + apiKey;
-      return url;
-    } else {
-      throw 'Must specify either workitem or digestId as a URL query parameter in order to query CommitStream'
-    }
-  }
-
-  function isEndOfScrollbar(el) {
+  var isEndOfScrollbar = function(el) {
     return (el.scrollTop() + el.innerHeight() >= el[0].scrollHeight);
-  }
+  };
 
-  function bindScrollEvent(commitStreamDomId, errorHandler) {
+  var bindScrollEvent = function() {
     $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
     $(commitStreamDomId).find('.side-panel-scrollable').on('scroll', function() {
       if (isEndOfScrollbar($(this))) {
-        queryCommitStream(commitStreamDomId, getUrlToQuery(commitStreamDomId), function(commitStreamDomId, model) {
+        queryCommitStream(getUrlToQuery(), function(model) {
           if (thereAreNoCommits(model)) {
             errorHandler();
           } else {
             configureModel(model);
-            renderCommitsList(commitStreamDomId, model);
+            renderCommitsList(model);
           }
-        }, errorHandler);
+        });
       }
     });
-  }
+  };
 
-  function queryCommitStreamRefresh() {};
-
-  var autoRefreshIntervalId = null;
-
-  function autoRefreshToggle() {
+  var autoRefreshToggle = function() {
     var toggle = $(this);
     if (toggle.is(':checked')) {
       autoRefreshEnable();
     } else {
       autoRefreshDisable();
     }
-  }
+  };
 
-  function autoRefreshEnable() {
+  var autoRefreshEnable = function() {
     if (autoRefreshIntervalId) {
       clearInterval(autoRefreshIntervalId);
     }
     autoRefreshIntervalId = setInterval(queryCommitStreamRefresh,
       window.CommitStream.autoRefreshIntervalInSeconds * 1000);
-  }
+  };
 
-  function autoRefreshDisable() {
+  var autoRefreshDisable = function() {
     if (autoRefreshIntervalId) {
       clearInterval(autoRefreshIntervalId);
-      autoRefreshIntervalId = null;
+      autoRefreshIntervalId = undefined;
     }
-  }
+  };
 
-  function queryCommitStream(commitStreamDomId, apiUrl, cb, errorHandler) {
+  var setCheckboxVisibility = function(model) {
+    if (digestId) {
+      model.showAutoRefreshCheckbox = true;
+    }
+  };
+
+  var setChildrenCheckboxVisibility = function(model) {
+    if (!digestId && getAssetAndChildNumbersUrl !== "") {
+      model.showChildrenCheckbox = true;
+    }
+  };
+
+  var getUrlToQuery = function() {
+    if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
+      return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
+    } else if (workitem || digestId) {
+      var url = '{{{apiUrl}}}' + instanceId;
+      if (digestId !== null && digestId !== undefined) {
+        url += '/digests/' + digestId + '/commits';
+      } else {
+        url += '/commits/tags/versionone/workitems/' + workitem;
+      }
+
+      url += '?apiKey=' + apiKey;
+      return url;
+    } else {
+      throw 'Must specify either workitem or digestId as a URL query parameter in order to query CommitStream';
+    }
+  };
+
+  var getQueryWithChildrenUrl = function() {
+    var url = '{{{apiUrl}}}';
+    url += instanceId;
+    url += '/commits/tags/versionone/workitems/';
+    url += workitem;
+    url += children ? ',' + children : '';
+    url += '?apiKey=';
+    url += apiKey;
+    return url;
+  };
+
+  var queryCommitStream = function(apiUrl, cb) {
     var el = $(commitStreamDomId);
     el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
       el.find('.cs-refresh').removeClass('requesting');
-      cb(commitStreamDomId, model);
+      cb(model);
     }).fail(errorHandler);
-  }
+  };
+
+  var queryCallback = function(model) {
+    if (thereAreNoCommits(model)) {
+      errorHandler();
+    } else {
+      configureModel(model);
+      setCheckboxVisibility(model);
+      setChildrenCheckboxVisibility(model);
+      renderCommitsContainer(model);
+    }
+  };
+
+  var queryCommitStreamRefresh = function() {
+    queryCommitStream(getUrlToQuery(), queryCallback);
+  };
+
+  var getChildren = function(url) {
+    return $.get(url).done(function(children) {
+      return children;
+    }).fail(errorHandler);
+  };
+
+  var init = function() {
+    var url = getUrlToQuery();
+    if (!hasAllDeps()) {
+      $.getScript(requirejsUrl, function(model, status, jqxhr) {
+        configureCommitStreamDependencies();
+        queryCommitStream(url, queryCallback);
+      }).fail(errorHandler);
+    } else {
+      queryCommitStream(url, queryCallback);
+    }
+  };
 
   // Put a commitStream object in the global space
   if (!window.CommitStream) {
     window.CommitStream = {
-      commitsDisplay: function(commitStreamDomId, workitem, errorHandler, digestId, instanceId, apiKey) {
+      commitsDisplay: function(csDomId,
+        wi,
+        eh,
+        dId,
+        iId,
+        aKey,
+        assetAndChildUrl) {
 
-        function setCheckboxVisibility(model, digestId) {
-          if (digestId) {
-            model.showAutoRefreshCheckbox = true;
-          }
-        }
+        commitStreamDomId = csDomId;
+        workitem = wi;
+        errorHandler = eh;
+        digestId = dId;
+        instanceId = iId;
+        apiKey = aKey;
+        getAssetAndChildNumbersUrl = assetAndChildUrl;
 
         try {
-          var queryCallBack = function(commitStreamDomId, model) {
-            if (thereAreNoCommits(model)) {
-              errorHandler();
-            } else {
-              configureModel(model);
-              setCheckboxVisibility(model, digestId);
-              renderCommitsContainer(commitStreamDomId, model, errorHandler);
-            }
-          }
-
-          var url = getUrlToQuery(commitStreamDomId, digestId, workitem, instanceId, apiKey);
-
-          queryCommitStreamRefresh = function() {
-            queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
-          };
-
-          if (!hasAllDeps()) {
-            $.getScript(requirejsUrl, function(model, status, jqxhr) {
-              configureCommitStreamDependencies();
-              queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
-            }).fail(errorHandler);
-          } else {
-            queryCommitStream(commitStreamDomId, url, queryCallBack, errorHandler);
-          }
+          getChildren(getAssetAndChildNumbersUrl)
+            .then(function(c) {
+              children = c;
+            })
+            .then(init);
         } catch (ex) {
           if (console && console.log) {
             console.log(ex);

@@ -30,8 +30,7 @@ let StreamNotFound = csError.createCustomError('StreamNotFound', (message) => {
 csError.StreamNotFound = StreamNotFound;
 
 statusCodeValidator.validateGetStream = (streamName) => {
-  return (response) => {
-    console.log('WTFFFFFF');
+  return (response) => {    
     if (!response.body || response.body.length < 1 || response.statusCode === 404) {
       throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
     }
