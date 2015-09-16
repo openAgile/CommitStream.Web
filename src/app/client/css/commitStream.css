@@ -1175,7 +1175,7 @@ h6 {
   white-space: pre-wrap;
 }
 .commitStream-panel .side-panel-scrollable {
-  top: 64px;
+  top: 73px !important;
   background-color: #fff;
 }
 .commitStream-panel .commitStreamTime {

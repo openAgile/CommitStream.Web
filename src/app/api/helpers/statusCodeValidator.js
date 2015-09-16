@@ -42,7 +42,6 @@ _middlewareCsError2['default'].StreamNotFound = StreamNotFound;
 
 statusCodeValidator.validateGetStream = function (streamName) {
   return function (response) {
-    console.log('WTFFFFFF');
     if (!response.body || response.body.length < 1 || response.statusCode === 404) {
       throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
     }
