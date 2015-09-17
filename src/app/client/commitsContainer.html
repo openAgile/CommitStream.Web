@@ -15,7 +15,7 @@
         {{#if showChildrenCheckbox}}
           <label class="toggle-cs-childrenasset-label">
             <input type="checkbox" class="toggle-cs-childrenasset"
-              {{#if showChildrenChecked}}checked{{/if}}>
+              {{bindAttr checked="showChildrenChecked"}} >              
               Show children
           </label>
         {{/if}}
