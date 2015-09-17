@@ -226,12 +226,12 @@
     }
   };
 
-  var getQueryWithChildrenUrl = function() {
+  var getQueryWithChildrenUrl = function() {    
     var url = '{{{apiUrl}}}';
     url += instanceId;
     url += '/commits/tags/versionone/workitems/';
     url += workitem;
-    url += children ? ',' + children : '';
+    url += children ? ',' + children.join() : '';
     url += '?apiKey=';
     url += apiKey;
     return url;
@@ -301,7 +301,7 @@
         try {
           getChildren(getAssetAndChildNumbersUrl)
             .then(function(c) {
-              children = c;
+              children = c.assetNumbers;
             })
             .then(init);
         } catch (ex) {
