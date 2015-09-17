@@ -209,6 +209,7 @@
   };
 
   var getUrlToQuery = function() {
+    showChildrenChecked = false;
     if ($(commitStreamDomId).find('.side-panel-scrollable').attr('next')) {
       return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
     } else if (workitem || digestId) {
