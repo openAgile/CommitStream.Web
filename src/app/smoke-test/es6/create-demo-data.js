@@ -30,7 +30,9 @@ let createInstanceWithData = async (iteration) => {
   });
   for (let inboxToCreate of inboxesToCreate) {
     let inbox = await csApiClient.postToLink(digest, 'inbox-create', inboxToCreate);
-    console.log(JSON.stringify(inbox));
+    let commitAddResponse = await csApiClient.families[inboxToCreate.family].commitAdd(inbox, `S-00001 on ${iteration}`);
+    console.log(`Commit added for inbox ${inbox.inboxId} (${inbox.family}):`);
+    console.log(commitAddResponse.message);
   }
 };
 

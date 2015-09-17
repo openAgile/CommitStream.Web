@@ -12,6 +12,10 @@ var _requestPromise = require('request-promise');
 
 var _requestPromise2 = _interopRequireDefault(_requestPromise);
 
+var _familyPayloadExamples = require('./family-payload-examples');
+
+var _familyPayloadExamples2 = _interopRequireDefault(_familyPayloadExamples);
+
 var csBaseUrl = 'http://localhost:6565/api';
 
 var baseUrlSet = function baseUrlSet(url) {
@@ -104,12 +108,38 @@ var postToLink = function postToLink(halResponse, linkName, data, extraHeaders) 
   return (0, _requestPromise2['default'])(postOptions(link, data, extraHeaders));
 };
 
+var postToInboxForFamily = function postToInboxForFamily(inbox, message, family, extraHeaders) {
+  return postToLink(inbox, 'add-commit', _familyPayloadExamples2['default'][family].validWithOneCommit(message), extraHeaders);
+};
+
+var families = {
+  GitHub: {
+    commitAdd: function commitAdd(inbox) {
+      var message = arguments.length <= 1 || arguments[1] === undefined ? 'GitHub commit' : arguments[1];
+      return postToInboxForFamily(inbox, message, 'GitHub', { 'x-github-event': 'push' });
+    }
+  },
+  GitLab: {
+    commitAdd: function commitAdd(inbox) {
+      var message = arguments.length <= 1 || arguments[1] === undefined ? 'GitLab commit' : arguments[1];
+      return postToInboxForFamily(inbox, message, 'GitLab', { 'x-gitlab-event': 'Push Hook' });
+    }
+  },
+  Bitbucket: {
+    commitAdd: function commitAdd(inbox) {
+      var message = arguments.length <= 1 || arguments[1] === undefined ? 'Bitbucket commit' : arguments[1];
+      return postToInboxForFamily(inbox, message, 'Bitbucket', { 'x-event-key': 'repo:push' });
+    }
+  }
+};
+
 exports['default'] = {
   baseUrlSet: baseUrlSet,
   post: post,
   postToLink: postToLink,
   get: get,
   getLink: getLink,
+  families: families,
   getApiKey: getApiKey,
   enableLogging: enableLogging
 };

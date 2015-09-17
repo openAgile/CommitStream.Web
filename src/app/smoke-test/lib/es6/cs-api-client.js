@@ -1,4 +1,5 @@
 import rp from 'request-promise';
+import familyPayloadExamples from './family-payload-examples';
 
 let csBaseUrl = 'http://localhost:6565/api';
 
@@ -60,7 +61,7 @@ let postToLink = (halResponse, linkName, data, extraHeaders) => {
     }
   }
   if (halResponse.apiKey) apiKey = halResponse.apiKey; // Cheap n dirty
-  var link = getLink(halResponse, linkName);
+  let link = getLink(halResponse, linkName);
   if (apiKey !== null) link += "?apiKey=" + apiKey;
 
   if (LOGGING) {
@@ -70,9 +71,26 @@ let postToLink = (halResponse, linkName, data, extraHeaders) => {
     console.log('```json\n' + JSON.stringify(data, ' ', 2) + '\n```\n\n');
     console.log(loggingSeparator);
   }
-  
+
   return rp(postOptions(link, data, extraHeaders));
 };
+
+
+let postToInboxForFamily = (inbox, message, family, extraHeaders) => {
+  return postToLink(inbox, 'add-commit', familyPayloadExamples[family].validWithOneCommit(message), extraHeaders);
+}
+
+let families = {
+  GitHub : {
+    commitAdd: (inbox, message='GitHub commit') => postToInboxForFamily(inbox, message, 'GitHub', {'x-github-event': 'push'})
+  },
+  GitLab : {
+    commitAdd: (inbox, message='GitLab commit') => postToInboxForFamily(inbox, message, 'GitLab', {'x-gitlab-event': 'Push Hook'})
+  },
+  Bitbucket : {
+    commitAdd: (inbox, message='Bitbucket commit') => postToInboxForFamily(inbox, message, 'Bitbucket', {'x-event-key': 'repo:push'})
+  }
+}
 
 export default {
   baseUrlSet,
@@ -80,6 +98,7 @@ export default {
   postToLink,
   get,
   getLink,
+  families,
   getApiKey,
   enableLogging
 };

@@ -17,7 +17,7 @@ var _libCsApiClient2 = _interopRequireDefault(_libCsApiClient);
 var workItemsToMention = ['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005', 'S-00002', 'T-00011', 'T-00012', 'T-00013', 'T-00014', 'T-00015', 'AT-00011', 'AT-00012', 'AT-00013', 'AT-00014', 'AT-00015', 'S-00003', 'T-00021', 'T-00022', 'T-00023', 'T-00024', 'T-00025', 'AT-00021', 'AT-00022', 'AT-00023', 'AT-00024', 'AT-00025'];
 
 var createInstanceWithData = function createInstanceWithData(iteration) {
-  var inboxesToCreate, instance, digest, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, inboxToCreate, inbox;
+  var inboxesToCreate, instance, digest, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, inboxToCreate, inbox, commitAddResponse;
 
   return _regeneratorRuntime.async(function createInstanceWithData$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -52,7 +52,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
       case 12:
         if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-          context$1$0.next = 21;
+          context$1$0.next = 25;
           break;
         }
 
@@ -62,53 +62,59 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
       case 16:
         inbox = context$1$0.sent;
+        context$1$0.next = 19;
+        return _regeneratorRuntime.awrap(_libCsApiClient2['default'].families[inboxToCreate.family].commitAdd(inbox, 'S-00001 on ' + iteration));
 
-        console.log(JSON.stringify(inbox));
+      case 19:
+        commitAddResponse = context$1$0.sent;
 
-      case 18:
+        console.log('Commit added for inbox ' + inbox.inboxId + ' (' + inbox.family + '):');
+        console.log(commitAddResponse.message);
+
+      case 22:
         _iteratorNormalCompletion = true;
         context$1$0.next = 12;
         break;
 
-      case 21:
-        context$1$0.next = 27;
+      case 25:
+        context$1$0.next = 31;
         break;
 
-      case 23:
-        context$1$0.prev = 23;
+      case 27:
+        context$1$0.prev = 27;
         context$1$0.t0 = context$1$0['catch'](10);
         _didIteratorError = true;
         _iteratorError = context$1$0.t0;
 
-      case 27:
-        context$1$0.prev = 27;
-        context$1$0.prev = 28;
+      case 31:
+        context$1$0.prev = 31;
+        context$1$0.prev = 32;
 
         if (!_iteratorNormalCompletion && _iterator['return']) {
           _iterator['return']();
         }
 
-      case 30:
-        context$1$0.prev = 30;
+      case 34:
+        context$1$0.prev = 34;
 
         if (!_didIteratorError) {
-          context$1$0.next = 33;
+          context$1$0.next = 37;
           break;
         }
 
         throw _iteratorError;
 
-      case 33:
-        return context$1$0.finish(30);
+      case 37:
+        return context$1$0.finish(34);
 
-      case 34:
-        return context$1$0.finish(27);
+      case 38:
+        return context$1$0.finish(31);
 
-      case 35:
+      case 39:
       case 'end':
         return context$1$0.stop();
     }
-  }, null, _this, [[10, 23, 27, 35], [28,, 30, 34]]);
+  }, null, _this, [[10, 27, 31, 39], [32,, 34, 38]]);
 };
 
 createInstanceWithData(0);
