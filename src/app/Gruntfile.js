@@ -4,7 +4,8 @@ module.exports = function(grunt) {
   var es6Locations = [
     'api/**/es6/*.js',
     'middleware/**/es6/*.js',
-    'client/**/es6/*.js'
+    'client/**/es6/*.js',
+    'smoke-test/**/es6/*.js'
   ];
 
   var babelFiles = {
