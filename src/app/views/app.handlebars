@@ -203,7 +203,7 @@
   };
 
   var setChildrenCheckboxVisibility = function(model) {
-    if (!digestId && getAssetAndChildNumbersUrl !== "") {
+    if (getAssetAndChildNumbersUrl) {
       model.showChildrenCheckbox = true;
     }
   };
@@ -226,7 +226,7 @@
     }
   };
 
-  var getQueryWithChildrenUrl = function() {    
+  var getQueryWithChildrenUrl = function() {
     var url = '{{{apiUrl}}}';
     url += instanceId;
     url += '/commits/tags/versionone/workitems/';
