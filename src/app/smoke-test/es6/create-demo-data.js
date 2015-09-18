@@ -14,9 +14,9 @@ const number_of_instances = parseInt(program.instances);
 const number_of_repo_iterations = parseInt(program.repos);
 const number_of_mentions_per_workitem_per_repo = parseInt(program.mentions);
 
-csApiClient.baseUrlSet(program.url);
+csApiClient.baseUrl = program.url;
 
-console.log(`Operating against this CommitStream Service API: ${csApiClient.baseUrlGet()}`);
+console.log(`Operating against this CommitStream Service API: ${csApiClient.baseUrl}`);
 
 let workItemsToMention = [
   ['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005'],
@@ -40,17 +40,15 @@ let createInstanceWithData = async (iteration) => {
     }
   ];
 
-  let instance = await csApiClient.post('/instances', {});
-  let digest = await csApiClient.postToLink(instance, 'digest-create', {
-    description: `Digest for ${iteration}`
-  });
+  let instance = await csApiClient.Instance.create();
+  let digest = await instance.digestCreate({description:`Digest for ${iteration}`});
 
-  console.log(`#${iteration}: Populating instance ${csApiClient.getInstanceId()}`);
-  
+  console.log(`#${iteration}: Populating instance ${csApiClient.instanceId} (apiKey = ${csApiClient.apiKey})`);
+
   for (let n = 0; n < number_of_repo_iterations; n++) {
     let inboxNum = 0;
     for (let inboxToCreate of inboxesToCreate) {
-      let inbox = await csApiClient.postToLink(digest, 'inbox-create', inboxToCreate);
+      let inbox = await digest.inboxCreate(inboxToCreate);
       let workItemGroupNum = inboxNum % 3;
       let workItemsGroup = workItemsToMention[workItemGroupNum];
       
@@ -59,7 +57,7 @@ let createInstanceWithData = async (iteration) => {
       for(let workItem of workItemsGroup) {
         for (let mentionNum = 0; mentionNum < number_of_mentions_per_workitem_per_repo; mentionNum++) {
           let message = `${workItem} mention # ${mentionNum} on ${iteration} in  ${inbox.inboxId} of family = ${inbox.family}`;
-          let commitAddResponse = await csApiClient.families[inboxToCreate.family].commitAdd(inbox, message);
+          let commitAddResponse = await inbox.commitCreate(message);
           if (program.debug) {
             console.log(commitAddResponse.message);
           }

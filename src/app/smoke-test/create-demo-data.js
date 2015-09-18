@@ -22,9 +22,9 @@ var number_of_instances = parseInt(_commander2['default'].instances);
 var number_of_repo_iterations = parseInt(_commander2['default'].repos);
 var number_of_mentions_per_workitem_per_repo = parseInt(_commander2['default'].mentions);
 
-_libCsApiClient2['default'].baseUrlSet(_commander2['default'].url);
+_libCsApiClient2['default'].baseUrl = _commander2['default'].url;
 
-console.log('Operating against this CommitStream Service API: ' + _libCsApiClient2['default'].baseUrlGet());
+console.log('Operating against this CommitStream Service API: ' + _libCsApiClient2['default'].baseUrl);
 
 var workItemsToMention = [['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005'], ['S-00002', 'T-00011', 'T-00012', 'T-00013', 'T-00014', 'T-00015', 'AT-00011', 'AT-00012', 'AT-00013', 'AT-00014', 'AT-00015'], ['S-00003', 'T-00021', 'T-00022', 'T-00023', 'T-00024', 'T-00025', 'AT-00021', 'AT-00022', 'AT-00023', 'AT-00024', 'AT-00025']];
 
@@ -45,19 +45,17 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
           family: 'Bitbucket'
         }];
         context$1$0.next = 3;
-        return _regeneratorRuntime.awrap(_libCsApiClient2['default'].post('/instances', {}));
+        return _regeneratorRuntime.awrap(_libCsApiClient2['default'].Instance.create());
 
       case 3:
         instance = context$1$0.sent;
         context$1$0.next = 6;
-        return _regeneratorRuntime.awrap(_libCsApiClient2['default'].postToLink(instance, 'digest-create', {
-          description: 'Digest for ' + iteration
-        }));
+        return _regeneratorRuntime.awrap(instance.digestCreate({ description: 'Digest for ' + iteration }));
 
       case 6:
         digest = context$1$0.sent;
 
-        console.log('#' + iteration + ': Populating instance ' + _libCsApiClient2['default'].getInstanceId());
+        console.log('#' + iteration + ': Populating instance ' + _libCsApiClient2['default'].instanceId + ' (apiKey = ' + _libCsApiClient2['default'].apiKey + ')');
 
         n = 0;
 
@@ -82,7 +80,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
         inboxToCreate = _step.value;
         context$1$0.next = 20;
-        return _regeneratorRuntime.awrap(_libCsApiClient2['default'].postToLink(digest, 'inbox-create', inboxToCreate));
+        return _regeneratorRuntime.awrap(digest.inboxCreate(inboxToCreate));
 
       case 20:
         inbox = context$1$0.sent;
@@ -114,7 +112,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
         message = workItem + ' mention # ' + mentionNum + ' on ' + iteration + ' in  ' + inbox.inboxId + ' of family = ' + inbox.family;
         context$1$0.next = 36;
-        return _regeneratorRuntime.awrap(_libCsApiClient2['default'].families[inboxToCreate.family].commitAdd(inbox, message));
+        return _regeneratorRuntime.awrap(inbox.commitCreate(message));
 
       case 36:
         commitAddResponse = context$1$0.sent;

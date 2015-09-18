@@ -3,10 +3,6 @@ import familyPayloadExamples from './family-payload-examples';
 
 let csBaseUrl = 'http://localhost:6565/api';
 
-let baseUrlSet = url => csBaseUrl = url;
-
-let baseUrlGet = () => csBaseUrl;
-
 let instanceId = null;
 
 let apiKey = null;
@@ -14,12 +10,6 @@ let apiKey = null;
 let LOGGING = false;
 
 let enableLogging = enabled => LOGGING = enabled;
-
-let getInstanceId = () => instanceId;
-
-let getApiKey = () => apiKey;
-
-let getApiKeyAsParam = () => '?apiKey=' + getApiKey();
 
 let href = path => `${csBaseUrl}${path}`;
 
@@ -63,7 +53,7 @@ let postToLink = (halResponse, linkName, data, extraHeaders) => {
     console.log('```json\n' + JSON.stringify(halResponse, ' ', 2) + '\n```\n\n');
     if (halResponse._links['teamroom-view']) {
       console.log('TEAMROOM LINK:');
-      console.log(halResponse._links['teamroom-view'].href + '&apiKey=' + getApiKey());
+      console.log(halResponse._links['teamroom-view'].href + '&apiKey=' + apiKey);
     }
   }
   if (halResponse.apiKey) {
@@ -99,18 +89,54 @@ let families = {
   Bitbucket : {
     commitAdd: (inbox, message='Bitbucket commit') => postToInboxForFamily(inbox, message, 'Bitbucket', {'x-event-key': 'repo:push'})
   }
+};
+
+let resourceSymbol = Symbol('resource');
+
+class Resource {
+  constructor(resource) {
+    this[resourceSymbol] = resource;
+    Reflect.ownKeys(resource).slice(1).forEach(prop => Object.defineProperty(this, prop, {
+      get: function() { return resource[prop]; },
+      enumerable: true,
+      configurable: true
+    }));
+  }
+  async postToLink(linkName, data, ResourceWrapperClass) {
+    let resource = await postToLink(this[resourceSymbol], linkName, data);
+    return new ResourceWrapperClass(resource);
+  }
+}
+
+class Instance extends Resource {
+  static async create() {
+    let instanceResource = await post('/instances', {});
+    return new Instance(instanceResource);
+  }
+  async digestCreate(data) {
+    return await this.postToLink('digest-create', data, Digest);
+  }
+};
+
+class Digest extends Resource {
+  async inboxCreate(data) {
+    return await this.postToLink('inbox-create', data, Inbox);
+  }
+}
+
+class Inbox extends Resource {
+  async commitCreate(message) {
+    let commitResponse = await families[this.family].commitAdd(this[resourceSymbol], message);
+    return commitResponse;
+  }
 }
 
 export default {
-  baseUrlSet,
-  baseUrlGet,
-  post,
-  postToLink,
-  get,
-  getLink,
-  families,
-  getInstanceId,
-  getApiKey,
+  Instance,
+  set baseUrl(url) { csBaseUrl = url; },
+  get baseUrl() { return csBaseUrl; },
+  get instanceId() { return instanceId; },
+  get apiKey() { return apiKey; },
   enableLogging
 };
 
