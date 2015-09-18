@@ -22,12 +22,18 @@ var baseUrlSet = function baseUrlSet(url) {
   return csBaseUrl = url;
 };
 
+var instanceId = null;
+
 var apiKey = null;
 
 var LOGGING = false;
 
 var enableLogging = function enableLogging(enabled) {
   return LOGGING = enabled;
+};
+
+var getInstanceId = function getInstanceId() {
+  return instanceId;
 };
 
 var getApiKey = function getApiKey() {
@@ -48,7 +54,7 @@ var post = function post(path, data) {
 
 var postOptions = function postOptions(uri, data, extraHeaders) {
   var headers = {
-    "Content-Type": "application/json"
+    'Content-Type': 'application/json'
   };
 
   if (extraHeaders) headers = _Object$assign(headers, extraHeaders);
@@ -93,7 +99,10 @@ var postToLink = function postToLink(halResponse, linkName, data, extraHeaders) 
       console.log(halResponse._links['teamroom-view'].href + '&apiKey=' + getApiKey());
     }
   }
-  if (halResponse.apiKey) apiKey = halResponse.apiKey; // Cheap n dirty
+  if (halResponse.apiKey) {
+    apiKey = halResponse.apiKey; // Cheap n dirty
+    instanceId = halResponse.instanceId;
+  }
   var link = getLink(halResponse, linkName);
   if (apiKey !== null) link += "?apiKey=" + apiKey;
 
@@ -140,6 +149,7 @@ exports['default'] = {
   get: get,
   getLink: getLink,
   families: families,
+  getInstanceId: getInstanceId,
   getApiKey: getApiKey,
   enableLogging: enableLogging
 };

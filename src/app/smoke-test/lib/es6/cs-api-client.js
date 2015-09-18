@@ -5,11 +5,15 @@ let csBaseUrl = 'http://localhost:6565/api';
 
 let baseUrlSet = url => csBaseUrl = url;
 
+let instanceId = null;
+
 let apiKey = null;
 
 let LOGGING = false;
 
 let enableLogging = enabled => LOGGING = enabled;
+
+let getInstanceId = () => instanceId;
 
 let getApiKey = () => apiKey;
 
@@ -21,7 +25,7 @@ let post = (path, data) => rp(postOptions(href(path), data));
 
 let postOptions = (uri, data, extraHeaders) => {
   let headers = {
-    "Content-Type": "application/json"
+    'Content-Type': 'application/json'
   };
 
   if (extraHeaders) headers = Object.assign(headers, extraHeaders);
@@ -60,7 +64,10 @@ let postToLink = (halResponse, linkName, data, extraHeaders) => {
       console.log(halResponse._links['teamroom-view'].href + '&apiKey=' + getApiKey());
     }
   }
-  if (halResponse.apiKey) apiKey = halResponse.apiKey; // Cheap n dirty
+  if (halResponse.apiKey) {
+    apiKey = halResponse.apiKey; // Cheap n dirty
+    instanceId = halResponse.instanceId;
+  }
   let link = getLink(halResponse, linkName);
   if (apiKey !== null) link += "?apiKey=" + apiKey;
 
@@ -99,6 +106,7 @@ export default {
   get,
   getLink,
   families,
+  getInstanceId,
   getApiKey,
   enableLogging
 };
