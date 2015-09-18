@@ -300,11 +300,15 @@
         getAssetAndChildNumbersUrl = assetAndChildUrl;
 
         try {
+          if(getAssetAndChildNumbersUrl) {
           getChildren(getAssetAndChildNumbersUrl)
             .then(function(c) {
               children = c.assetNumbers;
             })
             .then(init);
+          } else {
+            init();
+          }
         } catch (ex) {
           if (console && console.log) {
             console.log(ex);
