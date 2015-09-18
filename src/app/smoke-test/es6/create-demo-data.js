@@ -3,14 +3,19 @@ import csApiClient from './lib/cs-api-client';
 
 program
   .version('0.0.0')
-  .option('-i, --instances [number]', 'Number of instances to create', 1)
-  .option('-r, --repos [number]', 'Number of repos creation iterations to run (creates one repo per family type during each iteration)', 1)
-  .option('-m, --mentions [number]', 'Number of times to post a commit with each mention (one story, 5 tasks, 5 tests in each group of workitems)', 1)
+  .option('-u, --url [url]', 'The base URL for the CommitStream Service API, default: http://localhost:6565/api', 'http://localhost:6565/api')
+  .option('-i, --instances [number]', 'Number of instances to create, default: 1', 1)
+  .option('-r, --repos [number]', 'Number of repos creation iterations to run (creates one repo per family type during each iteration), default 1', 1)
+  .option('-m, --mentions [number]', 'Number of times to post a commit with each mention (one story, 5 tasks, 5 tests in each group of workitems), default 1', 1)
   .parse(process.argv);
 
 const number_of_instances = parseInt(program.instances);
 const number_of_repo_iterations = parseInt(program.repos);
 const number_of_mentions_per_workitem_per_repo = parseInt(program.mentions);
+
+csApiClient.baseUrlSet(program.url);
+
+console.log(`Operating against this CommitStream Service API: ${csApiClient.baseUrlGet()}`);
 
 let workItemsToMention = [
   ['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005'],

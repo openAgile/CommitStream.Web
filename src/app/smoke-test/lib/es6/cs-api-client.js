@@ -5,6 +5,8 @@ let csBaseUrl = 'http://localhost:6565/api';
 
 let baseUrlSet = url => csBaseUrl = url;
 
+let baseUrlGet = () => csBaseUrl;
+
 let instanceId = null;
 
 let apiKey = null;
@@ -101,6 +103,7 @@ let families = {
 
 export default {
   baseUrlSet,
+  baseUrlGet,
   post,
   postToLink,
   get,

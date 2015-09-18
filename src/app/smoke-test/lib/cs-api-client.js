@@ -22,6 +22,10 @@ var baseUrlSet = function baseUrlSet(url) {
   return csBaseUrl = url;
 };
 
+var baseUrlGet = function baseUrlGet() {
+  return csBaseUrl;
+};
+
 var instanceId = null;
 
 var apiKey = null;
@@ -144,6 +148,7 @@ var families = {
 
 exports['default'] = {
   baseUrlSet: baseUrlSet,
+  baseUrlGet: baseUrlGet,
   post: post,
   postToLink: postToLink,
   get: get,
