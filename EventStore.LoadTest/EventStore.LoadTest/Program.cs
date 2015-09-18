@@ -10,14 +10,13 @@ using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Net;
+using System.Collections.Concurrent;
 
 namespace EventStore.LoadTest
 {
     class Program
     {
         static int threadCount;
-        static int top;
-        static string url;
         static long count;
         static long lowest;
         static long highest;
@@ -25,16 +24,23 @@ namespace EventStore.LoadTest
         static long errors;
         static object syncRoot = new Object();
         static RestClient restClient;
-        static IList<string> urls = new List<string>(new string[] { });
+        static ConcurrentQueue<string> urls = new ConcurrentQueue<string>();
+
 
         static void Main(string[] args)
         {
+            //TODO: read from app.config
+            for (int i = 0; i < 100; i++)
+            {
+                urls.Enqueue("http://localhost:6565/api/002e064a-0982-4785-88d7-0a92fc2884e4/commits/tags/versionone/workitems/S-01001,TK-01001,AT-01002?apiKey=71a764aa-a8bb-4de2-a6dc-59279b3b5c7c");
+            }
+
+
             SetupSslValidation();
             ReadConfig();
-            restClient = new RestClient(url);
             var mainStopWatch = new Stopwatch();
 
-            Console.WriteLine("About make {0} requests.", top);
+            Console.WriteLine("Starting...");
 
             mainStopWatch.Start();
             Thread[] threads = StartPushEventsThreads();
@@ -69,32 +75,30 @@ namespace EventStore.LoadTest
         private static void PushEvent()
         {
             var threadStopWatch = new Stopwatch();
-            var request = new RestRequest(Method.GET);
 
             while (true)
             {
-                var shouldContinue = false;
-                SetUpRequest(request);
-
-                lock (syncRoot)
+                string url;
+                if (urls.TryDequeue(out url))
                 {
-                    if (count < top)
+                    var restClient = new RestClient(url);
+                    var request = new RestRequest(Method.GET);
+                    request.Parameters.Clear();
+                    request.AddHeader("Accept", "application/json");
+
+                    lock (syncRoot)
                     {
-                        shouldContinue = true;
                         count++;
+                        if (count % 1000 == 0)
+                        {
+                            WriteProgress();
+                        }
                     }
 
-                    if (count % 1000 == 0 && count != top)
-                    {
-                        WriteProgress();
-                    }
-                }
-
-                if (shouldContinue)
-                {
                     threadStopWatch.Restart();
                     var response = restClient.Execute(request);
                     threadStopWatch.Stop();
+
                     lock (syncRoot)
                     {
                         processStopWatch(threadStopWatch.ElapsedMilliseconds);
@@ -112,9 +116,11 @@ namespace EventStore.LoadTest
                 }
                 else
                 {
-                    //Console.WriteLine("Killing thread.");
                     break;
                 }
+
+
+
             }
         }
 
@@ -138,12 +144,6 @@ namespace EventStore.LoadTest
             Console.WriteLine("Errors: {0}", errors);
         }
 
-        private static void SetUpRequest(RestRequest request)
-        {
-            request.Parameters.Clear();
-            request.AddHeader("Accept", "application/json");
-        }
-
         private static Thread[] StartPushEventsThreads()
         {
             var threads = new Thread[threadCount];
@@ -155,15 +155,14 @@ namespace EventStore.LoadTest
         }
 
         private static void WriteElapsedTime(string message, long elapsedMs)
-        {            
+        {
             Console.WriteLine("{0}: {1}", message, elapsedMs);
         }
-        
+
         private static void ReadConfig()
         {
             threadCount = int.Parse(ConfigurationManager.AppSettings["threadCount"]);
-            top = int.Parse(ConfigurationManager.AppSettings["top"]);
-            url = ConfigurationManager.AppSettings["url"];
+            //url = ConfigurationManager.AppSettings["url"];
         }
     }
 }
