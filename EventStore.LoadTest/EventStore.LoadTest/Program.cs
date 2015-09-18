@@ -15,7 +15,7 @@ namespace EventStore.LoadTest
 {
     class Program
     {
-        static int taskCount;
+        static int threadCount;
         static int top;
         static string url;
         static long count;
@@ -35,10 +35,10 @@ namespace EventStore.LoadTest
             Console.WriteLine("About to push {0} events.", top);
 
             stopWatch.Start();
-            Task[] tasks = StartPushEventsTasks();
-            Console.WriteLine("{0} tasks are running. Waiting for them to finish.", taskCount);
+            Thread[] threads = StartPushEventsThreads();
+            Console.WriteLine("{0} tasks are running. Waiting for them to finish.", threadCount);
 
-            Task.WaitAll(tasks);
+            WaitForAllThreads(threads);
 
             stopWatch.Stop();
             WriteElapsedTime(stopWatch.Elapsed);
@@ -47,9 +47,17 @@ namespace EventStore.LoadTest
             Console.ReadKey();
         }
 
+        private static void WaitForAllThreads(Thread[] threads)
+        {
+            foreach (var t in threads)
+            {
+                t.Join();
+            }
+        }
+
         private static void PushEvent()
         {
-            var request = new RestRequest(Method.POST);
+            var request = new RestRequest(Method.GET);
 
             while (true)
             {
@@ -118,14 +126,14 @@ namespace EventStore.LoadTest
             request.AddHeader("ES-EventId", Guid.NewGuid().ToString());
         }
 
-        private static Task[] StartPushEventsTasks()
+        private static Thread[] StartPushEventsThreads()
         {
-            var tasks = new Task[taskCount];
-            for (int i = 0; i < taskCount; i++)
+            var threads = new Thread[threadCount];
+            for (int i = 0; i < threadCount; i++)
             {
-                tasks[i] = Task.Factory.StartNew(() => PushEvent());
+                (threads[i] = new Thread(PushEvent)).Start();
             }
-            return tasks;
+            return threads;
         }
 
         private static void WriteElapsedTime(TimeSpan elapsed)
@@ -147,7 +155,7 @@ namespace EventStore.LoadTest
 
         private static void ReadConfig()
         {
-            taskCount = int.Parse(ConfigurationManager.AppSettings["taskCount"]);
+            threadCount = int.Parse(ConfigurationManager.AppSettings["threadCount"]);
             top = int.Parse(ConfigurationManager.AppSettings["top"]);
             url = ConfigurationManager.AppSettings["url"];
         }
