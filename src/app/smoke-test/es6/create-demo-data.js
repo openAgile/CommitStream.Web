@@ -8,6 +8,7 @@ program
   .option('-r, --repos [number]', 'Number of repos creation iterations to run (creates one repo per family type during each iteration), default 1', 1)
   .option('-m, --mentions [number]', 'Number of times to post a commit with each mention (one story, 5 tasks, 5 tests in each group of workitems), default 1', 1)
   .option('-d, --debug', 'Show results of each commit, not just summary information')
+  .option('-j, --json', 'Log only the JSON output with all the query URLs needed for the performance client')
   .parse(process.argv);
 
 const number_of_instances = parseInt(program.instances);
@@ -16,7 +17,7 @@ const number_of_mentions_per_workitem_per_repo = parseInt(program.mentions);
 
 csApiClient.baseUrl = program.url;
 
-console.log(`Operating against this CommitStream Service API: ${csApiClient.baseUrl}`);
+if (!program.json) console.log(`Operating against this CommitStream Service API: ${csApiClient.baseUrl}`);
 
 let workItemsToMention = [
   ['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005'],
@@ -43,7 +44,7 @@ let createInstanceWithData = async (iteration) => {
   let instance = await csApiClient.Instance.create();
   let digest = await instance.digestCreate({description:`Digest for ${iteration}`});
 
-  console.log(`#${iteration}: Populating instance ${csApiClient.instanceId} (apiKey = ${csApiClient.apiKey})`);
+  if (!program.json) console.log(`#${iteration}: Populating instance ${csApiClient.instanceId} (apiKey = ${csApiClient.apiKey})`);
 
   for (let n = 0; n < number_of_repo_iterations; n++) {
     let inboxNum = 0;
@@ -51,9 +52,11 @@ let createInstanceWithData = async (iteration) => {
       let inbox = await digest.inboxCreate(inboxToCreate);
       let workItemGroupNum = inboxNum % 3;
       let workItemsGroup = workItemsToMention[workItemGroupNum];
-      
-      console.log(`Adding commits to ${inbox.inboxId} of family ${inbox.family}`);
-      
+      let comma = (iteration === 0 && inboxNum === 0) ? '' : ',';
+      inboxNum++;
+      if (!program.json) console.log(`Adding commits to ${inbox.inboxId} of family ${inbox.family}`);
+      else console.log(`${comma}"${csApiClient.baseUrl}/${csApiClient.instanceId}/commits/tags/versionone/workitems/${workItemsGroup.join(',')}?apiKey=${csApiClient.apiKey}"`);
+
       for(let workItem of workItemsGroup) {
         for (let mentionNum = 0; mentionNum < number_of_mentions_per_workitem_per_repo; mentionNum++) {
           let message = `${workItem} mention # ${mentionNum} on ${iteration} in  ${inbox.inboxId} of family = ${inbox.family}`;
@@ -68,9 +71,11 @@ let createInstanceWithData = async (iteration) => {
 };
 
 let run = async () => {
+  if (program.json) console.log('[');
   for(let instanceNum = 0; instanceNum < number_of_instances; instanceNum++) {
     await createInstanceWithData(instanceNum);
   }
+  if (program.json) console.log(']');
 }
 
 run();
