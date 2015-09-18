@@ -19,32 +19,43 @@ namespace EventStore.LoadTest
         static int top;
         static string url;
         static long count;
+        static long lowest;
+        static long highest;
+        static long avgAccumulator;
         static long errors;
         static object syncRoot = new Object();
-        static string body;
         static RestClient restClient;
+        static IList<string> urls = new List<string>(new string[] { });
 
         static void Main(string[] args)
         {
-            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+            SetupSslValidation();
             ReadConfig();
-            ReadJsonBody();
             restClient = new RestClient(url);
-            var stopWatch = new Stopwatch();
+            var mainStopWatch = new Stopwatch();
 
-            Console.WriteLine("About to push {0} events.", top);
+            Console.WriteLine("About make {0} requests.", top);
 
-            stopWatch.Start();
+            mainStopWatch.Start();
             Thread[] threads = StartPushEventsThreads();
             Console.WriteLine("{0} tasks are running. Waiting for them to finish.", threadCount);
 
             WaitForAllThreads(threads);
 
-            stopWatch.Stop();
-            WriteElapsedTime(stopWatch.Elapsed);
+            mainStopWatch.Stop();
+            WriteElapsedTime("Total elapsed time", mainStopWatch.ElapsedMilliseconds);
+            WriteElapsedTime("Max", highest);
+            WriteElapsedTime("Low", lowest);
+            WriteElapsedTime("Average", avgAccumulator / count);
+
             Console.WriteLine("All tasks have finished, press <ENTER> to exit.");
 
             Console.ReadKey();
+        }
+
+        private static void SetupSslValidation()
+        {
+            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
         private static void WaitForAllThreads(Thread[] threads)
@@ -57,6 +68,7 @@ namespace EventStore.LoadTest
 
         private static void PushEvent()
         {
+            var threadStopWatch = new Stopwatch();
             var request = new RestRequest(Method.GET);
 
             while (true)
@@ -80,8 +92,15 @@ namespace EventStore.LoadTest
 
                 if (shouldContinue)
                 {
+                    threadStopWatch.Restart();
                     var response = restClient.Execute(request);
-                    if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                    threadStopWatch.Stop();
+                    lock (syncRoot)
+                    {
+                        processStopWatch(threadStopWatch.ElapsedMilliseconds);
+                    }
+
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
                     {
                         lock (syncRoot) { errors++; }
                         Console.WriteLine("StatusCode: {0}", response.StatusCode);
@@ -99,31 +118,30 @@ namespace EventStore.LoadTest
             }
         }
 
+        private static void processStopWatch(long elapsedMilliseconds)
+        {
+            avgAccumulator += elapsedMilliseconds;
+            if (elapsedMilliseconds < lowest)
+            {
+                lowest = elapsedMilliseconds;
+            }
+
+            if (highest < elapsedMilliseconds)
+            {
+                highest = elapsedMilliseconds;
+            }
+        }
+
         private static void WriteProgress()
         {
             Console.WriteLine("Progress: {0}", count);
             Console.WriteLine("Errors: {0}", errors);
         }
 
-        private static string GetBasicAuthHeader()
-        {
-            var username = ConfigurationManager.AppSettings["username"];
-            var password = ConfigurationManager.AppSettings["password"];
-            var usrAndPass = string.Format("{0}:{1}", username, password);
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(usrAndPass);
-            return "Basic " + System.Convert.ToBase64String(plainTextBytes);
-        }
-
         private static void SetUpRequest(RestRequest request)
         {
             request.Parameters.Clear();
             request.AddHeader("Accept", "application/json");
-            request.AddHeader("Authorization", GetBasicAuthHeader());
-            request.AddHeader("ES-EventType", "Test");
-            request.AddHeader("ES-ExpectedVersion", "-2");
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            request.RequestFormat = DataFormat.Json;
-            request.AddHeader("ES-EventId", Guid.NewGuid().ToString());
         }
 
         private static Thread[] StartPushEventsThreads()
@@ -136,23 +154,11 @@ namespace EventStore.LoadTest
             return threads;
         }
 
-        private static void WriteElapsedTime(TimeSpan elapsed)
-        {
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                elapsed.Hours, elapsed.Minutes, elapsed.Seconds,
-                elapsed.Milliseconds / 10);
-            Console.WriteLine("RunTime " + elapsedTime);
+        private static void WriteElapsedTime(string message, long elapsedMs)
+        {            
+            Console.WriteLine("{0}: {1}", message, elapsedMs);
         }
-
-        private static void ReadJsonBody()
-        {
-            var fileName = ConfigurationManager.AppSettings["sampleFile"];
-            using (var reader = File.OpenText(fileName))
-            {
-                body = reader.ReadToEnd();
-            }
-        }
-
+        
         private static void ReadConfig()
         {
             threadCount = int.Parse(ConfigurationManager.AppSettings["threadCount"]);
