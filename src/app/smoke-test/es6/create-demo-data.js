@@ -7,6 +7,7 @@ program
   .option('-i, --instances [number]', 'Number of instances to create, default: 1', 1)
   .option('-r, --repos [number]', 'Number of repos creation iterations to run (creates one repo per family type during each iteration), default 1', 1)
   .option('-m, --mentions [number]', 'Number of times to post a commit with each mention (one story, 5 tasks, 5 tests in each group of workitems), default 1', 1)
+  .option('-d, --debug', 'Show results of each commit, not just summary information')
   .parse(process.argv);
 
 const number_of_instances = parseInt(program.instances);
@@ -59,6 +60,9 @@ let createInstanceWithData = async (iteration) => {
         for (let mentionNum = 0; mentionNum < number_of_mentions_per_workitem_per_repo; mentionNum++) {
           let message = `${workItem} mention # ${mentionNum} on ${iteration} in  ${inbox.inboxId} of family = ${inbox.family}`;
           let commitAddResponse = await csApiClient.families[inboxToCreate.family].commitAdd(inbox, message);
+          if (program.debug) {
+            console.log(commitAddResponse.message);
+          }
         }
       }
     }

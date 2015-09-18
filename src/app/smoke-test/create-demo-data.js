@@ -16,7 +16,7 @@ var _libCsApiClient = require('./lib/cs-api-client');
 
 var _libCsApiClient2 = _interopRequireDefault(_libCsApiClient);
 
-_commander2['default'].version('0.0.0').option('-u, --url [url]', 'The base URL for the CommitStream Service API, default: http://localhost:6565/api', 'http://localhost:6565/api').option('-i, --instances [number]', 'Number of instances to create, default: 1', 1).option('-r, --repos [number]', 'Number of repos creation iterations to run (creates one repo per family type during each iteration), default 1', 1).option('-m, --mentions [number]', 'Number of times to post a commit with each mention (one story, 5 tasks, 5 tests in each group of workitems), default 1', 1).parse(process.argv);
+_commander2['default'].version('0.0.0').option('-u, --url [url]', 'The base URL for the CommitStream Service API, default: http://localhost:6565/api', 'http://localhost:6565/api').option('-i, --instances [number]', 'Number of instances to create, default: 1', 1).option('-r, --repos [number]', 'Number of repos creation iterations to run (creates one repo per family type during each iteration), default 1', 1).option('-m, --mentions [number]', 'Number of times to post a commit with each mention (one story, 5 tasks, 5 tests in each group of workitems), default 1', 1).option('-d, --debug', 'Show results of each commit, not just summary information').parse(process.argv);
 
 var number_of_instances = parseInt(_commander2['default'].instances);
 var number_of_repo_iterations = parseInt(_commander2['default'].repos);
@@ -63,7 +63,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
       case 9:
         if (!(n < number_of_repo_iterations)) {
-          context$1$0.next = 77;
+          context$1$0.next = 78;
           break;
         }
 
@@ -76,7 +76,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
       case 16:
         if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-          context$1$0.next = 60;
+          context$1$0.next = 61;
           break;
         }
 
@@ -99,7 +99,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
       case 29:
         if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-          context$1$0.next = 43;
+          context$1$0.next = 44;
           break;
         }
 
@@ -108,7 +108,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
       case 32:
         if (!(mentionNum < number_of_mentions_per_workitem_per_repo)) {
-          context$1$0.next = 40;
+          context$1$0.next = 41;
           break;
         }
 
@@ -119,99 +119,103 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
       case 36:
         commitAddResponse = context$1$0.sent;
 
-      case 37:
+        if (_commander2['default'].debug) {
+          console.log(commitAddResponse.message);
+        }
+
+      case 38:
         mentionNum++;
         context$1$0.next = 32;
         break;
 
-      case 40:
+      case 41:
         _iteratorNormalCompletion2 = true;
         context$1$0.next = 29;
         break;
 
-      case 43:
-        context$1$0.next = 49;
+      case 44:
+        context$1$0.next = 50;
         break;
 
-      case 45:
-        context$1$0.prev = 45;
+      case 46:
+        context$1$0.prev = 46;
         context$1$0.t0 = context$1$0['catch'](27);
         _didIteratorError2 = true;
         _iteratorError2 = context$1$0.t0;
 
-      case 49:
-        context$1$0.prev = 49;
+      case 50:
         context$1$0.prev = 50;
+        context$1$0.prev = 51;
 
         if (!_iteratorNormalCompletion2 && _iterator2['return']) {
           _iterator2['return']();
         }
 
-      case 52:
-        context$1$0.prev = 52;
+      case 53:
+        context$1$0.prev = 53;
 
         if (!_didIteratorError2) {
-          context$1$0.next = 55;
+          context$1$0.next = 56;
           break;
         }
 
         throw _iteratorError2;
 
-      case 55:
-        return context$1$0.finish(52);
-
       case 56:
-        return context$1$0.finish(49);
+        return context$1$0.finish(53);
 
       case 57:
+        return context$1$0.finish(50);
+
+      case 58:
         _iteratorNormalCompletion = true;
         context$1$0.next = 16;
         break;
 
-      case 60:
-        context$1$0.next = 66;
+      case 61:
+        context$1$0.next = 67;
         break;
 
-      case 62:
-        context$1$0.prev = 62;
+      case 63:
+        context$1$0.prev = 63;
         context$1$0.t1 = context$1$0['catch'](14);
         _didIteratorError = true;
         _iteratorError = context$1$0.t1;
 
-      case 66:
-        context$1$0.prev = 66;
+      case 67:
         context$1$0.prev = 67;
+        context$1$0.prev = 68;
 
         if (!_iteratorNormalCompletion && _iterator['return']) {
           _iterator['return']();
         }
 
-      case 69:
-        context$1$0.prev = 69;
+      case 70:
+        context$1$0.prev = 70;
 
         if (!_didIteratorError) {
-          context$1$0.next = 72;
+          context$1$0.next = 73;
           break;
         }
 
         throw _iteratorError;
 
-      case 72:
-        return context$1$0.finish(69);
-
       case 73:
-        return context$1$0.finish(66);
+        return context$1$0.finish(70);
 
       case 74:
+        return context$1$0.finish(67);
+
+      case 75:
         n++;
         context$1$0.next = 9;
         break;
 
-      case 77:
+      case 78:
       case 'end':
         return context$1$0.stop();
     }
-  }, null, _this, [[14, 62, 66, 74], [27, 45, 49, 57], [50,, 52, 56], [67,, 69, 73]]);
+  }, null, _this, [[14, 63, 67, 75], [27, 46, 50, 58], [51,, 53, 57], [68,, 70, 74]]);
 };
 
 var run = function run() {
