@@ -1,5 +1,5 @@
 import program from 'commander';
-import csApiClient from './lib/cs-api-client';
+import CSApiClient from './lib/cs-api-client';
 
 program
   .version('0.0.0')
@@ -15,9 +15,9 @@ const number_of_instances = parseInt(program.instances);
 const number_of_repo_iterations = parseInt(program.repos);
 const number_of_mentions_per_workitem_per_repo = parseInt(program.mentions);
 
-csApiClient.baseUrl = program.url;
+let client = new CSApiClient(program.url);
 
-if (!program.json) console.log(`Operating against this CommitStream Service API: ${csApiClient.baseUrl}`);
+if (!program.json) console.log(`Operating against this CommitStream Service API: ${client.baseUrl}`);
 
 let workItemsToMention = [
   ['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005'],
@@ -41,10 +41,10 @@ let createInstanceWithData = async (iteration) => {
     }
   ];
 
-  let instance = await csApiClient.Instance.create();
+  let instance = await client.instanceCreate();
   let digest = await instance.digestCreate({description:`Digest for ${iteration}`});
 
-  if (!program.json) console.log(`#${iteration}: Populating instance ${csApiClient.instanceId} (apiKey = ${csApiClient.apiKey})`);
+  if (!program.json) console.log(`#${iteration}: Populating instance ${client.instanceId} (apiKey = ${client.apiKey})`);
 
   for (let n = 0; n < number_of_repo_iterations; n++) {
     let inboxNum = 0;
@@ -55,7 +55,7 @@ let createInstanceWithData = async (iteration) => {
       let comma = (iteration === 0 && inboxNum === 0) ? '' : ',';
       inboxNum++;
       if (!program.json) console.log(`Adding commits to ${inbox.inboxId} of family ${inbox.family}`);
-      else console.log(`${comma}"${csApiClient.baseUrl}/${csApiClient.instanceId}/commits/tags/versionone/workitems/${workItemsGroup.join(',')}?apiKey=${csApiClient.apiKey}"`);
+      else console.log(`${comma}"${client.baseUrl}/${client.instanceId}/commits/tags/versionone/workitems/${workItemsGroup.join(',')}?apiKey=${client.apiKey}"`);
 
       for(let workItem of workItemsGroup) {
         for (let mentionNum = 0; mentionNum < number_of_mentions_per_workitem_per_repo; mentionNum++) {
@@ -77,5 +77,8 @@ let run = async () => {
   }
   if (program.json) console.log(']');
 }
-
-run();
+try {
+  run();
+} catch (e) {
+  console.log(e);
+}

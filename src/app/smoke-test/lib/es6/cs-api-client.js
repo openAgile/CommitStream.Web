@@ -1,19 +1,9 @@
 import rp from 'request-promise';
 import familyPayloadExamples from './family-payload-examples';
 
-let csBaseUrl = 'http://localhost:6565/api';
+const loggingSeparator = '<hr/>';
 
-let instanceId = null;
-
-let apiKey = null;
-
-let LOGGING = false;
-
-let enableLogging = enabled => LOGGING = enabled;
-
-let href = path => `${csBaseUrl}${path}`;
-
-let post = (path, data) => rp(postOptions(href(path), data));
+let getLink = (obj, linkName) => obj._links[linkName].href;
 
 let postOptions = (uri, data, extraHeaders) => {
   let headers = {
@@ -28,42 +18,26 @@ let postOptions = (uri, data, extraHeaders) => {
     headers,
     transform: body => JSON.parse(body),
     body: JSON.stringify(data)
-  };  
+  };
 };
 
-let get = (uri, alreadyAbsolute) => {
-  uri = alreadyAbsolute ? uri : href(uri);
-  return {
-    uri,
-    method: 'GET',
-    transform: body => JSON.parse(body),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-};
-  
-let getLink = (obj, linkName) => obj._links[linkName].href;
-
-const loggingSeparator = '<hr/>';
-
-let postToLink = (halResponse, linkName, data, extraHeaders) => {
-  if (LOGGING) {
+let postToLink = (client, halResponse, linkName, data, extraHeaders) => {
+  if (client.loggingEnabled) {
     console.log('After getting this HAL response:\n\n');
     console.log('```json\n' + JSON.stringify(halResponse, ' ', 2) + '\n```\n\n');
     if (halResponse._links['teamroom-view']) {
       console.log('TEAMROOM LINK:');
-      console.log(halResponse._links['teamroom-view'].href + '&apiKey=' + apiKey);
+      console.log(halResponse._links['teamroom-view'].href + '&apiKey=' + client.apiKey);
     }
   }
   if (halResponse.apiKey) {
-    apiKey = halResponse.apiKey; // Cheap n dirty
-    instanceId = halResponse.instanceId;
+    client.apiKey = halResponse.apiKey; // Cheap n dirty
+    client.instanceId = halResponse.instanceId;
   }
   let link = getLink(halResponse, linkName);
-  if (apiKey !== null) link += "?apiKey=" + apiKey;
+  if (client.apiKey !== null) link += "?apiKey=" + client.apiKey;
 
-  if (LOGGING) {
+  if (client.loggingEnabled) {
     console.log('We then extract the `' + linkName + '` link from the `_links` property, returning:\n\n');
     console.log('`' + link + '`.\n\n');
     console.log('And then POST the following JSON body to that link:\n\n');
@@ -72,29 +46,67 @@ let postToLink = (halResponse, linkName, data, extraHeaders) => {
   }
 
   return rp(postOptions(link, data, extraHeaders));
+}
+
+let post = (client, path, data) => rp(postOptions(client.href(path), data));
+
+let get = (client, uri, alreadyAbsolute) => {
+  uri = alreadyAbsolute ? uri : client.href(uri);
+  return {
+    uri,
+    method: 'GET',
+    transform: body => JSON.parse(body),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }    
 };
 
-
-let postToInboxForFamily = (inbox, message, family, extraHeaders) => {
-  return postToLink(inbox, 'add-commit', familyPayloadExamples[family].validWithOneCommit(message), extraHeaders);
+let postToInboxForFamily = (client, inbox, message, family, extraHeaders) => {
+  return postToLink(client, inbox, 'add-commit', familyPayloadExamples[family].validWithOneCommit(message), extraHeaders);
 }
 
 let families = {
   GitHub : {
-    commitAdd: (inbox, message='GitHub commit') => postToInboxForFamily(inbox, message, 'GitHub', {'x-github-event': 'push'})
+    commitAdd: (client, inbox, message='GitHub commit') => postToInboxForFamily(client, inbox, message, 'GitHub', {'x-github-event': 'push'})
   },
   GitLab : {
-    commitAdd: (inbox, message='GitLab commit') => postToInboxForFamily(inbox, message, 'GitLab', {'x-gitlab-event': 'Push Hook'})
+    commitAdd: (client, inbox, message='GitLab commit') => postToInboxForFamily(client, inbox, message, 'GitLab', {'x-gitlab-event': 'Push Hook'})
   },
   Bitbucket : {
-    commitAdd: (inbox, message='Bitbucket commit') => postToInboxForFamily(inbox, message, 'Bitbucket', {'x-event-key': 'repo:push'})
+    commitAdd: (client, inbox, message='Bitbucket commit') => postToInboxForFamily(client, inbox, message, 'Bitbucket', {'x-event-key': 'repo:push'})
   }
 };
 
+class CSApiClient {
+  constructor(baseUrl = 'http://localhost:6565/api', loggingEnabled = false) {
+    this._baseUrl = baseUrl;
+    this._loggingEnabled = loggingEnabled;
+    this._instanceId = null;
+    this._apiKey = null;
+  }
+  async instanceCreate() {
+    return await Instance.create(this);
+  }
+  get apiKey() { return this._apiKey; }
+  set apiKey(val) { this._apiKey = val; }
+  get instanceId() { return this._instanceId; }
+  set instanceId(val) { this._instanceId = val; }
+  get baseUrl() { return this._baseUrl; }
+  set baseUrl(val) { this._baseUrl = val; }
+  get loggingEnabled() { return this._loggingEnabled; }
+  set loggingEnabled(val) { this._loggingEnabled = val; }
+  href(path) {
+    return `${this.baseUrl}${path}`;
+  }
+}
+
 let resourceSymbol = Symbol('resource');
+let clientSymbol = Symbol('client');
 
 class Resource {
-  constructor(resource) {
+  constructor(client, resource) {
+    this[clientSymbol] = client;
     this[resourceSymbol] = resource;
     Reflect.ownKeys(resource).slice(1).forEach(prop => Object.defineProperty(this, prop, {
       get: function() { return resource[prop]; },
@@ -103,15 +115,15 @@ class Resource {
     }));
   }
   async postToLink(linkName, data, ResourceWrapperClass) {
-    let resource = await postToLink(this[resourceSymbol], linkName, data);
-    return new ResourceWrapperClass(resource);
+    let resource = await postToLink(this[clientSymbol], this[resourceSymbol], linkName, data);
+    return new ResourceWrapperClass(this[clientSymbol], resource);
   }
 }
 
 class Instance extends Resource {
-  static async create() {
-    let instanceResource = await post('/instances', {});
-    return new Instance(instanceResource);
+  static async create(client) {
+    let instanceResource = await post(client, '/instances', {});
+    return new Instance(client, instanceResource);
   }
   async digestCreate(data) {
     return await this.postToLink('digest-create', data, Digest);
@@ -126,31 +138,42 @@ class Digest extends Resource {
 
 class Inbox extends Resource {
   async commitCreate(message) {
-    let commitResponse = await families[this.family].commitAdd(this[resourceSymbol], message);
+    let commitResponse = await families[this.family].commitAdd(this[clientSymbol], this[resourceSymbol], message);
     return commitResponse;
   }
 }
 
-export default {
-  Instance,
-  set baseUrl(url) { csBaseUrl = url; },
-  get baseUrl() { return csBaseUrl; },
-  get instanceId() { return instanceId; },
-  get apiKey() { return apiKey; },
-  enableLogging
-};
+export default CSApiClient;
 
-/* TODO
-function getFromLink(linkName, query, extraHeaders) {
-  return function(halResponse) {
-    if(LOGGING) {
-      console.log('HAL RESPONSE:');
-      console.log(halResponse);
-      console.log(sep);      
+/* NOTE: Experimental code that could drive runtime class generation
+
+const resourceSubClassDefinitions = [
+  {
+    name: 'Instance',
+    postToLinkMethods: [
+      ['digestCreate', 'digest-create', 'Digest']
+    ]
+  },
+  {
+    name: 'Digest',
+    postToLinkMethods: [
+      ['inboxCreate', 'inbox-create', 'Inbox']
+    ]
+  }
+];
+
+resourceSubClassDefinitions.forEach(def => {
+  module[def.name] = class extends Resource {};
+  def.postToLinkMethods.forEach(method => {
+    const [name, link, resourceWrapperClassName] = method;
+    module[def.name].prototype[name] = async function(data) {
+      return await this.postToLink(link, module[resourceWrapperClassName]);
     }
-    var link = getLink(halResponse, linkName);
-    if (apiKey !== null) link += "?apiKey=" + apiKey;
-    return rp(get(link))
-  };
+  })
+});
+
+module.Instance.create = async function() {
+  let instanceResource = await post('/instances', {});
+  return new Instance(instanceResource);
 }
 */
