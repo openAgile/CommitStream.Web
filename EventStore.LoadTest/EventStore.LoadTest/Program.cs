@@ -91,6 +91,7 @@ namespace EventStore.LoadTest
                 if (queue.TryDequeue(out url))
                 {
                     var restClient = new RestClient(url);
+                    restClient.Timeout = 300000;
                     var request = new RestRequest(Method.GET);
                     request.Parameters.Clear();
                     request.AddHeader("Accept", "application/json");
