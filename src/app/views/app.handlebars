@@ -55,6 +55,12 @@
     }
   };
 
+  var setStreamContent = function(model) {
+    var content = commitsContainerTmpl(model);
+    $(commitStreamDomId).html(content);
+  };
+
+
   var renderCommitsContainer = function(model) {
     try {
       if (!commitsContainerTmpl) {
@@ -63,8 +69,7 @@
           registerPartial('commitsList', tmpl, function() {
             getCompiledTemplate('commitsContainer.html', function(tmpl) {
               commitsContainerTmpl = tmpl;
-              var content = tmpl(model);
-              $(commitStreamDomId).html(content);
+              setStreamContent(model);
               checkIfNextPage(model);
               bindRefreshActions();
               bindShowChildrenAction();
@@ -72,8 +77,7 @@
           });
         });
       } else {
-        var content = commitsContainerTmpl(model);
-        $(commitStreamDomId).html(content);
+        setStreamContent(model);
         checkIfNextPage(model);
         bindRefreshActions();
         bindShowChildrenAction();
@@ -268,6 +272,19 @@
     }).fail(errorHandler);
   };
 
+  var clearChunckDataTemplate = function() {
+    if (commitsContainerTmpl) {
+      var model = {
+        noCommits: false,
+        lastPage: false,
+        showChildrenChecked: false,
+        protocol: '{{{protocol}}}',
+        resourcePath: '{{{resourcePath}}}'
+      };
+      setStreamContent(model);
+    }
+  };
+
   var init = function() {
     var url = getUrlToQuery();
     if (!hasAllDeps()) {
@@ -290,7 +307,7 @@
         iId,
         aKey,
         assetAndChildUrl) {
-
+        clearChunckDataTemplate();
         commitStreamDomId = csDomId;
         workitem = wi;
         errorHandler = eh;
@@ -300,12 +317,12 @@
         getAssetAndChildNumbersUrl = assetAndChildUrl;
 
         try {
-          if(getAssetAndChildNumbersUrl) {
-          getChildren(getAssetAndChildNumbersUrl)
-            .then(function(c) {
-              children = c.assetNumbers;
-            })
-            .then(init);
+          if (getAssetAndChildNumbersUrl) {
+            getChildren(getAssetAndChildNumbersUrl)
+              .then(function(c) {
+                children = c.assetNumbers;
+              })
+              .then(init);
           } else {
             init();
           }
