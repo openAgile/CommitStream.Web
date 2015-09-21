@@ -49,7 +49,7 @@ namespace EventStore.LoadTest
             WriteElapsedTime("Max", highest);
             WriteElapsedTime("Low", lowest);
             WriteElapsedTime("Average", avgAccumulator / count);
-            WriteElapsedTime("Ammount of requests", count);
+            WriteElapsedTime("Amount of requests", count);
             WriteElapsedTime("Errors", errors);
 
             Console.WriteLine("All tasks have finished, press <ENTER> to exit.");
