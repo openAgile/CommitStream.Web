@@ -50,6 +50,7 @@ namespace EventStore.LoadTest
             WriteElapsedTime("Low", lowest);
             WriteElapsedTime("Average", avgAccumulator / count);
             WriteElapsedTime("Ammount of requests", count);
+            WriteElapsedTime("Errors", errors);
 
             Console.WriteLine("All tasks have finished, press <ENTER> to exit.");
 
@@ -115,11 +116,12 @@ namespace EventStore.LoadTest
                     if (response.StatusCode != System.Net.HttpStatusCode.OK)
                     {
                         lock (syncRoot) { errors++; }
+                        Console.WriteLine("Url: {0}", url);
+                        Console.WriteLine("ErrorMessage: {0}", response.ErrorMessage);
                         Console.WriteLine("StatusCode: {0}", response.StatusCode);
                         Console.WriteLine("Content: {0}", response.Content);
-                        Console.WriteLine("Headers: {0}", response.Headers);
-                        Console.WriteLine("ErrorMessage: {0}", response.ErrorMessage);
                         Console.WriteLine("StatusDescription: {0}", response.StatusDescription);
+                        Console.WriteLine();
                     }
                 }
                 else
