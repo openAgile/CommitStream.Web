@@ -22,8 +22,8 @@ function createRequest() {
   request.instance = {
     instanceId: '1234'
   };
-  request.params = {
-    workitems: ''
+  request.query = {
+    numbers: ''
   };
   return request;
 }
@@ -40,7 +40,7 @@ describe('instanceCommitsGet', function() {
   describe('when getting commits from an instance for a single asset', function() {
     var request = createRequest();
     var response = createResponse();
-    request.params.workitems = 'S-00011';
+    request.query.numbers = 'S-00011';
 
     handler(request, response);
 
@@ -62,7 +62,7 @@ describe('instanceCommitsGet', function() {
   describe('when getting commits from an instance for multiple assets', function() {
     var request = createRequest();
     var response = createResponse();
-    request.params.workitems = 'S-00001,T-00002';
+    request.query.numbers = 'S-00001,T-00002';
 
     handler(request, response);
 
