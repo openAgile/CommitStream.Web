@@ -58,7 +58,7 @@ namespace EventStore.LoadTest
 
         private static void EnqueueUrls()
         {
-            for (int i = 0; i <= times; i++)
+            for (int i = 0; i < times; i++)
             {
                 foreach (var url in urls)
                 {
