@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -22,30 +22,26 @@ namespace EventStore.LoadTest
         static long highest;
         static long avgAccumulator;
         static long errors;
-        static object syncRoot = new Object();
+        static object syncRoot = new object();
         static RestClient restClient;
-        static ConcurrentQueue<string> urls = new ConcurrentQueue<string>();
+        static ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
+        static List<string> urls = new List<string>();
+        static int times;
 
 
         static void Main(string[] args)
         {
-            //TODO: read from app.config
-            for (int i = 0; i < 100; i++)
-            {
-                urls.Enqueue("http://localhost:6565/api/002e064a-0982-4785-88d7-0a92fc2884e4/commits/tags/versionone/workitems/S-01001,TK-01001,AT-01002?apiKey=71a764aa-a8bb-4de2-a6dc-59279b3b5c7c");
-            }
-
-
             SetupSslValidation();
-            ReadConfig();
+            ReadAppConfig();
+            ReadUrls();
+            EnqueueUrls();
+
             var mainStopWatch = new Stopwatch();
-
             Console.WriteLine("Starting...");
-
             mainStopWatch.Start();
+
             Thread[] threads = StartPushEventsThreads();
             Console.WriteLine("{0} tasks are running. Waiting for them to finish.", threadCount);
-
             WaitForAllThreads(threads);
 
             mainStopWatch.Stop();
@@ -53,10 +49,22 @@ namespace EventStore.LoadTest
             WriteElapsedTime("Max", highest);
             WriteElapsedTime("Low", lowest);
             WriteElapsedTime("Average", avgAccumulator / count);
+            WriteElapsedTime("Ammount of requests", count);
 
             Console.WriteLine("All tasks have finished, press <ENTER> to exit.");
 
             Console.ReadKey();
+        }
+
+        private static void EnqueueUrls()
+        {
+            for (int i = 0; i <= times; i++)
+            {
+                foreach (var url in urls)
+                {
+                    queue.Enqueue(url);
+                }
+            }
         }
 
         private static void SetupSslValidation()
@@ -79,7 +87,7 @@ namespace EventStore.LoadTest
             while (true)
             {
                 string url;
-                if (urls.TryDequeue(out url))
+                if (queue.TryDequeue(out url))
                 {
                     var restClient = new RestClient(url);
                     var request = new RestRequest(Method.GET);
@@ -118,9 +126,6 @@ namespace EventStore.LoadTest
                 {
                     break;
                 }
-
-
-
             }
         }
 
@@ -159,10 +164,23 @@ namespace EventStore.LoadTest
             Console.WriteLine("{0}: {1}", message, elapsedMs);
         }
 
-        private static void ReadConfig()
+        private static void ReadAppConfig()
         {
             threadCount = int.Parse(ConfigurationManager.AppSettings["threadCount"]);
-            //url = ConfigurationManager.AppSettings["url"];
+            times = int.Parse(ConfigurationManager.AppSettings["times"]);
+        }
+
+        private static void ReadUrls()
+        {
+
+            var fileName = ConfigurationManager.AppSettings["urlsFile"];
+            using (var reader = File.OpenText(fileName))
+            {
+                var file = reader.ReadToEnd();
+                var array = JArray.Parse(file);
+                urls = array.ToObject<List<string>>();
+            }
+
         }
     }
 }
