@@ -25,17 +25,17 @@ var _underscore2 = _interopRequireDefault(_underscore);
 var cache = (0, _helpersCacheCreate2['default'])();
 
 exports['default'] = function (req, res) {
-  var workitems = req.params.workitems;
+  var workitemNumbers = req.query.numbers || '';
   var instanceId = req.instance.instanceId;
 
   var buildUri = function buildUri(page) {
-    return req.href('/api/' + instanceId + '/commits/tags/versionone/workitems/' + workitems + '?page=' + page + '&apiKey=' + req.instance.apiKey);
+    return req.href('/api/' + instanceId + '/commits/tags/versionone/workitem?numbers=' + workitemNumbers + '&page=' + page + '&apiKey=' + req.instance.apiKey);
   };
 
-  var workitemsArray = workitems.split(',');
+  var workitemNumbersArray = workitemNumbers.split(',');
 
-  if (workitemsArray.length === 1) {
-    var stream = 'versionOne_CommitsWithWorkitems-' + instanceId + '_' + workitems;
+  if (workitemNumbersArray.length === 1) {
+    var stream = 'versionOne_CommitsWithWorkitems-' + instanceId + '_' + workitemNumbers;
 
     (0, _helpersCommitsGet2['default'])(req.query, stream, buildUri, cache).then(function (commits) {
       // TODO use hal?
@@ -44,7 +44,7 @@ exports['default'] = function (req, res) {
   } else {
     (function () {
       var streams = [];
-      _underscore2['default'].each(workitemsArray, function (e, i) {
+      _underscore2['default'].each(workitemNumbersArray, function (e, i) {
         streams.push('versionOne_CommitsWithWorkitems-' + instanceId + '_' + e);
       });
       (0, _helpersCommitsChildrenGet2['default'])(req.query, streams, buildUri).then(function (commits) {
