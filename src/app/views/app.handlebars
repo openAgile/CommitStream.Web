@@ -221,10 +221,10 @@
       if (digestId !== null && digestId !== undefined) {
         url += '/digests/' + digestId + '/commits';
       } else {
-        url += '/commits/tags/versionone/workitems/' + workitem;
+        url += '/commits/tags/versionone/workitem?numbers=' + workitem;
       }
 
-      url += '?apiKey=' + apiKey;
+      url += '&apiKey=' + apiKey;
       return url;
     } else {
       throw 'Must specify either workitem or digestId as a URL query parameter in order to query CommitStream';
@@ -234,10 +234,10 @@
   var getQueryWithChildrenUrl = function() {
     var url = '{{{apiUrl}}}';
     url += instanceId;
-    url += '/commits/tags/versionone/workitems/';
+    url += '/commits/tags/versionone/workitem?numbers=';
     url += workitem;
     url += children ? ',' + children.join() : '';
-    url += '?apiKey=';
+    url += '&apiKey=';
     url += apiKey;
     return url;
   };
@@ -307,6 +307,7 @@
         iId,
         aKey,
         assetAndChildUrl) {
+
         clearChunckDataTemplate();
         commitStreamDomId = csDomId;
         workitem = wi;
