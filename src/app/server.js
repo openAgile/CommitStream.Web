@@ -108,7 +108,7 @@ app.use(csError.errorHandler);
 
 function getHostSettings(req) {
   return {
-    protocol : config.protocol || req.protocol,
+    protocol: config.protocol || req.protocol,
     host: req.get('host'),
     key: req.query.key
   };
@@ -121,7 +121,8 @@ app.get('/app', function(req, res) {
   res.render('app', {
     apiUrl: settings.protocol + '://' + settings.host + '/api/',
     protocol: settings.protocol,
-    resourcePath: settings.protocol + '://' + settings.host + '/'
+    resourcePath: settings.protocol + '://' + settings.host + '/',
+    showChildrenFeatureToggle: config.showChildrenFeatureToggle
   });
 });
 
