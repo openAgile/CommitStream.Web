@@ -56,7 +56,7 @@ var getUntilQueryIsDone = function getUntilQueryIsDone(queryArgs) {
 exports['default'] = function (query, stream, buildUri) {
   var args = {
     embed: 'tryharder',
-    projection: 'fromStreams(["' + stream.join('", "') + '"]).when("$init": function(s, e) {return { events: [], keys: {}}},"$any": function(s,e) {  var eventId = JSON.parse(e.linkMetadataRaw).$causedBy; if (!s.keys[eventId]){s.keys[eventId] = true;s.events.unshift(e);}}})'
+    projection: 'fromStreams(["' + stream.join('", "') + '"]).when({"$init": function(s, e) {return { events: [], keys: {}}},"$any": function(s,e) {  var eventId = JSON.parse(e.linkMetadataRaw).$causedBy; if (!s.keys[eventId]){s.keys[eventId] = true;s.events.unshift(e);}}})'
   };
   return _helpersEventStoreClient2['default'].queryCreate(args).then(function (response) {
     var queryArgs = {
