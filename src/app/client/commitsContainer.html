@@ -12,8 +12,18 @@
     <div class="titlebar">
       <div class="title-container">
         <h3><span class="commitStream-title">CommitStream&trade; Commits</span> <span class="reload cs-refresh"></span></h3>
+        {{#if showChildrenCheckbox}}
+          <label class="toggle-cs-childrenasset-label">
+            <input type="checkbox" class="toggle-cs-childrenasset"
+              {{#if showChildrenChecked}}checked{{/if}}>             
+              Show children
+          </label>
+        {{/if}}
         {{#if showAutoRefreshCheckbox}}
-            <label class="toggle-cs-autorefresh-label"><input type="checkbox" class="toggle-cs-autorefresh"> Auto-refresh? (Occurs every 30 seconds)</label>
+            <label class="toggle-cs-autorefresh-label">
+              <input type="checkbox" class="toggle-cs-autorefresh">
+              Auto-refresh? (Occurs every 30 seconds)
+            </label>
         {{/if}}
       </div>
     </div>
