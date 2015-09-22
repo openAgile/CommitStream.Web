@@ -17,6 +17,7 @@ namespace EventStore.LoadTest
     class Program
     {
         static int threadCount;
+        static int threadDelay;
         static long count;
         static long lowest;
         static long highest;
@@ -41,7 +42,7 @@ namespace EventStore.LoadTest
             mainStopWatch.Start();
 
             Thread[] threads = StartPushEventsThreads();
-            Console.WriteLine("{0} tasks are running. Waiting for them to finish.", threadCount);
+            Console.WriteLine("{0} threads are running. Waiting for them to finish.", threadCount);
             WaitForAllThreads(threads);
 
             mainStopWatch.Stop();
@@ -90,6 +91,7 @@ namespace EventStore.LoadTest
                 string url;
                 if (queue.TryDequeue(out url))
                 {
+                    Console.WriteLine("Dequeued url: {0}.", url);
                     var restClient = new RestClient(url);
                     restClient.Timeout = 300000;
                     var request = new RestRequest(Method.GET);
@@ -157,7 +159,10 @@ namespace EventStore.LoadTest
             var threads = new Thread[threadCount];
             for (int i = 0; i < threadCount; i++)
             {
-                (threads[i] = new Thread(PushEvent)).Start();
+                threads[i] = new Thread(PushEvent);
+                threads[i].IsBackground = true;
+                threads[i].Start();
+                Thread.Sleep(1000 * threadDelay);
             }
             return threads;
         }
@@ -171,6 +176,7 @@ namespace EventStore.LoadTest
         {
             threadCount = int.Parse(ConfigurationManager.AppSettings["threadCount"]);
             times = int.Parse(ConfigurationManager.AppSettings["times"]);
+            threadDelay = int.Parse(ConfigurationManager.AppSettings["threadDelay"]);
         }
 
         private static void ReadUrls()
