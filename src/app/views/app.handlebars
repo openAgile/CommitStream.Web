@@ -218,13 +218,15 @@
       return $(commitStreamDomId).find('.side-panel-scrollable').attr('next');
     } else if (workitem || digestId) {
       var url = '{{{apiUrl}}}' + instanceId;
+      var prefix = '&';
       if (digestId !== null && digestId !== undefined) {
         url += '/digests/' + digestId + '/commits';
+        prefix = '?';
       } else {
         url += '/commits/tags/versionone/workitem?numbers=' + workitem;
       }
 
-      url += '&apiKey=' + apiKey;
+      url += prefix + 'apiKey=' + apiKey;
       return url;
     } else {
       throw 'Must specify either workitem or digestId as a URL query parameter in order to query CommitStream';
