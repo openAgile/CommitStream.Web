@@ -6,10 +6,7 @@ import config from '../../config';
 
 let cache = cacheCreate();
 
-export
-default
-
-function(req, res) {
+export default function(req, res) {
   let workitemNumbers = req.query.numbers || '';
   let instanceId = req.instance.instanceId;
 
@@ -35,7 +32,7 @@ function(req, res) {
       res.send(commits);
     });
   } else {
-    // TODO: What do we send here?
+    // Daniel says OK to send empty array here (9/24/2015)
     res.send([]);
   }
-}
+};
