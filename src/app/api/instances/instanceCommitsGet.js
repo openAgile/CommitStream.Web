@@ -22,6 +22,10 @@ var _underscore = require('underscore');
 
 var _underscore2 = _interopRequireDefault(_underscore);
 
+var _config = require('../../config');
+
+var _config2 = _interopRequireDefault(_config);
+
 var cache = (0, _helpersCacheCreate2['default'])();
 
 exports['default'] = function (req, res) {
@@ -41,7 +45,7 @@ exports['default'] = function (req, res) {
       // TODO use hal?
       res.send(commits);
     });
-  } else {
+  } else if (_config2['default'].showChildrenFeatureToggle) {
     (function () {
       var streams = [];
       _underscore2['default'].each(workitemNumbersArray, function (e, i) {
@@ -51,7 +55,11 @@ exports['default'] = function (req, res) {
         res.send(commits);
       });
     })();
+  } else {
+    // Daniel says OK to send empty array here (9/24/2015)
+    res.send([]);
   }
 };
 
+;
 module.exports = exports['default'];
