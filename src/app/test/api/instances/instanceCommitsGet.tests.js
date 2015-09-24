@@ -81,4 +81,29 @@ describe('instanceCommitsGet', function() {
     });
   });
 
+  describe('when showChildrenFeatureToggle === false and getting commits from an instance for multiple assets', function() {
+    var request = createRequest();
+    var response = createResponse();
+    request.query.numbers = 'S-00001,T-00002';
+
+    var cache = sinon.spy();
+    var cacheCreate = sinon.stub().returns(cache);
+    var config = require('../../../config');
+    config.showChildrenFeatureToggle = false;
+
+    var handler = proxyquire('../../api/instances/instanceCommitsGet', {
+      '../helpers/cacheCreate': cacheCreate
+    });
+
+    handler(request, response);
+
+    it('should call cacheCreate once', function() {
+      cacheCreate.should.have.been.calledOnce;
+    });
+
+    it('should call response.send with an empty array', function() {
+      response.send.should.have.been.calledWith([]);
+    });
+  });
+
 });
