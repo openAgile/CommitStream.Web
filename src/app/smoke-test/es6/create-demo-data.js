@@ -55,8 +55,7 @@ let createInstanceWithData = async (iteration) => {
       let comma = (iteration === 0 && inboxNum === 0) ? '' : ',';
       inboxNum++;
       if (!program.json) console.log(`Adding commits to ${inbox.inboxId} of family ${inbox.family}`);
-      else console.log(`${comma}"${client.baseUrl}/${client.instanceId}/commits/tags/versionone/workitems/${workItemsGroup.join(',')}?apiKey=${client.apiKey}"`);
-
+      else console.log(`${comma}"${client.baseUrl}/${client.instanceId}/commits/tags/versionone/workitem?numbers=${workItemsGroup.join(',')}&apiKey=${client.apiKey}"`);
       for(let workItem of workItemsGroup) {
         for (let mentionNum = 0; mentionNum < number_of_mentions_per_workitem_per_repo; mentionNum++) {
           let message = `${workItem} mention # ${mentionNum} on ${iteration} in  ${inbox.inboxId} of family = ${inbox.family}`;
