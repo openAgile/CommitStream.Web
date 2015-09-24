@@ -12,7 +12,7 @@
     commitsListTmpl,
     autoRefreshIntervalId,
     showChildrenChecked,
-    children;
+    assetNumbers;
 
   var configureCommitStreamDependencies = function() {
     require.config({
@@ -237,8 +237,7 @@
     var url = '{{{apiUrl}}}';
     url += instanceId;
     url += '/commits/tags/versionone/workitem?numbers=';
-    url += workitem;
-    url += children ? ',' + children.join() : '';
+    url += assetNumbers ? assetNumbers.join() : '';
     url += '&apiKey=';
     url += apiKey;
     return url;
@@ -268,9 +267,9 @@
     queryCommitStream(getUrlToQuery(), queryCallback);
   };
 
-  var getChildren = function(url) {
-    return $.get(url).done(function(children) {
-      return children;
+  var getAssetNumbers = function(url) {
+    return $.get(url).done(function(assetNumbers) {
+      return assetNumbers;
     }).fail(errorHandler);
   };
 
@@ -321,9 +320,9 @@
 
         try {
           if (getAssetAndChildNumbersUrl) {
-            getChildren(getAssetAndChildNumbersUrl)
+            getAssetNumbers(getAssetAndChildNumbersUrl)
               .then(function(c) {
-                children = c.assetNumbers;
+                assetNumbers = c.assetNumbers;
               })
               .then(init);
           } else {
