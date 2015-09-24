@@ -2,10 +2,14 @@ import commitsGet from '../helpers/commitsGet';
 import cacheCreate from '../helpers/cacheCreate';
 import commitsChildrenGet from '../helpers/commitsChildrenGet';
 import _ from 'underscore';
+import config from '../../config';
 
 let cache = cacheCreate();
 
-export default function(req, res) {
+export
+default
+
+function(req, res) {
   let workitemNumbers = req.query.numbers || '';
   let instanceId = req.instance.instanceId;
 
@@ -22,7 +26,7 @@ export default function(req, res) {
       // TODO use hal?
       res.send(commits);
     });
-  } else {
+  } else if (config.showChildrenFeatureToggle) {
     let streams = [];
     _.each(workitemNumbersArray, function(e, i) {
       streams.push('versionOne_CommitsWithWorkitems-' + instanceId + '_' + e);
@@ -30,5 +34,8 @@ export default function(req, res) {
     commitsChildrenGet(req.query, streams, buildUri).then(function(commits) {
       res.send(commits);
     });
+  } else {
+    // TODO: What do we send here?
+    res.send([]);
   }
 }
