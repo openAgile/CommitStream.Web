@@ -122,7 +122,7 @@ app.get('/app', function(req, res) {
     apiUrl: settings.protocol + '://' + settings.host + '/api/',
     protocol: settings.protocol,
     resourcePath: settings.protocol + '://' + settings.host + '/',
-    showChildrenFeatureToggle: config.showChildrenFeatureToggle
+    showChildrenFeatureToggle: config.showChildrenFeatureToggle.toString()
   });
 });
 
