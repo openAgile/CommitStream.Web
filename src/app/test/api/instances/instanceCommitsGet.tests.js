@@ -101,8 +101,8 @@ describe('instanceCommitsGet', function() {
       cacheCreate.should.have.been.calledOnce;
     });
 
-    it('should call response.send with an empty array', function() {
-      response.send.should.have.been.calledWith([]);
+    it('should call response.send with an object containing an empty commits property', function() {
+      response.send.should.have.been.calledWith({commits:[]});
     });
   });
 

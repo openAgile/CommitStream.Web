@@ -57,7 +57,7 @@ exports['default'] = function (req, res) {
     })();
   } else {
     // Daniel says OK to send empty array here (9/24/2015)
-    res.send([]);
+    res.send({ commits: [] });
   }
 };
 
