@@ -89,8 +89,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
         comma = iteration === 0 && inboxNum === 0 ? '' : ',';
 
         inboxNum++;
-        if (!_commander2['default'].json) console.log('Adding commits to ' + inbox.inboxId + ' of family ' + inbox.family);else console.log(comma + '"' + client.baseUrl + '/' + client.instanceId + '/commits/tags/versionone/workitems/' + workItemsGroup.join(',') + '?apiKey=' + client.apiKey + '"');
-
+        if (!_commander2['default'].json) console.log('Adding commits to ' + inbox.inboxId + ' of family ' + inbox.family);else console.log(comma + '"' + client.baseUrl + '/' + client.instanceId + '/commits/tags/versionone/workitem?numbers=' + workItemsGroup.join(',') + '&apiKey=' + client.apiKey + '"');
         _iteratorNormalCompletion2 = true;
         _didIteratorError2 = false;
         _iteratorError2 = undefined;
