@@ -24,4 +24,9 @@
   var notSet = nconf.get('production') == undefined;
   config.production = nconf.get('production') === 'true' || notSet;
   config.controllerResponseDelay = nconf.get('controllerResponseDelay') || 1000;
+  var showChildrenFeature = nconf.get('showChildrenFeature');
+  if (showChildrenFeature === 'true') showChildrenFeature = true;
+  else if (showChildrenFeature === 'false') showChildrenFeature = false
+  else showChildrenFeature = true;
+  config.showChildrenFeatureToggle = showChildrenFeature;
 })(module.exports);
