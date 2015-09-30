@@ -38,6 +38,18 @@
       showHidden: true,
       depth: null
     }).substr(0, 5000));
+    console.error("\nURL: " + util.inspect(req.originalUrl, {
+      showHidden: true,
+      depth: null
+    }).substr(0, 5000));
+    console.error("\nHEADERS: " + util.inspect(req.headers, {
+      showHidden: true,
+      depth: null
+    }).substr(0, 5000));
+    console.error("\nBODY: " + util.inspect(req.body, {
+      showHidden: true,
+      depth: null
+    }).substr(0, 5000));
     console.error("STACK TRACE:");
     console.error(err.stack);
     console.error("CAUGHT ERROR DETAILS:");

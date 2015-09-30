@@ -33,7 +33,7 @@
           res.hal(hypermedia, 201);
         });
     } else {
-      throw new MalformedPushEventError();
+      throw new MalformedPushEventError(req);
     }
   };
 }());
