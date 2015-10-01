@@ -26,6 +26,28 @@ let workItemsToMention = [
 ];
 
 let createInstanceWithData = async (iteration) => {
+  const instanceId = '4ddaa257-bebe-4557-a3dc-14889cc42a91',
+        apiKey = '08ec3bcd-2161-4103-b198-d0351bc5297b';
+  
+  let instance = await client.instanceGet(instanceId, apiKey);
+ 
+  let digests = await instance.digestsGet();
+
+  for (let digest of digests) {
+    console.log(`${digest.description} (${digest.digestId}) commits:`);
+    let commits = await digest.commitsGet();
+    let messages = commits.commits.map(c => c.message);
+    console.log(messages);
+    console.log('Inboxes:');
+    let inboxes = await digest.inboxesGet();
+    console.log(inboxes.resource);
+  }
+
+  console.log("----------");
+  console.log(await instance.commitsForWorkItemsGet(['AT-00025', 'T-00015']));  
+
+  return;
+
   let inboxesToCreate = [
     {
       name: `GitHub Repo ${iteration}`,
@@ -41,7 +63,7 @@ let createInstanceWithData = async (iteration) => {
     }
   ];
 
-  let instance = await client.instanceCreate();
+  instance = await client.instanceCreate();
   let digest = await instance.digestCreate({description:`Digest for ${iteration}`});
 
   if (!program.json) console.log(`#${iteration}: Populating instance ${client.instanceId} (apiKey = ${client.apiKey})`);

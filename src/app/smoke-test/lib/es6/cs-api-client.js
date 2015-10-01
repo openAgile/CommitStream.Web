@@ -50,16 +50,24 @@ let postToLink = (client, halResponse, linkName, data, extraHeaders) => {
 
 let post = (client, path, data) => rp(postOptions(client.href(path), data));
 
+let getOptions = uri => ({
+  uri,
+  method: 'GET',
+  transform: body => JSON.parse(body),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 let get = (client, uri, alreadyAbsolute) => {
   uri = alreadyAbsolute ? uri : client.href(uri);
-  return {
-    uri,
-    method: 'GET',
-    transform: body => JSON.parse(body),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }    
+  return rp(getOptions(uri));
+};
+
+let getFromLink = (client, halResponse, linkName) => {
+  let link = getLink(halResponse, linkName);
+  if (client.apiKey !== null) link += "?apiKey=" + client.apiKey;
+  return get(client, link, true);
 };
 
 let postToInboxForFamily = (client, inbox, message, family, extraHeaders) => {
@@ -87,6 +95,9 @@ class CSApiClient {
   }
   async instanceCreate() {
     return await Instance.create(this);
+  }
+  async instanceGet(instanceId, apiKey) {
+    return await Instance.get(this, instanceId, apiKey);
   }
   get apiKey() { return this._apiKey; }
   set apiKey(val) { this._apiKey = val; }
@@ -118,6 +129,13 @@ class Resource {
     let resource = await postToLink(this[clientSymbol], this[resourceSymbol], linkName, data);
     return new ResourceWrapperClass(this[clientSymbol], resource);
   }
+  async getFromLink(linkName, ResourceWrapperClass) {
+    let resource = await getFromLink(this[clientSymbol], this[resourceSymbol], linkName);
+    return new ResourceWrapperClass(this[clientSymbol], resource);
+  }
+  get resource() {
+    return this[resourceSymbol];
+  }
 }
 
 class Instance extends Resource {
@@ -125,15 +143,54 @@ class Instance extends Resource {
     let instanceResource = await post(client, '/instances', {});
     return new Instance(client, instanceResource);
   }
+  static async get(client, instanceId, apiKey) {
+    client.apiKey = apiKey;
+    client.instanceId = instanceId;
+    const url = `/instances/${instanceId}?apiKey=${apiKey}`;
+    let instanceResource = await get(client, url);
+    return new Instance(client, instanceResource);
+  }
   async digestCreate(data) {
     return await this.postToLink('digest-create', data, Digest);
   }
+  async digestsGet() {
+    return await this.getFromLink('digests', Digests);
+  }
+  async commitsForWorkItemsGet(workitems=[]) {
+    const url = `/${this[clientSymbol].instanceId}/commits/tags/versionone/workitem?numbers=${workitems.join(',')}&apiKey=${this[clientSymbol].apiKey}`;
+    let commits = await get(this[clientSymbol], url);
+    return commits;
+  }
 };
 
+class Digests extends Resource {
+  *[Symbol.iterator]() {
+    for(let digest of this.resource._embedded['digests'])
+      yield new Digest(this[clientSymbol], digest);
+  }
+}
+
 class Digest extends Resource {
+  // TODO: add inboxes link to the embedded results in digestsGet
+  //async inboxesGet() {
+  //console.log(JSON.stringify(this.resource));
+  //  return await this.getFromLink('inboxes', Inboxes);
+  //}  
+  async inboxesGet() {
+    const url = `/${this[clientSymbol].instanceId}/digests/${this.resource.digestId}/inboxes?apiKey=${this[clientSymbol].apiKey}`;
+    let inboxes = await get(this[clientSymbol], url);
+    return new Inboxes(this[clientSymbol], inboxes);
+  }
   async inboxCreate(data) {
     return await this.postToLink('inbox-create', data, Inbox);
   }
+  async commitsGet({page = 0, pageSize = 25} = {}) {
+    const url = `/${this[clientSymbol].instanceId}/digests/${this.resource.digestId}/commits?apiKey=${this[clientSymbol].apiKey}&page=${page}&pageSize=${pageSize}`;
+    return await get(this[clientSymbol], url);
+  }  
+}
+
+class Inboxes extends Resource {
 }
 
 class Inbox extends Resource {
