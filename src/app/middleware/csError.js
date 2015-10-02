@@ -58,18 +58,6 @@ var CSError = (function (_ExtendableError) {
         _errors.push(UNEXPECTED_ERROR_MSG);
       }
       return new CSError(_errors, status);
-    console.error("\nURL: " + util.inspect(req.originalUrl, {
-      showHidden: true,
-      depth: null
-    }).substr(0, 5000));
-    console.error("\nHEADERS: " + util.inspect(req.headers, {
-      showHidden: true,
-      depth: null
-    }).substr(0, 5000));
-    console.error("\nBODY: " + util.inspect(req.body, {
-      showHidden: true,
-      depth: null
-    }).substr(0, 5000));
     }
   }]);
 

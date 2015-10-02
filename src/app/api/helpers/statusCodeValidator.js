@@ -6,15 +6,6 @@ var _inherits = require('babel-runtime/helpers/inherits')['default'];
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-
-  var ProjectionNotFound = (function (_CSError) {
-    _inherits(ProjectionNotFound, _CSError);
-
-    function ProjectionNotFound() {
-      var message = arguments.length <= 0 || arguments[0] === undefined ? 'Projection not found' : arguments[0];
-
-      _classCallCheck(this, ProjectionNotFound);
-
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -25,17 +16,25 @@ var _middlewareCsError = require('../../middleware/csError');
 
 var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
 
-var ProjectionNotFound = _middlewareCsError2['default'].createCustomError('ProjectionNotFound', function (message) {
-  message = message || 'Projection not found';
-  var errors = [message];
-  ProjectionNotFound.prototype.constructor.call(undefined, errors, 404);
-});
+var ProjectionNotFound = (function (_CSError) {
+  _inherits(ProjectionNotFound, _CSError);
+
+  function ProjectionNotFound() {
+    var message = arguments.length <= 0 || arguments[0] === undefined ? 'Projection not found' : arguments[0];
+
+    _classCallCheck(this, ProjectionNotFound);
+
+    var errors = [message];
+    _get(Object.getPrototypeOf(ProjectionNotFound.prototype), 'constructor', this).call(this, errors, 404);
+  }
+
+  return ProjectionNotFound;
+})(_middlewareCsError2['default']);
+
+;
 _middlewareCsError2['default'].ProjectionNotFound = ProjectionNotFound;
 
 var statusCodeValidator = {};
-
-  ;
-  CSError.ProjectionNotFound = ProjectionNotFound;
 
 statusCodeValidator.validateGetProjection = function (objectType, objectId) {
   return function (response) {
@@ -51,23 +50,23 @@ statusCodeValidator.validateGetProjection = function (objectType, objectId) {
   };
 };
 
-var StreamNotFound = _middlewareCsError2['default'].createCustomError('StreamNotFound', function (message) {
-  message = message || 'Stream not found';
+var StreamNotFound = (function (_CSError2) {
+  _inherits(StreamNotFound, _CSError2);
 
-    function StreamNotFound() {
-      var message = arguments.length <= 0 || arguments[0] === undefined ? 'Stream not found' : arguments[0];
+  function StreamNotFound() {
+    var message = arguments.length <= 0 || arguments[0] === undefined ? 'Stream not found' : arguments[0];
 
-      _classCallCheck(this, StreamNotFound);
+    _classCallCheck(this, StreamNotFound);
 
-  var errors = [message];
-  StreamNotFound.prototype.constructor.call(undefined, errors, 404);
-});
+    var errors = [message];
+    _get(Object.getPrototypeOf(StreamNotFound.prototype), 'constructor', this).call(this, errors, 404);
+  }
+
+  return StreamNotFound;
+})(_middlewareCsError2['default']);
+
+;
 _middlewareCsError2['default'].StreamNotFound = StreamNotFound;
-    return StreamNotFound;
-  })(CSError);
-
-  ;
-  CSError.StreamNotFound = StreamNotFound;
 
 statusCodeValidator.validateGetStream = function (streamName) {
   return function (response) {
@@ -83,21 +82,21 @@ statusCodeValidator.validateGetStream = function (streamName) {
 };
 
 // TODO: should we handle 408 using this specific failure in each case
-var EventStoreClusterFailure = _middlewareCsError2['default'].createCustomError('EventStoreClusterFailure', function () {
-  EventStoreClusterFailure.prototype.constructor.call(undefined, null, 500, 'Trouble communicating with eventstore.');
-});
 
-    function EventStoreClusterFailure() {
-      _classCallCheck(this, EventStoreClusterFailure);
+var EventStoreClusterFailure = (function (_CSError3) {
+  _inherits(EventStoreClusterFailure, _CSError3);
 
-      var internalMessage = 'Trouble communicating with eventstore.';
-      _get(Object.getPrototypeOf(EventStoreClusterFailure.prototype), 'constructor', this).call(this, null, 500, internalMessage);
-    }
+  function EventStoreClusterFailure() {
+    _classCallCheck(this, EventStoreClusterFailure);
 
-    return EventStoreClusterFailure;
-  })(CSError);
+    var internalMessage = 'Trouble communicating with eventstore.';
+    _get(Object.getPrototypeOf(EventStoreClusterFailure.prototype), 'constructor', this).call(this, null, 500, internalMessage);
+  }
 
-  ;
+  return EventStoreClusterFailure;
+})(_middlewareCsError2['default']);
+
+;
 
 statusCodeValidator.validateStreamsPost = function () {
   return function (response) {
@@ -110,12 +109,23 @@ statusCodeValidator.validateStreamsPost = function () {
     return true;
   };
 };
-})(module.exports);
-var QueryError = _middlewareCsError2['default'].createCustomError('QueryError', function (message) {
-  message = message || 'Query Error';
-  var errors = [message];
-  QueryError.prototype.constructor.call(undefined, errors, 500);
-});
+
+var QueryError = (function (_CSError4) {
+  _inherits(QueryError, _CSError4);
+
+  function QueryError() {
+    var message = arguments.length <= 0 || arguments[0] === undefined ? 'Query Error' : arguments[0];
+
+    _classCallCheck(this, QueryError);
+
+    var errors = [message];
+    _get(Object.getPrototypeOf(QueryError.prototype), 'constructor', this).call(this, errors, 500);
+  }
+
+  return QueryError;
+})(_middlewareCsError2['default']);
+
+;
 _middlewareCsError2['default'].QueryError = QueryError;
 
 statusCodeValidator.validateQueryGetState = function (response) {

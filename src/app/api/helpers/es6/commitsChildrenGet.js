@@ -2,14 +2,16 @@ import config from '../../config';
 import commitEventsToApiResponse from '../translators/commitEventsToApiResponse';
 import eventStore from '../helpers/eventStoreClient';
 import pager from '../helpers/pager';
-import csError from '../../middleware/csError';
+import CSError from '../../middleware/csError';
 import Promise from 'bluebird';
 
-let InputRequired = csError.createCustomError('InputRequired', function(objectType) {
-  message = objectType + ' is required';
-  var errors = [message];
-  NotFound.prototype.constructor.call(this, errors, 400);
-});
+class InputRequired extends CSError {
+  constructor(objectType) {
+    message = objectType + ' is required';
+    let errors = [message];
+    super(errors, 400);
+  }
+};
 
 let validate = (propertyName, property) => {
   if (property === undefined || property === null || property === '')
