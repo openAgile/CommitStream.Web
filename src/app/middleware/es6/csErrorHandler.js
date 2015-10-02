@@ -1,19 +1,25 @@
 import _ from 'underscore';
 import util from 'util';
 import CSError from './csError';
+import logger from './logger';
 
 export default function errorHandler(err, req, res, next) {
-  console.error("\nEXCEPTION RAISED BY API ROUTE: " + util.inspect(req.route, {
-    showHidden: true,
-    depth: null
-  }).substr(0, 5000));
-  console.error("STACK TRACE:");
-  console.error(err.stack);
-  console.error("CAUGHT ERROR DETAILS:");
-  console.error(util.inspect(err, {
-    showHidden: true,
-    depth: null
-  }).substr(0, 5000));
+  var errorMessage = {
+    level: 'error',
+    route: req.route.path,
+    url: util.inspect(req.originalUrl),
+    headers: util.inspect(req.headers, {
+      showHidden: true,
+      depth: null
+    }),
+    body: req.body,
+    stackTrace: err.stack,
+    exception: util.inspect(err, {
+      showHidden: true,
+      depth: null
+    }).substr(0, 5000),
+    internalMessage: ''
+  };
 
   function sendError(error) {
     res.status(error.statusCode).json(error.errors);
@@ -22,10 +28,13 @@ export default function errorHandler(err, req, res, next) {
   if (err instanceof CSError) {
     sendError(err);
     if (err.internalMessage !== null) {
-      console.error("INTERNAL MESSAGE:");
-      console.error(err.internalMessage);
+      errorMessage.internalMessage = err.internalMessage;
     }
+    errorMessage.status = err.statusCode;
+    logger.error(JSON.stringify(errorMessage));
   } else {
     sendError(CSError.create(500));
+    errorMessage.status = 500;
+    logger.error(JSON.stringify(errorMessage));
   }
 }

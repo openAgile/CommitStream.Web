@@ -19,18 +19,27 @@ var _csError = require('./csError');
 
 var _csError2 = _interopRequireDefault(_csError);
 
+var _logger = require('./logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function errorHandler(err, req, res, next) {
-  console.error("\nEXCEPTION RAISED BY API ROUTE: " + _util2['default'].inspect(req.route, {
-    showHidden: true,
-    depth: null
-  }).substr(0, 5000));
-  console.error("STACK TRACE:");
-  console.error(err.stack);
-  console.error("CAUGHT ERROR DETAILS:");
-  console.error(_util2['default'].inspect(err, {
-    showHidden: true,
-    depth: null
-  }).substr(0, 5000));
+  var errorMessage = {
+    level: 'error',
+    route: req.route.path,
+    url: _util2['default'].inspect(req.originalUrl),
+    headers: _util2['default'].inspect(req.headers, {
+      showHidden: true,
+      depth: null
+    }),
+    body: req.body,
+    stackTrace: err.stack,
+    exception: _util2['default'].inspect(err, {
+      showHidden: true,
+      depth: null
+    }).substr(0, 5000),
+    internalMessage: ''
+  };
 
   function sendError(error) {
     res.status(error.statusCode).json(error.errors);
@@ -39,11 +48,14 @@ function errorHandler(err, req, res, next) {
   if (err instanceof _csError2['default']) {
     sendError(err);
     if (err.internalMessage !== null) {
-      console.error("INTERNAL MESSAGE:");
-      console.error(err.internalMessage);
+      errorMessage.internalMessage = err.internalMessage;
     }
+    errorMessage.status = err.statusCode;
+    _logger2['default'].error(JSON.stringify(errorMessage));
   } else {
     sendError(_csError2['default'].create(500));
+    errorMessage.status = 500;
+    _logger2['default'].error(JSON.stringify(errorMessage));
   }
 }
 

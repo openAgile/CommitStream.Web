@@ -18,6 +18,10 @@ var _es6Error = require('es6-error');
 
 var _es6Error2 = _interopRequireDefault(_es6Error);
 
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
 var UNEXPECTED_ERROR_MSG = 'There was an unexpected error when processing your request.';
 
 var CSError = (function (_ExtendableError) {
@@ -50,9 +54,9 @@ var CSError = (function (_ExtendableError) {
 
       var _errors = [];
 
-      if (_.isArray(errors)) {
+      if (_underscore2['default'].isArray(errors)) {
         _errors = errors;
-      } else if (_.isString(errors)) {
+      } else if (_underscore2['default'].isString(errors)) {
         _errors.push(errors);
       } else {
         _errors.push(UNEXPECTED_ERROR_MSG);

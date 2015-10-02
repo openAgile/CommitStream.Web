@@ -1,4 +1,5 @@
 import ExtendableError from 'es6-error';
+import _ from 'underscore';
 
 const UNEXPECTED_ERROR_MSG = 'There was an unexpected error when processing your request.';
 
