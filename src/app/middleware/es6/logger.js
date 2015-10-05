@@ -11,7 +11,7 @@ var streamsConfigured = [{
 }];
 if (config.azureLoggerConfigured) {
   const tableName = config.azureTableName;
-  const connectionString = config.azureTableConnectionString;
+  const connectionString = config.storageConnectionString;
   streamsConfigured.push(azBunyan.createTableStorageStream(level, {
     connectionString,
     tableName
