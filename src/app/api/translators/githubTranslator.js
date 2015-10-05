@@ -32,7 +32,7 @@ var GitHubCommitMalformedError = (function (_CSError) {
   function GitHubCommitMalformedError(error, pushEvent) {
     _classCallCheck(this, GitHubCommitMalformedError);
 
-    _get(Object.getPrototypeOf(GitHubCommitMalformedError.prototype), 'constructor', this).call(this, [error.toString()]);
+    _get(Object.getPrototypeOf(GitHubCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your GitHub push event.']);
     this.originalError = error;
     this.pushEvent = pushEvent;
   }

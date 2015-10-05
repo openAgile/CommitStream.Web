@@ -5,9 +5,9 @@ import CSError from '../../middleware/csError';
 //TODO: do we want this kind of library to know about status codes?
 class GitHubCommitMalformedError extends CSError {
   constructor(error, pushEvent) {
-    super([error.toString()]);
+    super(['There was an unexpected error when processing your GitHub push event.']);
     this.originalError = error;
-    this.pushEvent = pushEvent;      
+    this.pushEvent = pushEvent;
   }
 }
 
