@@ -14,19 +14,25 @@ var _azBunyan = require('az-bunyan');
 
 var _azBunyan2 = _interopRequireDefault(_azBunyan);
 
-// TODO: pull from app settings:
-// define the target azure storage table name
-var tableName = 'developingapplogtable';
-// define the connection string to your azure storage account
-var connectionString = 'DefaultEndpointsProtocol=https;AccountName=commitstreamdev;AccountKey=PBr7JHysuTvIXJwljstuPLmBoVCao/UQvPVqiJQRrfXgAdXAw41hQpXKz1f+fSzQ3niJVMwgTU7fsSA+1esmIA==';
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
 var level = 'info';
 var name = 'CSError-Logger';
 
-// initialize the az-bunyan table storage stream
-var azureStream = _azBunyan2['default'].createTableStorageStream(level, {
-  connectionString: connectionString,
-  tableName: tableName
-});
+var streamsConfigured = [{
+  level: level,
+  stream: process.stderr
+}];
+if (_config2['default'].azureLoggerConfigured) {
+  var tableName = _config2['default'].azureTableName;
+  var connectionString = _config2['default'].azureTableConnectionString;
+  streamsConfigured.push(_azBunyan2['default'].createTableStorageStream(level, {
+    connectionString: connectionString,
+    tableName: tableName
+  }));
+}
 
 var logger = _bunyan2['default'].createLogger({
   name: name,
@@ -34,10 +40,7 @@ var logger = _bunyan2['default'].createLogger({
     req: _bunyan2['default'].stdSerializers.req,
     err: _bunyan2['default'].stdSerializers.err
   },
-  streams: [{
-    level: level,
-    stream: process.stderr
-  }, azureStream]
+  streams: streamsConfigured
 });
 
 exports['default'] = logger;

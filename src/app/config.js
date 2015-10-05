@@ -29,4 +29,8 @@
   else if (showChildrenFeature === 'false') showChildrenFeature = false
   else showChildrenFeature = true;
   config.showChildrenFeatureToggle = showChildrenFeature;
+  config.azureTableConnectionString = nconf.get('azureTableConnectionString') || '';
+  config.azureTableName = nconf.get('azureTableName') || '';
+  config.azureLoggerConfigured = config.azureTableConnectionString !== '' && config.azureTableName !== '';
+
 })(module.exports);
