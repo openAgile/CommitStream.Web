@@ -4,6 +4,8 @@ import CSError from './csError';
 import logger from './logger';
 
 export default function errorHandler(err, req, res, next) {
+  let body = '';
+  if (req.body) body = req.body;
   var errorMessage = {
     level: 'error',
     route: req.route.path,
@@ -12,7 +14,7 @@ export default function errorHandler(err, req, res, next) {
       showHidden: true,
       depth: null
     }),
-    body: req.body,
+    body: body,
     stackTrace: err.stack,
     exception: util.inspect(err, {
       showHidden: true,

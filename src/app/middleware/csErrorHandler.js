@@ -24,6 +24,8 @@ var _logger = require('./logger');
 var _logger2 = _interopRequireDefault(_logger);
 
 function errorHandler(err, req, res, next) {
+  var body = '';
+  if (req.body) body = req.body;
   var errorMessage = {
     level: 'error',
     route: req.route.path,
@@ -32,7 +34,7 @@ function errorHandler(err, req, res, next) {
       showHidden: true,
       depth: null
     }),
-    body: req.body,
+    body: body,
     stackTrace: err.stack,
     exception: _util2['default'].inspect(err, {
       showHidden: true,
