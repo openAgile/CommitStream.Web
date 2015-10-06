@@ -13,7 +13,7 @@ class InstanceToInboxRemoved extends CSError {
   constructor(instanceId, inboxId) {
     const message = `The inbox ${inboxId} has been removed from instance ${instanceId}.`;
     const errors = [message];
-    super(errors, 404);
+    super(errors, 410);
   }
 }
 

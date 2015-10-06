@@ -42,7 +42,7 @@ var InstanceToInboxRemoved = (function (_CSError2) {
 
     var message = 'The inbox ' + inboxId + ' has been removed from instance ' + instanceId + '.';
     var errors = [message];
-    _get(Object.getPrototypeOf(InstanceToInboxRemoved.prototype), 'constructor', this).call(this, errors, 404);
+    _get(Object.getPrototypeOf(InstanceToInboxRemoved.prototype), 'constructor', this).call(this, errors, 410);
   }
 
   return InstanceToInboxRemoved;
