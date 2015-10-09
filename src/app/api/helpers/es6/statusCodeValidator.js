@@ -1,10 +1,12 @@
-import csError from '../../middleware/csError';
-let ProjectionNotFound = csError.createCustomError('ProjectionNotFound', (message) => {
-  message = message || 'Projection not found';
-  let errors = [message];
-  ProjectionNotFound.prototype.constructor.call(this, errors, 404);
-});
-csError.ProjectionNotFound = ProjectionNotFound;
+import CSError from '../../middleware/csError';
+
+class ProjectionNotFound extends CSError {
+  constructor(message = 'Projection not found') {
+    let errors = [message];
+    super(errors, 404);
+  }
+};
+CSError.ProjectionNotFound = ProjectionNotFound;
 
 let statusCodeValidator = {};
 
@@ -22,15 +24,16 @@ statusCodeValidator.validateGetProjection = (objectType, objectId) => {
   };
 };
 
-let StreamNotFound = csError.createCustomError('StreamNotFound', (message) => {
-  message = message || 'Stream not found';
-  let errors = [message];
-  StreamNotFound.prototype.constructor.call(this, errors, 404);
-});
-csError.StreamNotFound = StreamNotFound;
+class StreamNotFound extends CSError {
+  constructor(message = 'Stream not found') {
+    let errors = [message];
+    super(errors, 404);
+  }
+};
+CSError.StreamNotFound = StreamNotFound;
 
 statusCodeValidator.validateGetStream = (streamName) => {
-  return (response) => {    
+  return (response) => {
     if (!response.body || response.body.length < 1 || response.statusCode === 404) {
       throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
     }
@@ -43,9 +46,12 @@ statusCodeValidator.validateGetStream = (streamName) => {
 };
 
 // TODO: should we handle 408 using this specific failure in each case
-let EventStoreClusterFailure = csError.createCustomError('EventStoreClusterFailure', () => {
-  EventStoreClusterFailure.prototype.constructor.call(this, null, 500, 'Trouble communicating with eventstore.');
-});
+class EventStoreClusterFailure extends CSError {
+  constructor() {
+    let internalMessage = 'Trouble communicating with eventstore.';
+    super(null, 500, internalMessage);
+  }
+};
 
 statusCodeValidator.validateStreamsPost = () => {
   return (response) => {
@@ -59,12 +65,13 @@ statusCodeValidator.validateStreamsPost = () => {
   };
 };
 
-let QueryError = csError.createCustomError('QueryError', (message) => {
-  message = message || 'Query Error';
-  let errors = [message];
-  QueryError.prototype.constructor.call(this, errors, 500);
-});
-csError.QueryError = QueryError;
+class QueryError extends CSError {
+  constructor(message = 'Query Error') {
+    let errors = [message];
+    super(errors, 500);
+  }
+};
+CSError.QueryError = QueryError;
 
 statusCodeValidator.validateQueryGetState = (response) => {
   if (response.statusCode !== 200) {
@@ -97,8 +104,5 @@ statusCodeValidator.validateQueryGetStatus = (response) => {
     }
   }
 };
-
-
-
 
 export default statusCodeValidator;

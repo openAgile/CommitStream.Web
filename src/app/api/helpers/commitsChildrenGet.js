@@ -1,5 +1,11 @@
 'use strict';
 
+var _get = require('babel-runtime/helpers/get')['default'];
+
+var _inherits = require('babel-runtime/helpers/inherits')['default'];
+
+var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
+
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -30,11 +36,21 @@ var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
-var InputRequired = _middlewareCsError2['default'].createCustomError('InputRequired', function (objectType) {
-  message = objectType + ' is required';
-  var errors = [message];
-  NotFound.prototype.constructor.call(this, errors, 400);
-});
+var InputRequired = (function (_CSError) {
+  _inherits(InputRequired, _CSError);
+
+  function InputRequired(objectType) {
+    _classCallCheck(this, InputRequired);
+
+    message = objectType + ' is required';
+    var errors = [message];
+    _get(Object.getPrototypeOf(InputRequired.prototype), 'constructor', this).call(this, errors, 400);
+  }
+
+  return InputRequired;
+})(_middlewareCsError2['default']);
+
+;
 
 var validate = function validate(propertyName, property) {
   if (property === undefined || property === null || property === '') throw new InputRequired(propertyName);

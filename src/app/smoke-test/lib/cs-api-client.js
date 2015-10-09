@@ -210,7 +210,7 @@ var Resource = (function () {
 
     this[clientSymbol] = client;
     this[resourceSymbol] = resource;
-    _Reflect$ownKeys(resource).slice(1).forEach(function (prop) {
+    _Reflect$ownKeys(resource).forEach(function (prop) {
       return _Object$defineProperty(_this, prop, {
         get: function get() {
           return resource[prop];

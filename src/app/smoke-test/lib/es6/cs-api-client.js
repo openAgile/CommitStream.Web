@@ -108,7 +108,7 @@ class Resource {
   constructor(client, resource) {
     this[clientSymbol] = client;
     this[resourceSymbol] = resource;
-    Reflect.ownKeys(resource).slice(1).forEach(prop => Object.defineProperty(this, prop, {
+    Reflect.ownKeys(resource).forEach(prop => Object.defineProperty(this, prop, {
       get: function() { return resource[prop]; },
       enumerable: true,
       configurable: true

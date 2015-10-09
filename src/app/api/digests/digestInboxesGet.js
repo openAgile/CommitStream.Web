@@ -1,6 +1,6 @@
 (function() {
   var eventStore = require('../helpers/eventStoreClient'),
-    csError = require('../../middleware/csError'),
+    CSError = require('../../middleware/csError'),
     digestInboxesFormatAsHal = require('./digestInboxesFormatAsHal'),
     validateUUID = require('../validateUUID');
 
@@ -18,7 +18,7 @@
       .then(function(inboxes) {
         var hypermedia = digestInboxesFormatAsHal(req.href, instanceId, digest, inboxes);
         res.hal(hypermedia);
-      }).catch(csError.ProjectionNotFound, function(error) {
+      }).catch(CSError.ProjectionNotFound, function(error) {
         // TODO: log the error?
         var hypermedia = digestInboxesFormatAsHal(req.href, instanceId, digest, {
           inboxes: {}
