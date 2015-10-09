@@ -30,7 +30,6 @@ This is a work in progress. As this evolves, we update this narrative.
 
 # How to run just the CommitStream application (no dependency on the VersionOne application)
 
-* In GitHub, create a new **Personal access token** for yourself by going to https://github.com/settings/applications. Copy it to your clipboard. You'll need to use it below where it says **[insert-access-token-here]**!
 * Clone this repo if you have not already done so
 * As Administrator, open Powershell and navigate to the root of the cloned repo
 * Type `Get-ExecutionPolicy` and if the result is not **Unrestricted**, then type `Set-ExecutionPolicy unrestricted`
@@ -39,7 +38,7 @@ This is a work in progress. As this evolves, we update this narrative.
 	* Right-Click on My Computer
 	* Click Advanced System Settings link from the left side column
 	* Click Environment Variables in the bottom of the window
-	* Then under System Variables look for the path variable and click edit
+	* Then under System Variables look for the path variable and click edithttps://github.com/openAgile/CommitStream.Web/pulls
 	* Add the pwd to git's bin and cmd at the end of the string like this:
 	```
 	;C:\Program Files (x86)\Git\bin;C:\Program Files (x86)\Git\cmd
@@ -47,7 +46,7 @@ This is a work in progress. As this evolves, we update this narrative.
 	* Now test it out in PowerShell; type git and see if it recognizes the command.
 * Run the install script by typing:
 ```powershell
-.\install.ps1 [insert-access-token-here]
+.\install.ps1
 ```
 ## Verify installation
 

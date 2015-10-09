@@ -34,7 +34,7 @@
   var getRepoHref = function(repoInfo) {
     // https://serverUrl/repoOwner/repoName
     return repoInfo.serverUrl + '/' + repoInfo.repoOwner + '/' + repoInfo.repoName;
-  }
+  };
 
   var getBranchHref = function(family, repoHref, branch) {
     if (family === 'GitHub' || family === 'GitLab') {
@@ -48,10 +48,10 @@
     }
 
     throw 'Invalid family';
-  }
+  };
 
   module.exports = function(entries) {
-    var commits = [];    
+    var commits = [];
     _.each(entries, function(entry) {
       try {
         var e = JSON.parse(entry.data);

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -10,84 +10,141 @@ using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Net;
+using System.Collections.Concurrent;
 
 namespace EventStore.LoadTest
 {
     class Program
     {
-        static int taskCount;
-        static int top;
-        static string url;
+        static int threadCount;
+        static int threadDelay;
         static long count;
+        static long lowest;
+        static long highest;
+        static long avgAccumulator;
         static long errors;
-        static object syncRoot = new Object();
-        static string body;
+        static object syncRoot = new object();
         static RestClient restClient;
+        static ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
+        static List<string> urls = new List<string>();
+        static int times;
+
 
         static void Main(string[] args)
         {
-            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
-            ReadConfig();
-            ReadJsonBody();
-            restClient = new RestClient(url);
-            var stopWatch = new Stopwatch();
+            SetupSslValidation();
+            ReadAppConfig();
+            ReadUrls();
+            EnqueueUrls();
 
-            Console.WriteLine("About to push {0} events.", top);
+            var mainStopWatch = new Stopwatch();
+            Console.WriteLine("Starting...");
+            mainStopWatch.Start();
 
-            stopWatch.Start();
-            Task[] tasks = StartPushEventsTasks();
-            Console.WriteLine("{0} tasks are running. Waiting for them to finish.", taskCount);
+            Thread[] threads = StartPushEventsThreads();
+            Console.WriteLine("{0} threads are running. Waiting for them to finish.", threadCount);
+            WaitForAllThreads(threads);
 
-            Task.WaitAll(tasks);
+            mainStopWatch.Stop();
+            WriteElapsedTime("Total elapsed time", mainStopWatch.ElapsedMilliseconds);
+            WriteElapsedTime("Max", highest);
+            WriteElapsedTime("Low", lowest);
+            WriteElapsedTime("Average", avgAccumulator / count);
+            WriteElapsedTime("Amount of requests", count);
+            WriteElapsedTime("Errors", errors);
 
-            stopWatch.Stop();
-            WriteElapsedTime(stopWatch.Elapsed);
             Console.WriteLine("All tasks have finished, press <ENTER> to exit.");
 
             Console.ReadKey();
         }
 
+        private static void EnqueueUrls()
+        {
+            for (int i = 0; i < times; i++)
+            {
+                foreach (var url in urls)
+                {
+                    queue.Enqueue(url);
+                }
+            }
+        }
+
+        private static void SetupSslValidation()
+        {
+            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+        }
+
+        private static void WaitForAllThreads(Thread[] threads)
+        {
+            foreach (var t in threads)
+            {
+                t.Join();
+            }
+        }
+
         private static void PushEvent()
         {
-            var request = new RestRequest(Method.POST);
+            var threadStopWatch = new Stopwatch();
 
             while (true)
             {
-                var shouldContinue = false;
-                SetUpRequest(request);
-
-                lock (syncRoot)
+                string url;
+                if (queue.TryDequeue(out url))
                 {
-                    if (count < top)
+                    Console.WriteLine("Dequeued url: {0}.", url);
+                    var restClient = new RestClient(url);
+                    restClient.Timeout = 300000;
+                    var request = new RestRequest(Method.GET);
+                    request.Parameters.Clear();
+                    request.AddHeader("Accept", "application/json");
+
+                    lock (syncRoot)
                     {
-                        shouldContinue = true;
                         count++;
+                        if (count % 1000 == 0)
+                        {
+                            WriteProgress();
+                        }
                     }
 
-                    if (count % 1000 == 0 && count != top)
-                    {
-                        WriteProgress();
-                    }
-                }
-
-                if (shouldContinue)
-                {
+                    threadStopWatch.Restart();
                     var response = restClient.Execute(request);
-                    if (response.StatusCode != System.Net.HttpStatusCode.Created)
+                    threadStopWatch.Stop();
+
+                    lock (syncRoot)
+                    {
+                        processStopWatch(threadStopWatch.ElapsedMilliseconds);
+                    }
+
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
                     {
                         lock (syncRoot) { errors++; }
+                        Console.WriteLine("Url: {0}", url);
+                        Console.WriteLine("ErrorMessage: {0}", response.ErrorMessage);
                         Console.WriteLine("StatusCode: {0}", response.StatusCode);
                         Console.WriteLine("Content: {0}", response.Content);
-                        Console.WriteLine("Headers: {0}", response.Headers);
-                        Console.WriteLine("ErrorMessage: {0}", response.ErrorMessage);
                         Console.WriteLine("StatusDescription: {0}", response.StatusDescription);
+                        Console.WriteLine();
                     }
                 }
                 else
                 {
-                    //Console.WriteLine("Killing thread.");
                     break;
                 }
+            }
+        }
+
+        private static void processStopWatch(long elapsedMilliseconds)
+        {
+            avgAccumulator += elapsedMilliseconds;
+            if (elapsedMilliseconds < lowest)
+            {
+                lowest = elapsedMilliseconds;
+            }
+
+            if (highest < elapsedMilliseconds)
+            {
+                highest = elapsedMilliseconds;
             }
         }
 
@@ -97,59 +154,42 @@ namespace EventStore.LoadTest
             Console.WriteLine("Errors: {0}", errors);
         }
 
-        private static string GetBasicAuthHeader()
+        private static Thread[] StartPushEventsThreads()
         {
-            var username = ConfigurationManager.AppSettings["username"];
-            var password = ConfigurationManager.AppSettings["password"];
-            var usrAndPass = string.Format("{0}:{1}", username, password);
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(usrAndPass);
-            return "Basic " + System.Convert.ToBase64String(plainTextBytes);
-        }
-
-        private static void SetUpRequest(RestRequest request)
-        {
-            request.Parameters.Clear();
-            request.AddHeader("Accept", "application/json");
-            request.AddHeader("Authorization", GetBasicAuthHeader());
-            request.AddHeader("ES-EventType", "Test");
-            request.AddHeader("ES-ExpectedVersion", "-2");
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
-            request.RequestFormat = DataFormat.Json;
-            request.AddHeader("ES-EventId", Guid.NewGuid().ToString());
-        }
-
-        private static Task[] StartPushEventsTasks()
-        {
-            var tasks = new Task[taskCount];
-            for (int i = 0; i < taskCount; i++)
+            var threads = new Thread[threadCount];
+            for (int i = 0; i < threadCount; i++)
             {
-                tasks[i] = Task.Factory.StartNew(() => PushEvent());
+                threads[i] = new Thread(PushEvent);
+                threads[i].IsBackground = true;
+                threads[i].Start();
+                Thread.Sleep(1000 * threadDelay);
             }
-            return tasks;
+            return threads;
         }
 
-        private static void WriteElapsedTime(TimeSpan elapsed)
+        private static void WriteElapsedTime(string message, long elapsedMs)
         {
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                elapsed.Hours, elapsed.Minutes, elapsed.Seconds,
-                elapsed.Milliseconds / 10);
-            Console.WriteLine("RunTime " + elapsedTime);
+            Console.WriteLine("{0}: {1}", message, elapsedMs);
         }
 
-        private static void ReadJsonBody()
+        private static void ReadAppConfig()
         {
-            var fileName = ConfigurationManager.AppSettings["sampleFile"];
+            threadCount = int.Parse(ConfigurationManager.AppSettings["threadCount"]);
+            times = int.Parse(ConfigurationManager.AppSettings["times"]);
+            threadDelay = int.Parse(ConfigurationManager.AppSettings["threadDelay"]);
+        }
+
+        private static void ReadUrls()
+        {
+
+            var fileName = ConfigurationManager.AppSettings["urlsFile"];
             using (var reader = File.OpenText(fileName))
             {
-                body = reader.ReadToEnd();
+                var file = reader.ReadToEnd();
+                var array = JArray.Parse(file);
+                urls = array.ToObject<List<string>>();
             }
-        }
 
-        private static void ReadConfig()
-        {
-            taskCount = int.Parse(ConfigurationManager.AppSettings["taskCount"]);
-            top = int.Parse(ConfigurationManager.AppSettings["top"]);
-            url = ConfigurationManager.AppSettings["url"];
         }
     }
 }

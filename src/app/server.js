@@ -4,7 +4,7 @@ var express = require('express'),
   config = require('./config'),
   exphbs = require('express-handlebars'),
   validation = require('./configValidation'),
-  csError = require('./middleware/csError'),
+  csErrorHandler = require('./middleware/csErrorHandler'),
   instanceAuthenticator = require('./middleware/instanceAuthenticator'),
   instanceToDigestValidator = require('./middleware/instanceToDigestValidator'),
   instanceToInboxValidator = require('./middleware/instanceToInboxValidator'),
@@ -104,11 +104,11 @@ app.all('/api/*', apiRoutesRequireContentTypeAppJson);
 api.init(app);
 
 // DO NOT MOVE THIS. It must be here to catch unhandled errors.
-app.use(csError.errorHandler);
+app.use(csErrorHandler);
 
 function getHostSettings(req) {
   return {
-    protocol : config.protocol || req.protocol,
+    protocol: config.protocol || req.protocol,
     host: req.get('host'),
     key: req.query.key
   };
@@ -121,7 +121,8 @@ app.get('/app', function(req, res) {
   res.render('app', {
     apiUrl: settings.protocol + '://' + settings.host + '/api/',
     protocol: settings.protocol,
-    resourcePath: settings.protocol + '://' + settings.host + '/'
+    resourcePath: settings.protocol + '://' + settings.host + '/',
+    showChildrenFeatureToggle: config.showChildrenFeatureToggle.toString()
   });
 });
 
