@@ -24,7 +24,7 @@ There are two ways you can query for commits inside CommitStream:
 * Query By Workitem -- *Fetch commits that are associated with one or more Workitem numbers*
 * Query By Team -- *Fetch all commits, even those without Workitem mentions, that are made by a specific team*
 
-# Query by Wokritem
+# Query by Workitem
 
 To make a query by Workitem, you just need to pass the Workitem ids to the correct endpoint, along with your `instanceId` and `apiKey` values. 
 
