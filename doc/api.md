@@ -2,7 +2,7 @@
 
 The CommitStream API is a REST API based on the [Hypertext Application Language](https://github.com/mikekelly/hal_specification), or HAL. This is a simple data format that allows servers to return resources that have not just simple data properties, but also link relationships to related resources. You can learn more about HAL on the GitHub link above, or in [this interview with HAL creator Mike Kelly](http://www.infoq.com/articles/web-apis-hal).
 
-# Step 1: Find Your `instanceId` and `apiKey` Values
+# First, Find Your `instanceId` and `apiKey` Values
 
 To make queries against the CommitStream API, you'll need the `instanceId` and `apiKey` that corresponds to your VersionOne instance. The easiest way to find this is by looking at one of the URLs generated for a repository when you add one in the CommitStream Admin page, or from the TeamRoom settings page if you're using a custom collection of repositories for your specific team. **Note that the instanceId and apiKey apply to your entire instance, not just to indivivudal teams or a an individual TeamRoom, however.**
 
@@ -14,6 +14,19 @@ To make queries against the CommitStream API, you'll need the `instanceId` and `
 `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/8533e007-fdf7-42ff-b13f-90d3653b6047/commits?apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
 * The structure of the URL is: https://host/api/**instanceId**/inboxes/inboxId/commits?apiKey=**apiKey**
 * Copy the values for the **instanceId** and **apiKey** and save them somewhere secure
+
+# Next, Decide Whether to Query at the Workitem Level or Team Level
+
+There are two ways you can query for commits inside CommitStream:
+
+* By Workitem -- fetch commits that are associated with one or more Workitem numbers
+* By Team -- fetch all commits, even those without Workitem mentions, that are made by a specific team
+
+# Query by Wokritem
+
+To make a query by Workitem:
+
+TODO
 
 
 
