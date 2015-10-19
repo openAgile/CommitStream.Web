@@ -1,6 +1,6 @@
 # Getting Started with the CommitStream API for VersionOne Users
 
-The CommitStream API is a REST API based on the [Hypertext Application Language](https://github.com/mikekelly/hal_specification), or HAL. This is a simple data format that allows servers to return resources that have not just simple data properties, but also link relationships to related resources. You can learn more about HAL on the GitHub link above, or in [this interview with HAL creator Mike Kelly](http://www.infoq.com/articles/web-apis-hal).
+The CommitStream API is a REST / JSON API based on the [Hypertext Application Language](https://github.com/mikekelly/hal_specification), or HAL. This is a simple data format that allows servers to return resources that have not just simple data properties, but also link relationships to related resources. You can learn more about HAL on the GitHub link above, or in [this interview with HAL creator Mike Kelly](http://www.infoq.com/articles/web-apis-hal).
 
 However, while there are specialized HAL clients that can make querying HAL-based APIs easier, you can also just query the API with standard HTTP clients or directly via the web browser. But, you need to know the basics first, so let's go!
 
