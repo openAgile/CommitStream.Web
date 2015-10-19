@@ -21,8 +21,8 @@ To make queries against the CommitStream API, you'll need the `instanceId` and `
 
 There are two ways you can query for commits inside CommitStream:
 
-* Query By Workitem -- fetch commits that are associated with one or more Workitem numbers
-* Query By Team -- fetch all commits, even those without Workitem mentions, that are made by a specific team
+* Query By Workitem -- *Fetch commits that are associated with one or more Workitem numbers*
+* Query By Team -- *Fetch all commits, even those without Workitem mentions, that are made by a specific team*
 
 # Query by Wokritem
 
