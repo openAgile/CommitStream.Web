@@ -12,7 +12,7 @@ To make queries against the CommitStream API, you'll need the `instanceId` and `
 ![image](https://cloud.githubusercontent.com/assets/1863005/10341224/e353a386-6ce1-11e5-94b0-1195cff238cd.png)
 * Copy the URL to your clipboard and paste it into a text editor. The full URL should be something like:
 `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/8533e007-fdf7-42ff-b13f-90d3653b6047/commits?apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
-* The structure of the URL is: *https://host/api/***instanceId***/inboxes/inboxId/commits?apiKey=***apiKey**
+* The structure of the URL is: *https://commitstream.v1host.com/api/***instanceId***/inboxes/inboxId/commits?apiKey=***apiKey**
 * Copy the values for the **instanceId** and **apiKey** and save them somewhere secure
 
 # Next, Decide Whether to Query at the Workitem Level or Team Level
@@ -26,7 +26,7 @@ There are two ways you can query for commits inside CommitStream:
 
 To make a query by Workitem, you just need to pass the Workitem ids to the correct endpoint, along with your `instanceId` and `apiKey` values. 
 
-* The structure of the URL is: https://host/api/**instanceId**/commits/tags/versionone/workitem?numbers=**S-00001[,S-00002...]**&apiKey=**apiKey**
+* The structure of the URL is: *https://commitstream.v1host.com/api/***instanceId***/commits/tags/versionone/workitem?numbers=***S-00001[,S-00002...]***&apiKey=***apiKey**
 * Exmaple to query for commits against a single Workitem: `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
 * Example to query for commits against two (or more) Workitems: `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001,S-00002,S-00003&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
 
