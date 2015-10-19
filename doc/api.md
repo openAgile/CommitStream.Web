@@ -26,7 +26,7 @@ There are two ways you can query for commits inside CommitStream:
 
 To make a query by Workitem, you just need to pass the Workitem ids to the correct endpoint, along with your `instanceId` and `apiKey` values. 
 
-* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/commits/tags/versionone/workitem?numbers=**S-00001[,S-00002...]**`&apiKey=`**apiKey**
+* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/commits/tags/versionone/workitem?numbers=`**S-00001[,S-00002...]**`&apiKey=`**apiKey**
 * Exmaple to query for commits against a single Workitem: `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
 * Example to query for commits against two (or more) Workitems: `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001,S-00002,S-00003&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
 
