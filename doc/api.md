@@ -24,9 +24,98 @@ There are two ways you can query for commits inside CommitStream:
 
 # Query by Wokritem
 
-To make a query by Workitem:
+To make a query by Workitem, you just need to pass the Workitem ids to the correct endpoint, along with your `instanceId` and `apiKey` values. 
 
-TODO
+* The structure of the URL is: https://host/api/**instanceId**/commits/tags/versionone/workitem?numbers=**S-00001[,S-00002...]**&apiKey=**apiKey**
+* Exmaple to query for commits against a single Workitem: `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
+* Example to query for commits against two (or more) Workitems: `https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001,S-00002,S-00003&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f`
 
+## Example Single-Workitem Query with cURL
 
+Here's a sample from my local development copy of CommitStream. I'm doing this with the popular [cURL](http://curl.haxx.se/) command line tool and [python](https://www.python.org/) to format the JSON, but you can use any HTTP client library you'd like. You can even just try it out in the web browser at first.
 
+```text
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00003\&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
+{
+    "_links": {},
+    "commits": [
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "S-00001 mention # 0 on 0 in  f434d4d7-05d2-4446-a1fa-c3b039c9f5ee of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        }
+    ]
+}
+```
+
+### Explanation
+
+* Notice that the `message` property contains the `S-00001` Workitem mention that we queried for.
+* Notice that the `family` property indicated the commit was to a `GitHub` repository.
+
+## Example Multi-Workitem Query with cURL
+
+```text
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001,S-00002,S-00003\&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
+{
+    "commits": [
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T18:43:11+00:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "S-00003 mention # 0 on 0 in  1da7d2bd-f7a5-4e13-b822-c1847123daa7 of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T14:27:31+02:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "S-00002 mention # 0 on 0 in  ba1d712c-4f93-497f-83fa-091b0ea7e6c5 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T17:00:17-03:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "S-00001 mention # 0 on 0 in  f434d4d7-05d2-4446-a1fa-c3b039c9f5ee of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        }
+    ]
+}
+```
+
+### Explanation
+
+* The only difference in our query is that the `numbers` parameter now passes three items: `numbers=S-00001,S-00002,S-00003`
+* We now have commits from three separate repositories (and each one of a different family in this particular case)
+* The `message` property of each commit contains one of the Workitem`S-00001` Workitem mention that passed in the `numbers` parameter
