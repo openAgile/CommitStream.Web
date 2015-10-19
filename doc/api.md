@@ -19,8 +19,8 @@ To make queries against the CommitStream API, you'll need the `instanceId` and `
 
 There are two ways you can query for commits inside CommitStream:
 
-* By Workitem -- fetch commits that are associated with one or more Workitem numbers
-* By Team -- fetch all commits, even those without Workitem mentions, that are made by a specific team
+* Query By Workitem -- fetch commits that are associated with one or more Workitem numbers
+* Query By Team -- fetch all commits, even those without Workitem mentions, that are made by a specific team
 
 # Query by Wokritem
 
@@ -119,3 +119,7 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 * The only difference in our query is that the `numbers` parameter now passes three items: `numbers=S-00001,S-00002,S-00003`
 * We now have commits from three separate repositories (and each one of a different family in this particular case)
 * The `message` property of each commit contains one of the Workitem`S-00001` Workitem mention that passed in the `numbers` parameter
+
+# Query By Team
+
+TODO
