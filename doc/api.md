@@ -39,7 +39,7 @@ To make a query by Workitem, you just need to pass the Workitem ids to the corre
 
 > https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001,S-00002,S-00003&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f
 
-## Example Single-Workitem Query with cURL
+## Sample Single-Workitem Query with cURL
 
 Here's a sample from my local development copy of CommitStream. I'm doing this with the popular [cURL](http://curl.haxx.se/) command line tool and [python](https://www.python.org/) to format the JSON, but you can use any HTTP client library you'd like. You can even just try it out in the web browser at first.
 
@@ -76,7 +76,7 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 * Notice that the `message` property contains the `S-00001` Workitem mention that we queried for.
 * Notice that the `family` property indicated the commit was to a `GitHub` repository.
 
-## Example Multi-Workitem Query with cURL
+## Sample Multi-Workitem Query with cURL
 
 ```bash
 $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001,S-00002,S-00003\&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
@@ -140,4 +140,650 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 
 # Query By Team
 
+Teams in VersionOne can have their own collections of repositories. When you configure CommitStream for a TeamRoom, you have the option to use the Global repository list (one shared collection of repositories that the instance administrator can manage), or a Custom respository list that is managed by the TeamRoom administrator. 
+
+The API domain term for groups of repositories is `Digest`. You can fetch the list of all the `Digest` objects that your CommitStream instance contains by fetching the `/digests` route
+
+* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/digests&apiKey=`**apiKey**
+* Exmaple to query for digests within an instance:
+
+> https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digsts&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f
+
+## Sample Query for Digests within an Instance
+
+This request fetches all the digests within my sample instance. Just plugin the values for your own `instanceId` and `apiKey` to get the list for your own CommitStream instance:
+
+```bash
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests | python -mjson.tool
+```
+
+### Response
+
+```json
+{
+    "_links": {
+        "self": {
+            "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/dige
+sts"
+        }
+    },
+    "count": 2,
+    "_embedded": {
+        "digests": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/dige
+sts/c4e3eb55-71b8-40e2-9279-d7097fe9e278"
+                    }
+                },
+                "description": "Global Respositories List",
+                "digestId": "c4e3eb55-71b8-40e2-9279-d7097fe9e278"
+            },
+            {
+                "_links": {
+                    "self": {
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/dige
+sts/2b0c0791-140a-4143-be60-15552b4d6af1"
+                    }
+                },
+                "description": "Respositories List",
+                "digestId": "2b0c0791-140a-4143-be60-15552b4d6af1"
+            }
+        ]
+    }
+}
+```
+### Explanation
+
 TODO
+
+
+Follow link to digest:
+
+```json
+$ curl http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2
+b0c0791-140a-4143-be60-15552b4d6af1?apiKey=9a753757-8ae9-4287-babe-0970101627db
+   | python -mjson.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   854  100   854    0     0   4206      0 --:--:-- --:--:-- --:--:--  4566
+{
+    "_links": {
+        "digests": {
+            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests"
+        },
+        "inbox-create": {
+            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791
+-140a-4143-be60-15552b4d6af1/inboxes",
+            "method": "POST",
+            "title": "Endpoint for creating an inbox for a repository on digest 2b0c0791-140a-4143-b
+e60-15552b4d6af1."
+        },
+        "inboxes": {
+            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791
+-140a-4143-be60-15552b4d6af1/inboxes"
+        },
+        "self": {
+            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791
+-140a-4143-be60-15552b4d6af1"
+        },
+        "teamroom-view": {
+            "href": "http://localhost:6565/?instanceId=c525ed34-429f-4e22-bd13-82e846e12ab6&digestId
+=2b0c0791-140a-4143-be60-15552b4d6af1"
+        }
+    },
+    "description": "Digest for 0",
+    "digestId": "2b0c0791-140a-4143-be60-15552b4d6af1"
+}
+```
+
+Follow link to inboxes within a digest:
+
+```bash
+$ curl http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes?apiKey=9a753757-8ae9-4287-babe-0970101627db | python -mjson.tool
+```
+```json
+{
+    "_embedded": {
+        "inboxes": [
+            {
+                "_links": {
+                    "add-commit": {
+                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2/commits"
+                    },
+                    "self": {
+                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2"
+                    }
+                },
+                "family": "GitHub",
+                "inboxId": "1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2",
+                "instanceId": "c525ed34-429f-4e22-bd13-82e846e12ab6",
+                "name": "GitHub Repo 0"
+            },
+            {
+                "_links": {
+                    "add-commit": {
+                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/fee20df8-0041-463a-90b7-5ec0da09fed0/commits"
+                    },
+                    "self": {
+                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/fee20df8-0041-463a-90b7-5ec0da09fed0"
+                    }
+                },
+                "family": "GitLab",
+                "inboxId": "fee20df8-0041-463a-90b7-5ec0da09fed0",
+                "instanceId": "c525ed34-429f-4e22-bd13-82e846e12ab6",
+                "name": "GitLab Repo 0"
+            },
+            {
+                "_links": {
+                    "add-commit": {
+                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c/commits"
+                    },
+                    "self": {
+                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c"
+                    }
+                },
+                "family": "Bitbucket",
+                "inboxId": "2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c",
+                "instanceId": "c525ed34-429f-4e22-bd13-82e846e12ab6",
+                "name": "Bitbucket Repo 0"
+            }
+        ]
+    },
+    "_links": {
+        "digest": {
+            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1"
+        },
+        "inbox-create": {
+            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes",
+            "method": "POST",
+            "title": "Endpoint for creating an inbox for a repository on digest 2b0c0791-140a-4143-be60-15552b4d6af1."
+        },
+        "self": {
+            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes"
+        }
+    },
+    "count": 3,
+    "digest": {
+        "description": "Digest for 0",
+        "digestId": "2b0c0791-140a-4143-be60-15552b4d6af1"
+    }
+
+```
+
+Commits within a Digest:
+
+```bash
+$ curl http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits?pageSize=100\&apiKey=9a753757-8ae9-4287-babe-0970101627db   | python -mjson.tool
+```
+```json
+{
+    "_links": {},
+    "commits": [
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "AT-00025 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "AT-00024 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "AT-00023 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "AT-00022 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "AT-00021 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "T-00025 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "T-00024 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "T-00023 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "T-00022 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "T-00021 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Mariano Kunzi",
+            "branch": "master",
+            "branchHref": "https://bitbucket.org/kunzimariano/test/branch/master",
+            "commitDate": "2015-08-18T14:43:11-04:00",
+            "commitHref": "https://bitbucket.org/kunzimariano/test/commits/24480f9c4f1b4cff6c8ccec86416f6b258b75b22",
+            "family": "Bitbucket",
+            "message": "S-00003 mention # 0 on 0 in  2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c of family = Bitbucket",
+            "repo": "kunzimariano/test",
+            "repoHref": "https://bitbucket.org/kunzimariano/test",
+            "sha1Partial": "24480f",
+            "timeFormatted": "2 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "AT-00015 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "AT-00014 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "AT-00013 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "AT-00012 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "AT-00011 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "T-00015 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "T-00014 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "T-00013 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "T-00012 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "T-00011 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "Jordi Mallach",
+            "branch": "master",
+            "branchHref": "http://example.com/mike/diaspora/tree/master",
+            "commitDate": "2011-12-12T07:27:31-05:00",
+            "commitHref": "http://example.com/mike/diaspora/commit/b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+            "family": "GitLab",
+            "message": "S-00002 mention # 0 on 0 in  fee20df8-0041-463a-90b7-5ec0da09fed0 of family = GitLab",
+            "repo": "mike/diaspora",
+            "repoHref": "http://example.com/mike/diaspora",
+            "sha1Partial": "b6568d",
+            "timeFormatted": "4 years ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "AT-00005 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "AT-00004 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "AT-00003 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "AT-00002 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "AT-00001 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "T-00005 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "T-00004 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "T-00003 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "T-00002 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "T-00001 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        },
+        {
+            "action": "committed",
+            "author": "kunzimariano",
+            "branch": "teamRoomUX2_S-51083",
+            "branchHref": "https://github.com/openAgile/CommitStream.Web/tree/teamRoomUX2_S-51083",
+            "commitDate": "2015-01-19T15:00:17-05:00",
+            "commitHref": "https://github.com/openAgile/CommitStream.Web/commit/3b80fa1b0b5641443d9ef59b95b98d1f21e160f6",
+            "family": "GitHub",
+            "message": "S-00001 mention # 0 on 0 in  1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2 of family = GitHub",
+            "repo": "openAgile/CommitStream.Web",
+            "repoHref": "https://github.com/openAgile/CommitStream.Web",
+            "sha1Partial": "3b80fa",
+            "timeFormatted": "9 months ago"
+        }
+    ]
+}
+
+```
