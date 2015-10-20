@@ -263,7 +263,8 @@
     }
   };
 
-  var queryCommitStreamRefresh = function() {
+  var queryCommitStreamRefresh = function() {    
+    $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
     queryCommitStream(getUrlToQuery(), queryCallback);
   };
 
