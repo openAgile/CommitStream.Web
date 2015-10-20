@@ -43,8 +43,13 @@ To make a query by Workitem, you just need to pass the Workitem ids to the corre
 
 Here's a sample from my local development copy of CommitStream. I'm doing this with the popular [cURL](http://curl.haxx.se/) command line tool and [python](https://www.python.org/) to format the JSON, but you can use any HTTP client library you'd like. You can even just try it out in the web browser at first.
 
-```text
+```bash
 $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001\&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
+```
+
+### Response
+
+```json
 {
     "_links": {},
     "commits": [
@@ -73,8 +78,12 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 
 ## Example Multi-Workitem Query with cURL
 
-```text
+```bash
 $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/commits/tags/versionone/workitem?numbers=S-00001,S-00002,S-00003\&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
+```
+### Response
+
+```json
 {
     "commits": [
         {
