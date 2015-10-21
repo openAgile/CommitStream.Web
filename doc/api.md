@@ -142,19 +142,19 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 
 Teams in VersionOne can have their own collections of repositories. When you configure CommitStream for a TeamRoom, you have the option to use the Global repository list (one shared collection of repositories that the instance administrator can manage), or a Custom respository list that is managed by the TeamRoom administrator. 
 
-The API domain term for groups of repositories is `Digest`. You can fetch the list of all the `Digest` objects that your CommitStream instance contains by fetching the `/digests` route
+The API domain term for groups of repositories is `digest`. You can fetch the list of all the `digest` objects that your CommitStream instance contains by fetching the `/digests` route
 
 * The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/digests&apiKey=`**apiKey**
 * Exmaple to query for digests within an instance:
 
-> https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digsts&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f
+> https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f
 
 ## Sample Query for Digests within an Instance
 
-This request fetches all the digests within my sample instance. Just plugin the values for your own `instanceId` and `apiKey` to get the list for your own CommitStream instance:
+As just mentioned, you first need to know the address for the `digest` you wanto query. The following request fetches **all** the digests within my sample instance. Just plugin the values for your own `instanceId` and `apiKey` to get the list for your own CommitStream instance:
 
 ```bash
-$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests | python -mjson.tool
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
 ```
 
 ### Response
@@ -194,128 +194,106 @@ sts/2b0c0791-140a-4143-be60-15552b4d6af1"
     }
 }
 ```
+
 ### Explanation
 
-TODO
+* This instance has two separate digests, which is a common case because you can have a single **Global** repository list (managed by the VersionOne instance's administrator), and one or more **Custom** repository lists corresponding to individual TeamRooms.
+* The first has a `description` of `Global Repositories List` and the second has `Repositories List`. At this time, all custom TeamRoom repositories have the same `description`, but different `digestId` values.
+  * Because of this, you may have to query each one to find out its list of repositories to know if it is the one you really care about if your company has multiple TeamRooms and thus multiple **Custom** repository lists. The next section explains that.
 
+## Sample Query for Showing the Repositories within a Digest
 
-Follow link to digest:
-
-```json
-$ curl http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2
-b0c0791-140a-4143-be60-15552b4d6af1?apiKey=9a753757-8ae9-4287-babe-0970101627db
-   | python -mjson.tool
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100   854  100   854    0     0   4206      0 --:--:-- --:--:-- --:--:--  4566
-{
-    "_links": {
-        "digests": {
-            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests"
-        },
-        "inbox-create": {
-            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791
--140a-4143-be60-15552b4d6af1/inboxes",
-            "method": "POST",
-            "title": "Endpoint for creating an inbox for a repository on digest 2b0c0791-140a-4143-b
-e60-15552b4d6af1."
-        },
-        "inboxes": {
-            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791
--140a-4143-be60-15552b4d6af1/inboxes"
-        },
-        "self": {
-            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791
--140a-4143-be60-15552b4d6af1"
-        },
-        "teamroom-view": {
-            "href": "http://localhost:6565/?instanceId=c525ed34-429f-4e22-bd13-82e846e12ab6&digestId
-=2b0c0791-140a-4143-be60-15552b4d6af1"
-        }
-    },
-    "description": "Digest for 0",
-    "digestId": "2b0c0791-140a-4143-be60-15552b4d6af1"
-}
-```
-
-Follow link to inboxes within a digest:
+The technical term within CommitStream for a source control repository is actually `inbox`, because it represents an HTTP endpoint to which the repository sends WebHook messages. Thus, to find out the list of repositories that a `digest` contains, we query for its child `inboxes` route.
 
 ```bash
-$ curl http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes?apiKey=9a753757-8ae9-4287-babe-0970101627db | python -mjson.tool
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes?\&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
 ```
+
+### Response
+
+This will show all the commits from all the repositories, regardless of whether they are from GitHub, Bitbucket, GitLab, or any other system that CommitStream eventually supports:
+
 ```json
 {
+    "_links": {
+        "digest": {
+            "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1"
+        },
+        "inbox-create": {
+            "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes",
+            "method": "POST",
+            "title": "Endpoint for creating an inbox for a repository on digest 2b0c0791-140a-4143-be60-15552b4d6af1."
+        },
+        "self": {
+            "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes"
+        }
+    },
+    "digest": {
+        "description": "Digest for First Group of Repositories",
+        "digestId": "2b0c0791-140a-4143-be60-15552b4d6af1"
+    },
+    "count": 3,
     "_embedded": {
         "inboxes": [
             {
                 "_links": {
                     "add-commit": {
-                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2/commits"
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2/commits"
                     },
                     "self": {
-                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2"
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2"
                     }
                 },
                 "family": "GitHub",
                 "inboxId": "1f4a0c96-5226-47ac-8d4f-8ecaac7cbca2",
                 "instanceId": "c525ed34-429f-4e22-bd13-82e846e12ab6",
-                "name": "GitHub Repo 0"
+                "name": "GitHub Repo"
             },
             {
                 "_links": {
                     "add-commit": {
-                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/fee20df8-0041-463a-90b7-5ec0da09fed0/commits"
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/fee20df8-0041-463a-90b7-5ec0da09fed0/commits"
                     },
                     "self": {
-                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/fee20df8-0041-463a-90b7-5ec0da09fed0"
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/fee20df8-0041-463a-90b7-5ec0da09fed0"
                     }
                 },
                 "family": "GitLab",
                 "inboxId": "fee20df8-0041-463a-90b7-5ec0da09fed0",
                 "instanceId": "c525ed34-429f-4e22-bd13-82e846e12ab6",
-                "name": "GitLab Repo 0"
+                "name": "GitLab Repo"
             },
             {
                 "_links": {
                     "add-commit": {
-                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c/commits"
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c/commits"
                     },
                     "self": {
-                        "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/inboxes/2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c"
+                        "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c"
                     }
                 },
                 "family": "Bitbucket",
                 "inboxId": "2f5e73da-d0d7-4ab6-a38d-d521a6dabd4c",
                 "instanceId": "c525ed34-429f-4e22-bd13-82e846e12ab6",
-                "name": "Bitbucket Repo 0"
+                "name": "Bitbucket Repo"
+                
             }
         ]
-    },
-    "_links": {
-        "digest": {
-            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1"
-        },
-        "inbox-create": {
-            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes",
-            "method": "POST",
-            "title": "Endpoint for creating an inbox for a repository on digest 2b0c0791-140a-4143-be60-15552b4d6af1."
-        },
-        "self": {
-            "href": "http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes"
-        }
-    },
-    "count": 3,
-    "digest": {
-        "description": "Digest for 0",
-        "digestId": "2b0c0791-140a-4143-be60-15552b4d6af1"
     }
-
+}
 ```
 
-Commits within a Digest:
+### Explanation
+
+* This response shows the information about each of the repositories (inboxes) that contribute commits into the selected `digest`
+* By looking at the list of inboxes inside the `_embedded.inboxes` property, you can be sure that you are querying for the right group of repositories
+
+## Sample Query to Show All Commits within a Digest:
+
+Finally, once you know that you have the correct `digestId`, you can simply ask for all the commits that are aggregated within that `digest` like so:
 
 ```bash
-$ curl http://localhost:6565/api/c525ed34-429f-4e22-bd13-82e846e12ab6/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits?pageSize=100\&apiKey=9a753757-8ae9-4287-babe-0970101627db   | python -mjson.tool
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits\&apiKey=9a753757-8ae9-4287-babe-0970101627db   | python -mjson.tool
 ```
 ```json
 {
