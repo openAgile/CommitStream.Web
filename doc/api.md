@@ -205,8 +205,15 @@ sts/2b0c0791-140a-4143-be60-15552b4d6af1"
 
 The technical term within CommitStream for a source control repository is actually `inbox`, because it represents an HTTP endpoint to which the repository sends WebHook messages. Thus, to find out the list of repositories that a `digest` contains, we query for its child `inboxes` route.
 
+* The structure of the URL is `https://commitstream.v1host.com/api/`**instanceId**`/digests/`**digestId**`/inboxes?apiKey=`**apiKey**
+* Exmaple to query for inboxes within a digest:
+
+> https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes?apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f
+
+Here is the above in action:
+
 ```bash
-$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes?\&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes?apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
 ```
 
 ### Response
@@ -221,8 +228,7 @@ This will show all the commits from all the repositories, regardless of whether 
         },
         "inbox-create": {
             "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes",
-            "method": "POST",
-            "title": "Endpoint for creating an inbox for a repository on digest 2b0c0791-140a-4143-be60-15552b4d6af1."
+            "method": "POST"
         },
         "self": {
             "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/inboxes"
@@ -283,18 +289,24 @@ This will show all the commits from all the repositories, regardless of whether 
 }
 ```
 
-### Explanation
-
-* This response shows the information about each of the repositories (inboxes) that contribute commits into the selected `digest`
-* By looking at the list of inboxes inside the `_embedded.inboxes` property, you can be sure that you are querying for the right group of repositories
+c
 
 ## Sample Query to Show All Commits within a Digest:
 
-Finally, once you know that you have the correct `digestId`, you can simply ask for all the commits that are aggregated within that `digest` like so:
+Finally, once you know that you have the correct `digestId`, you can simply ask for all the commits that are aggregated within that `digest`.
+
+* The structure of the URL is `https://commitstream.v1host.com/api/`**instanceId**`/digests/`**digestId**`/commits?apiKey=`**apiKey**
+* Exmaple to query for commits within a digest: 
+ 
+> https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits?apiKey=9a753757-8ae9-4287-babe-0970101627db
+
+Here it is in action:
 
 ```bash
-$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits\&apiKey=9a753757-8ae9-4287-babe-0970101627db   | python -mjson.tool
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits?apiKey=9a753757-8ae9-4287-babe-0970101627db | python -mjson.tool
 ```
+### Response
+
 ```json
 {
     "_links": {},
@@ -763,5 +775,15 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
         }
     ]
 }
-
 ```
+
+### Explanation
+
+* There are commits in this response that correspond to all three of the repositories (inboxes) that are part of the digest.
+* The data has been normalized to have a common format across all the different version control systems that CommitStream support.
+* You can process this JSON result with whatever tools you like to create valuable information about the commit activity of your teams.
+
+# Feedback
+
+When we built CommitStream, we built a minimalistic API. There are lots of of other things that might be valuable for users of CommitStream. If you have some ideas, please let us know. You can also get involved in development, because the source code for CommitStream is open source! If you do play around with the code, VersionOne cannot guarantee that it will include your ideas into the official code base, but if you make something awesome, we'd love to hear about it and see if it makes sense to pull it in!
+
