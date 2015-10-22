@@ -93,6 +93,7 @@ git push origin devopsheros
 * Once the web app has been created, configure the App Settings so that it knows where to find its EventStore instance with these settings
   * First, create a new GUIDs, this time for the service `apiKey`. Again, in powershell you can type `[guid]::NewGuid()`. 
   * Then, add these App Settings to the site
+	* WEBSITE_NODE_DEFAULT_VERSION : `0.12.6`
 	* protocol : `https`
 	* apiKey: `apiKey`
 	* eventStoreBaseUrl: `https://v1cs-devopsheros.cloudapp.net:2113`
