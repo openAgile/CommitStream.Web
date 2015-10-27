@@ -29,8 +29,8 @@
   else if (showChildrenFeature === 'false') showChildrenFeature = false
   else showChildrenFeature = true;
   config.showChildrenFeatureToggle = showChildrenFeature;
-  config.storageConnectionString = nconf.get('storageConnectionString') || '';
-  config.azureTableName = nconf.get('azureTableName') || '';
+  config.storageConnectionString = nconf.get('AzureTableToSumo_storageConnectionString') || '';
+  config.azureTableName = nconf.get('AzureTableToSumo_azureTableName') || '';
   config.azureLoggerConfigured = config.storageConnectionString !== '' && config.azureTableName !== '';
 
 })(module.exports);
