@@ -1,9 +1,10 @@
 (() => {
-  let gitHubTranslator = require('../translators/githubTranslator'),
+  const gitHubTranslator = require('../translators/githubTranslator'),
     gitLabTranslator = require('../translators/gitLabTranslator'),
-    bitbucketTranslator = require('../translators/bitbucketTranslator');
+    bitbucketTranslator = require('../translators/bitbucketTranslator'),
+    vsoTranslator = require('../translators/vsoTranslator');
 
-  let TranslatorFactory = class {
+  const TranslatorFactory = class {
 
       create(request) {
         if (gitHubTranslator.canTranslate(request)) {
@@ -12,6 +13,8 @@
           return gitLabTranslator;
         } else if (bitbucketTranslator.canTranslate(request)) {
           return bitbucketTranslator;
+        } else if (vsoTranslator.canTranslate(request)) {
+          return vsoTranslator;
         } else {
           return undefined;
         }
