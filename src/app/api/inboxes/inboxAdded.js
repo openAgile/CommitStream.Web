@@ -47,7 +47,7 @@
           "GitHub",
           "GitLab",
           "Bitbucket",
-          "VSO"
+          "VsoGit"
         ]
       },
       "name": {

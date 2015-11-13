@@ -2,15 +2,15 @@ import util from 'util';
 import uuid from 'uuid-v4';
 import CSError from '../../middleware/csError';
 
-class VsoCommitMalformedError extends CSError {
+class VsoGitCommitMalformedError extends CSError {
   constructor(error, pushEvent) {
-    super(['There was an unexpected error when processing your Visual Studio Online push event.']);
+    super(['There was an unexpected error when processing your Visual Studio Online Git push event.']);
     this.originalError = error;
     this.pushEvent = pushEvent;
   }
 }
 
-const vsoTranslator = {
+const vsoGitTranslator = {
   canTranslate(request) {
     return (request.body.eventType && request.body.eventType === 'git.push') 
     && (request.body.publisherId && request.body.publisherId === 'tfs');
@@ -51,7 +51,7 @@ const vsoTranslator = {
         };
         return {
           eventId: uuid(),
-          eventType: 'VsoCommitReceived',
+          eventType: 'VsoGitCommitReceived',
           data: commit,
           metadata: {
             instanceId: instanceId,
@@ -62,13 +62,13 @@ const vsoTranslator = {
       });
       return events;
     } catch (ex) {
-      const malformedEx = new vsoTranslator.VsoCommitMalformedError(ex, pushEvent);
+      const malformedEx = new VsoGitCommitMalformedError(ex, pushEvent);
       throw malformedEx;
     }    
   }
 }
 
-export default vsoTranslator;
+export default vsoGitTranslator;
 
 
 /*

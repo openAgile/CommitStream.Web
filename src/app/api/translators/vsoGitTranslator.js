@@ -24,21 +24,21 @@ var _middlewareCsError = require('../../middleware/csError');
 
 var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
 
-var VsoCommitMalformedError = (function (_CSError) {
-  _inherits(VsoCommitMalformedError, _CSError);
+var VsoGitCommitMalformedError = (function (_CSError) {
+  _inherits(VsoGitCommitMalformedError, _CSError);
 
-  function VsoCommitMalformedError(error, pushEvent) {
-    _classCallCheck(this, VsoCommitMalformedError);
+  function VsoGitCommitMalformedError(error, pushEvent) {
+    _classCallCheck(this, VsoGitCommitMalformedError);
 
-    _get(Object.getPrototypeOf(VsoCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Visual Studio Online push event.']);
+    _get(Object.getPrototypeOf(VsoGitCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Visual Studio Online Git push event.']);
     this.originalError = error;
     this.pushEvent = pushEvent;
   }
 
-  return VsoCommitMalformedError;
+  return VsoGitCommitMalformedError;
 })(_middlewareCsError2['default']);
 
-var vsoTranslator = {
+var vsoGitTranslator = {
   canTranslate: function canTranslate(request) {
     return request.body.eventType && request.body.eventType === 'git.push' && (request.body.publisherId && request.body.publisherId === 'tfs');
   },
@@ -78,7 +78,7 @@ var vsoTranslator = {
           };
           return {
             eventId: (0, _uuidV42['default'])(),
-            eventType: 'VsoCommitReceived',
+            eventType: 'VsoGitCommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,
@@ -94,13 +94,13 @@ var vsoTranslator = {
 
       if (typeof _ret === 'object') return _ret.v;
     } catch (ex) {
-      var malformedEx = new vsoTranslator.VsoCommitMalformedError(ex, pushEvent);
+      var malformedEx = new VsoGitCommitMalformedError(ex, pushEvent);
       throw malformedEx;
     }
   }
 };
 
-exports['default'] = vsoTranslator;
+exports['default'] = vsoGitTranslator;
 
 /*
 {
