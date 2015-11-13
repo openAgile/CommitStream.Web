@@ -11,6 +11,13 @@
       repoArray = commitUrl.split('/commit')[0].split('/');
     } else if (family === 'Bitbucket') {
       repoArray = commitUrl.split('/commits')[0].split('/');
+    } else if (family === 'VsoGit') {
+      repoArray = [];
+      var components = commitUrl.match(/http.?:\/\/(.*?)\..*?_git\/(.*?)\/commit/);
+      var serverUrlMatch = commitUrl.match(/(http.?:)\/\/(.*?_git)\//);
+      if (components !== null && serverUrlMatch !== null) {
+        repoArray = [serverUrlMatch[1], '', serverUrlMatch[2], components[1], components[2]];
+      }
     } else {
       throw 'Invalid family';
     }
@@ -31,7 +38,10 @@
     return eventType.slice(0, -14);
   };
 
-  var getRepoHref = function(repoInfo) {
+  var getRepoHref = function(family, repoInfo) {
+    if (family === 'VsoGit') {
+      return repoInfo.serverUrl + '/' + repoInfo.repoName;
+    }
     // https://serverUrl/repoOwner/repoName
     return repoInfo.serverUrl + '/' + repoInfo.repoOwner + '/' + repoInfo.repoName;
   };
@@ -45,6 +55,10 @@
     if (family === 'Bitbucket') {
       // https://bitbucket.org/kunzimariano/test/branch/master for bitbucket
       return repoHref + '/branch/' + branch;
+    }
+
+    if (family === 'VsoGit') {
+      return repoHref + '/#version=GB' + encodeURIComponent(branch);
     }
 
     throw 'Invalid family';
@@ -64,13 +78,13 @@
           author: e.commit.committer.name,
           sha1Partial: e.sha.substring(0, 6),
           family: family,
-          action: "committed",
+          action: 'committed',
           message: e.commit.message,
           commitHref: e.html_url,
-          repo: repoInfo.repoOwner + '/' + repoInfo.repoName,
+          repo: repoInfo.repoOwner + '/' + decodeURIComponent(repoInfo.repoName),
           branch: e.branch,
-          branchHref: getBranchHref(family, getRepoHref(repoInfo), e.branch),
-          repoHref: getRepoHref(repoInfo)
+          branchHref: getBranchHref(family, getRepoHref(family, repoInfo), e.branch),
+          repoHref: getRepoHref(family, repoInfo)
         });
       } catch (ex) {
         console.log(ex);

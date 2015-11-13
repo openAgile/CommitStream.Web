@@ -56,7 +56,15 @@ var vsoGitTranslator = {
           name: pushEvent.resource.repository.name
         };
 
-        var events = _.map(pushEvent.resource.commits, function (aCommit) {
+        var getHtmlCommitUrl = function getHtmlCommitUrl(theCommit) {
+          var repositoryName = encodeURIComponent(pushEvent.resource.repository.name);
+          // Original format: https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/commits/e771d9b9d5abab2da4107a0e6db05cef21e40ce8
+          // Expected format: https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/commit/e771d9b9d5abab2da4107a0e6db05cef21e40ce8
+          var url = theCommit.url.replace(/_apis\/git\/repositories\/.*?\/commits\//i, '_git/' + repositoryName + '/commit/');
+          return url;
+        };
+
+        var events = pushEvent.resource.commits.map(function (aCommit) {
           var commit = {
             sha: aCommit.commitId,
             commit: {
@@ -71,7 +79,7 @@ var vsoGitTranslator = {
               },
               message: aCommit.comment
             },
-            html_url: aCommit.url,
+            html_url: getHtmlCommitUrl(aCommit),
             repository: repository,
             branch: branch,
             originalMessage: aCommit
