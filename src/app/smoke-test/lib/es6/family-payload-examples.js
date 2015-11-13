@@ -311,5 +311,94 @@ export default {
 				"type": "repository"
 			}
 		})
+	},
+	VsoGit: {
+		validWithOneCommit: message => (
+			{
+			  "subscriptionId": "a36104aa-ef6c-4643-ac08-5c42fd2115d3",
+			  "notificationId": 7,
+			  "id": "2d01bcf8-83cb-49aa-8d0b-3f2233965060",
+			  "eventType": "git.push",
+			  "publisherId": "tfs",
+			  "message": {
+			    "text": "Josh Gough pushed updates to branch MyNew/Shelveset of V1 Integration\r\n(https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/#version=GBMyNew%2FShelveset)",
+			    "html": "Josh Gough pushed updates to branch <a href=\"https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/#version=GBMyNew%2FShelveset\">MyNew/Shelveset</a> of <a href=\"https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1 Integration/\">V1 Integration</a>",
+			    "markdown": "Josh Gough pushed updates to branch [MyNew/Shelveset](https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/#version=GBMyNew%2FShelveset) of [V1 Integration](https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1 Integration/)"
+			  },
+			  "detailedMessage": {
+			    "text": `Josh Gough pushed 1 commit to branch MyNew/Shelveset of V1 Integration\r\n - ${message} cf383dd3 (https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/commit/cf383dd370a74a8a5062385f6c1723fcc7cc66eb)`,
+			    "html": `Josh Gough pushed 1 commit to branch <a href=\"https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/#version=GBMyNew%2FShelveset\">MyNew/Shelveset</a> of <a href=\"https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1 Integration/\">V1 Integration</a>\r\n<ul>\r\n<li>${message} <a href=\"https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/commit/cf383dd370a74a8a5062385f6c1723fcc7cc66eb\">cf383dd3</a></li>\r\n</ul>`,
+			    "markdown": `Josh Gough pushed 1 commit to branch [MyNew/Shelveset](https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/#version=GBMyNew%2FShelveset) of [V1 Integration](https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1 Integration/)\r\n* ${message} [cf383dd3](https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/commit/cf383dd370a74a8a5062385f6c1723fcc7cc66eb)`
+			  },
+			  "resource": {
+			    "commits": [
+			      {
+			        "commitId": "cf383dd370a74a8a5062385f6c1723fcc7cc66eb",
+			        "author": {
+			          "name": "Josh Gough",
+			          "email": "jsgough@gmail.com",
+			          "date": "2015-11-11T20:13:49Z"
+			        },
+			        "committer": {
+			          "name": "Josh Gough",
+			          "email": "jsgough@gmail.com",
+			          "date": "2015-11-11T20:13:49Z"
+			        },
+			        "comment": message,
+			        "url": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/commits/cf383dd370a74a8a5062385f6c1723fcc7cc66eb"
+			      }
+			    ],
+			    "refUpdates": [
+			      {
+			        "name": "refs/heads/MyNew/Shelveset",
+			        "oldObjectId": "0000000000000000000000000000000000000000",
+			        "newObjectId": "cf383dd370a74a8a5062385f6c1723fcc7cc66eb"
+			      }
+			    ],
+			    "repository": {
+			      "id": "d29767bb-8f5f-4c43-872f-6c73635a1256",
+			      "name": "V1 Integration",
+			      "url": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256",
+			      "project": {
+			        "id": "213b6eda-2f19-4651-9fa9-ee01a9a75945",
+			        "name": "V1 Integration",
+			        "url": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/projects/213b6eda-2f19-4651-9fa9-ee01a9a75945",
+			        "state": "wellFormed"
+			      },
+			      "defaultBranch": "refs/heads/master",
+			      "remoteUrl": "https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1 Integration"
+			    },
+			    "pushedBy": {
+			      "id": "0b88cae0-021f-4fa0-b723-d670c74ae474",
+			      "displayName": "Josh Gough",
+			      "uniqueName": "jsgough@gmail.com",
+			      "url": "https://v1platformtest.vssps.visualstudio.com/_apis/Identities/0b88cae0-021f-4fa0-b723-d670c74ae474",
+			      "imageUrl": "https://v1platformtest.visualstudio.com/DefaultCollection/_api/_common/identityImage?id=0b88cae0-021f-4fa0-b723-d670c74ae474"
+			    },
+			    "pushId": 7,
+			    "date": "2015-11-11T20:13:49.321845Z",
+			    "url": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/pushes/7",
+			    "_links": {
+			      "self": {
+			        "href": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/pushes/7"
+			      },
+			      "repository": {
+			        "href": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256"
+			      },
+			      "commits": {
+			        "href": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/pushes/7/commits"
+			      },
+			      "pusher": {
+			        "href": "https://v1platformtest.vssps.visualstudio.com/_apis/Identities/0b88cae0-021f-4fa0-b723-d670c74ae474"
+			      },
+			      "refs": {
+			        "href": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/refs"
+			      }
+			    }
+			  },
+			  "resourceVersion": "1.0-preview.1",
+			  "createdDate": "2015-11-11T20:13:52.4966577Z"
+			}
+		)
 	}
 };

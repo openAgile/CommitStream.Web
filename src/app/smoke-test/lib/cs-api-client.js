@@ -123,6 +123,12 @@ var families = {
       var message = arguments.length <= 2 || arguments[2] === undefined ? 'Bitbucket commit' : arguments[2];
       return postToInboxForFamily(client, inbox, message, 'Bitbucket', { 'x-event-key': 'repo:push' });
     }
+  },
+  VsoGit: {
+    commitAdd: function commitAdd(client, inbox) {
+      var message = arguments.length <= 2 || arguments[2] === undefined ? 'VsoGit commit' : arguments[2];
+      return postToInboxForFamily(client, inbox, message, 'VsoGit');
+    }
   }
 };
 

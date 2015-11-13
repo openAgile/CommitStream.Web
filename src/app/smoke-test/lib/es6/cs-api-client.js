@@ -75,6 +75,9 @@ let families = {
   },
   Bitbucket : {
     commitAdd: (client, inbox, message='Bitbucket commit') => postToInboxForFamily(client, inbox, message, 'Bitbucket', {'x-event-key': 'repo:push'})
+  },
+  VsoGit : {
+    commitAdd: (client, inbox, message='VsoGit commit') => postToInboxForFamily(client, inbox, message, 'VsoGit')
   }
 };
 
