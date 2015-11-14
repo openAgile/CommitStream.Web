@@ -39,6 +39,7 @@ var VsoGitCommitMalformedError = (function (_CSError) {
 })(_middlewareCsError2['default']);
 
 var vsoGitTranslator = {
+  family: 'VsoGit',
   canTranslate: function canTranslate(request) {
     return request.body.eventType && request.body.eventType === 'git.push' && (request.body.publisherId && request.body.publisherId === 'tfs');
   },
@@ -105,6 +106,32 @@ var vsoGitTranslator = {
       var malformedEx = new VsoGitCommitMalformedError(ex, pushEvent);
       throw malformedEx;
     }
+  },
+  getProperties: function getProperties(event) {
+    var commit = event.commit;
+    var branch = event.branch;
+    var html_url = event.html_url;
+    var props = {
+      repoName: '',
+      branchHref: '',
+      repoHref: ''
+    };
+
+    var urlComponents = html_url.match(/http.?:\/\/(.*?)\..*?_git\/(.*?)\/commit/);
+    var serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
+    if (urlComponents !== null && serverUrlMatch !== null) {
+      props.repoName = urlComponents[2];
+      var repoOwner = urlComponents[1];
+      var protocol = serverUrlMatch[1];
+      var serverUrl = protocol + '//' + serverUrlMatch[2];
+      props.repoHref = serverUrl + '/' + props.repoName;
+      props.branchHref = props.repoHref + '/#version=GB' + encodeURIComponent(branch);
+    } else {
+      // TODO: use proper error here
+      throw 'Could not parse VsoGitCommitReceived event props correctly.';
+    }
+
+    return props;
   }
 };
 

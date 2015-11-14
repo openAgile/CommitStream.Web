@@ -24,6 +24,8 @@ var hasCorrectHeaders = function hasCorrectHeaders(headers) {
   return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
 };
 
+bitbucketTranslator.family = 'Bitbucket';
+
 bitbucketTranslator.canTranslate = function (request) {
   return hasCorrectHeaders(request.headers);
 };

@@ -1,7 +1,8 @@
 //TODO: convert to ES6
 (function() {
   var _ = require('underscore'),
-    moment = require('moment');
+    moment = require('moment'),
+    translatorFactory = require('./translatorFactory');
 
   var getRepoInfo = function(family, commitUrl) {
 
@@ -11,13 +12,6 @@
       repoArray = commitUrl.split('/commit')[0].split('/');
     } else if (family === 'Bitbucket') {
       repoArray = commitUrl.split('/commits')[0].split('/');
-    } else if (family === 'VsoGit') {
-      repoArray = [];
-      var components = commitUrl.match(/http.?:\/\/(.*?)\..*?_git\/(.*?)\/commit/);
-      var serverUrlMatch = commitUrl.match(/(http.?:)\/\/(.*?_git)\//);
-      if (components !== null && serverUrlMatch !== null) {
-        repoArray = [serverUrlMatch[1], '', serverUrlMatch[2], components[1], components[2]];
-      }
     } else {
       throw 'Invalid family';
     }
@@ -39,9 +33,6 @@
   };
 
   var getRepoHref = function(family, repoInfo) {
-    if (family === 'VsoGit') {
-      return repoInfo.serverUrl + '/' + repoInfo.repoName;
-    }
     // https://serverUrl/repoOwner/repoName
     return repoInfo.serverUrl + '/' + repoInfo.repoOwner + '/' + repoInfo.repoName;
   };
@@ -57,10 +48,6 @@
       return repoHref + '/branch/' + branch;
     }
 
-    if (family === 'VsoGit') {
-      return repoHref + '/#version=GB' + encodeURIComponent(branch);
-    }
-
     throw 'Invalid family';
   };
 
@@ -70,7 +57,17 @@
       try {
         var e = JSON.parse(entry.data);
         var family = getFamily(entry.eventType);
-        var repoInfo = getRepoInfo(family, e.html_url);
+        var translator = translatorFactory.getByFamily(family);
+
+        var props = {};
+        if (translator.getProperties) {
+          props = translator.getProperties(e);
+        } else {
+          var repoInfo = getRepoInfo(family, e.html_url);
+          props.repoName = repoInfo.repoOwner + '/' + decodeURIComponent(repoInfo.repoName);
+          props.branchHref = getBranchHref(family, getRepoHref(family, repoInfo), e.branch);
+          props.repoHref = getRepoHref(family, repoInfo);
+        }
 
         commits.push({
           commitDate: e.commit.committer.date,
@@ -81,10 +78,10 @@
           action: 'committed',
           message: e.commit.message,
           commitHref: e.html_url,
-          repo: repoInfo.repoOwner + '/' + decodeURIComponent(repoInfo.repoName),
+          repo: props.repoName,
           branch: e.branch,
-          branchHref: getBranchHref(family, getRepoHref(family, repoInfo), e.branch),
-          repoHref: getRepoHref(family, repoInfo)
+          branchHref: props.branchHref,
+          repoHref: props.repoHref
         });
       } catch (ex) {
         console.log(ex);

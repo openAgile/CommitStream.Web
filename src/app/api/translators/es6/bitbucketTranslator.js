@@ -6,6 +6,8 @@ let bitbucketTranslator = {};
 
 let hasCorrectHeaders = headers => headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
 
+bitbucketTranslator.family = 'Bitbucket';
+
 bitbucketTranslator.canTranslate = request => hasCorrectHeaders(request.headers);
 
 bitbucketTranslator.translatePush = (pushEvent, instanceId, digestId, inboxId) => {
