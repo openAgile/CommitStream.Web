@@ -24,6 +24,10 @@ var _middlewareCsError = require('../../middleware/csError');
 
 var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
 
+var _getProperties2 = require('./getProperties');
+
+var _getProperties3 = _interopRequireDefault(_getProperties2);
+
 //TODO: do we want this kind of library to know about status codes?
 
 var GitHubCommitMalformedError = (function (_CSError) {
@@ -93,6 +97,9 @@ var githubTranslator = {
   canTranslate: function canTranslate(request) {
     var headers = request.headers;
     return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+  },
+  getProperties: function getProperties(event) {
+    return (0, _getProperties3['default'])(event, '/commit', 'tree');
   }
 };
 
