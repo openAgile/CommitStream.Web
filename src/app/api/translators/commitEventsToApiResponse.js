@@ -4,51 +4,8 @@
     moment = require('moment'),
     translatorFactory = require('./translatorFactory');
 
-  var getRepoInfo = function(family, commitUrl) {
-
-    var repoArray;
-
-    if (family === 'GitHub' || family === 'GitLab') {
-      repoArray = commitUrl.split('/commit')[0].split('/');
-    } else if (family === 'Bitbucket') {
-      repoArray = commitUrl.split('/commits')[0].split('/');
-    } else {
-      throw 'Invalid family';
-    }
-
-    var r = {};
-    r.repoName = repoArray.pop();
-    r.repoOwner = repoArray.pop();
-    r.serverUrl = repoArray.pop();
-
-    if (repoArray.pop() === '') {
-      r.serverUrl = repoArray.pop() + '//' + r.serverUrl;
-    }
-
-    return r;
-  };
-
   var getFamily = function(eventType) {
     return eventType.slice(0, -14);
-  };
-
-  var getRepoHref = function(family, repoInfo) {
-    // https://serverUrl/repoOwner/repoName
-    return repoInfo.serverUrl + '/' + repoInfo.repoOwner + '/' + repoInfo.repoName;
-  };
-
-  var getBranchHref = function(family, repoHref, branch) {
-    if (family === 'GitHub' || family === 'GitLab') {
-      // http://serverUrl/repoOwner/reponame/tree/branchName
-      return repoHref + '/tree/' + branch;
-    }
-
-    if (family === 'Bitbucket') {
-      // https://bitbucket.org/kunzimariano/test/branch/master for bitbucket
-      return repoHref + '/branch/' + branch;
-    }
-
-    throw 'Invalid family';
   };
 
   module.exports = function(entries) {
@@ -58,16 +15,7 @@
         var e = JSON.parse(entry.data);
         var family = getFamily(entry.eventType);
         var translator = translatorFactory.getByFamily(family);
-
-        var props = {};
-        if (translator.getProperties) {
-          props = translator.getProperties(e);
-        } else {
-          var repoInfo = getRepoInfo(family, e.html_url);
-          props.repoName = repoInfo.repoOwner + '/' + decodeURIComponent(repoInfo.repoName);
-          props.branchHref = getBranchHref(family, getRepoHref(family, repoInfo), e.branch);
-          props.repoHref = getRepoHref(family, repoInfo);
-        }
+        var props = translator.getProperties(e);
 
         commits.push({
           commitDate: e.commit.committer.date,
@@ -78,7 +26,7 @@
           action: 'committed',
           message: e.commit.message,
           commitHref: e.html_url,
-          repo: props.repoName,
+          repo: props.repo,
           branch: e.branch,
           branchHref: props.branchHref,
           repoHref: props.repoHref

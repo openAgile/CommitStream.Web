@@ -80,7 +80,7 @@ const vsoGitTranslator = {
     const branch = event.branch;
     const html_url = event.html_url;
     const props = {
-      repoName: '',
+      repo: '',
       branchHref: '',
       repoHref: ''
     };
@@ -88,11 +88,12 @@ const vsoGitTranslator = {
     const urlComponents = html_url.match(/http.?:\/\/(.*?)\..*?_git\/(.*?)\/commit/);
     const serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
     if (urlComponents !== null && serverUrlMatch !== null) {
-      props.repoName = urlComponents[2];
+      const repoName = urlComponents[2];
       const repoOwner = urlComponents[1];
       const protocol = serverUrlMatch[1];
       const serverUrl = protocol + '//' + serverUrlMatch[2];
-      props.repoHref =  serverUrl + '/' + props.repoName;
+      props.repo = `${repoOwner}/${decodeURIComponent(repoName)}`;
+      props.repoHref =  serverUrl + '/' + encodeURIComponent(props.repoName);
       props.branchHref =  props.repoHref + '/#version=GB' + encodeURIComponent(branch);
     } else {
       // TODO: use proper error here
