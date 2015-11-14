@@ -11,6 +11,7 @@ class VsoGitCommitMalformedError extends CSError {
 }
 
 const vsoGitTranslator = {
+  family: 'VsoGit',
   canTranslate(request) {
     return (request.body.eventType && request.body.eventType === 'git.push') 
     && (request.body.publisherId && request.body.publisherId === 'tfs');
@@ -73,6 +74,32 @@ const vsoGitTranslator = {
       const malformedEx = new VsoGitCommitMalformedError(ex, pushEvent);
       throw malformedEx;
     }    
+  },
+  getProperties(event) {
+    const commit = event.commit;
+    const branch = event.branch;
+    const html_url = event.html_url;
+    const props = {
+      repoName: '',
+      branchHref: '',
+      repoHref: ''
+    };
+
+    const urlComponents = html_url.match(/http.?:\/\/(.*?)\..*?_git\/(.*?)\/commit/);
+    const serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
+    if (urlComponents !== null && serverUrlMatch !== null) {
+      props.repoName = urlComponents[2];
+      const repoOwner = urlComponents[1];
+      const protocol = serverUrlMatch[1];
+      const serverUrl = protocol + '//' + serverUrlMatch[2];
+      props.repoHref =  serverUrl + '/' + props.repoName;
+      props.branchHref =  props.repoHref + '/#version=GB' + encodeURIComponent(branch);
+    } else {
+      // TODO: use proper error here
+      throw 'Could not parse VsoGitCommitReceived event props correctly.';
+    }
+
+    return props;
   }
 }
 

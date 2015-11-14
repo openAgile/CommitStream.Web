@@ -14,6 +14,12 @@ class TranslatorFactory {
     }
     return undefined;
   }
+  getByFamily(family) {
+    for(let translator of translators) {
+      if (translator.family === family) return translator;
+    }
+    return undefined;
+  }
 }
 
 export default new TranslatorFactory();

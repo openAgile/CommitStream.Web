@@ -9,6 +9,8 @@
     return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook';
   };
 
+  gitLabTranslator.family = 'GitLab';
+
   gitLabTranslator.canTranslate = function (request) {
     // gitLab does not have a pusheEvent.repository.id field, and github does
     // gitLab does not have a commit.committer object, and github does

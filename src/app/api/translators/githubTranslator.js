@@ -41,6 +41,7 @@ var GitHubCommitMalformedError = (function (_CSError) {
 })(_middlewareCsError2['default']);
 
 var githubTranslator = {
+  family: 'GitHub',
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {

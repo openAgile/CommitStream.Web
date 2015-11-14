@@ -12,6 +12,7 @@ class GitHubCommitMalformedError extends CSError {
 }
 
 let githubTranslator = {
+  family: 'GitHub',
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       const branch = pushEvent.ref.split('/').pop();
