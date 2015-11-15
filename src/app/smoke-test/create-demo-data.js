@@ -58,7 +58,10 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
       case 6:
         digest = context$1$0.sent;
 
-        if (!_commander2['default'].json) console.log('#' + iteration + ': Populating instance ' + client.instanceId + ' (apiKey = ' + client.apiKey + ')');
+        if (!_commander2['default'].json) {
+          console.log('The digest: ' + digest._links['teamroom-view'].href + '&apiKey=' + client.apiKey);
+          console.log('#' + iteration + ': Populating instance ' + client.instanceId + ' (apiKey = ' + client.apiKey + ')');
+        }
 
         n = 0;
 

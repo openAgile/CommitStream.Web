@@ -49,7 +49,10 @@ let createInstanceWithData = async (iteration) => {
   let instance = await client.instanceCreate();
   let digest = await instance.digestCreate({description:`Digest for ${iteration}`});
 
-  if (!program.json) console.log(`#${iteration}: Populating instance ${client.instanceId} (apiKey = ${client.apiKey})`);
+  if (!program.json) {
+    console.log(`The digest: ${digest._links['teamroom-view'].href}&apiKey=${client.apiKey}`);
+    console.log(`#${iteration}: Populating instance ${client.instanceId} (apiKey = ${client.apiKey})`);
+  }
 
   for (let n = 0; n < number_of_repo_iterations; n++) {
     let inboxNum = 0;
