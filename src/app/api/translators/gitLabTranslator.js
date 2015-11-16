@@ -18,6 +18,10 @@ var _getProperties2 = require('./getProperties');
 
 var _getProperties3 = _interopRequireDefault(_getProperties2);
 
+var _branchNameParse = require('./branchNameParse');
+
+var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
+
 var hasCorrectHeaders = function hasCorrectHeaders(headers) {
   return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook';
 };
@@ -35,7 +39,7 @@ var gitLabTranslator = {
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
-        var branch = pushEvent.ref.split('/').pop();
+        var branch = (0, _branchNameParse2['default'])(pushEvent.ref);
         var repository = {
           // gitLab does not have a repository id
           // id: pushEvent.repository.id,

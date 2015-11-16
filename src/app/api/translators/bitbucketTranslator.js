@@ -36,6 +36,7 @@ var bitbucketTranslator = {
         var latestCommit = pushEvent.push.changes[0]['new'];
         //TODO: we only have the date of the newest commit in the push.
         //Do we want to use it for every commit?
+
         var branch = latestCommit.name;
         var date = latestCommit.target.date;
         var repository = {

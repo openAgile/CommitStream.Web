@@ -24,6 +24,10 @@ var _middlewareCsError = require('../../middleware/csError');
 
 var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
 
+var _branchNameParse = require('./branchNameParse');
+
+var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
+
 var VsoGitCommitMalformedError = (function (_CSError) {
   _inherits(VsoGitCommitMalformedError, _CSError);
 
@@ -46,12 +50,8 @@ var vsoGitTranslator = {
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
-        var branchParts = pushEvent.resource.refUpdates[0].name.split('/');
-        // knock off the prefixing stuff
-        branchParts.shift();
-        branchParts.shift();
-        var branch = undefined;
-        if (branchParts.length > 1) branch = branchParts.join('/');else branch = branchParts[0];
+        var branch = (0, _branchNameParse2['default'])(pushEvent.resource.refUpdates[0].name);
+
         var repository = {
           id: pushEvent.resource.repository.id,
           name: pushEvent.resource.repository.name
