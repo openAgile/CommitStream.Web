@@ -1,6 +1,7 @@
   import uuid from 'uuid-v4';
   import GitLabCommitMalformedError from '../../middleware/gitLabCommitMalformedError';
   import getProperties from './getProperties';
+  import branchNameParse from './branchNameParse';
 
   let hasCorrectHeaders = (headers) => {
     return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook';
@@ -18,15 +19,15 @@
     },
     translatePush(pushEvent, instanceId, digestId, inboxId) {
       try {
-        let branch = pushEvent.ref.split('/').pop();
-        let repository = {
+        const branch = branchNameParse(pushEvent.ref);
+        const repository = {
           // gitLab does not have a repository id
           // id: pushEvent.repository.id,
           name: pushEvent.repository.name
         };
 
-        let events = pushEvent.commits.map(aCommit => {
-          let commit = {
+        const events = pushEvent.commits.map(aCommit => {
+          const commit = {
             sha: aCommit.id,
             commit: {
               author: aCommit.author,

@@ -1,6 +1,7 @@
 import util from 'util';
 import uuid from 'uuid-v4';
 import CSError from '../../middleware/csError';
+import branchNameParse from './branchNameParse';
 
 class VsoGitCommitMalformedError extends CSError {
   constructor(error, pushEvent) {
@@ -18,13 +19,8 @@ const vsoGitTranslator = {
   },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
-      let branchParts = pushEvent.resource.refUpdates[0].name.split('/');
-      // knock off the prefixing stuff
-      branchParts.shift();
-      branchParts.shift();
-      let branch;
-      if (branchParts.length > 1) branch = branchParts.join('/');
-      else branch = branchParts[0];
+      const branch = branchNameParse(pushEvent.resource.refUpdates[0].name);
+
       const repository = {
         id: pushEvent.resource.repository.id,
         name: pushEvent.resource.repository.name
