@@ -3,9 +3,8 @@
   import getProperties from './getProperties';
   import branchNameParse from './branchNameParse';
 
-  let hasCorrectHeaders = (headers) => {
-    return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook';
-  };
+  const hasCorrectHeaders = (headers) => headers.hasOwnProperty('x-gitlab-event')
+    && headers['x-gitlab-event'] === 'Push Hook';
 
   const gitLabTranslator = {
     family: 'GitLab',
