@@ -45,7 +45,7 @@ var VsoGitCommitMalformedError = (function (_CSError) {
 var vsoGitTranslator = {
   family: 'VsoGit',
   canTranslate: function canTranslate(request) {
-    return request.body.eventType && request.body.eventType === 'git.push' && (request.body.publisherId && request.body.publisherId === 'tfs');
+    return request.body.eventType && request.body.eventType === 'git.push' && request.body.publisherId && request.body.publisherId === 'tfs';
   },
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
