@@ -847,7 +847,7 @@ curl -i -X POST \
 ### Explanation
 
 * The response contains the information we sent to it, but also the new server-generated `inboxId` and, most importantly:
-* The `add-commit` href, which you will copy and past into the Web Hooks setup for the VCS system to tell it to send messages to CommitStream. **Don't forget to add the `apiKey` parameter to this href, however. For example, we would use https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f/commits?apiKey=0d6a6241-e256-4c54-a594-5fd51ccddb69
+* The `add-commit` href, which you will copy and past into the Web Hooks setup for the VCS system to tell it to send messages to CommitStream. **Don't forget to add the `apiKey` parameter to this href, however. For example, we would use https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f/commits?apiKey=0d6a6241-e256-4c54-a594-5fd51ccddb69.**
 
 # Feedback
 
