@@ -783,6 +783,72 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 * The data has been normalized to have a common format across all the different version control systems that CommitStream support.
 * You can process this JSON result with whatever tools you like to create valuable information about the commit activity of your teams.
 
+
+# Other API Operations
+
+In addition to querying, you can also use the API to create new resources. This can be helpful when you want to automate the creation of repositories to associate them with a digest.
+
+# Create an Inobox for a Repository
+
+Each `digest` allows you to create an `inbox` for a particular repository by issuing a POST to a sub-resource of the `digest`.
+
+* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/digests/`**digestId**`/inboxes`&apiKey=`**apiKey**.
+* You must send a `Content-Type: application/json` HTTP header.
+* The structure of the body is:
+```json
+{
+    "name": "RepositoryName",
+    "url": "http://url/of/therepo",
+    "family": "VcsFamily"
+}
+```
+* The `family` value must be one of `GitHub`, `GitLab`, `Bitbucket`, or `VsoGit`.
+* Here it is in action, creating a new `inbox` of family `GitHub`:
+https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits?apiKey=9a753757-8ae9-4287-babe-0970101627db
+
+Here it is in action:
+```bash
+curl -i -X POST \
+   -H "Content-Type:application/json" \
+   -d \
+'{
+  "name": "CommitStream.Web",
+  "url": "https://www.github.com/openAgile/CommitStream.Web",
+  "family": "GitHub"  
+}' \
+ 'https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/204600dd-4790-42e0-813e-37b632798751/inboxes?apiKey=0d6a6241-e256-4c54-a594-5fd51ccddb69'
+```
+
+### Response
+
+```json
+{
+  "_links": {
+    "self": {
+      "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f"
+    },
+    "digest-parent": {
+      "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/204600dd-4790-42e0-813e-37b632798751"
+    },
+    "add-commit": {
+      "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f/commits"
+    },
+    "inbox-remove": {
+      "href": "https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f"
+    }
+  },
+  "inboxId": "75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f",
+  "family": "VsoGit",
+  "name": "CommitStream.Web",
+  "url": "https://www.github.com/openAgile/CommitStream.Web"
+}
+```
+
+### Explanation
+
+* The response contains the information we sent to it, but also the new server-generated `inboxId` and, most importantly:
+* The `add-commit` href, which you will copy and past into the Web Hooks setup for the VCS system to tell it to send messages to CommitStream. **Don't forget to add the `apiKey` parameter to this href, however. For example, we would use https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f/commits?apiKey=0d6a6241-e256-4c54-a594-5fd51ccddb69
+
 # Feedback
 
 When we built CommitStream, we built a minimalistic API. There are lots of of other things that might be valuable for users of CommitStream. If you have some ideas, please let us know. You can also get involved in development, because the source code for CommitStream is open source! If you do play around with the code, VersionOne cannot guarantee that it will include your ideas into the official code base, but if you make something awesome, we'd love to hear about it and see if it makes sense to pull it in!
