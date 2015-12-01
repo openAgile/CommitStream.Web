@@ -788,7 +788,7 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 
 In addition to querying, you can also use the API to create new resources. This can be helpful when you want to automate the creation of repositories to associate them with a digest.
 
-# Create an Inobox for a Repository
+# Create an Inbox for a Repository
 
 Each `digest` allows you to create an `inbox` for a particular repository by issuing a POST to a sub-resource of the `digest`.
 
