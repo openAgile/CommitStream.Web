@@ -804,7 +804,6 @@ Each digest allows you to create an inbox for a particular repository by issuing
 ```
 * The `family` value must be one of `GitHub`, `GitLab`, `Bitbucket`, or `VsoGit`.
 * Here it is in action, creating a new inbox of family `GitHub`:
-https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits?apiKey=9a753757-8ae9-4287-babe-0970101627db:
 
 ```bash
 curl -i -X POST \
