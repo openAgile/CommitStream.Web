@@ -786,13 +786,13 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 
 # Other API Operations
 
-In addition to querying, you can also use the API to create new resources. This can be helpful when you want to automate the creation of repositories to associate them with a digest.
+In addition to querying, you can also use the API to create new resources. This can be helpful when you want to automate the creation of inboxes for repositories to associate them with a digest.
 
 # Create an Inbox for a Repository
 
-Each `digest` allows you to create an `inbox` for a particular repository by issuing a POST to a sub-resource of the `digest`.
+Each digest allows you to create an inbox for a particular repository by issuing a POST to a sub-resource of the digest.
 
-* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/digests/`**digestId**`/inboxes`&apiKey=`**apiKey**.
+* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/digests/`**digestId**`/inboxes?apiKey=`**apiKey**.
 * You must send a `Content-Type: application/json` HTTP header.
 * The structure of the body is:
 ```json
@@ -803,7 +803,7 @@ Each `digest` allows you to create an `inbox` for a particular repository by iss
 }
 ```
 * The `family` value must be one of `GitHub`, `GitLab`, `Bitbucket`, or `VsoGit`.
-* Here it is in action, creating a new `inbox` of family `GitHub`:
+* Here it is in action, creating a new inbox of family `GitHub`:
 https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests/2b0c0791-140a-4143-be60-15552b4d6af1/commits?apiKey=9a753757-8ae9-4287-babe-0970101627db:
 
 ```bash
@@ -846,7 +846,7 @@ curl -i -X POST \
 ### Explanation
 
 * The response contains the information we sent to it, but also the new server-generated `inboxId` and, most importantly:
-* The `add-commit` href, which you will copy and paste into the hook setup for your repository in your VCS system so that it will send messages to this new CommitStream `inbox`. **Don't forget to add the `apiKey` parameter to this href, however. For example, we would use https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f/commits?apiKey=0d6a6241-e256-4c54-a594-5fd51ccddb69.**
+* The `add-commit` href, which you will copy and paste into the hook setup for your repository in your VCS system so that it will send messages to this new CommitStream inbox. **Don't forget to add the `apiKey` parameter to this href, however. For example, we would use https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/inboxes/75a0a7b2-10fd-4b97-ae9b-73e4e0598c1f/commits?apiKey=0d6a6241-e256-4c54-a594-5fd51ccddb69.**
 
 # Feedback
 
