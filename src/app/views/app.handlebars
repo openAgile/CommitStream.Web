@@ -14,20 +14,30 @@
     showChildrenChecked,
     assetNumbers;
 
-  var plugins = [
-    function CareerBuilder_open_mentions_in_new_window(model) {
-      console.log("CareerBuilder plugin running...");
-      console.log(model);
+  var clone = function(source) {
+    return JSON.parse(JSON.stringify(source));
+  };
+
+  var commitsListModelPreprocessorPlugins = [
+    function CareerBuilder_open_mentions_in_new_window(context, model) {
+      for(var i = 0; i < model.commits.length; i++) {
+        var commit = model.commits[i];
+        var processedMessage = commit.message.replace(context.assetMentionPattern, 'TESTING: $1');
+        commit.message = processedMessage;
+      }
     }
   ];
 
-  var processPlugins = function(model) {
-    for(var i = 0; i < plugins.length; i++) {
-      var plugin = plugins[i];
-      plugin(model);
-    }
+  var commitsListModelPreprocessorPluginContext = {
+    assetMentionPattern: new RegExp('([A-Z,a-z]{1,2}-[0-9]+)', 'g')
   };
 
+  var processCommitsListPreprocessorPlugins = function(model) {
+    for(var i = 0; i < commitsListModelPreprocessorPlugins.length; i++) {
+      var plugin = commitsListModelPreprocessorPlugins[i];
+      plugin(commitsListModelPreprocessorPluginContext, model);
+    }
+  };
 
   var configureCommitStreamDependencies = function() {
     require.config({
@@ -75,17 +85,16 @@
     $(commitStreamDomId).html(content);
   };
 
-
   var renderCommitsContainer = function(model) {
     try {
-      var modelCopy = JSON.parse(JSON.stringify(model));
+      var modelCopy = clone(model);
       if (!commitsContainerTmpl) {
         getCompiledTemplate('commitsList.html', function(tmpl) {
           commitsListTmpl = tmpl;
           registerPartial('commitsList', tmpl, function() {
             getCompiledTemplate('commitsContainer.html', function(tmpl) {
               commitsContainerTmpl = tmpl;
-              processPlugins(modelCopy);
+              processCommitsListPreprocessorPlugins(modelCopy);
               setStreamContent(modelCopy);
               checkIfNextPage(model);
               bindRefreshActions();
@@ -94,7 +103,7 @@
           });
         });
       } else {
-        processPlugins(modelCopy);
+        processCommitsListPreprocessorPlugins(modelCopy);
         setStreamContent(modelCopy);
         checkIfNextPage(model);
         bindRefreshActions();
@@ -106,18 +115,18 @@
   };
 
   var renderCommitsList = function(model) {
-    var modelCopy = JSON.parse(JSON.stringify(model));
+    var modelCopy = clone(model);
     try {
       if (!commitsListTmpl) {
         getCompiledTemplate('commitsList.html', function(tmpl) {
           commitsListTmpl = tmpl;
-          processPlugins(modelCopy);
+          processCommitsListPreprocessorPlugins(modelCopy);
           var content = tmpl(modelCopy);
           $(commitStreamDomId).find('.side-panel-scrollable').append(content);
           checkIfNextPage(model);
         });
       } else {
-        processPlugins(modelCopy);
+        processCommitsListPreprocessorPlugins(modelCopy);
         var content = commitsListTmpl(modelCopy);
         $(commitStreamDomId).find('.side-panel-scrollable').append(content);
         checkIfNextPage(model);
