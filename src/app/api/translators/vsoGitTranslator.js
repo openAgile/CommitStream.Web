@@ -119,13 +119,14 @@ var vsoGitTranslator = {
 
     var urlComponents = html_url.match(/http.?:\/\/(.*?)\..*?_git\/(.*?)\/commit/);
     var serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
+
     if (urlComponents !== null && serverUrlMatch !== null) {
       var repoName = urlComponents[2];
       var repoOwner = urlComponents[1];
       var protocol = serverUrlMatch[1];
       var serverUrl = protocol + '//' + serverUrlMatch[2];
       props.repo = repoOwner + '/' + decodeURIComponent(repoName);
-      props.repoHref = serverUrl + '/' + encodeURIComponent(props.repoName);
+      props.repoHref = serverUrl + '/' + repoName;
       props.branchHref = props.repoHref + '/#version=GB' + encodeURIComponent(branch);
     } else {
       // TODO: use proper error here
