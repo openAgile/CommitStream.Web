@@ -1,6 +1,8 @@
 ﻿import util from 'util';
 import uuid from 'uuid-v4';
 import CSError from '../../middleware/csError';
+import getProperties from './getProperties';
+import branchNameParse from './branchNameParse';
 
 //TODO: do we want this kind of library to know about status codes?
 class GitHubCommitMalformedError extends CSError {
@@ -12,9 +14,10 @@ class GitHubCommitMalformedError extends CSError {
 }
 
 let githubTranslator = {
+  family: 'GitHub',
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
-      const branch = pushEvent.ref.split('/').pop();
+      const branch = branchNameParse(pushEvent.ref);
       const repository = {
         id: pushEvent.repository.id,
         name: pushEvent.repository.name
@@ -57,6 +60,9 @@ let githubTranslator = {
   canTranslate(request) {
     const headers = request.headers;
     return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+  },
+  getProperties(event) {
+    return getProperties(event, '/commit', 'tree');
   }
 };
 

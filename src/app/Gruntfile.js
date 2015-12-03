@@ -2,6 +2,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   var es6Locations = [
+    './es6/*.js',
     'api/**/es6/*.js',
     'middleware/**/es6/*.js',
     'client/**/es6/*.js',
@@ -99,6 +100,11 @@ module.exports = function(grunt) {
           force: true
         }
       }    
+    },
+    shell: {
+      target: {
+        command: 'sh devm.sh'
+      }
     }
   });
 
@@ -114,6 +120,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('dev', ['less', 'babel', 'express', 'watch']);
+  grunt.registerTask('devm', ['shell']);
+
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-express-server');

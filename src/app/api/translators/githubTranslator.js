@@ -24,6 +24,14 @@ var _middlewareCsError = require('../../middleware/csError');
 
 var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
 
+var _getProperties2 = require('./getProperties');
+
+var _getProperties3 = _interopRequireDefault(_getProperties2);
+
+var _branchNameParse = require('./branchNameParse');
+
+var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
+
 //TODO: do we want this kind of library to know about status codes?
 
 var GitHubCommitMalformedError = (function (_CSError) {
@@ -41,10 +49,11 @@ var GitHubCommitMalformedError = (function (_CSError) {
 })(_middlewareCsError2['default']);
 
 var githubTranslator = {
+  family: 'GitHub',
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
-        var branch = pushEvent.ref.split('/').pop();
+        var branch = (0, _branchNameParse2['default'])(pushEvent.ref);
         var repository = {
           id: pushEvent.repository.id,
           name: pushEvent.repository.name
@@ -92,6 +101,9 @@ var githubTranslator = {
   canTranslate: function canTranslate(request) {
     var headers = request.headers;
     return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+  },
+  getProperties: function getProperties(event) {
+    return (0, _getProperties3['default'])(event, '/commit', 'tree');
   }
 };
 
