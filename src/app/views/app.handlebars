@@ -12,7 +12,8 @@
     commitsListTmpl,
     autoRefreshIntervalId,
     showChildrenChecked,
-    assetNumbers;
+    assetNumbers,
+    versionOneInstanceUrl;
 
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
@@ -22,18 +23,21 @@
     function CareerBuilder_open_mentions_in_new_window(context, model) {
       for(var i = 0; i < model.commits.length; i++) {
         var commit = model.commits[i];
-        var processedMessage = commit.message.replace(context.assetMentionPattern, 'TESTING: $1');
+        var processedMessage = commit.message.replace(context.assetMentionPattern, '<a href="' + versionOneInstanceUrl + '/assetdetail.v1?number=$1" target="_blank">$1</a>');
         commit.message = processedMessage;
       }
     }
   ];
 
   var commitsListModelPreprocessorPluginContext = {
-    assetMentionPattern: new RegExp('([A-Z,a-z]{1,2}-[0-9]+)', 'g')
+    assetMentionPattern: new RegExp('([A-Z,a-z]{1,2}-[0-9]{5,})', 'g')
   };
 
   var processCommitsListPreprocessorPlugins = function(model) {
-    for(var i = 0; i < commitsListModelPreprocessorPlugins.length; i++) {
+    if(!versionOneInstanceUrl){
+        return;
+    }
+    for(var i = 0; i < commitsListModelPreprocessorPlugins.length; i++) {  
       var plugin = commitsListModelPreprocessorPlugins[i];
       plugin(commitsListModelPreprocessorPluginContext, model);
     }
@@ -338,7 +342,8 @@
         dId,
         iId,
         aKey,
-        assetAndChildUrl) {
+        assetAndChildUrl,
+        v1InstanceUrl) {
 
         clearChunckDataTemplate();
         commitStreamDomId = csDomId;
@@ -348,6 +353,7 @@
         instanceId = iId;
         apiKey = aKey;
         getAssetAndChildNumbersUrl = assetAndChildUrl;
+        versionOneInstanceUrl = v1InstanceUrl;
 
         try {
           if (getAssetAndChildNumbersUrl) {

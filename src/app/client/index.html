@@ -26,7 +26,6 @@ $(function() {
       }
       return null;
   }
-
   var apiKey = getQueryVariable('apiKey');
   var digestId = getQueryVariable('digestId');
   var instanceId = getQueryVariable('instanceId');
@@ -34,14 +33,13 @@ $(function() {
     alert('Must specify API key in the form of apiKey=<apikey> as a query string parameter');
   }
   var workitem = getQueryVariable('workitem');
-
+  var versionOneInstanceUrl = getQueryVariable('versionOneInstanceUrl');
   function handleError(data, status) {
     $('#commits').html('<div class="commitStream-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
   }
-
   $.getScript('app',
     function(data, status, jqxhr) {
-      CommitStream.commitsDisplay('#commits', workitem, handleError, digestId, instanceId, apiKey);
+      CommitStream.commitsDisplay('#commits', workitem, handleError, digestId, instanceId, apiKey, undefined, versionOneInstanceUrl);
     });
 });
     </script>
