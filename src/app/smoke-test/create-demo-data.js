@@ -26,7 +26,7 @@ var client = new _libCsApiClient2['default'](_commander2['default'].url);
 
 if (!_commander2['default'].json) console.log('Operating against this CommitStream Service API: ' + client.baseUrl);
 
-var workItemsToMention = [['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005'], ['S-00002', 'T-00011', 'T-00012', 'T-00013', 'T-00014', 'T-00015', 'AT-00011', 'AT-00012', 'AT-00013', 'AT-00014', 'AT-00015'], ['S-00003', 'T-00021', 'T-00022', 'T-00023', 'T-00024', 'T-00025', 'AT-00021', 'AT-00022', 'AT-00023', 'AT-00024', 'AT-00025']];
+var workItemsToMention = [['S-00001', 'T-00001', 'T-00002', 'T-00003', 'T-00004', 'T-00005', 'AT-00001', 'AT-00002', 'AT-00003', 'AT-00004', 'AT-00005'], ['S-00002', 'T-00011', 'T-00012', 'T-00013', 'T-00014', 'T-00015', 'AT-00011', 'AT-00012', 'AT-00013', 'AT-00014', 'AT-00015'], ['S-00003', 'T-00021', 'T-00022', 'T-00023', 'T-00024', 'T-00025', 'AT-00021', 'AT-00022', 'AT-00023', 'AT-00024', 'AT-00025'], ['S-00004', 'T-00031', 'T-00032', 'T-00033', 'T-00034', 'T-00035', 'AT-00031', 'AT-00032', 'AT-00033', 'AT-00034', 'AT-00035']];
 
 var createInstanceWithData = function createInstanceWithData(iteration) {
   var inboxesToCreate, instance, digest, n, inboxNum, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, inboxToCreate, inbox, workItemGroupNum, workItemsGroup, comma, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, workItem, mentionNum, message, commitAddResponse;
@@ -43,6 +43,9 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
         }, {
           name: 'Bitbucket Repo ' + iteration,
           family: 'Bitbucket'
+        }, {
+          name: 'VsoGit Repo ' + iteration,
+          family: 'VsoGit'
         }];
         context$1$0.next = 3;
         return _regeneratorRuntime.awrap(client.instanceCreate());
@@ -55,7 +58,10 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
       case 6:
         digest = context$1$0.sent;
 
-        if (!_commander2['default'].json) console.log('#' + iteration + ': Populating instance ' + client.instanceId + ' (apiKey = ' + client.apiKey + ')');
+        if (!_commander2['default'].json) {
+          console.log('The digest: ' + digest._links['teamroom-view'].href + '&apiKey=' + client.apiKey);
+          console.log('#' + iteration + ': Populating instance ' + client.instanceId + ' (apiKey = ' + client.apiKey + ')');
+        }
 
         n = 0;
 
@@ -84,7 +90,7 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
 
       case 20:
         inbox = context$1$0.sent;
-        workItemGroupNum = inboxNum % 3;
+        workItemGroupNum = inboxNum % 4;
         workItemsGroup = workItemsToMention[workItemGroupNum];
         comma = iteration === 0 && inboxNum === 0 ? '' : ',';
 

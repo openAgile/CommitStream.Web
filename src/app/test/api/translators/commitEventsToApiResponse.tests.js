@@ -27,7 +27,7 @@ eventsData.single = [{
   links: []
 }];
 
-describe('gitHubEventsToApiResponse', function() {
+describe('commitEventsToApiResponse', function() {
 
   describe('when 0 events present', function() {
     it('returns an empty array', function() {

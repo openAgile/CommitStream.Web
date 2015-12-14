@@ -6,6 +6,7 @@ var chai = require('chai'),
   githubTranslator = proxyquire('../../../api/translators/githubTranslator', {
     'uuid-v4': uuidStub
   });
+require('../../helpers')(global);
 
 // Test data:
 
@@ -185,6 +186,9 @@ var pushEventMessageWithOneCommit = {
   }
 };
 
+var pushEventWithSlashInBranchName = clone(pushEventMessageWithOneCommit);
+pushEventWithSlashInBranchName.ref = 'refs/heads/my-cool-feature/the-thing-we-broke/and-now-we-fix';
+
 var pushEventMessageWithoutRequiredProperty = {
   "ref": "refs/heads/teamRoomUX2_S-51083",
   "before": "300417ed43da3a6819d9ee329e06275e0a377a0c",
@@ -342,6 +346,14 @@ describe('githubTranslator', function() {
       }
       invokeTranslator.should.throw(githubTranslator.GitHubCommitMalformedError);
       done();
+    });
+  });
+
+  describe('when translating a push event', function() {
+    it('should parse branch names with slashes correctly', function() {
+      var expectedBranchName = 'my-cool-feature/the-thing-we-broke/and-now-we-fix';
+      var actual = githubTranslator.translatePush(pushEventWithSlashInBranchName, instanceId, digestId, inboxId);
+      actual[0].data.branch.should.equal(expectedBranchName);
     });
   });
 

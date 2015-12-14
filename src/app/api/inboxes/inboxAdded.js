@@ -46,7 +46,8 @@
         "enum": [
           "GitHub",
           "GitLab",
-          "Bitbucket"
+          "Bitbucket",
+          "VsoGit"
         ]
       },
       "name": {

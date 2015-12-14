@@ -1,23 +1,25 @@
-(() => {
-  let gitHubTranslator = require('../translators/githubTranslator'),
-    gitLabTranslator = require('../translators/gitLabTranslator'),
-    bitbucketTranslator = require('../translators/bitbucketTranslator');
+const translatorNames = [
+  'githubTranslator',
+  'gitLabTranslator',
+  'bitbucketTranslator',
+  'vsoGitTranslator'
+];
 
-  let TranslatorFactory = class {
+const translators = translatorNames.map(name => require(`../translators/${name}`));
 
-      create(request) {
-        if (gitHubTranslator.canTranslate(request)) {
-          return gitHubTranslator;
-        } else if (gitLabTranslator.canTranslate(request)) {
-          return gitLabTranslator;
-        } else if (bitbucketTranslator.canTranslate(request)) {
-          return bitbucketTranslator;
-        } else {
-          return undefined;
-        }
-      }
-    } // close the class
+class TranslatorFactory {
+  create(req) {
+    for(let translator of translators) {
+      if (translator.canTranslate(req)) return translator;
+    }
+    return undefined;
+  }
+  getByFamily(family) {
+    for(let translator of translators) {
+      if (translator.family === family) return translator;
+    }
+    return undefined;
+  }
+}
 
-  module.exports = new TranslatorFactory();
-
-})();
+export default new TranslatorFactory();

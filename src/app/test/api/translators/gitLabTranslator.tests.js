@@ -7,6 +7,7 @@ var chai = require('chai'),
   gitLabTranslator = proxyquire('../../../api/translators/gitLabTranslator', {
     'uuid-v4': uuidStub
   });
+require('../../helpers')(global);
 
 var pushEventWithOneCommit = {
   "object_kind": "push",
@@ -38,6 +39,9 @@ var pushEventWithOneCommit = {
   }],
   "total_commits_count": 4
 };
+
+var pushEventWithSlashInBranchName = clone(pushEventWithOneCommit);
+pushEventWithSlashInBranchName.ref = 'refs/heads/my-cool-feature/the-thing-we-broke/and-now-we-fix';
 
 describe('gitLabTranslator', function() {
 
@@ -91,6 +95,12 @@ describe('gitLabTranslator', function() {
   });
 
   describe('when translating a push event that contains one commit', function() {
+      var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
+        digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
+        inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
+      eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
+      uuidStub.returns(eventId);      
+
     it('should match the expected translation', function() {
       var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
         digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
@@ -143,5 +153,10 @@ describe('gitLabTranslator', function() {
       actual.should.deep.equal(expected);
     });
 
+    it('should parse branch names with slashes correctly', function() {
+      var expectedBranchName = 'my-cool-feature/the-thing-we-broke/and-now-we-fix';
+      var actual = gitLabTranslator.translatePush(pushEventWithSlashInBranchName, instanceId, digestId, inboxId);
+      actual[0].data.branch.should.equal(expectedBranchName);
+    });
   });
 });

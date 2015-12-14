@@ -1,84 +1,78 @@
-//TODO: convert to ES6
-(function() {
-  var _ = require('underscore'),
-    moment = require('moment');
+'use strict';
 
-  var getRepoInfo = function(family, commitUrl) {
+var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
 
-    var repoArray;
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-    if (family === 'GitHub' || family === 'GitLab') {
-      repoArray = commitUrl.split('/commit')[0].split('/');
-    } else if (family === 'Bitbucket') {
-      repoArray = commitUrl.split('/commits')[0].split('/');
-    } else {
-      throw 'Invalid family';
-    }
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-    var r = {};
-    r.repoName = repoArray.pop();
-    r.repoOwner = repoArray.pop();
-    r.serverUrl = repoArray.pop();
+var _moment = require('moment');
 
-    if (repoArray.pop() === '') {
-      r.serverUrl = repoArray.pop() + '//' + r.serverUrl;
-    }
+var _moment2 = _interopRequireDefault(_moment);
 
-    return r;
-  };
+var _translatorFactory = require('./translatorFactory');
 
-  var getFamily = function(eventType) {
-    return eventType.slice(0, -14);
-  };
+var _translatorFactory2 = _interopRequireDefault(_translatorFactory);
 
-  var getRepoHref = function(repoInfo) {
-    // https://serverUrl/repoOwner/repoName
-    return repoInfo.serverUrl + '/' + repoInfo.repoOwner + '/' + repoInfo.repoName;
-  };
+var getFamily = function getFamily(eventType) {
+  return eventType.slice(0, -14);
+};
 
-  var getBranchHref = function(family, repoHref, branch) {
-    if (family === 'GitHub' || family === 'GitLab') {
-      // http://serverUrl/repoOwner/reponame/tree/branchName
-      return repoHref + '/tree/' + branch;
-    }
+exports['default'] = function (entries) {
+  var commits = [];
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
 
-    if (family === 'Bitbucket') {
-      // https://bitbucket.org/kunzimariano/test/branch/master for bitbucket
-      return repoHref + '/branch/' + branch;
-    }
+  try {
+    for (var _iterator = _getIterator(entries), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var entry = _step.value;
 
-    throw 'Invalid family';
-  };
-
-  module.exports = function(entries) {
-    var commits = [];
-    _.each(entries, function(entry) {
       try {
         var e = JSON.parse(entry.data);
         var family = getFamily(entry.eventType);
-        var repoInfo = getRepoInfo(family, e.html_url);
+        var translator = _translatorFactory2['default'].getByFamily(family);
+        var props = translator.getProperties(e);
 
         commits.push({
           commitDate: e.commit.committer.date,
-          timeFormatted: moment(e.commit.committer.date).fromNow(),
+          timeFormatted: (0, _moment2['default'])(e.commit.committer.date).fromNow(),
           author: e.commit.committer.name,
           sha1Partial: e.sha.substring(0, 6),
           family: family,
-          action: "committed",
+          action: 'committed',
           message: e.commit.message,
           commitHref: e.html_url,
-          repo: repoInfo.repoOwner + '/' + repoInfo.repoName,
+          repo: props.repo,
           branch: e.branch,
-          branchHref: getBranchHref(family, getRepoHref(repoInfo), e.branch),
-          repoHref: getRepoHref(repoInfo)
+          branchHref: props.branchHref,
+          repoHref: props.repoHref
         });
       } catch (ex) {
         console.log(ex);
       }
-    });
-    var response = {
-      commits: commits
-    };
-    return response;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator['return']) {
+        _iterator['return']();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  var response = {
+    commits: commits
   };
-})();
+  return response;
+};
+
+module.exports = exports['default'];
