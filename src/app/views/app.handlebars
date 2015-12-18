@@ -15,7 +15,6 @@
     assetNumbers,
     mentionUrl;
 
-
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
   };
@@ -24,7 +23,10 @@
     function CareerBuilder_open_mentions_in_new_window(context, model) {
       for (var i = 0; i < model.commits.length; i++) {
         var commit = model.commits[i];
-        var processedMessage = commit.message.replace(context.assetMentionPattern, '<a href="' + mentionUrl + '=$1" target="_blank">$1</a>');
+        var processedMessage = commit.message.replace(context.assetMentionPattern, function(match, p1) {
+          var mentionUrlWithReplacement = mentionUrl.replace("\{\{mention\}\}", p1);
+          return '<a href="' + mentionUrlWithReplacement + '" target="_blank">' + match + '</a>';
+        });
         commit.message = processedMessage;
       }
     }
@@ -353,7 +355,7 @@
         instanceId = iId;
         apiKey = aKey;
         getAssetAndChildNumbersUrl = assetAndChildUrl;
-        mentionUrl = mentionDetailUrlTemplate
+        mentionUrl = mentionDetailUrlTemplate;
 
         try {
           if (getAssetAndChildNumbersUrl) {
