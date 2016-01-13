@@ -13,7 +13,7 @@
     autoRefreshIntervalId,
     showChildrenChecked,
     assetNumbers,
-    versionOneInstanceUrl;
+    mentionUrl;
 
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
@@ -21,9 +21,12 @@
 
   var commitsListModelPreprocessorPlugins = [
     function CareerBuilder_open_mentions_in_new_window(context, model) {
-      for(var i = 0; i < model.commits.length; i++) {
+      for (var i = 0; i < model.commits.length; i++) {
         var commit = model.commits[i];
-        var processedMessage = commit.message.replace(context.assetMentionPattern, '<a href="' + versionOneInstanceUrl + '/assetdetail.v1?number=$1" target="_blank">$1</a>');
+        var processedMessage = commit.message.replace(context.assetMentionPattern, function(match, p1) {
+          var mentionUrlWithReplacement = mentionUrl.replace("\{\{mention\}\}", p1);
+          return '<a href="' + mentionUrlWithReplacement + '" target="_blank">' + match + '</a>';
+        });
         commit.message = processedMessage;
       }
     }
@@ -34,10 +37,9 @@
   };
 
   var processCommitsListPreprocessorPlugins = function(model) {
-    if(!versionOneInstanceUrl){
-        return;
-    }
-    for(var i = 0; i < commitsListModelPreprocessorPlugins.length; i++) {  
+    if (!mentionUrl) return;
+
+    for (var i = 0; i < commitsListModelPreprocessorPlugins.length; i++) {
       var plugin = commitsListModelPreprocessorPlugins[i];
       plugin(commitsListModelPreprocessorPluginContext, model);
     }
@@ -297,7 +299,7 @@
     }
   };
 
-  var queryCommitStreamRefresh = function() {    
+  var queryCommitStreamRefresh = function() {
     $(commitStreamDomId).find('.side-panel-scrollable').attr('next', '');
     queryCommitStream(getUrlToQuery(), queryCallback);
   };
@@ -343,7 +345,7 @@
         iId,
         aKey,
         assetAndChildUrl,
-        v1InstanceUrl) {
+        mentionDetailUrlTemplate) {
 
         clearChunckDataTemplate();
         commitStreamDomId = csDomId;
@@ -353,7 +355,7 @@
         instanceId = iId;
         apiKey = aKey;
         getAssetAndChildNumbersUrl = assetAndChildUrl;
-        versionOneInstanceUrl = v1InstanceUrl;
+        mentionUrl = mentionDetailUrlTemplate;
 
         try {
           if (getAssetAndChildNumbersUrl) {
