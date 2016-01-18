@@ -1,54 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <style type="text/css">
-      .side-panel-scrollable {
-        overflow-y: auto;
-        position: absolute;
-        bottom: 0;
-        top: 45px;
-        left: 0;
-        right: 0;
-      }
-    </style>
 
-    <script>
-$(function() {
-  function getQueryVariable(variable) {
-      var query = window.location.search.substring(1);
-      var vars = query.split('&');
-      for (var i = 0; i < vars.length; i++) {
+<head>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <style type="text/css">
+    .side-panel-scrollable {
+      overflow-y: auto;
+      position: absolute;
+      bottom: 0;
+      top: 45px;
+      left: 0;
+      right: 0;
+    }
+  </style>
+
+  <script>
+    $(function() {
+      function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
           var pair = vars[i].split('=');
           if (decodeURIComponent(pair[0]) == variable) {
-              return decodeURIComponent(pair[1]);
+            return decodeURIComponent(pair[1]);
           }
+        }
+        return null;
       }
-      return null;
-  }
+      var apiKey = getQueryVariable('apiKey');
+      var digestId = getQueryVariable('digestId');
+      var instanceId = getQueryVariable('instanceId');
+      if (!apiKey) {
+        alert('Must specify API key in the form of apiKey=<apikey> as a query string parameter');
+      }
+      var workitem = getQueryVariable('workitem');
+      var mentionDetailUrlTemplate = getQueryVariable('mentionDetailUrlTemplate');
 
-  var apiKey = getQueryVariable('apiKey');
-  var digestId = getQueryVariable('digestId');
-  var instanceId = getQueryVariable('instanceId');
-  if (!apiKey) {
-    alert('Must specify API key in the form of apiKey=<apikey> as a query string parameter');
-  }
-  var workitem = getQueryVariable('workitem');
+      function handleError(data, status) {
+        $('#commits').html('<div class="commitStream-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
+      }
 
-  function handleError(data, status) {
-    $('#commits').html('<div class="commitStream-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
-  }
-
-  $.getScript('app',
-    function(data, status, jqxhr) {
-      CommitStream.commitsDisplay('#commits', workitem, handleError, digestId, instanceId, apiKey);
+      $.getScript('app',
+        function(data, status, jqxhr) {
+          CommitStream.commitsDisplay(
+            '#commits',
+            workitem,
+            handleError,
+            digestId,
+            instanceId,
+            apiKey,
+            undefined,            
+            mentionDetailUrlTemplate);
+        });
     });
-});
-    </script>
-  </head>
+  </script>
+</head>
 
-  <body>
-    <link type="text/css" rel="stylesheet" href="css/commitStream.css">
-    <div id="commits"></div>
-  </body>
+<body>
+  <link type="text/css" rel="stylesheet" href="css/commitStream.css">
+  <div id="commits"></div>
+</body>
+
 </html>
