@@ -1079,7 +1079,7 @@ h6 {
   opacity: .7;
 }
 .commitStream-panel h3 .requesting {
-  background-image: url('../refesh.svg');
+  background-image: url('../refresh.svg');
 }
 .commitStream-panel div.window .remaining,
 .commitStream-panel div.window .remaining {
