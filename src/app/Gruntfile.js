@@ -6,7 +6,8 @@ module.exports = function(grunt) {
     'api/**/es6/*.js',
     'middleware/**/es6/*.js',
     'client/**/es6/*.js',
-    'smoke-test/**/es6/*.js'
+    'smoke-test/**/es6/*.js',
+    'test/**/es6/*.js'
   ];
 
   var babelFiles = {
@@ -15,6 +16,7 @@ module.exports = function(grunt) {
     dest: '',
     ext: '.js',
     rename: function(dest, src) {
+      console.log(dest, src);
       return src.replace('/es6/', '/');
     }
   };
