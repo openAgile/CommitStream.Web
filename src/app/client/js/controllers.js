@@ -212,6 +212,10 @@
       return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
     };
 
+    $scope.familyIsSelected = function (familyName) {
+      return family === familyName;
+    };
+
     $scope.familyHasBeenSelected = function () {
       return family !== '';
     };

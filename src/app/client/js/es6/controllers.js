@@ -194,6 +194,8 @@
       $scope.familyIsSelectedIcon = familyName =>
         (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
 
+      $scope.familyIsSelected = familyName => family === familyName;
+
       $scope.familyHasBeenSelected = () => family !== '';
 
       $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
