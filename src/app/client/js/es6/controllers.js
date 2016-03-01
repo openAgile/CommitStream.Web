@@ -30,7 +30,7 @@
         } else {
           preventTabNavigation();
         }
-      }
+      };
 
       let isInboxesDone = () => inboxesDone;
 

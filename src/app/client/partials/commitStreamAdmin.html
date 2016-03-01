@@ -1,4 +1,4 @@
-<style>
+<style xmlns="http://www.w3.org/1999/html">
 /* Modal Bootstrap Extracted Styles */
 	.modal-open{overflow:hidden}.modal
 	{display:none;overflow:hidden;position:fixed;top:0;right:0;bottom:0;left:0;z-index:1050;-webkit-overflow-scrolling:touch;outline:0}
@@ -332,6 +332,11 @@
   height: 32px !important;
 }
 
+div.vcs-vso-options input[type="radio"] {
+  vertical-align: baseline;
+  width: 20px;
+}
+
 </style>
 
 <img ng-show='loading()' ng-src='{{loaderUrl}}' class='initialLoader' />
@@ -383,6 +388,14 @@
         <button type='button' ng-click='familySelect("GitHub")' ng-mouseenter='familyHover("GitHub")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitHub")}}'>GitHub&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitHub")}}' /></button>&nbsp;
         <button type='button' ng-click='familySelect("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitLab")}}'>GitLab&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
         <button type='button' ng-click='familySelect("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Bitbucket")}}'>Bitbucket&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
+        <div style="display: inline-block">
+          <button type='button' ng-click='familySelect("VsoGit")' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("VsoGit")}}'>VSO&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
+          <div class="vcs-vso-options">
+            <label><input type="radio" checked="true"/>Git</label>
+            <br/>
+            <label><input type="radio" disabled="disabled" title="TFVC is not currently supported.">TFVC</label>
+          </div>
+        </div>
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
