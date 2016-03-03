@@ -225,7 +225,7 @@
     };
 
     $scope.familyOptionIcon = function (familyOptionName) {
-      return serviceUrl + '/icon-' + familyOptionName.toLowerCase() + '-selected-96x96.png';
+      return serviceUrl + '/icon-' + familyOptionName.toLowerCase() + '-selected-24x24.png';
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
