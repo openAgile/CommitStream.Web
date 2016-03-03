@@ -200,6 +200,8 @@
 
       $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
 
+      $scope.familyOptionIcon = familyOptionName => `${serviceUrl}/icon-${familyOptionName.toLowerCase()}-selected-96x96.png`;
+
       let setupNewInbox = selectedFamily =>
         $scope.newInbox = {
           url: '',

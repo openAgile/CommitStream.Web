@@ -224,6 +224,10 @@
       return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
     };
 
+    $scope.familyOptionIcon = function (familyOptionName) {
+      return serviceUrl + '/icon-' + familyOptionName.toLowerCase() + '-selected-96x96.png';
+    };
+
     var setupNewInbox = function setupNewInbox(selectedFamily) {
       return $scope.newInbox = {
         url: '',
