@@ -104,8 +104,11 @@ module.exports = function(grunt) {
       }    
     },
     shell: {
-      target: {
+      devm: {
         command: 'sh devm.sh'
+      },
+      dev: {
+        command: 'sh dev.sh'
       }
     }
   });
@@ -122,7 +125,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('dev', ['less', 'babel', 'express', 'watch']);
-  grunt.registerTask('devm', ['shell']);
+  grunt.registerTask('devm', ['shell:devm']);
+  grunt.registerTask('devs', ['shell:dev']);
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
