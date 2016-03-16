@@ -6,8 +6,7 @@ module.exports = function(grunt) {
     'api/**/es6/*.js',
     'middleware/**/es6/*.js',
     'client/**/es6/*.js',
-    'smoke-test/**/es6/*.js',
-    'test/**/es6/*.js'
+    'smoke-test/**/es6/*.js'
   ];
 
   var babelFiles = {
@@ -16,7 +15,6 @@ module.exports = function(grunt) {
     dest: '',
     ext: '.js',
     rename: function(dest, src) {
-      console.log(dest, src);
       return src.replace('/es6/', '/');
     }
   };
@@ -124,9 +122,9 @@ module.exports = function(grunt) {
     grunt.config('gitpush.deploy-dev.branch', sourceBranch + ':v1cs-dev');
   });
 
-  grunt.registerTask('dev', ['less', 'babel', 'express', 'watch']);
+  grunt.registerTask('devs', ['less', 'babel', 'express', 'watch']);
   grunt.registerTask('devm', ['shell:devm']);
-  grunt.registerTask('devs', ['shell:dev']);
+  grunt.registerTask('dev', ['shell:dev']);
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');

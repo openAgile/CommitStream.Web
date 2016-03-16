@@ -1,2 +1,2 @@
-source ./smoke-test.vars.sh
+./es.sh
 grunt dev
