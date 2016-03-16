@@ -212,12 +212,20 @@
       return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
     };
 
+    $scope.familyIsSelected = function (familyName) {
+      return family === familyName;
+    };
+
     $scope.familyHasBeenSelected = function () {
       return family !== '';
     };
 
     $scope.familyIcon = function (familyName) {
       return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
+    };
+
+    $scope.familyOptionIcon = function (familyOptionName) {
+      return serviceUrl + '/icon-' + familyOptionName.toLowerCase() + '-selected-24x24.png';
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
