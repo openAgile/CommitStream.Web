@@ -102,8 +102,11 @@ module.exports = function(grunt) {
       }    
     },
     shell: {
-      target: {
+      devm: {
         command: 'sh devm.sh'
+      },
+      dev: {
+        command: 'sh dev.sh'
       }
     }
   });
@@ -119,8 +122,9 @@ module.exports = function(grunt) {
     grunt.config('gitpush.deploy-dev.branch', sourceBranch + ':v1cs-dev');
   });
 
-  grunt.registerTask('dev', ['less', 'babel', 'express', 'watch']);
-  grunt.registerTask('devm', ['shell']);
+  grunt.registerTask('devs', ['less', 'babel', 'express', 'watch']);
+  grunt.registerTask('devm', ['shell:devm']);
+  grunt.registerTask('dev', ['shell:dev']);
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
