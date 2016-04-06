@@ -1,4 +1,4 @@
-# How to run CommitStream from scratch with commits from a source GitHub repo
+# How to run CommitStream locally (from scratch)
 
 This is a work in progress. As this evolves, we update this narrative.
 
