@@ -87,21 +87,21 @@ OK created projection partitionate-with-or-without-mention
 }
 ```
 
-# How to install and run a build of VersionOne that integrates CommitStream info into the Asset Detail view
+# How to configure an On-Premise build of VersionOne to point to your CommitStream instance
 
 ## Background
 
-> Given you have a GitHub repository that has commits matching the VersionOne asset mention pattern, like S-12345, D-00312, etc, and you want to start seeing those correlated with those assets inside VersionOne's asset detail view, then:
+This assumes that you have already done the previous step.
 
-* As Administrator, open Powershell
-* Go to the root folder of this project
-* Type `cd src\sandbox`
-* Type `get-help Install-V1CSInAzure.ps1 -full` or simply modify the script to suit your needs
-* Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being served by the NodeJS server you installed above.
+* Assuming you have VersionOne installed at `C:\inetpub\wwwroot\VersionOne`, then open the file `C:\inetpub\wwwroot\VersionOne\Web.config`
+* Look for the text `<add key="CommitStream.ServiceUrl" value="https://commitstream.v1host.com" />`
+* Change the `value` property to point to your local network address of where CommitStream is running.
+  * Typically this will be something like `http://theservernameOrIpAddress:6565`
 
-# Open VersionOne and see commits!
+# Open VersionOne and configure CommitStream
 
-* You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
+* You should now be able to configure CommitStream by opening VersionOne and navigating to the **Admin / DevOps / CommitStream** page.
+  * Refer to the VersionOne Community site for configuration documentation: https://community.versionone.com/Help-Center/Administration/CommitStream
 
 # Troubleshooting
 
