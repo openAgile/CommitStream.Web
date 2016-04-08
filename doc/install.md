@@ -86,6 +86,25 @@ OK created projection partitionate-with-or-without-mention
   "name": "partitionate-with-or-without-mention"
 }
 ```
+## Troubleshooting
+
+### Keeping CommitStream running as a Windows Service
+
+Since we have all of our development and testing builds of CommitStream running in the cloud, we haven't actually need to try this yet, but if you want to run CommitStream on a Windows machine as a Windows Service, look into the `node-windows` package:
+
+https://github.com/coreybutler/node-windows
+
+If it works, send us a pull request to this document so others can benefit too!
+
+## Exposing EventStore to other network machines
+
+If you wish to expose the EventStore instance to other machines on a network, you may need to open some firewall ports for EventStore. These powershell commands will do that for you:
+
+```powershell
+New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
+```
+Likewise, unless you change the default `6565` port for CommitStream itself, you may need to do the same.
 
 # How to configure an On-Premise build of VersionOne to point to your CommitStream instance
 
@@ -98,16 +117,9 @@ This assumes that you have already done the previous step.
 * Change the `value` property to point to your local network address of where CommitStream is running.
   * Typically this will be something like `http://theservernameOrIpAddress:6565`
 
-# Open VersionOne and configure CommitStream
+## Open VersionOne and configure CommitStream
 
 * You should now be able to configure CommitStream by opening VersionOne and navigating to the **Admin / DevOps / CommitStream** page.
   * Refer to the VersionOne Community site for configuration documentation: https://community.versionone.com/Help-Center/Administration/CommitStream
 
-# Troubleshooting
 
-If you wish to expose the instance to other machines on a network, you may need to open some firewall ports for EventStore. These powershell commands will do that for you:
-
-```powershell
-New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
-```
