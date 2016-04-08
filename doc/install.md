@@ -90,7 +90,7 @@ OK created projection partitionate-with-or-without-mention
 
 ### Keeping CommitStream running as a Windows Service
 
-Since we have all of our development and testing builds of CommitStream running in the cloud, we haven't actually need to try this yet, but if you want to run CommitStream on a Windows machine as a Windows Service, look into the `node-windows` package:
+Since we have all of our development and testing builds of CommitStream running in the cloud, we haven't actually needed to try this yet, but if you want to run CommitStream on a Windows machine as a Windows Service, look into the `node-windows` package:
 
 https://github.com/coreybutler/node-windows
 
