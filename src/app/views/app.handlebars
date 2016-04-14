@@ -13,7 +13,8 @@
     autoRefreshIntervalId,
     showChildrenChecked,
     assetNumbers,
-    mentionUrl;
+    mentionUrl,
+    showSpinner;
 
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
@@ -281,11 +282,17 @@
 
   var queryCommitStream = function(apiUrl, cb) {
     var el = $(commitStreamDomId);
+    showSpinner = true;
     el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
       el.find('.cs-refresh').removeClass('requesting');
       cb(model);
-    }).fail(errorHandler);
+        setTimeout(function(){
+            showSpinner = true
+        }, 3000);
+      }).fail(function(errorHandler) {
+        showSpinner = false
+    });
   };
 
   var queryCallback = function(model) {
