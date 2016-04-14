@@ -3,6 +3,7 @@
 This is a work in progress. As this evolves, we update this narrative.
 
 # Required software
+* Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * First, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
 * NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
