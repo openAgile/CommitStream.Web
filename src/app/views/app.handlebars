@@ -73,7 +73,7 @@
       } else {
         queryCommitStream(getUrlToQuery(), queryCallback);
       }
-    });
+    });   
   };
 
   var bindRefreshActions = function() {
@@ -118,7 +118,8 @@
       }
     } catch (ex) {
       errorHandler();
-    }
+      $('.overlay').hide();
+    }    
   };
 
   var renderCommitsList = function(model) {
@@ -130,16 +131,16 @@
           processCommitsListPreprocessorPlugins(modelCopy);
           var content = tmpl(modelCopy);
           $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-          checkIfNextPage(model);
+          checkIfNextPage(model);            
         });
       } else {
         processCommitsListPreprocessorPlugins(modelCopy);
         var content = commitsListTmpl(modelCopy);
         $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-        checkIfNextPage(model);
+        checkIfNextPage(model);        
       }
     } catch (ex) {
-      errorHandler();
+      errorHandler();      
     }
   };
 
@@ -186,7 +187,10 @@
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
       $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       bindScrollEvent();
-    }
+    }  
+    setTimeout(function() {
+      $('.overlay').hide();
+    },500);
   };
 
   var thereAreNoCommits = function(model) {
@@ -282,16 +286,12 @@
 
   var queryCommitStream = function(apiUrl, cb) {
     var el = $(commitStreamDomId);
-    showSpinner = true;
+    $('.overlay').show();
     el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
-      el.find('.cs-refresh').removeClass('requesting');
-      cb(model);
-        setTimeout(function(){
-            showSpinner = true
-        }, 3000);
-      }).fail(function(errorHandler) {
-        showSpinner = false
+      el.find('.cs-refresh').removeClass('requesting');      
+      cb(model);        
+      }).fail(function(errorHandler) {        
     });
   };
 
@@ -303,7 +303,7 @@
       setCheckboxVisibility(model);
       setChildrenCheckboxVisibility(model);
       renderCommitsContainer(model);
-    }
+    }    
   };
 
   var queryCommitStreamRefresh = function() {
@@ -363,6 +363,7 @@
         apiKey = aKey;
         getAssetAndChildNumbersUrl = assetAndChildUrl;
         mentionUrl = mentionDetailUrlTemplate;
+        showSpinner = true;
 
         try {
           if (getAssetAndChildNumbersUrl) {
