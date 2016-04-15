@@ -13,8 +13,7 @@
     autoRefreshIntervalId,
     showChildrenChecked,
     assetNumbers,
-    mentionUrl,
-    showSpinner;
+    mentionUrl;    
 
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
@@ -119,6 +118,7 @@
     } catch (ex) {
       errorHandler();
       $('.overlay').hide();
+      $(commitStreamDomId).find('.side-panel-scrollable').removeClass('opacity');
     }    
   };
 
@@ -187,10 +187,9 @@
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
       $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       bindScrollEvent();
-    }  
-    setTimeout(function() {
-      $('.overlay').hide();
-    },500);
+    }      
+    $(commitStreamDomId).find('.side-panel-scrollable').removeClass('opacity');
+    $('.overlay').hide();    
   };
 
   var thereAreNoCommits = function(model) {
@@ -287,6 +286,7 @@
   var queryCommitStream = function(apiUrl, cb) {
     var el = $(commitStreamDomId);
     $('.overlay').show();
+    $(commitStreamDomId).find('.side-panel-scrollable').addClass('opacity');
     el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
       el.find('.cs-refresh').removeClass('requesting');      
@@ -362,8 +362,7 @@
         instanceId = iId;
         apiKey = aKey;
         getAssetAndChildNumbersUrl = assetAndChildUrl;
-        mentionUrl = mentionDetailUrlTemplate;
-        showSpinner = true;
+        mentionUrl = mentionDetailUrlTemplate;       
 
         try {
           if (getAssetAndChildNumbersUrl) {

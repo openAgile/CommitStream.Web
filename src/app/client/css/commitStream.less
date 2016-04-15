@@ -989,10 +989,13 @@ select::-webkit-input-placeholder {
   -moz-opacity: 0.5;
   opacity: 0.5;
 }
+.opacity {
+	opacity: 0.1;
+}
 .overlay {
 	.loading {	  				
 	  position: fixed;
-	  z-index: 999;
+	  z-index: 3;
 	  height: 2em;
 	  width: 2em;
 	  overflow: show;
@@ -1008,16 +1011,17 @@ select::-webkit-input-placeholder {
 	  content: '';
 	  display: block;
 	  position: fixed;
+	  z-index: 2;
 	  top: 0;
 	  left: 0;
 	  width: 100%;
 	  height: 100%;
-	  background-color: rgba(221, 226, 233, 0.65);
+	  /*background-color: rgba(225, 225, 225, 0.5);*/
 	}
 
-	/* :not(:required) hides these rules from IE9 and below */
+	/* :not(:required) hides these rules from IE9 and below 
 	.loading:not(:required) {
-	  /* hide "loading..." text */
+	  /* hide "loading..." text
 	  font: 0/0 a;
 	  color: transparent;
 	  text-shadow: none;
@@ -1032,12 +1036,13 @@ select::-webkit-input-placeholder {
 	  width: 1em;
 	  height: 1em;
 	  margin-top: -0.5em;	  
-	}
+	}*/
 
 	.svg {
 		background: url('../loading-spin-888.svg') no-repeat scroll center center transparent;
 		min-height: 32px;
     	min-width: 32px;
+    	z-index: 4;
 	}
 }
 .main-panel-scroller .loading {
