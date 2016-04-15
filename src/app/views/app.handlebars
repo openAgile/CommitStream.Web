@@ -117,8 +117,7 @@
       }
     } catch (ex) {
       errorHandler();
-      $('.overlay').hide();
-      $(commitStreamDomId).find('.side-panel-scrollable').removeClass('opacity');
+      $('.overlay').hide();      
     }    
   };
 
@@ -187,8 +186,7 @@
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
       $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       bindScrollEvent();
-    }      
-    $(commitStreamDomId).find('.side-panel-scrollable').removeClass('opacity');
+    }          
     $('.overlay').hide();    
   };
 
@@ -285,8 +283,7 @@
 
   var queryCommitStream = function(apiUrl, cb) {
     var el = $(commitStreamDomId);
-    $('.overlay').show();
-    $(commitStreamDomId).find('.side-panel-scrollable').addClass('opacity');
+    $('.overlay').show();    
     el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
       el.find('.cs-refresh').removeClass('requesting');      
