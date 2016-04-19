@@ -992,8 +992,8 @@ select::-webkit-input-placeholder {
 
 .overlay {
 	background-color: rgba(0,0,0,0.3);
-	position: fixed;
-	top: 0;
+	position: absolute;
+	top: 64px;
 	bottom: 0;
 	left: 0;
 	right: 0;
@@ -1003,7 +1003,7 @@ select::-webkit-input-placeholder {
 	vertical-align: middle;
 }
 .loader {
-  margin-top: calc(25% - 5em);
+  margin-top: calc(50%);
   display: inline-block;
   position: relative;
   width: inherit;
@@ -1018,8 +1018,8 @@ select::-webkit-input-placeholder {
 }
 .loader {
   border-radius: 50%;
-  width: 10em;
-  height: 10em;
+  width: 2.5em;
+  height: 2.5em;
 }
 @-webkit-keyframes load8 {
   0% {
