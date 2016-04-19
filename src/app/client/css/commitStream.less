@@ -991,7 +991,7 @@ select::-webkit-input-placeholder {
 }
 
 .overlay {
-	background-color: rgba(0,0,0,0.3);
+	background-color: rgba(255,255,255,0.6);
 	position: absolute;
 	top: 64px;
 	bottom: 0;
@@ -1003,9 +1003,10 @@ select::-webkit-input-placeholder {
 	vertical-align: middle;
 }
 .loader {
-  margin-top: calc(50%);
+  margin-top: auto;
+  top:calc(50% - 2.5em);
   display: inline-block;
-  position: relative;
+  position: fixed;
   width: inherit;
   height: inherit;
   font-size: 10px;
