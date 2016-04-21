@@ -13,7 +13,7 @@
     autoRefreshIntervalId,
     showChildrenChecked,
     assetNumbers,
-    mentionUrl;
+    mentionUrl;    
 
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
@@ -72,7 +72,7 @@
       } else {
         queryCommitStream(getUrlToQuery(), queryCallback);
       }
-    });
+    });   
   };
 
   var bindRefreshActions = function() {
@@ -117,7 +117,8 @@
       }
     } catch (ex) {
       errorHandler();
-    }
+      $('.overlay').hide();      
+    }    
   };
 
   var renderCommitsList = function(model) {
@@ -129,16 +130,16 @@
           processCommitsListPreprocessorPlugins(modelCopy);
           var content = tmpl(modelCopy);
           $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-          checkIfNextPage(model);
+          checkIfNextPage(model);            
         });
       } else {
         processCommitsListPreprocessorPlugins(modelCopy);
         var content = commitsListTmpl(modelCopy);
         $(commitStreamDomId).find('.side-panel-scrollable').append(content);
-        checkIfNextPage(model);
+        checkIfNextPage(model);        
       }
     } catch (ex) {
-      errorHandler();
+      errorHandler();      
     }
   };
 
@@ -185,7 +186,8 @@
       $(commitStreamDomId).find('.side-panel-scrollable').attr('next', model._links.next);
       $(commitStreamDomId).find('.side-panel-scrollable').unbind('scroll');
       bindScrollEvent();
-    }
+    }          
+    $('.overlay').hide();    
   };
 
   var thereAreNoCommits = function(model) {
@@ -281,11 +283,13 @@
 
   var queryCommitStream = function(apiUrl, cb) {
     var el = $(commitStreamDomId);
+    $('.overlay').show();    
     el.find('.cs-refresh').addClass('requesting');
     $.getJSON(apiUrl).done(function(model) {
-      el.find('.cs-refresh').removeClass('requesting');
-      cb(model);
-    }).fail(errorHandler);
+      el.find('.cs-refresh').removeClass('requesting');      
+      cb(model);        
+      }).fail(function(errorHandler) {        
+    });
   };
 
   var queryCallback = function(model) {
@@ -296,7 +300,7 @@
       setCheckboxVisibility(model);
       setChildrenCheckboxVisibility(model);
       renderCommitsContainer(model);
-    }
+    }    
   };
 
   var queryCommitStreamRefresh = function() {
@@ -355,7 +359,7 @@
         instanceId = iId;
         apiKey = aKey;
         getAssetAndChildNumbersUrl = assetAndChildUrl;
-        mentionUrl = mentionDetailUrlTemplate;
+        mentionUrl = mentionDetailUrlTemplate;       
 
         try {
           if (getAssetAndChildNumbersUrl) {
