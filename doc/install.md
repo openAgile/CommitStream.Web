@@ -1,23 +1,24 @@
-# How to run CommitStream from scratch with commits from a source GitHub repo
+# How to run CommitStream locally (from scratch)
 
 This is a work in progress. As this evolves, we update this narrative.
 
 # Required software
+* Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * First, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
 * NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
 	* There are two special snowflake packages that need to be installed globally
-		* bower - npm install -g bower 
-		* babel - npm install -g babel
+		* bower - `npm install -g bower`
+		* babel - `npm install -g babel`
 * Bower components need to be installed for client side code to get served correctly.
-  * Navigate to CommitStream.Web/src/app/client on the command line.
-  * Run the command: bower install
+  * Navigate to `CommitStream.Web/src/app/client` on the command line.
+  * Run the command: `bower install`
   * You should have seen all of the bower components defined in CommitStream.Web/src/app/client/bower.json get installed.
 * Grunt and Babel: These two are being used in order to transpile our ES2015 files to the appropriate locations within the project. In order for this to work appropriately though, you must first execute from your command line
-  * npm install -g grunt-cli
+  * `npm install -g grunt-cli`
   * Note that installing grunt-cli does not install the Grunt task runner! The job of the Grunt CLI is simple: run the version of Grunt which has been installed next to a Gruntfile. This allows multiple versions of Grunt to be installed on the same machine simultaneously.
   * If you would like to run the watcher for ES2015 files while you make code changes run:
-    * grunt watch --verbose
+    * `grunt watch --verbose`
   * In the Gruntfile there are a couple of tasks created for developers
     * `grunt dev`
       * Assuming EventStore is running as a Windows Service
@@ -86,28 +87,40 @@ OK created projection partitionate-with-or-without-mention
   "name": "partitionate-with-or-without-mention"
 }
 ```
+## Troubleshooting
 
-# How to install and run a build of VersionOne that integrates CommitStream info into the Asset Detail view
+### Keeping CommitStream running as a Windows Service
 
-## Background
+Since we have all of our development and testing builds of CommitStream running in the cloud, we haven't actually needed to try this yet, but if you want to run CommitStream on a Windows machine as a Windows Service, look into the `node-windows` package:
 
-> Given you have a GitHub repository that has commits matching the VersionOne asset mention pattern, like S-12345, D-00312, etc, and you want to start seeing those correlated with those assets inside VersionOne's asset detail view, then:
+https://github.com/coreybutler/node-windows
 
-* As Administrator, open Powershell
-* Go to the root folder of this project
-* Type `cd src\sandbox`
-* Type `get-help Install-V1CSInAzure.ps1 -full` or simply modify the script to suit your needs
-* Run it! This will download and install VersionOne and configure it to you the CommitStream integration that is being served by the NodeJS server you installed above.
+If it works, send us a pull request to this document so others can benefit too!
 
-# Open VersionOne and see commits!
+## Exposing EventStore to other network machines
 
-* You should now be able to navigate to an asset detail in your VersionOne instance and see commits.
-
-# Troubleshooting
-
-If you wish to expose the instance to other machines on a network, you may need to open some firewall ports for EventStore. These powershell commands will do that for you:
+If you wish to expose the EventStore instance to other machines on a network, you may need to open some firewall ports for EventStore. These powershell commands will do that for you:
 
 ```powershell
 New-NetFirewallRule -DisplayName "Allow Port 2113" -Direction Inbound –LocalPort 2113 -Protocol TCP -Action Allow
 New-NetFirewallRule -DisplayName "Allow Port 1113" -Direction Inbound –LocalPort 1113 -Protocol TCP -Action Allow
 ```
+Likewise, unless you change the default `6565` port for CommitStream itself, you may need to do the same.
+
+# How to configure an On-Premise build of VersionOne to point to your CommitStream instance
+
+## Background
+
+This assumes that you have already done the previous step.
+
+* Assuming you have VersionOne installed at `C:\inetpub\wwwroot\VersionOne`, then open the file `C:\inetpub\wwwroot\VersionOne\Web.config`
+* Look for the text `<add key="CommitStream.ServiceUrl" value="https://commitstream.v1host.com" />`
+* Change the `value` property to point to your local network address of where CommitStream is running.
+  * Typically this will be something like `http://theservernameOrIpAddress:6565`
+
+## Open VersionOne and configure CommitStream
+
+* You should now be able to configure CommitStream by opening VersionOne and navigating to the **Admin / DevOps / CommitStream** page.
+  * Refer to the VersionOne Community site for configuration documentation: https://community.versionone.com/Help-Center/Administration/CommitStream
+
+

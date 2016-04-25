@@ -1,9 +1,3 @@
-param(
-	$accessToken,
-	$owner='openAgile',
-	$repo='CommitStream.Web'
-)
-
 # Install EventStore from custom Chocolatey package on MyGet
 choco install eventstore -source https://www.myget.org/F/versionone/ -force
 
@@ -18,10 +12,3 @@ nssm start eventstore
 cd src/app
 npm install
 start npm start
-
-sleep 10
-
-# Import commits into EventStore via the service API
-if(-not [string]::IsNullOrEmpty($accessToken) ) {
-  iwr -uri http://localhost:6565/api/importHistory -method POST -body (ConvertTo-Json @{owner="$owner";repo="$repo";accessToken="$accessToken"}) -headers @{'Content-Type'='application/json'}
-}

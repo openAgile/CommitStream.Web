@@ -30,11 +30,14 @@
   <div class="window side-panel-scrollable">
     {{#if noCommits}}
     <div class="remaining">
-        <div class="loading"></div>
         <div class="finished">No Commits available...</div>
     </div>
     {{else}}
-      {{> commitsList}}
-    {{/if}}
+    {{> commitsList}}
+    {{/if}}    
   </div>
+  <div class="overlay">
+    <div class="loader">
+    </div>
+  </div> 
 </div>
