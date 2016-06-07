@@ -1,4 +1,5 @@
 1) Deleted port 2113 from Node 1 in Azure
+
 2) Added a new port of 2113 on Node 1, making it a Balanced Set named ESClust
 3) For nodes 2 and 3, added this same balanced set port, resulting in all three nodes have port 2113
 4) Because of the original script, at this point, Node 1 has 2113, and Node 2 has 2113 AND 2213, and Node 3 has port 2113 and 2313
