@@ -1227,7 +1227,10 @@ h6 {
 .commitStream-panel .csMessage {
   padding-left: 22px;
   color: #454545;
-  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: pre-line;
+  max-width: 308px;
+  display: inline-block;
 }
 .commitStream-panel .side-panel-scrollable {
   top: 64px !important;
