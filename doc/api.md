@@ -218,7 +218,7 @@ $ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/
 
 ### Response
 
-This will show all the commits from all the repositories, regardless of whether they are from GitHub, Bitbucket, GitLab, or any other system that CommitStream eventually supports:
+This will show all the inboxes from the specified repository, regardless of whether they are from GitHub, Bitbucket, GitLab, or any other system that CommitStream eventually supports:
 
 ```json
 {
