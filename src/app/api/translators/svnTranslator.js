@@ -15,7 +15,7 @@ var _middlewareSvnCommitMalformedError = require('../../middleware/svnCommitMalf
 var _middlewareSvnCommitMalformedError2 = _interopRequireDefault(_middlewareSvnCommitMalformedError);
 
 var hasCorrectHeaders = function hasCorrectHeaders(headers) {
-  return headers.hasOwnProperty('Cs-Svn-Event') && headers['Cs-Svn-Event'] === 'Commit Event';
+  return headers.hasOwnProperty('cs-svn-event') && headers['cs-svn-event'] === 'Commit Event';
 };
 
 var svnTranslator = {
@@ -74,10 +74,9 @@ var svnTranslator = {
     }
   },
   getProperties: function getProperties(event) {
-    var repoArray = event.repository.split('/');
     var props = {
-      repo: repoArray[repoArray.length - 1],
-      repoHref: event.repository,
+      repo: event.repository.name,
+      repoHref: event.repository.url,
       branchHref: ''
     };
     return props;

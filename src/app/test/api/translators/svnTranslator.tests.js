@@ -31,7 +31,7 @@ describe('svnTranslator', function() {
         it('canTranslate should return true when valid header information is present', function() {
             var request = {
                 'headers': {
-                  "Cs-Svn-Event": "Commit Event"
+                  "cs-svn-event": "Commit Event"
                 }
             };
             svnTranslator.canTranslate(request).should.equal(true);

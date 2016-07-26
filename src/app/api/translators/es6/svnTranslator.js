@@ -1,8 +1,8 @@
   import uuid from 'uuid-v4';
   import SvnCommitMalformedError from '../../middleware/svnCommitMalformedError';
 
-  const hasCorrectHeaders = (headers) => headers.hasOwnProperty('Cs-Svn-Event')
-    && headers['Cs-Svn-Event'] === 'Commit Event';
+  const hasCorrectHeaders = (headers) => headers.hasOwnProperty('cs-svn-event')
+    && headers['cs-svn-event'] === 'Commit Event';
 
   const svnTranslator = {
     family: 'Svn',
@@ -60,10 +60,9 @@
       }
     },
     getProperties(event) {
-      var repoArray = event.repository.split('/');
       const props = {
-        repo: repoArray[repoArray.length-1],
-        repoHref: event.repository,
+        repo: event.repository.name,
+        repoHref: event.repository.url,
         branchHref: ''
       };
       return props;
