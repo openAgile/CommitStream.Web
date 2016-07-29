@@ -4,7 +4,8 @@
     inboxFormatAsHal = require('./inboxFormatAsHal'),
     sanitizeAndValidate = require('../sanitizeAndValidate'),
     setTimeout = require('../helpers/setTimeout'),
-    config = require('../../config');
+    config = require('../../config'),
+    decoratorFactory = require ('./halDecorators/decoratorFactory');
 
   module.exports = function(req, res) {
     var digestId = req.params.digestId;
@@ -20,9 +21,13 @@
     var args = {
       name: 'inboxes-' + instanceId,
       events: inboxAddedEvent
-    };
+    };    
     eventStore.postToStream(args).then(function() {
       var hypermedia = inboxFormatAsHal(req.href, instanceId, inboxAddedEvent.data);
+      var halDecorator = decoratorFactory.create(hypermedia);
+      if(halDecorator)
+        hypermedia = halDecorator.decorateHalResponse(hypermedia);
+
       setTimeout(function() {
         res.hal(hypermedia, 201);
       }, config.controllerResponseDelay);

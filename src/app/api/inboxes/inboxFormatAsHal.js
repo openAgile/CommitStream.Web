@@ -15,6 +15,7 @@
           "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId)
         }
       },
+      "_embedded":{},
       "inboxId": inbox.inboxId,
       "family": inbox.family,
       "name": inbox.name,
