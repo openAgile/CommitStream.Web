@@ -5,9 +5,9 @@ const decoratorNames = [
 const decorators = decoratorNames.map(name => require(`../halDecorators/${name}`));
 
 class DecoratorFactory {
-  create(req) {
+  create(hypermedia) {
     for(let decorator of decorators) {
-      if (decorator.shouldDecorate(req)) return decorator;
+      if (decorator.shouldDecorate(hypermedia)) return decorator;
     }
     return undefined;
   }

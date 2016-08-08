@@ -1,32 +1,40 @@
 import vcsFamilies from '../../helpers/vcsFamilies';
 
 const svnDecorator = {
-  shouldDecorate(request) {
-    if (request.family === vcsFamilies.Svn) {
+  shouldDecorate(hypermedia) {
+    if (hypermedia.family === vcsFamilies.Svn) {
       return true;
     }
     return false;
   },
-  decorateHalResponse(request) {
-    const family = vcsFamilies.Svn + "-scripts";
-    const baseUrl = request._links.self.href;
-    request._embedded.family = [{
+  ensureHasEmbeddedKey(hypermedia) {
+    if (!hypermedia.hasOwnProperty('_embedded')) {
+      hypermedia['_embedded'] = {};
+    }
+    return hypermedia;
+  },
+  addScriptResource(baseUrl, platform) {
+    return {
       "_links": {
         "self": {
-          "href": baseUrl + "/script?platform=windows"
+          "href": baseUrl + "/script?platform=" + platform
         },
-        "platform": "windows"
+        "platform": platform
       }
-    },
-    {
-      "_links": {
-        "self": {
-          "href": baseUrl + "/script?platform=linux"
-        },
-        "platform": "linux"
-      }
-    }];
-    return request;
+    }
+  },
+  embedScripts(hypermedia) {
+    const scriptFamily = vcsFamilies.Svn + "-scripts";
+
+    hypermedia._embedded[scriptFamily] = [svnDecorator.addScriptResource(hypermedia._links.self.href, "windows"), 
+    svnDecorator.addScriptResource(hypermedia._links.self.href, "linux")];
+
+    return hypermedia;
+  },
+  decorateHalResponse(hypermedia) {
+    hypermedia = svnDecorator.ensureHasEmbeddedKey(hypermedia);
+    hypermedia = svnDecorator.embedScripts(hypermedia);
+    return hypermedia;
   }
 };
 

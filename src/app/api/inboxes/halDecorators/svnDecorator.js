@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-var _interopRequireDefault = require("babel-runtime/helpers/interop-require-default")["default"];
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
@@ -11,33 +11,41 @@ var _helpersVcsFamilies = require('../../helpers/vcsFamilies');
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
 var svnDecorator = {
-  shouldDecorate: function shouldDecorate(request) {
-    if (request.family === _helpersVcsFamilies2["default"].Svn) {
+  shouldDecorate: function shouldDecorate(hypermedia) {
+    if (hypermedia.family === _helpersVcsFamilies2['default'].Svn) {
       return true;
     }
     return false;
   },
-  decorateHalResponse: function decorateHalResponse(request) {
-    var family = _helpersVcsFamilies2["default"].Svn + "-scripts";
-    var baseUrl = request._links.self.href;
-    request._embedded.family = [{
+  ensureHasEmbeddedKey: function ensureHasEmbeddedKey(hypermedia) {
+    if (!hypermedia.hasOwnProperty('_embedded')) {
+      hypermedia['_embedded'] = {};
+    }
+    return hypermedia;
+  },
+  addScriptResource: function addScriptResource(baseUrl, platform) {
+    return {
       "_links": {
         "self": {
-          "href": baseUrl + "/script?platform=windows"
+          "href": baseUrl + "/script?platform=" + platform
         },
-        "platform": "windows"
+        "platform": platform
       }
-    }, {
-      "_links": {
-        "self": {
-          "href": baseUrl + "/script?platform=linux"
-        },
-        "platform": "linux"
-      }
-    }];
-    return request;
+    };
+  },
+  embedScripts: function embedScripts(hypermedia) {
+    var scriptFamily = _helpersVcsFamilies2['default'].Svn + "-scripts";
+
+    hypermedia._embedded[scriptFamily] = [svnDecorator.addScriptResource(hypermedia._links.self.href, "windows"), svnDecorator.addScriptResource(hypermedia._links.self.href, "linux")];
+
+    return hypermedia;
+  },
+  decorateHalResponse: function decorateHalResponse(hypermedia) {
+    hypermedia = svnDecorator.ensureHasEmbeddedKey(hypermedia);
+    hypermedia = svnDecorator.embedScripts(hypermedia);
+    return hypermedia;
   }
 };
 
-exports["default"] = svnDecorator;
-module.exports = exports["default"];
+exports['default'] = svnDecorator;
+module.exports = exports['default'];

@@ -47,7 +47,7 @@
         };
         return [{
           eventId: uuid(),
-          eventType: 'SvnCommitReceived',
+          eventType: svnTranslator.family + 'CommitReceived',
           data: commit,
           metadata: {
             instanceId: instanceId,
