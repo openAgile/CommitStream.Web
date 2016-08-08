@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#The next 3 line should be added in post-commit file under hooks folder 
+#REPOS="$1"
+#REV="$2"
+#"$REPOS"/hooks/commit-event.sh "$REPOS" "$REV"
+
+# BASH 4.0 or higher is required
+# THIS IS SO WE CAN USE MAPFILE
+
+SVNPATH="$1"
+REVISION="$2"
+
+REPOSITORY="http://subversionlinux.cloudapp.net/svn/repos/myproject"
+HTML_URL=""
+ENDPOINT="http://requestb.in/1b8vkkr1"
+
+COMMITEVENTHEADER="CS-SVN-Event:Commit Event"
+APPJSONHEADER="Content-Type:application/json"
+
+svnlook="/usr/bin/svnlook"
+svn="/usr/bin/svn"
+
+LOG=`$svnlook log -r $REVISION $SVNPATH`
+WHO=`svnlook author -r $REVISION $SVNPATH`
+WHEN=`svnlook date -r $REVISION $SVNPATH`
+CHANGES=`svnlook changed -r $REVISION $SVNPATH`
+
+mapfile -t array <<< "$CHANGES"
+
+for element in "${array[@]}"
+do
+  CHANGESFORJSON+=\""${element}\","
+done
+
+CHANGESFORJSON="${CHANGESFORJSON::-1}"
+
+PAYLOAD='{"pretext":"Commit completed: rev. '"$REVISION"'","committer":{"name":"'"$WHO"'","date":"'"$WHEN"'"},"author":"'"$WHO"'","revision":"'"$REVISION"'","message":"'"$LOG"'","changes":['"$CH$
+
+curl -X POST -H "$COMMITEVENTHEADER" -H "$APPJSONHEADER" --data "$PAYLOAD" "$ENDPOINT"
