@@ -8,9 +8,9 @@ Param(
   [string]$svnPath,
   [string]$revision
 )
-$repository = "http://v1commitstream.cloudapp.net:9090/svn/ProjectA"
+$repository = "PLACE REPO URL HERE"
 $html_url = ""
-$endpoint = "http://requestb.in/pupvsmpu"
+$endpoint = "PLACE INBOX URL HERE"
 $headers = @{"CS-SVN-Event"="Commit Event"}
 $log = (svnlook log -r $revision $svnPath)
 $who = (svnlook author -r $revision $svnPath)
