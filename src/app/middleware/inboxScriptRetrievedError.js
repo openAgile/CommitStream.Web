@@ -16,17 +16,17 @@ var _CsError2 = require('./CsError');
 
 var _CsError3 = _interopRequireDefault(_CsError2);
 
-var InboxScriptRetrievedErro = (function (_CsError) {
-	_inherits(InboxScriptRetrievedErro, _CsError);
+var InboxScriptRetrievedError = (function (_CsError) {
+	_inherits(InboxScriptRetrievedError, _CsError);
 
-	function InboxScriptRetrievedErro() {
-		_classCallCheck(this, InboxScriptRetrievedErro);
+	function InboxScriptRetrievedError() {
+		_classCallCheck(this, InboxScriptRetrievedError);
 
-		_get(Object.getPrototypeOf(InboxScriptRetrievedErro.prototype), 'constructor', this).call(this, ['There was an unexpected error when retrieving your Svn script.']);
+		_get(Object.getPrototypeOf(InboxScriptRetrievedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when retrieving your Svn script.']);
 	}
 
-	return InboxScriptRetrievedErro;
+	return InboxScriptRetrievedError;
 })(_CsError3['default']);
 
-exports['default'] = InboxScriptRetrievedErro;
+exports['default'] = InboxScriptRetrievedError;
 module.exports = exports['default'];
