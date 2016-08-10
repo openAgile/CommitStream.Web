@@ -26,26 +26,36 @@ var _middlewareInboxScriptRetrievedError = require('../../middleware/inboxScript
 
 var _middlewareInboxScriptRetrievedError2 = _interopRequireDefault(_middlewareInboxScriptRetrievedError);
 
+var getFileNameToRead = function getFileNameToRead(platform) {
+	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
+};
+
+var setOurHeaders = function setOurHeaders(res, fileToRead) {
+	res.setHeader("content-type", "application/octet-stream");
+	res.setHeader('Content-Disposition', 'attachment; filename="' + fileToRead + '"');
+	return res;
+};
+
+var replaceValues = function replaceValues(req, stream) {
+	return stream.replace(/PLACE REPO URL HERE/g, req.inbox.name).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
+};
+
+var sendScriptFile = function sendScriptFile(req, res) {
+	var result = undefined;
+	var fileToRead = getFileNameToRead(req.query.platform);
+	_fs2['default'].readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err, data) {
+		if (err) {
+			throw new _middlewareInboxScriptRetrievedError2['default'](err);
+		}
+		res = setOurHeaders(res, fileToRead);
+		result = replaceValues(req, data);
+		res.end(result);
+	});
+};
+
 exports['default'] = function (req, res) {
 	if (_helpersVcsFamilies2['default'].Svn) {
-		(function () {
-			res.setHeader("content-type", "application/octet-stream");
-
-			var apiKey = req.query.apiKey;
-			var platform = req.query.platform;
-			var result = undefined;
-			var fileToRead = "commit-event.";
-			fileToRead += platform == "windows" ? "ps1" : "sh";
-			res.setHeader('Content-Disposition', 'attachment; filename="' + fileToRead + '"');
-			_fs2['default'].readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err, data) {
-				if (err) {
-					throw new _middlewareInboxScriptRetrievedError2['default'](err);
-				}
-				result = data.replace(/PLACE REPO URL HERE/g, req.inbox.name).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + apiKey));
-
-				res.end(result);
-			});
-		})();
+		sendScriptFile(req, res);
 	} else {
 		throw new _middlewareInboxhasNotScript2['default']();
 	}
