@@ -11,9 +11,9 @@
 SVNPATH="$1"
 REVISION="$2"
 
-REPOSITORY="http://subversionlinux.cloudapp.net/svn/repos/myproject"
+REPOSITORY="PLACE REPO URL HERE"
 HTML_URL=""
-ENDPOINT="http://requestb.in/1b8vkkr1"
+ENDPOINT="PLACE INBOX URL HERE"
 
 COMMITEVENTHEADER="CS-SVN-Event:Commit Event"
 APPJSONHEADER="Content-Type:application/json"

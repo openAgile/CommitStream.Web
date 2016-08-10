@@ -1,34 +1,29 @@
 import _ from 'underscore';
 import fs from 'fs';
+import VcsFamilies from '../helpers/vcsFamilies';
+import InboxhasNotScript from '../../middleware/inboxhasNotScript';
+import InboxScriptRetrievedError from '../../middleware/inboxScriptRetrievedError';
 
-// function(req, res) {
-//   if(req.url==="somethingorAnother") {
-//     res.setHeader("content-type", "some/type");
-//     fs.createReadStream("./toSomeFile").pipe(res);
-//   }
-// }
 export default function(req, res) {
-	res.setHeader("content-type", "application/octet-stream");
-	// var reader = fs.createReadStream("./api/inboxes/resources/commit-event.ps1");
-	// reader.pipe(res);
+	if (VcsFamilies.Svn) {
+		res.setHeader("content-type", "application/octet-stream");
 
-	var result;
-	fs.readFile("./api/inboxes/resources/commit-event.ps1", 'utf8', function (err,data) {
-		if (err) {
-			return console.log(err);
-		}
-		console.log("DATA IS");
-		console.log(data);
-
-		result = data.replace(/PLACE REPO URL HERE/g, req.inbox.name);
-
-		console.log("RESULT IS");
-		console.log(result);
-		res.end(result);
-
-		// fs.writeFile(someFile, result, 'utf8', function (err) {
-		// 	if (err) return console.log(err);
-		// });
-	});
+		const apiKey = req.query.apiKey;
+		const platform = req.query.platform;
+		let result;
+		let fileToRead = "commit-event.";
+		fileToRead += platform == "windows" ? "ps1" : "sh";
+		res.setHeader('Content-Disposition', 'attachment; filename="' + fileToRead + '"');
+		fs.readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err,data) {
+			if (err) {
+				throw new InboxScriptRetrievedError(err);
+			}
+			result = data.replace(/PLACE REPO URL HERE/g, req.inbox.name)
+				.replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey="+ apiKey));
+			res.end(result);
+		});
+	} else {
+		throw new InboxhasNotScript();
+	}
 
 }
