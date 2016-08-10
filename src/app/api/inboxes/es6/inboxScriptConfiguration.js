@@ -33,7 +33,7 @@ const sendScriptFile = (req, res) => {
 }
 
 export default function(req, res) {
-	if (VcsFamilies.Svn) {
+	if (VcsFamilies.Svn == req.inbox.family) {
 		sendScriptFile(req, res);
 	} else {
 		throw new InboxhasNotScript();

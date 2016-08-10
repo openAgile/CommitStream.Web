@@ -54,7 +54,7 @@ var sendScriptFile = function sendScriptFile(req, res) {
 };
 
 exports['default'] = function (req, res) {
-	if (_helpersVcsFamilies2['default'].Svn) {
+	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family) {
 		sendScriptFile(req, res);
 	} else {
 		throw new _middlewareInboxhasNotScript2['default']();
