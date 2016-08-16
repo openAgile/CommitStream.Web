@@ -43,7 +43,7 @@ This is a work in progress. As this evolves, we update this narrative.
 	* Right-Click on My Computer
 	* Click Advanced System Settings link from the left side column
 	* Click Environment Variables in the bottom of the window
-	* Then under System Variables look for the path variable and click edithttps://github.com/openAgile/CommitStream.Web/pulls
+	* Then under System Variables look for the path variable and click edit
 	* Add the pwd to git's bin and cmd at the end of the string like this:
 	```
 	;C:\Program Files (x86)\Git\bin;C:\Program Files (x86)\Git\cmd
