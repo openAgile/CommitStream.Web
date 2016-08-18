@@ -16,19 +16,17 @@ var _CsError2 = require('./CsError');
 
 var _CsError3 = _interopRequireDefault(_CsError2);
 
-var InboxHasNotScript = (function (_CsError) {
-  _inherits(InboxHasNotScript, _CsError);
+var InboxHasNoScriptError = (function (_CsError) {
+  _inherits(InboxHasNoScriptError, _CsError);
 
-  function InboxHasNotScript() {
-    var error = arguments.length <= 0 || arguments[0] === undefined ? 'This inbox has not script to retrieve.' : arguments[0];
+  function InboxHasNoScriptError() {
+    _classCallCheck(this, InboxHasNoScriptError);
 
-    _classCallCheck(this, InboxHasNotScript);
-
-    _get(Object.getPrototypeOf(InboxHasNotScript.prototype), 'constructor', this).call(this, [error]);
+    _get(Object.getPrototypeOf(InboxHasNoScriptError.prototype), 'constructor', this).call(this, ['This inbox has no script to retrieve.']);
   }
 
-  return InboxHasNotScript;
+  return InboxHasNoScriptError;
 })(_CsError3['default']);
 
-exports['default'] = InboxHasNotScript;
+exports['default'] = InboxHasNoScriptError;
 module.exports = exports['default'];

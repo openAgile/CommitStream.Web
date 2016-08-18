@@ -1,10 +1,16 @@
 import fs from 'fs';
 import VcsFamilies from '../helpers/vcsFamilies';
-import InboxhasNotScript from '../../middleware/inboxhasNotScript';
+import InboxHasNoScriptError from '../../middleware/inboxHasNoScriptError';
 import InboxScriptRetrievedError from '../../middleware/inboxScriptRetrievedError';
+import InboxScriptBadPlatformRequestedError from '../../middleware/inboxScriptBadPlatformRequestedError';
 //import scriptFileSender from '../helpers/scriptFileSender';
 
-const getFileNameToRead = (platform) => {
+const validatePlatform = platform => (platform == "windows" || platform == "linux");
+
+const getFileNameToRead = platform => {
+	// if (platform !== "windows" || platform  !== "linux") {
+	// 	throw new InboxScriptBadPlatformRequestedError();
+	// }
 	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
 }
 
@@ -21,22 +27,27 @@ const replaceValues = (req, stream) => {
 
 const sendScriptFile = (req, res) => {
 	let result;
-	const fileToRead = getFileNameToRead(req.query.platform);
-	fs.readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err,data) {
-		if (err) {
-			console.log("err: " + err)
-			throw new InboxScriptRetrievedError(err);
-		}
-		res = setOurHeaders(res, fileToRead);
-		result = replaceValues(req, data);
-		res.end(result);
-	});
+	let platform = req.query.platform;
+	if (validatePlatform(platform)) {
+		const fileToRead = getFileNameToRead(platform);
+		fs.readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err,data) {
+			if (err) {
+				throw new InboxScriptRetrievedError(err);
+			}
+			res = setOurHeaders(res, fileToRead);
+			result = replaceValues(req, data);
+			console.log(result)
+			res.end(result);
+		});
+	} else {
+		throw new InboxScriptBadPlatformRequestedError();
+	}
 }
 
 export default function(req, res) {
 	if (VcsFamilies.Svn == req.inbox.family) {
 		sendScriptFile(req, res);
 	} else {
-		throw new InboxhasNotScript();
+		throw new InboxHasNoScriptError();
 	}
 }

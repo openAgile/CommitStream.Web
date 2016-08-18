@@ -14,17 +14,28 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-var _middlewareInboxhasNotScript = require('../../middleware/inboxhasNotScript');
+var _middlewareInboxHasNoScriptError = require('../../middleware/inboxHasNoScriptError');
 
-var _middlewareInboxhasNotScript2 = _interopRequireDefault(_middlewareInboxhasNotScript);
+var _middlewareInboxHasNoScriptError2 = _interopRequireDefault(_middlewareInboxHasNoScriptError);
 
 var _middlewareInboxScriptRetrievedError = require('../../middleware/inboxScriptRetrievedError');
 
 var _middlewareInboxScriptRetrievedError2 = _interopRequireDefault(_middlewareInboxScriptRetrievedError);
 
+var _middlewareInboxScriptBadPlatformRequestedError = require('../../middleware/inboxScriptBadPlatformRequestedError');
+
+var _middlewareInboxScriptBadPlatformRequestedError2 = _interopRequireDefault(_middlewareInboxScriptBadPlatformRequestedError);
+
 //import scriptFileSender from '../helpers/scriptFileSender';
 
+var validatePlatform = function validatePlatform(platform) {
+	return platform == "windows" || platform == "linux";
+};
+
 var getFileNameToRead = function getFileNameToRead(platform) {
+	// if (platform !== "windows" || platform  !== "linux") {
+	// 	throw new InboxScriptBadPlatformRequestedError();
+	// }
 	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
 };
 
@@ -40,23 +51,30 @@ var replaceValues = function replaceValues(req, stream) {
 
 var sendScriptFile = function sendScriptFile(req, res) {
 	var result = undefined;
-	var fileToRead = getFileNameToRead(req.query.platform);
-	_fs2['default'].readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err, data) {
-		if (err) {
-			console.log("err: " + err);
-			throw new _middlewareInboxScriptRetrievedError2['default'](err);
-		}
-		res = setOurHeaders(res, fileToRead);
-		result = replaceValues(req, data);
-		res.end(result);
-	});
+	var platform = req.query.platform;
+	if (validatePlatform(platform)) {
+		(function () {
+			var fileToRead = getFileNameToRead(platform);
+			_fs2['default'].readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err, data) {
+				if (err) {
+					throw new _middlewareInboxScriptRetrievedError2['default'](err);
+				}
+				res = setOurHeaders(res, fileToRead);
+				result = replaceValues(req, data);
+				console.log(result);
+				res.end(result);
+			});
+		})();
+	} else {
+		throw new _middlewareInboxScriptBadPlatformRequestedError2['default']();
+	}
 };
 
 exports['default'] = function (req, res) {
 	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family) {
 		sendScriptFile(req, res);
 	} else {
-		throw new _middlewareInboxhasNotScript2['default']();
+		throw new _middlewareInboxHasNoScriptError2['default']();
 	}
 };
 

@@ -1,4 +1,5 @@
 # Requires Powershell 3.0
+#The next 4 line should be added in post-commit.bat file under hooks folder 
 #SET REPOS=%1
 #SET REV=%2
 #SET DIR=%REPOS%/hooks
@@ -9,7 +10,7 @@ Param(
   [string]$revision
 )
 $repository = "PLACE REPO URL HERE"
-$html_url = ""
+$html_url = "PLACE BASE URL TO INSPECT YOUR REVISIONS"
 $endpoint = "PLACE INBOX URL HERE"
 $headers = @{"CS-SVN-Event"="Commit Event"}
 $log = (svnlook log -r $revision $svnPath)
