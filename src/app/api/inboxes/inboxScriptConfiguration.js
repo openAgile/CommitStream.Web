@@ -14,66 +14,50 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-// import InboxhasNotScript from '../../middleware/inboxhasNotScript';
-// import InboxScriptRetrievedError from '../../middleware/inboxScriptRetrievedError';
+var _middlewareInboxhasNotScript = require('../../middleware/inboxhasNotScript');
 
-var _helpersScriptFileSender = require('../helpers/scriptFileSender');
+var _middlewareInboxhasNotScript2 = _interopRequireDefault(_middlewareInboxhasNotScript);
 
-var _helpersScriptFileSender2 = _interopRequireDefault(_helpersScriptFileSender);
+var _middlewareInboxScriptRetrievedError = require('../../middleware/inboxScriptRetrievedError');
 
-// const getFileNameToRead = (platform) => {
-// 	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
-// }
-//
-// const setOurHeaders = (res, fileToRead) => {
-// 	res.setHeader("content-type", "application/octet-stream");
-// 	res.setHeader('Content-Disposition', 'attachment; filename="' + fileToRead + '"');
-// 	return res;
-// }
-//
-// const replaceValues = (req, stream) => {
-// 	return stream.replace(/PLACE REPO URL HERE/g, req.inbox.name)
-// 			.replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey="+ req.query.apiKey));
-// }
-//
-// const sendScriptFile = (req, res) => {
-// 	let result;
-// 	const fileToRead = getFileNameToRead(req.query.platform);
-// 	fs.readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err,data) {
-// 		if (err) {
-// 			throw new InboxScriptRetrievedError(err);
-// 		}
-// 		res = setOurHeaders(res, fileToRead);
-// 		result = replaceValues(req, data);
-// 		res.end(result);
-// 	});
-// }
+var _middlewareInboxScriptRetrievedError2 = _interopRequireDefault(_middlewareInboxScriptRetrievedError);
 
-var sendFile = function sendFile(fileObject, res) {
-	setHeaders(res, fileObject.headers);
-	res.end(fileObject.fileContent);
+//import scriptFileSender from '../helpers/scriptFileSender';
+
+var getFileNameToRead = function getFileNameToRead(platform) {
+	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
+};
+
+var setOurHeaders = function setOurHeaders(res, fileToRead) {
+	res.setHeader("content-type", "application/octet-stream");
+	res.setHeader('Content-Disposition', 'attachment; filename="' + fileToRead + '"');
+	return res;
+};
+
+var replaceValues = function replaceValues(req, stream) {
+	return stream.replace(/PLACE REPO URL HERE/g, req.inbox.name).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
+};
+
+var sendScriptFile = function sendScriptFile(req, res) {
+	var result = undefined;
+	var fileToRead = "./api/inboxes/resources/" + getFileNameToRead(req.query.platform);
+	_fs2['default'].readFile(fileToRead, 'utf8', function (err, data) {
+		if (err) {
+			console.log("err: " + err);
+			throw new _middlewareInboxScriptRetrievedError2['default'](err);
+		}
+		res = setOurHeaders(res, fileToRead);
+		result = replaceValues(req, data);
+		res.end(result);
+	});
 };
 
 exports['default'] = function (req, res) {
 	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family) {
-
-		getBitsForSvnFamily;
-		getSvnHeadersAndFileContent;
-		getSvnFileConfiguration;
-
-		scriptFileSomething.getSvnHeadersAndFileContent;
-
-		downloadFactory.getSvnResponse(res);
-
-		scriptFileGenerator.getSvnScriptFile(req).then(function (fileObject) {
-			sendFile(fileContent, res);
-		});
-
-		// sendScriptFile(req, res);
-		// scriptFileSender.sendSvnScriptFile(req,res);
+		sendScriptFile(req, res);
 	} else {
-			throw new InboxhasNotScript();
-		}
+		throw new _middlewareInboxhasNotScript2['default']();
+	}
 };
 
 module.exports = exports['default'];
