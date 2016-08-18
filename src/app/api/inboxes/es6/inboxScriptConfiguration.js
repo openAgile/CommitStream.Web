@@ -21,8 +21,8 @@ const replaceValues = (req, stream) => {
 
 const sendScriptFile = (req, res) => {
 	let result;
-	const fileToRead = "./api/inboxes/resources/" + getFileNameToRead(req.query.platform);
-	fs.readFile(fileToRead, 'utf8', function (err,data) {
+	const fileToRead = getFileNameToRead(req.query.platform);
+	fs.readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err,data) {
 		if (err) {
 			console.log("err: " + err)
 			throw new InboxScriptRetrievedError(err);

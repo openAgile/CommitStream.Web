@@ -40,8 +40,8 @@ var replaceValues = function replaceValues(req, stream) {
 
 var sendScriptFile = function sendScriptFile(req, res) {
 	var result = undefined;
-	var fileToRead = "./api/inboxes/resources/" + getFileNameToRead(req.query.platform);
-	_fs2['default'].readFile(fileToRead, 'utf8', function (err, data) {
+	var fileToRead = getFileNameToRead(req.query.platform);
+	_fs2['default'].readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err, data) {
 		if (err) {
 			console.log("err: " + err);
 			throw new _middlewareInboxScriptRetrievedError2['default'](err);
