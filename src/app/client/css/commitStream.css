@@ -1212,6 +1212,9 @@ h6 {
   background-position: 0 10px;
   background-size: 16px;
 }
+.commitStream-panel .csSvn {
+  background-image: url(../icon-svn-selected-32x32.png);
+}
 .commitStream-panel .csBitbucket {
   background-image: url(../icon-bitbucket-selected-32x32.png);
 }
@@ -1227,10 +1230,7 @@ h6 {
 .commitStream-panel .csMessage {
   padding-left: 22px;
   color: #454545;
-  word-wrap: break-word;
-  white-space: pre-line;
-  max-width: 308px;
-  display: inline-block;
+  white-space: pre-wrap;
 }
 .commitStream-panel .side-panel-scrollable {
   top: 64px !important;
