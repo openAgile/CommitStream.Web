@@ -47,6 +47,8 @@
   	background-color: #EDF0F3;
   }
   .commitstream-admin .repos-list input {padding: .4em; width: 85%;}
+  .commitstream-admin .repos-list input.activeList {width: 95%;}
+
   /* End Repo List Table */
   .commitstream-admin .prompt {
     position: absolute;
@@ -337,8 +339,17 @@
   padding-bottom: 8px;
 }
 
+.commitstream-admin .scriptDownloadIcon {
+  margin: 5px;
+}
+
 .button .actions .grid-row-btn {
   height: 32px !important;
+}
+
+button.actions.grid-row-btn.remove.ng-scope {
+  padding-left: 9px !important;
+  padding-right: 9px !important;
 }
 
 .vcs-vso-options {
@@ -439,20 +450,21 @@ div.vcs-vso-options input[type="radio"] {
         <tr>
           <th>Repository Name</th>
           <th>Webhook URL</th>
-          <th>&nbsp;</th>
-          <th>Download</th>
+          <!-- <th>&nbsp;</th> -->
+          <th style='width: 8em' ng-if='thereIsOneSvnInbox("Svn")'>Download</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
           <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
-            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox' ng-click='inboxHighlight($event)' ng-readonly='true'>
+            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>
+            <button ng-if='editAllowed()' class='actions grid-row-btn remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>X</button>
           </td>
-          <td>
-            <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
+          <!-- <td>
+            <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
             <button ng-if='editAllowed()' class='actions grid-row-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
-          </td>
-          <td>
-            <a ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, hoverEdit)}}' style="height:24px;" /></a>
+          </td> -->
+          <td ng-if='thereIsOneSvnInbox("Svn")'>
+            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, hoverEdit)}}' style="height:24px;" /></a>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>

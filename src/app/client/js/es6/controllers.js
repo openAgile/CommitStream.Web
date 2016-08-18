@@ -289,6 +289,15 @@
         inboxSvnScriptResources(inbox);
       };
 
+      $scope.thereIsOneSvnInbox = (family) => {
+        let thereIs = false;
+        $scope.inboxes.forEach(inbox => {
+          if (inbox.family == family) 
+            thereIs = true;
+        });
+        return thereIs;
+      }
+
       $scope.svnScriptPlatformIcon = (platform, hoverEdit) =>
           hoverEdit ? `${serviceUrl}/icon-${platform}-selected-24x24.png` : `${serviceUrl}/icon-${platform}-nonselected-24x24.png`;
 

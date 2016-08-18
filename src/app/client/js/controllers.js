@@ -318,6 +318,14 @@
       inboxSvnScriptResources(inbox);
     };
 
+    $scope.thereIsOneSvnInbox = function (family) {
+      var thereIs = false;
+      $scope.inboxes.forEach(function (inbox) {
+        if (inbox.family == family) thereIs = true;
+      });
+      return thereIs;
+    };
+
     $scope.svnScriptPlatformIcon = function (platform, hoverEdit) {
       return hoverEdit ? serviceUrl + '/icon-' + platform + '-selected-24x24.png' : serviceUrl + '/icon-' + platform + '-nonselected-24x24.png';
     };
