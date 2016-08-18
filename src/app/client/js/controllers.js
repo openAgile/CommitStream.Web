@@ -309,10 +309,41 @@
       }
     };
 
+    $scope.hoverEdit = false;
+
     var inboxConfigure = function inboxConfigure(inbox) {
       var links = inbox.$links();
       inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
       inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
+      inboxSvnScriptResources(inbox);
+    };
+
+    $scope.svnScriptPlatformIcon = function (platform, hoverEdit) {
+      return hoverEdit ? serviceUrl + '/icon-' + platform + '-selected-24x24.png' : serviceUrl + '/icon-' + platform + '-nonselected-24x24.png';
+    };
+
+    $scope.hoverIn = function () {
+      this.hoverEdit = true;
+    };
+
+    $scope.hoverOut = function () {
+      this.hoverEdit = false;
+    };
+
+    var inboxSvnScriptResources = function inboxSvnScriptResources(inbox) {
+      if (inbox.family == "Svn") {
+        inbox.$get('Svn-scripts').then(function (scripts) {
+          var scriptUrl = [];
+          scripts.forEach(function (script) {
+            var links = script.$links();
+            scriptUrl.push({
+              'href': links['self'].href + '&apiKey=' + persistentOptions.headers.Bearer,
+              'platform': script.platform
+            });
+          });
+          inbox.scripts = scriptUrl;
+        });
+      }
     };
 
     var inboxesGet = function inboxesGet() {

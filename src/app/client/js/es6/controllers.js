@@ -280,11 +280,41 @@
         }
       };
 
+      $scope.hoverEdit = false;
+
       let inboxConfigure = inbox => {
         let links = inbox.$links();
         inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
         inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
+        inboxSvnScriptResources(inbox);
       };
+
+      $scope.svnScriptPlatformIcon = (platform, hoverEdit) =>
+          hoverEdit ? `${serviceUrl}/icon-${platform}-selected-24x24.png` : `${serviceUrl}/icon-${platform}-nonselected-24x24.png`;
+
+      $scope.hoverIn = function(){
+        this.hoverEdit = true;
+      };
+
+      $scope.hoverOut = function(){
+          this.hoverEdit = false;
+      };
+
+      let inboxSvnScriptResources = inbox => {
+        if(inbox.family == "Svn") {
+          inbox.$get('Svn-scripts').then(scripts => {
+            let scriptUrl = [];
+            scripts.forEach(script => {
+              let links = script.$links();
+              scriptUrl.push({
+                'href': links['self'].href + '&apiKey=' + persistentOptions.headers.Bearer,
+                'platform': script.platform
+              });
+            });
+            inbox.scripts = scriptUrl;
+          });
+        }
+      }
 
       let inboxesGet = () => {
         loading = true;
@@ -370,7 +400,7 @@
 
           digest.$post('inbox-create', {}, $scope.newInbox)
             .then(inbox => {
-              inboxConfigure(inbox);
+              inboxConfigure(inbox);              
               $scope.inboxes.unshift(inbox);
               $scope.newInbox.url = '';
               $scope.inboxHighlightTop(inbox.removeHref);

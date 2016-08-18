@@ -417,6 +417,9 @@ div.vcs-vso-options input[type="radio"] {
             <label title='TFVC is not currently supported'><input type='radio' disabled='disabled'><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:16px;" />&nbspTFVC</label>
           </div>
         </div>
+        <div class='vcs-family'>
+          <button type='button' ng-click='familySelect("Svn")' ng-mouseenter='familyHover("Svn")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Svn")}}'>Subversion&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Svn")}}' style="height:32px;" /></button>
+        </div>
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
@@ -437,6 +440,7 @@ div.vcs-vso-options input[type="radio"] {
           <th>Repository Name</th>
           <th>Webhook URL</th>
           <th>&nbsp;</th>
+          <th>Download</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
           <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
@@ -446,6 +450,9 @@ div.vcs-vso-options input[type="radio"] {
           <td>
             <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>-->
             <button ng-if='editAllowed()' class='actions grid-row-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
+          </td>
+          <td>
+            <a ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, hoverEdit)}}' style="height:24px;" /></a>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
