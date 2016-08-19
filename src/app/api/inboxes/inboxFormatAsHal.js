@@ -1,6 +1,8 @@
 (function() {
+  var decoratorFactory = require('./halDecorators/decoratorFactory');
+
   module.exports = function(href, instanceId, inbox) {
-    return {
+    var result = {
       "_links": {
         "self": {
           "href": href("/api/" + instanceId + "/inboxes/" + inbox.inboxId)
@@ -20,5 +22,12 @@
       "name": inbox.name,
       "url": inbox.url
     };
+
+    var halDecorator = decoratorFactory.create(inbox.family);
+    if(halDecorator) {
+      result = halDecorator.decorateHalResponse(result);
+    };
+
+    return result;
   }
 }());
