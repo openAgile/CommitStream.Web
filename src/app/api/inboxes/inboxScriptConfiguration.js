@@ -26,8 +26,6 @@ var _middlewareInboxScriptBadPlatformRequestedError = require('../../middleware/
 
 var _middlewareInboxScriptBadPlatformRequestedError2 = _interopRequireDefault(_middlewareInboxScriptBadPlatformRequestedError);
 
-//import scriptFileSender from '../helpers/scriptFileSender';
-
 var validatePlatform = function validatePlatform(platform) {
 	return platform == "windows" || platform == "linux";
 };

@@ -3,7 +3,6 @@ import VcsFamilies from '../helpers/vcsFamilies';
 import InboxHasNoScriptError from '../../middleware/inboxHasNoScriptError';
 import InboxScriptRetrievedError from '../../middleware/inboxScriptRetrievedError';
 import InboxScriptBadPlatformRequestedError from '../../middleware/inboxScriptBadPlatformRequestedError';
-//import scriptFileSender from '../helpers/scriptFileSender';
 
 const validatePlatform = platform => (platform == "windows" || platform == "linux");
 
