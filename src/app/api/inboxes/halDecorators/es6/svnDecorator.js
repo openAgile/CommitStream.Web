@@ -24,7 +24,7 @@ const svnDecorator = {
     }
   },
   embedScripts(hypermedia) {
-    const scriptFamily = vcsFamilies.Svn + "-scripts";
+    const scriptFamily = vcsFamilies.Svn.toLowerCase() + "-scripts";
 
     hypermedia._embedded[scriptFamily] = [svnDecorator.addScriptResource(hypermedia._links.self.href, "windows"), 
     svnDecorator.addScriptResource(hypermedia._links.self.href, "linux")];

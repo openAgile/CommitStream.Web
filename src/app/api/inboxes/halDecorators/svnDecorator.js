@@ -34,7 +34,7 @@ var svnDecorator = {
     };
   },
   embedScripts: function embedScripts(hypermedia) {
-    var scriptFamily = _helpersVcsFamilies2['default'].Svn + "-scripts";
+    var scriptFamily = _helpersVcsFamilies2['default'].Svn.toLowerCase() + "-scripts";
 
     hypermedia._embedded[scriptFamily] = [svnDecorator.addScriptResource(hypermedia._links.self.href, "windows"), svnDecorator.addScriptResource(hypermedia._links.self.href, "linux")];
 
