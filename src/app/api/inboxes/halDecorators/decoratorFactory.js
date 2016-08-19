@@ -22,7 +22,7 @@ var DecoratorFactory = (function () {
 
   _createClass(DecoratorFactory, [{
     key: 'create',
-    value: function create(hypermedia) {
+    value: function create(family) {
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -31,7 +31,7 @@ var DecoratorFactory = (function () {
         for (var _iterator = _getIterator(decorators), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var decorator = _step.value;
 
-          if (decorator.shouldDecorate(hypermedia)) return decorator;
+          if (decorator.shouldDecorate(family)) return decorator;
         }
       } catch (err) {
         _didIteratorError = true;

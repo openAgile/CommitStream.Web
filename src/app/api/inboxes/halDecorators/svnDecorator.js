@@ -11,8 +11,8 @@ var _helpersVcsFamilies = require('../../helpers/vcsFamilies');
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
 var svnDecorator = {
-  shouldDecorate: function shouldDecorate(hypermedia) {
-    if (hypermedia.family === _helpersVcsFamilies2['default'].Svn) {
+  shouldDecorate: function shouldDecorate(family) {
+    if (family === _helpersVcsFamilies2['default'].Svn) {
       return true;
     }
     return false;

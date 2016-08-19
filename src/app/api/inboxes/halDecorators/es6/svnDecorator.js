@@ -1,8 +1,8 @@
 import vcsFamilies from '../../helpers/vcsFamilies';
 
 const svnDecorator = {
-  shouldDecorate(hypermedia) {
-    if (hypermedia.family === vcsFamilies.Svn) {
+  shouldDecorate(family) {
+    if (family === vcsFamilies.Svn) {
       return true;
     }
     return false;
