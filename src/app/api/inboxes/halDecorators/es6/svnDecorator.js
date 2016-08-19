@@ -18,9 +18,9 @@ const svnDecorator = {
       "_links": {
         "self": {
           "href": baseUrl + "/script?platform=" + platform
-        },
-        "platform": platform
-      }
+        }
+      },
+      "platform": platform
     }
   },
   embedScripts(hypermedia) {

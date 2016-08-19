@@ -28,9 +28,9 @@ var svnDecorator = {
       "_links": {
         "self": {
           "href": baseUrl + "/script?platform=" + platform
-        },
-        "platform": platform
-      }
+        }
+      },
+      "platform": platform
     };
   },
   embedScripts: function embedScripts(hypermedia) {

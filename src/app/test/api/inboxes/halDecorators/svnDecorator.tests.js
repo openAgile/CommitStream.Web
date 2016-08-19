@@ -45,22 +45,22 @@ var expected = {
   "url": 'http://random.url.com',
   "_embedded": {
     "Svn-scripts":[{
-     "_links": {
+      "_links": {
         "self": {
           "href": "/api/11111111-1111-4111-1111-111111111111/inboxes/22222222-2222-4222-2222-222222222222/script?platform=windows"
-        },
-        "platform": "windows"
         }
       },
-      {
-        "_links": {
-          "self": {
-            "href":"/api/11111111-1111-4111-1111-111111111111/inboxes/22222222-2222-4222-2222-222222222222/script?platform=linux"
-        },
-        "platform": "linux"
-      }
-    }
-  ]}
+      "platform": "windows"
+    },
+    {
+      "_links": {
+        "self": {
+          "href":"/api/11111111-1111-4111-1111-111111111111/inboxes/22222222-2222-4222-2222-222222222222/script?platform=linux"
+        }
+      },
+      "platform": "linux"
+    }]
+  }
 };
 
 describe('svnDecorator', function() {
