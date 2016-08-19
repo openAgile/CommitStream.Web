@@ -31,9 +31,6 @@ var validatePlatform = function validatePlatform(platform) {
 };
 
 var getFileNameToRead = function getFileNameToRead(platform) {
-	// if (platform !== "windows" || platform  !== "linux") {
-	// 	throw new InboxScriptBadPlatformRequestedError();
-	// }
 	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
 };
 
@@ -59,7 +56,6 @@ var sendScriptFile = function sendScriptFile(req, res) {
 				}
 				res = setOurHeaders(res, fileToRead);
 				result = replaceValues(req, data);
-				console.log(result);
 				res.end(result);
 			});
 		})();

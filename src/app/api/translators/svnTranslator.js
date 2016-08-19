@@ -14,12 +14,16 @@ var _middlewareSvnCommitMalformedError = require('../../middleware/svnCommitMalf
 
 var _middlewareSvnCommitMalformedError2 = _interopRequireDefault(_middlewareSvnCommitMalformedError);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
 var hasCorrectHeaders = function hasCorrectHeaders(headers) {
   return headers.hasOwnProperty('cs-svn-event') && headers['cs-svn-event'] === 'Commit Event';
 };
 
 var svnTranslator = {
-  family: 'Svn',
+  family: _helpersVcsFamilies2['default'].Svn,
   canTranslate: function canTranslate(request) {
     if (hasCorrectHeaders(request.headers)) {
       return true;
@@ -32,8 +36,6 @@ var svnTranslator = {
       var branch = "";
       var revisionNumber = commitEvent.pretext.split("rev. ");
       var repository = {
-        // gitLab does not have a repository id
-        // id: pushEvent.repository.id,
         name: commitEvent.repository.substr(commitEvent.repository.lastIndexOf('/') + 1),
         url: commitEvent.repository
       };

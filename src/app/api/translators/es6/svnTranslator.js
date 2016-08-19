@@ -1,11 +1,12 @@
   import uuid from 'uuid-v4';
   import SvnCommitMalformedError from '../../middleware/svnCommitMalformedError';
+  import VcsFamilies from '../helpers/vcsFamilies';
 
   const hasCorrectHeaders = (headers) => headers.hasOwnProperty('cs-svn-event')
     && headers['cs-svn-event'] === 'Commit Event';
 
   const svnTranslator = {
-    family: 'Svn',
+    family: VcsFamilies.Svn,
     canTranslate(request) {
       if (hasCorrectHeaders(request.headers)) {
         return true;
@@ -18,8 +19,6 @@
         const branch = "";
         const revisionNumber = commitEvent.pretext.split("rev. ");
         const repository = {
-          // gitLab does not have a repository id
-          // id: pushEvent.repository.id,
           name: commitEvent.repository.substr(commitEvent.repository.lastIndexOf('/') + 1),
           url: commitEvent.repository
         };

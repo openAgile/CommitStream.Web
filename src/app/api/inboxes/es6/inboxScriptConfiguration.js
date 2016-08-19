@@ -7,9 +7,6 @@ import InboxScriptBadPlatformRequestedError from '../../middleware/inboxScriptBa
 const validatePlatform = platform => (platform == "windows" || platform == "linux");
 
 const getFileNameToRead = platform => {
-	// if (platform !== "windows" || platform  !== "linux") {
-	// 	throw new InboxScriptBadPlatformRequestedError();
-	// }
 	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
 }
 
@@ -35,7 +32,6 @@ const sendScriptFile = (req, res) => {
 			}
 			res = setOurHeaders(res, fileToRead);
 			result = replaceValues(req, data);
-			console.log(result)
 			res.end(result);
 		});
 	} else {
