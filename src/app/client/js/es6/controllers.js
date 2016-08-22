@@ -311,7 +311,7 @@
 
       let inboxSvnScriptResources = inbox => {
         if(inbox.family == "Svn") {
-          inbox.$get('Svn-scripts').then(scripts => {
+          inbox.$get('svn-scripts').then(scripts => {
             let scriptUrl = [];
             scripts.forEach(script => {
               let links = script.$links();

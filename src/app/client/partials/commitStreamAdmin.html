@@ -347,9 +347,50 @@
   height: 32px !important;
 }
 
-button.actions.grid-row-btn.remove.ng-scope {
-  padding-left: 9px !important;
-  padding-right: 9px !important;
+.commitstream-admin .buttonRemove {
+  width: 23px;
+  height: 23px;
+  transition: 0.3s all ease;
+  border-radius: 50%;
+  position: relative;
+  transform: rotate(45deg);
+  float: right;
+}
+
+.commitstream-admin .buttonRemove:hover {
+  background-color: #00a9e0;
+}
+
+.commitstream-admin .buttonRemove:hover .iconRemove:before, .commitstream-admin .buttonRemove:hover .iconRemove:after {
+  background-color: #fff;
+}
+
+.commitstream-admin .iconRemove {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  transition: 0.3s all ease;
+}
+
+.commitstream-admin .iconRemove:before, .commitstream-admin .iconRemove:after {
+  position: absolute;
+  background-color: gray; /* use the V1 gray here */
+  content: '';
+  display: inline-block;
+}
+
+.commitstream-admin .iconRemove:before {
+  top: 5px;
+  left: 10px;
+  height: 13px;
+  width: 3px;
+}
+
+.commitstream-admin .iconRemove:after {
+  top: 10px;
+  left: 5px;
+  height: 3px;
+  width: 13px;
 }
 
 .vcs-vso-options {
@@ -457,12 +498,11 @@ div.vcs-vso-options input[type="radio"] {
           <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>
-            <button ng-if='editAllowed()' class='actions grid-row-btn remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>X</button>
+            <!-- <button ng-if='editAllowed()' class='actions grid-row-btn remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>X</button> -->
+            <div ng-if='editAllowed()'  ng-click='inboxRemove(inbox)' title='Remove' class="buttonRemove">
+               <span class="iconRemove"></span>
+            </div>
           </td>
-          <!-- <td>
-            <!--<span class='glyphicon glyphicon-minus-sign alert-warning' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'></span>
-            <button ng-if='editAllowed()' class='actions grid-row-btn' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>Remove</button>
-          </td> -->
           <td ng-if='thereIsOneSvnInbox("Svn")'>
             <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, hoverEdit)}}' style="height:24px;" /></a>
           </td>

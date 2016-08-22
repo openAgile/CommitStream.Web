@@ -340,7 +340,7 @@
 
     var inboxSvnScriptResources = function inboxSvnScriptResources(inbox) {
       if (inbox.family == "Svn") {
-        inbox.$get('Svn-scripts').then(function (scripts) {
+        inbox.$get('svn-scripts').then(function (scripts) {
           var scriptUrl = [];
           scripts.forEach(function (script) {
             var links = script.$links();
