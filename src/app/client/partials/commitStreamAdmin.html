@@ -35,7 +35,7 @@
   .commitstream-admin .repos-list .table-bordered>thead>tr>th, .commitstream-admin .table-bordered>tbody>tr>th, .commitstream-admin .table-bordered>tfoot>tr>th, .commitstream-admin .table-bordered>thead>tr>td, .commitstream-admin .table-bordered>tbody>tr>td, .commitstream-admin .table-bordered>tfoot>tr>td {border-left: none; border-right: none; border-bottom: none; padding: 13px;}
   .commitstream-admin .table>thead>tr>th, .commitstream-admin .table>tbody>tr>th, .commitstream-admin .table>tfoot>tr>th, .commitstream-admin .table>thead>tr>td, .commitstream-admin .table>tbody>tr>td, .commitstream-admin .table>tfoot>tr>td {text-align: left; border-top: 1px solid #dde2e9 !important; border-width: 1px 0; border-color: transparent transparent #dde2e9;}
   .commitstream-admin .repos-list .table-striped>tbody>tr:nth-of-type(odd) {background-color:#fff;}
-  .commitstream-admin {color: #454545;}
+  .commitstream-admin {color: #474c54;}
   .commitstream-admin h1 {
   	margin-top: 1em;
     padding: 0px .5em !important;
@@ -47,7 +47,7 @@
   	background-color: #EDF0F3;
   }
   .commitstream-admin .repos-list input {padding: .4em; width: 85%;}
-  .commitstream-admin .repos-list input.activeList {width: 95%;}
+  .commitstream-admin .repos-list input.activeList {width: 91%;}
 
   /* End Repo List Table */
   .commitstream-admin .prompt {
@@ -355,6 +355,7 @@
   position: relative;
   transform: rotate(45deg);
   float: right;
+  margin-right: 25px;
 }
 
 .commitstream-admin .buttonRemove:hover {
@@ -374,7 +375,7 @@
 
 .commitstream-admin .iconRemove:before, .commitstream-admin .iconRemove:after {
   position: absolute;
-  background-color: gray; /* use the V1 gray here */
+  background-color: #31363e; /* use the V1 gray here */
   content: '';
   display: inline-block;
 }
@@ -402,6 +403,12 @@ div.vcs-vso-options input[type="radio"] {
   margin-left: 16px;
   width: 20px;
 }
+
+.legend-wrapper.popover-content-v1 {
+  position: absolute;
+  cursor: pointer;
+}
+
 
 </style>
 
@@ -491,18 +498,19 @@ div.vcs-vso-options input[type="radio"] {
         <tr>
           <th>Repository Name</th>
           <th>Webhook URL</th>
-          <!-- <th>&nbsp;</th> -->
-          <th style='width: 8em' ng-if='thereIsOneSvnInbox("Svn")'>Download</th>
+          <th ng-click='clickTooltip()' style='width: 6em;position: relative;'>{{thereIsOneSvnInbox("Svn") ? "Download" : "&nbsp;" }}
+            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a href="#">here</a>.</h6></div>
+          </th>          
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
           <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
-            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>
-            <!-- <button ng-if='editAllowed()' class='actions grid-row-btn remove' type='button' ng-click='inboxRemove(inbox)' title='Remove' aria-hidden='true'>X</button> -->
+            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>          
             <div ng-if='editAllowed()'  ng-click='inboxRemove(inbox)' title='Remove' class="buttonRemove">
                <span class="iconRemove"></span>
             </div>
           </td>
+          <td ng-if='!thereIsOneSvnInbox("Svn")'>&nbsp;</td>
           <td ng-if='thereIsOneSvnInbox("Svn")'>
             <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, hoverEdit)}}' style="height:24px;" /></a>
           </td>

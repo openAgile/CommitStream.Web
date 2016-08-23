@@ -324,6 +324,10 @@
           });
         }
       }
+      $scope.showTooltip = false;
+      $scope.clickTooltip = function() {
+        $scope.showTooltip = !$scope.showTooltip;
+      }
 
       let inboxesGet = () => {
         loading = true;

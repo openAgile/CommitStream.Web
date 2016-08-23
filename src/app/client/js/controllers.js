@@ -353,6 +353,10 @@
         });
       }
     };
+    $scope.showTooltip = false;
+    $scope.clickTooltip = function () {
+      $scope.showTooltip = !$scope.showTooltip;
+    };
 
     var inboxesGet = function inboxesGet() {
       loading = true;
