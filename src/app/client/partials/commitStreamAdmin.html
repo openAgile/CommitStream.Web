@@ -340,7 +340,7 @@
 }
 
 .commitstream-admin .scriptDownloadIcon {
-  margin: 5px;
+  margin: 9px;
 }
 
 .button .actions .grid-row-btn {
@@ -356,6 +356,7 @@
   transform: rotate(45deg);
   float: right;
   margin-right: 25px;
+  top: 2px;
 }
 
 .commitstream-admin .buttonRemove:hover {
@@ -381,17 +382,17 @@
 }
 
 .commitstream-admin .iconRemove:before {
-  top: 5px;
+  top: 4px;
   left: 10px;
-  height: 13px;
-  width: 3px;
+  height: 14px;
+  width: 2px;
 }
 
 .commitstream-admin .iconRemove:after {
   top: 10px;
-  left: 5px;
-  height: 3px;
-  width: 13px;
+  left: 4px;
+  height: 2px;
+  width: 14px;
 }
 
 .vcs-vso-options {
@@ -405,8 +406,21 @@ div.vcs-vso-options input[type="radio"] {
 }
 
 .legend-wrapper.popover-content-v1 {
-  position: absolute;
+  position: absolute;  
+}
+
+.commitstream-admin .popover-content-v1:before {
+  left: 93%;
+}
+.commitstream-admin .legend-wrapper {
+  width: 290px;
+}
+
+.commitstream-admin .helpIcon {
   cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 12px;
 }
 
 
@@ -478,7 +492,7 @@ div.vcs-vso-options input[type="radio"] {
         </div>
         <div class='vcs-family'>
           <button type='button' ng-click='familySelect("Svn")' ng-mouseenter='familyHover("Svn")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Svn")}}'>Subversion&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Svn")}}' style="height:32px;" /></button>
-        </div>
+        </div>       
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
@@ -498,9 +512,10 @@ div.vcs-vso-options input[type="radio"] {
         <tr>
           <th>Repository Name</th>
           <th>Webhook URL</th>
-          <th ng-click='clickTooltip()' style='width: 6em;position: relative;'>{{thereIsOneSvnInbox("Svn") ? "Download" : "&nbsp;" }}
+          <th ng if="thereIsOneSvnInbox('Svn')" style='width: 6em;position: relative;'>Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
             <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a href="#">here</a>.</h6></div>
-          </th>          
+          </th>   
+          <th ng-if="!thereIsOneSvnInbox('Svn')">&nbsp;</th>       
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
           <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
@@ -512,7 +527,7 @@ div.vcs-vso-options input[type="radio"] {
           </td>
           <td ng-if='!thereIsOneSvnInbox("Svn")'>&nbsp;</td>
           <td ng-if='thereIsOneSvnInbox("Svn")'>
-            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, hoverEdit)}}' style="height:24px;" /></a>
+            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' style="height:24px;" /></a>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>

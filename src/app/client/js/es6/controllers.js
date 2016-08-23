@@ -298,15 +298,19 @@
         return thereIs;
       }
 
-      $scope.svnScriptPlatformIcon = (platform, hoverEdit) =>
-          hoverEdit ? `${serviceUrl}/icon-${platform}-selected-24x24.png` : `${serviceUrl}/icon-${platform}-nonselected-24x24.png`;
+      $scope.getHelpIconSrc = () => `${serviceUrl}/icon-help-16x16.png`;
 
-      $scope.hoverIn = function(){
-        this.hoverEdit = true;
+      $scope.svnScriptPlatformIcon = (platform, mouseHover) =>
+          mouseHover ? `${serviceUrl}/icon-${platform}-selected-24x24.png` : `${serviceUrl}/icon-${platform}-nonselected-24x24.png`;
+
+      // we need to use this function declaration in both of the below functions to make use of "this"
+      // "this" need to be bound to the <a> element
+      $scope.hoverIn = function() {
+        this.mouseHover = true;
       };
 
-      $scope.hoverOut = function(){
-          this.hoverEdit = false;
+      $scope.hoverOut = function() {
+        this.mouseHover = false;
       };
 
       let inboxSvnScriptResources = inbox => {
@@ -324,8 +328,10 @@
           });
         }
       }
+
       $scope.showTooltip = false;
-      $scope.clickTooltip = function() {
+
+      $scope.clickTooltip = () => {
         $scope.showTooltip = !$scope.showTooltip;
       }
 
