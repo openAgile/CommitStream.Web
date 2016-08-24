@@ -12,9 +12,9 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
-var _CsError2 = require('./CsError');
+var _csError = require('./csError');
 
-var _CsError3 = _interopRequireDefault(_CsError2);
+var _csError2 = _interopRequireDefault(_csError);
 
 var InboxScriptBadPlatformRequestedError = (function (_CsError) {
 	_inherits(InboxScriptBadPlatformRequestedError, _CsError);
@@ -22,11 +22,11 @@ var InboxScriptBadPlatformRequestedError = (function (_CsError) {
 	function InboxScriptBadPlatformRequestedError() {
 		_classCallCheck(this, InboxScriptBadPlatformRequestedError);
 
-		_get(Object.getPrototypeOf(InboxScriptBadPlatformRequestedError.prototype), 'constructor', this).call(this, ['There was expecting Linux or Windows as platform query parameter']);
+		_get(Object.getPrototypeOf(InboxScriptBadPlatformRequestedError.prototype), 'constructor', this).call(this, ['Expected linux or windows as platform query parameter']);
 	}
 
 	return InboxScriptBadPlatformRequestedError;
-})(_CsError3['default']);
+})(_csError2['default']);
 
 exports['default'] = InboxScriptBadPlatformRequestedError;
 module.exports = exports['default'];

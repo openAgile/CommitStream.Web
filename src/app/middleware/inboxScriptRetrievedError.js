@@ -12,9 +12,9 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
-var _CsError2 = require('./CsError');
+var _csError = require('./csError');
 
-var _CsError3 = _interopRequireDefault(_CsError2);
+var _csError2 = _interopRequireDefault(_csError);
 
 var InboxScriptRetrievedError = (function (_CsError) {
 	_inherits(InboxScriptRetrievedError, _CsError);
@@ -26,7 +26,7 @@ var InboxScriptRetrievedError = (function (_CsError) {
 	}
 
 	return InboxScriptRetrievedError;
-})(_CsError3['default']);
+})(_csError2['default']);
 
 exports['default'] = InboxScriptRetrievedError;
 module.exports = exports['default'];

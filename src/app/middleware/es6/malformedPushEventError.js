@@ -1,4 +1,4 @@
-import CsError from './CsError';
+import CsError from './csError';
 
 class MalformedPushEventError extends CsError {
   constructor(error = 'Push event could not be processed.') {
