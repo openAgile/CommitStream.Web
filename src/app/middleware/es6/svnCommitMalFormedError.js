@@ -1,4 +1,4 @@
-import CsError from './CsError';
+import CsError from './csError';
 
 class SvnCommitMalformedError extends CsError {
 	constructor() {

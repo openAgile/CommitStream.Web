@@ -12,9 +12,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _CsError2 = require('./CsError');
+var _csError = require('./csError');
 
-var _CsError3 = _interopRequireDefault(_CsError2);
+var _csError2 = _interopRequireDefault(_csError);
 
 var MalformedPushEventError = (function (_CsError) {
   _inherits(MalformedPushEventError, _CsError);
@@ -28,7 +28,7 @@ var MalformedPushEventError = (function (_CsError) {
   }
 
   return MalformedPushEventError;
-})(_CsError3['default']);
+})(_csError2['default']);
 
 exports['default'] = MalformedPushEventError;
 module.exports = exports['default'];

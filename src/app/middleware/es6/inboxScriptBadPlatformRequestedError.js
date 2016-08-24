@@ -1,8 +1,8 @@
-import CsError from './CsError';
+import CsError from './csError';
 
 class InboxScriptBadPlatformRequestedError extends CsError {
 	constructor() {
-		super(['There was expecting Linux or Windows as platform query parameter']);
+		super(['Expected linux or windows as platform query parameter']);
 	}
 }
 
