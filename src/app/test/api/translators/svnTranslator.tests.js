@@ -3,9 +3,11 @@ var chai = require('chai'),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
     uuidStub = sinon.stub(),
+    SvnCommitMalformedError = require('../../../middleware/svnCommitMalformedError'),
     svnTranslator = proxyquire('../../../api/translators/svnTranslator', {
         'uuid-v4': uuidStub
     });
+
 require('../../helpers')(global);
 
 
@@ -103,12 +105,24 @@ describe('svnTranslator', function() {
         });
     });
 
-    describe('with invalid body', function() {
+    describe('when translating a malformed push event', function() {
+        var invokeTranslatePush;
 
-        var invokeTranslatePush = function() {
-            svnTranslator.translatePush({}, '111', '222', '333')
-        }
-        invokeTranslatePush.should.throw(svnTranslator.SvnCommitMalformedError);
+        beforeEach(function() {
+            invokeTranslatePush = function() {
+                var malformedPushEvent = {};
+                var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
+                    digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
+                    inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
+
+                svnTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId)
+            }
+        });
+
+        it('should throw SvnCommitMalformedError', function() {
+            invokeTranslatePush.should.throw(SvnCommitMalformedError);
+        });
+
     });
 
 });

@@ -200,12 +200,23 @@ describe('bitbucketTranslator', function() {
 
   });
 
-  describe('with invalid body', function() {
+  describe('when translating a malformed push event', function() {
+    var invokeTranslatePush;
 
-    var invokeTranslatePush = function() {
-      bitbucketTranslator.translatePush({}, '111', '222', '333')
-    }
-    invokeTranslatePush.should.throw(BitbucketCommitMalformedError);
+    beforeEach(function() {
+      invokeTranslatePush = function() {
+        var malformedPushEvent = {};
+        var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
+            digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
+            inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
+
+        bitbucketTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId)
+      }
+    });
+
+    it('should throw BitbucketCommitMalformedError', function() {
+      invokeTranslatePush.should.throw(BitbucketCommitMalformedError);
+    });
+
   });
-
 });
