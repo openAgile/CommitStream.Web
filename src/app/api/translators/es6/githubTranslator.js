@@ -1,17 +1,8 @@
 ﻿import util from 'util';
 import uuid from 'uuid-v4';
-import CSError from '../../middleware/csError';
 import getProperties from './getProperties';
+import GitHubCommitMalformedError from '../../middleware/gitHubCommitMalformedError';
 import branchNameParse from './branchNameParse';
-
-//TODO: do we want this kind of library to know about status codes?
-class GitHubCommitMalformedError extends CSError {
-  constructor(error, pushEvent) {
-    super(['There was an unexpected error when processing your GitHub push event.']);
-    this.originalError = error;
-    this.pushEvent = pushEvent;
-  }
-}
 
 let githubTranslator = {
   family: 'GitHub',
@@ -52,9 +43,7 @@ let githubTranslator = {
         };
       });
     } catch (ex) {
-      var otherEx = new GitHubCommitMalformedError(ex, pushEvent);
-      //console.log(otherEx, otherEx.originalError.stack);
-      throw otherEx;
+      throw new GitHubCommitMalformedError(ex, pushEvent);
     }
   },
   canTranslate(request) {
