@@ -22,9 +22,9 @@ var BitbucketCommitMalformedError = (function (_CSError) {
 	function BitbucketCommitMalformedError(error, pushEvent) {
 		_classCallCheck(this, BitbucketCommitMalformedError);
 
-		var message = 'There was an unexpected error when processing your Bitbucket push event.';
-		var errors = [message];
-		_get(Object.getPrototypeOf(BitbucketCommitMalformedError.prototype), 'constructor', this).call(this, errors);
+		_get(Object.getPrototypeOf(BitbucketCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Bitbucket push event.']);
+		this.originalError = error;
+		this.pushEvent = pushEvent;
 	}
 
 	return BitbucketCommitMalformedError;
