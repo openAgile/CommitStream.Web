@@ -19,10 +19,12 @@ var _csError2 = _interopRequireDefault(_csError);
 var SvnCommitMalformedError = (function (_CsError) {
 	_inherits(SvnCommitMalformedError, _CsError);
 
-	function SvnCommitMalformedError() {
+	function SvnCommitMalformedError(error, pushEvent) {
 		_classCallCheck(this, SvnCommitMalformedError);
 
 		_get(Object.getPrototypeOf(SvnCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Svn commit event.']);
+		this.originalError = error;
+		this.pushEvent = pushEvent;
 	}
 
 	return SvnCommitMalformedError;
