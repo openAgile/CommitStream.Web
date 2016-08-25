@@ -158,13 +158,13 @@ describe('inboxScriptConfiguration', function() {
     var response;
 
         describe('when getting an inbox script for not Svn family but for not a windows or linux platform', function() {
-            before(function() {
+            beforeEach(function() {
                 request = createRequest();
                 response = createResponse();
                 request.query.platform = "notWindowsOrLinux";                
             });           
 
-            it('should raise an exception', function(done) {
+            it('should raise an InboxScriptBadPlatformRequestedError', function(done) {
                 var invokeHandler = function() {
                     handler(request, response);
                 }
