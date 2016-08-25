@@ -1,11 +1,5 @@
 'use strict';
 
-var _get = require('babel-runtime/helpers/get')['default'];
-
-var _inherits = require('babel-runtime/helpers/inherits')['default'];
-
-var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
-
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -20,10 +14,6 @@ var _uuidV4 = require('uuid-v4');
 
 var _uuidV42 = _interopRequireDefault(_uuidV4);
 
-var _middlewareCsError = require('../../middleware/csError');
-
-var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
-
 var _branchNameParse = require('./branchNameParse');
 
 var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
@@ -32,23 +22,13 @@ var _underscore = require('underscore');
 
 var _underscore2 = _interopRequireDefault(_underscore);
 
-var VsoGitCommitMalformedError = (function (_CSError) {
-  _inherits(VsoGitCommitMalformedError, _CSError);
+var _middlewareVsoGitCommitMalformedError = require('../../middleware/vsoGitCommitMalformedError');
 
-  function VsoGitCommitMalformedError(error, pushEvent) {
-    _classCallCheck(this, VsoGitCommitMalformedError);
-
-    _get(Object.getPrototypeOf(VsoGitCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Visual Studio Online Git push event.']);
-    this.originalError = error;
-    this.pushEvent = pushEvent;
-  }
-
-  return VsoGitCommitMalformedError;
-})(_middlewareCsError2['default']);
+var _middlewareVsoGitCommitMalformedError2 = _interopRequireDefault(_middlewareVsoGitCommitMalformedError);
 
 var vsoGitTranslator = {
   family: 'VsoGit',
-  VsoGitCommitMalformedError: VsoGitCommitMalformedError,
+  VsoGitCommitMalformedError: _middlewareVsoGitCommitMalformedError2['default'],
   canTranslate: function canTranslate(request) {
     return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
   },
@@ -108,8 +88,7 @@ var vsoGitTranslator = {
 
       if (typeof _ret === 'object') return _ret.v;
     } catch (ex) {
-      var malformedEx = new VsoGitCommitMalformedError(ex, pushEvent);
-      throw malformedEx;
+      throw new _middlewareVsoGitCommitMalformedError2['default'](ex, pushEvent);
     }
   },
   getProperties: function getProperties(event) {
