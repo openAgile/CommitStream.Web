@@ -6,7 +6,6 @@ import VsoGitCommitMalformedError from '../../middleware/vsoGitCommitMalformedEr
 
 const vsoGitTranslator = {
   family: 'VsoGit',
-  VsoGitCommitMalformedError,
   canTranslate(request) {
     return (_.isString(request.body.eventType) && request.body.eventType === 'git.push')
     && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
