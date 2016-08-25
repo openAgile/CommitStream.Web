@@ -3,13 +3,13 @@ var chai = require('chai'),
   proxyquire = require('proxyquire'),
   sinon = require('sinon'),
   uuidStub = sinon.stub(),
+  GitHubCommitMalformedError = require('../../../middleware/gitHubCommitMalformedError'),
   githubTranslator = proxyquire('../../../api/translators/githubTranslator', {
     'uuid-v4': uuidStub
   });
 require('../../helpers')(global);
 
 // Test data:
-
 var pushEventMessageWithOneCommit = {
   "ref": "refs/heads/teamRoomUX2_S-51083",
   "before": "300417ed43da3a6819d9ee329e06275e0a377a0c",
@@ -339,13 +339,22 @@ describe('githubTranslator', function() {
     });
   });
 
-  describe('when translating a push event without required properties', function() {
-    it('should raise an exception', function(done) {
-      var invokeTranslator = function() {
-        githubTranslator.translatePush(pushEventMessageWithoutRequiredProperty, digestId);
+  describe('when translating a malformed push event', function() {
+    var invokeTranslatePush;
+
+    beforeEach(function() {
+      invokeTranslatePush = function() {
+        var malformedPushEvent = {};
+        var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
+            digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
+            inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
+
+        githubTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId)
       }
-      invokeTranslator.should.throw(githubTranslator.GitHubCommitMalformedError);
-      done();
+    });
+
+    it('should throw GitHubCommitMalformedError', function() {
+      invokeTranslatePush.should.throw(GitHubCommitMalformedError);
     });
   });
 
