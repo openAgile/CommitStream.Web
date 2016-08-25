@@ -28,7 +28,6 @@ var _middlewareVsoGitCommitMalformedError2 = _interopRequireDefault(_middlewareV
 
 var vsoGitTranslator = {
   family: 'VsoGit',
-  VsoGitCommitMalformedError: _middlewareVsoGitCommitMalformedError2['default'],
   canTranslate: function canTranslate(request) {
     return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
   },
