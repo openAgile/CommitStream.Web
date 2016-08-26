@@ -65,7 +65,6 @@ describe('inboxScriptConfiguration', function() {
             response.end = sinon.spy();
             var indexToFunctionToBeStub = 2;
             var firstFunctionArgument = null;
-            var secondFunctionArgument = fileContentForWindows;
             //Documentation about this at: http://sinonjs.org/docs/
             //look for stub.callsArgOnWith(index, context, arg1, arg2, ...);
             fsStub.readFile.callsArgWith(indexToFunctionToBeStub, firstFunctionArgument, fileContentForWindows);
@@ -93,7 +92,6 @@ describe('inboxScriptConfiguration', function() {
             response.end = sinon.spy();
             var indexToFunctionToBeStub = 2;
             var firstFunctionArgument = null;
-            var secondFunctionArgument = fileContentForLinux;
             //Documentation about this at: http://sinonjs.org/docs/
             //look for stub.callsArgOnWith(index, context, arg1, arg2, ...);
             fsStub.readFile.callsArgWith(indexToFunctionToBeStub, firstFunctionArgument, fileContentForLinux);
@@ -110,7 +108,7 @@ describe('inboxScriptConfiguration', function() {
     var request;
     var response;
 
-        describe('when getting an inbox script for Svn', function() {
+        describe('when getting an inbox script for Svn and there is an error reading it', function() {
             before(function() {
                 request = createRequest();
                 response = createResponse();
@@ -122,7 +120,7 @@ describe('inboxScriptConfiguration', function() {
                 fsStub.readFile.callsArgWith(indexToFunctionToBeStub, firstFunctionArgument, secondFunctionArgument);
             });           
 
-            it('should raise an exception', function(done) {
+            it('should raise an InboxScriptRetrievedError', function(done) {
                 var invokeHandler = function() {
                     handler(request, response);
                 }
@@ -136,14 +134,14 @@ describe('inboxScriptConfiguration', function() {
     var request;
     var response;
 
-        describe('when getting an inbox script for not Svn family', function() {
+        describe('when getting an inbox script for a non Svn family', function() {
             before(function() {
                 request = createRequest();
                 response = createResponse();
                 request.inbox.family = "notSvn";
             });           
 
-            it('should raise an exception', function(done) {
+            it('should raise an InboxHasNoScriptError', function(done) {
                 var invokeHandler = function() {
                     handler(request, response);
                 }
@@ -157,7 +155,7 @@ describe('inboxScriptConfiguration', function() {
     var request;
     var response;
 
-        describe('when getting an inbox script for not Svn family but for not a windows or linux platform', function() {
+        describe('when getting an inbox script for an Svn family but for not the windows or linux platform', function() {
             beforeEach(function() {
                 request = createRequest();
                 response = createResponse();
