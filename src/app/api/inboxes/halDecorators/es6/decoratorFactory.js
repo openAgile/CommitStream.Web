@@ -5,9 +5,9 @@ const decoratorNames = [
 const decorators = decoratorNames.map(name => require(`../halDecorators/${name}`));
 
 class DecoratorFactory {
-  create(family) {
+  create(vcsFamily) {
     for(let decorator of decorators) {
-      if (decorator.shouldDecorate(family)) return decorator;
+      if (decorator.shouldDecorate(vcsFamily)) return decorator;
     }
     return undefined;
   }
