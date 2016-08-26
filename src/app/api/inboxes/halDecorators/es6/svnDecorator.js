@@ -1,8 +1,8 @@
 import vcsFamilies from '../../helpers/vcsFamilies';
 
 const svnDecorator = {
-  shouldDecorate(family) {
-    if (family === vcsFamilies.Svn) {
+  shouldDecorate(vcsFamily) {
+    if (vcsFamily === vcsFamilies.Svn) {
       return true;
     }
     return false;
