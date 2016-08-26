@@ -84,8 +84,8 @@ var expected = {
 };
 
 describe('svnDecorator', function() {
-  describe('when calling it', function() {
-    it('should return the expected value', function() {
+  describe('when decorating a hal response', function() {
+    it('should modify the hal response with svn specific things', function() {
       svnDecorator.decorateHalResponse(basicSvnHalResponse).should.deep.equal(expected);
     });
   });
