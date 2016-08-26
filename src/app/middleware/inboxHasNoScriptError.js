@@ -16,20 +16,17 @@ var _csError = require('./csError');
 
 var _csError2 = _interopRequireDefault(_csError);
 
-var MalformedPushEventError = (function (_CsError) {
-  _inherits(MalformedPushEventError, _CsError);
+var InboxHasNoScriptError = (function (_CsError) {
+  _inherits(InboxHasNoScriptError, _CsError);
 
-  function MalformedPushEventError() {
-    var error = arguments.length <= 0 || arguments[0] === undefined ? 'Push event could not be processed.' : arguments[0];
+  function InboxHasNoScriptError() {
+    _classCallCheck(this, InboxHasNoScriptError);
 
-    _classCallCheck(this, MalformedPushEventError);
-
-    _get(Object.getPrototypeOf(MalformedPushEventError.prototype), 'constructor', this).call(this, [error]);
-    this.originalError = error;
+    _get(Object.getPrototypeOf(InboxHasNoScriptError.prototype), 'constructor', this).call(this, ['This inbox has no script to retrieve.']);
   }
 
-  return MalformedPushEventError;
+  return InboxHasNoScriptError;
 })(_csError2['default']);
 
-exports['default'] = MalformedPushEventError;
+exports['default'] = InboxHasNoScriptError;
 module.exports = exports['default'];

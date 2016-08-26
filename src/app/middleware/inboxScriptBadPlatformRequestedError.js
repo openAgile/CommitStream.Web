@@ -16,19 +16,17 @@ var _csError = require('./csError');
 
 var _csError2 = _interopRequireDefault(_csError);
 
-var GitLabCommitMalformedError = (function (_CsError) {
-	_inherits(GitLabCommitMalformedError, _CsError);
+var InboxScriptBadPlatformRequestedError = (function (_CsError) {
+	_inherits(InboxScriptBadPlatformRequestedError, _CsError);
 
-	function GitLabCommitMalformedError(error, pushEvent) {
-		_classCallCheck(this, GitLabCommitMalformedError);
+	function InboxScriptBadPlatformRequestedError() {
+		_classCallCheck(this, InboxScriptBadPlatformRequestedError);
 
-		_get(Object.getPrototypeOf(GitLabCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your GitLab push event.']);
-		this.originalError = error;
-		this.pushEvent = pushEvent;
+		_get(Object.getPrototypeOf(InboxScriptBadPlatformRequestedError.prototype), 'constructor', this).call(this, ['Expected linux or windows as platform query parameter']);
 	}
 
-	return GitLabCommitMalformedError;
+	return InboxScriptBadPlatformRequestedError;
 })(_csError2['default']);
 
-exports['default'] = GitLabCommitMalformedError;
+exports['default'] = InboxScriptBadPlatformRequestedError;
 module.exports = exports['default'];

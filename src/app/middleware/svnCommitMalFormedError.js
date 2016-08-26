@@ -16,19 +16,19 @@ var _csError = require('./csError');
 
 var _csError2 = _interopRequireDefault(_csError);
 
-var BitbucketCommitMalformedError = (function (_CSError) {
-	_inherits(BitbucketCommitMalformedError, _CSError);
+var SvnCommitMalformedError = (function (_CsError) {
+	_inherits(SvnCommitMalformedError, _CsError);
 
-	function BitbucketCommitMalformedError(error, pushEvent) {
-		_classCallCheck(this, BitbucketCommitMalformedError);
+	function SvnCommitMalformedError(error, pushEvent) {
+		_classCallCheck(this, SvnCommitMalformedError);
 
-		_get(Object.getPrototypeOf(BitbucketCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Bitbucket push event.']);
+		_get(Object.getPrototypeOf(SvnCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Svn commit event.']);
 		this.originalError = error;
 		this.pushEvent = pushEvent;
 	}
 
-	return BitbucketCommitMalformedError;
+	return SvnCommitMalformedError;
 })(_csError2['default']);
 
-exports['default'] = BitbucketCommitMalformedError;
+exports['default'] = SvnCommitMalformedError;
 module.exports = exports['default'];

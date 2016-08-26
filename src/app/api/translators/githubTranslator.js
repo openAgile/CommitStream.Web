@@ -1,11 +1,5 @@
 'use strict';
 
-var _get = require('babel-runtime/helpers/get')['default'];
-
-var _inherits = require('babel-runtime/helpers/inherits')['default'];
-
-var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
-
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -20,33 +14,17 @@ var _uuidV4 = require('uuid-v4');
 
 var _uuidV42 = _interopRequireDefault(_uuidV4);
 
-var _middlewareCsError = require('../../middleware/csError');
-
-var _middlewareCsError2 = _interopRequireDefault(_middlewareCsError);
-
 var _getProperties2 = require('./getProperties');
 
 var _getProperties3 = _interopRequireDefault(_getProperties2);
 
+var _middlewareGitHubCommitMalformedError = require('../../middleware/gitHubCommitMalformedError');
+
+var _middlewareGitHubCommitMalformedError2 = _interopRequireDefault(_middlewareGitHubCommitMalformedError);
+
 var _branchNameParse = require('./branchNameParse');
 
 var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
-
-//TODO: do we want this kind of library to know about status codes?
-
-var GitHubCommitMalformedError = (function (_CSError) {
-  _inherits(GitHubCommitMalformedError, _CSError);
-
-  function GitHubCommitMalformedError(error, pushEvent) {
-    _classCallCheck(this, GitHubCommitMalformedError);
-
-    _get(Object.getPrototypeOf(GitHubCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your GitHub push event.']);
-    this.originalError = error;
-    this.pushEvent = pushEvent;
-  }
-
-  return GitHubCommitMalformedError;
-})(_middlewareCsError2['default']);
 
 var githubTranslator = {
   family: 'GitHub',
@@ -93,9 +71,7 @@ var githubTranslator = {
 
       if (typeof _ret === 'object') return _ret.v;
     } catch (ex) {
-      var otherEx = new GitHubCommitMalformedError(ex, pushEvent);
-      //console.log(otherEx, otherEx.originalError.stack);
-      throw otherEx;
+      throw new _middlewareGitHubCommitMalformedError2['default'](ex, pushEvent);
     }
   },
   canTranslate: function canTranslate(request) {
