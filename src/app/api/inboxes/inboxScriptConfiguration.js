@@ -41,7 +41,7 @@ var setOurHeaders = function setOurHeaders(res, fileToRead) {
 };
 
 var replaceValues = function replaceValues(req, contentString) {
-	return contentString.replace(/PLACE REPO URL HERE/g, req.inbox.name).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
+	return contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
 };
 
 var sendScriptFile = function sendScriptFile(req, res) {

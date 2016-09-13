@@ -17,7 +17,7 @@ const setOurHeaders = (res, fileToRead) => {
 }
 
 const replaceValues = (req, contentString) => {
-	return contentString.replace(/PLACE REPO URL HERE/g, req.inbox.name)
+	return contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url)
 			.replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey="+ req.query.apiKey));
 }
 
