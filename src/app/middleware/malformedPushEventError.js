@@ -24,7 +24,7 @@ var MalformedPushEventError = (function (_CsError) {
 
     _classCallCheck(this, MalformedPushEventError);
 
-    _get(Object.getPrototypeOf(MalformedPushEventError.prototype), 'constructor', this).call(this, [error]);
+    _get(Object.getPrototypeOf(MalformedPushEventError.prototype), 'constructor', this).call(this, ['Push event could not be processed.']);
     this.originalError = error;
   }
 
