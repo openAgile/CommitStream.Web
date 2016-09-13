@@ -35,6 +35,6 @@ done
 
 CHANGESFORJSON="${CHANGESFORJSON::-1}"
 
-PAYLOAD='{"pretext":"Commit completed: rev. '"$REVISION"'","committer":{"name":"'"$WHO"'","date":"'"$WHEN"'"},"author":"'"$WHO"'","revision":"'"$REVISION"'","message":"'"$LOG"'","changes":['"$CH$
+PAYLOAD='{"pretext":"Commit completed: rev. '"$REVISION"'","committer":{"name":"'"$WHO"'","date":"'"$WHEN"'"},"author":"'"$WHO"'","revision":"'"$REVISION"'","message":"'"$LOG"'","changes":['"$CHANGESFORJSON"'], "repository":"'"$REPOSITORY"'", "html_url":"'"$HTML_URL$REVISION"'"}'
 
 curl -X POST -H "$COMMITEVENTHEADER" -H "$APPJSONHEADER" --data "$PAYLOAD" "$ENDPOINT"
