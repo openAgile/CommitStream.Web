@@ -1,13 +1,15 @@
   import uuid from 'uuid-v4';
-  import GitLabCommitMalformedError from '../../middleware/gitLabCommitMalformedError';
+  import GitSwarmCommitMalformedError from '../../middleware/gitSwarmCommitMalformedError';
   import getProperties from './getProperties';
   import branchNameParse from './branchNameParse';
+  import VcsFamilies from '../helpers/vcsFamilies';
 
   const hasCorrectHeaders = (headers) => headers.hasOwnProperty('x-gitlab-event')
-    && headers['x-gitlab-event'] === 'Push Hook' && !headers.hasOwnProperty('x-gitswarm-event');
+    && headers['x-gitlab-event'] === 'Push Hook' && headers.hasOwnProperty('x-gitswarm-event') &&
+    headers['x-gitswarm-event'] === 'Push Hook';
 
-  const gitLabTranslator = {
-    family: 'GitLab',
+  const gitSwarmTranslator = {
+    family: VcsFamilies.GitSwarm,
     canTranslate(request) {
       // gitLab does not have a pusheEvent.repository.id field, and github does
       // gitLab does not have a commit.committer object, and github does
@@ -50,7 +52,7 @@
           };
           return {
             eventId: uuid(),
-            eventType: 'GitLabCommitReceived',
+            eventType: gitSwarmTranslator.family + 'CommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,
@@ -62,7 +64,7 @@
 
         return events;
       } catch (ex) {
-        throw new GitLabCommitMalformedError(ex, pushEvent);
+        throw new GitSwarmCommitMalformedError(ex, pushEvent);
       }
     },
     getProperties(event) {
@@ -70,4 +72,4 @@
     }
 };
 
-export default gitLabTranslator;
+export default gitSwarmTranslator;

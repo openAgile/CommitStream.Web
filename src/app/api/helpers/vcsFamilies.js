@@ -9,7 +9,8 @@ var vcsFamilies = {
 	'Svn': "Svn",
 	'Bitbucket': "Bitbucket",
 	'GitLab': "GitLab",
-	'VsoGit': "VsoGit"
+	'VsoGit': "VsoGit",
+	'GitSwarm': "GitSwarm"
 };
 
 exports['default'] = vcsFamilies;

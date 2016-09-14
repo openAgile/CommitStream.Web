@@ -49,7 +49,8 @@
           "GitLab",
           "Bitbucket",
           "VsoGit",
-          vcsFamilies.Svn
+          vcsFamilies.Svn,
+          vcsFamilies.GitSwarm
         ]
       },
       "name": {

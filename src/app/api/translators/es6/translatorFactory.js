@@ -3,7 +3,8 @@ const translatorNames = [
   'gitLabTranslator',
   'bitbucketTranslator',
   'vsoGitTranslator',
-  'svnTranslator'
+  'svnTranslator',
+  'gitSwarmTranslator'
 ];
 
 const translators = translatorNames.map(name => require(`../translators/${name}`));
