@@ -1260,3 +1260,6 @@ div.window > ol {
   position: relative;
   top: -15px;
 }
+.helpSvnLink {
+  color: #ea6c02;
+}

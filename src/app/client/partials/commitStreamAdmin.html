@@ -423,6 +423,15 @@ div.vcs-vso-options input[type="radio"] {
   top: 12px;
 }
 
+.helpSvnLink{
+  color: #ea6c02;
+}
+.gitSwarmIcon{
+  width: 22px !important;
+}
+
+
+
 
 </style>
 
@@ -494,7 +503,7 @@ div.vcs-vso-options input[type="radio"] {
           <button type='button' ng-click='familySelect("Svn")' ng-mouseenter='familyHover("Svn")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Svn")}}'>Subversion&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Svn")}}' style="height:32px;" /></button>
         </div>
         <div class='vcs-family'>
-          <button type='button' ng-click='familySelect("GitSwarm")' ng-mouseenter='familyHover("GitSwarm")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitSwarm")}}'>GitSwarm&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitSwarm")}}' style="height:32px;" /></button>
+          <button type='button' ng-click='familySelect("GitSwarm")' ng-mouseenter='familyHover("GitSwarm")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitSwarm")}}'>GitSwarm&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitSwarm")}}' style="height:32px;" /></button>
         </div>
       </div>
       <br />
@@ -516,12 +525,12 @@ div.vcs-vso-options input[type="radio"] {
           <th>Repository Name</th>
           <th>Webhook URL</th>
           <th ng-if='thereIsOneSvnInbox("Svn")' style="width: 6.1em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
-            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a href="http://community.versionone.com/?cid=UsingCommitStreamWithSubversion" target="_blank">here</a>.</h6></div>
+            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a class='helpSvnLink' href="http://community.versionone.com/?cid=UsingCommitStreamWithSubversion" target="_blank">here</a>.</h6></div>
           </th>   
           <th ng-if='!thereIsOneSvnInbox("Svn")' style="width: 6em;position: relative;">&nbsp;</th>       
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " ng-class="inbox.family === 'GitSwarm' ? 'gitSwarmIcon' : ''"/>&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>          
             <div ng-if='editAllowed()'  ng-click='inboxRemove(inbox)' title='Remove' class="buttonRemove">
@@ -530,7 +539,7 @@ div.vcs-vso-options input[type="radio"] {
           </td>
           <td ng-if='!thereIsOneSvnInbox("Svn")'>&nbsp;</td>
           <td ng-if='thereIsOneSvnInbox("Svn")'>
-            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' style="height:24px;" /></a>
+            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' ng-style="height:24px;" /></a>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
