@@ -77,6 +77,16 @@ describe('gitLabTranslator', function() {
       gitLabTranslator.canTranslate(request).should.equal(false);
     });
 
+    it('canTranslate should return false when x-gitswarm-event headers are present', function() {
+      var request = {
+        'headers': {
+          'x-gitlab-event': 'Push Hook',
+          'x-gitswarm-event': 'Push Hook'
+        }
+      }
+      gitLabTranslator.canTranslate(request).should.equal(false);
+    });
+
   });
 
   describe('when translating a malformed push event', function() {
