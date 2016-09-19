@@ -20,9 +20,10 @@
     var args = {
       name: 'inboxes-' + instanceId,
       events: inboxAddedEvent
-    };
+    };    
     eventStore.postToStream(args).then(function() {
       var hypermedia = inboxFormatAsHal(req.href, instanceId, inboxAddedEvent.data);
+
       setTimeout(function() {
         res.hal(hypermedia, 201);
       }, config.controllerResponseDelay);

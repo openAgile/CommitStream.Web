@@ -280,11 +280,60 @@
         }
       };
 
+      $scope.hoverEdit = false;
+
       let inboxConfigure = inbox => {
         let links = inbox.$links();
         inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
         inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
+        inboxSvnScriptResources(inbox);
       };
+
+      $scope.thereIsOneSvnInbox = (family) => {
+        let thereIs = false;
+        $scope.inboxes.forEach(inbox => {
+          if (inbox.family == family) 
+            thereIs = true;
+        });
+        return thereIs;
+      }
+
+      $scope.getHelpIconSrc = () => `${serviceUrl}/icon-help-16x16.png`;
+
+      $scope.svnScriptPlatformIcon = (platform, mouseHover) =>
+          mouseHover ? `${serviceUrl}/icon-${platform}-selected-24x24.png` : `${serviceUrl}/icon-${platform}-nonselected-24x24.png`;
+
+      // we need to use this function declaration in both of the below functions to make use of "this"
+      // "this" need to be bound to the <a> element
+      $scope.hoverIn = function() {
+        this.mouseHover = true;
+      };
+
+      $scope.hoverOut = function() {
+        this.mouseHover = false;
+      };
+
+      let inboxSvnScriptResources = inbox => {
+        if(inbox.family == "Svn") {
+          inbox.$get('svn-scripts').then(scripts => {
+            let scriptUrl = [];
+            scripts.forEach(script => {
+              let links = script.$links();
+              scriptUrl.push({
+                'href': links['self'].href + '&apiKey=' + persistentOptions.headers.Bearer,
+                'platform': script.platform
+              });
+            });
+            inbox.scripts = scriptUrl;
+          });
+        }
+      }
+
+      $scope.showTooltip = false;
+
+      $scope.clickTooltip = () => {
+        $scope.showTooltip = !$scope.showTooltip;
+      }
 
       let inboxesGet = () => {
         loading = true;
@@ -370,7 +419,7 @@
 
           digest.$post('inbox-create', {}, $scope.newInbox)
             .then(inbox => {
-              inboxConfigure(inbox);
+              inboxConfigure(inbox);              
               $scope.inboxes.unshift(inbox);
               $scope.newInbox.url = '';
               $scope.inboxHighlightTop(inbox.removeHref);

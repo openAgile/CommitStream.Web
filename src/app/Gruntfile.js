@@ -57,7 +57,7 @@ module.exports = function(grunt) {
     watch: {
       babel: {
         files: es6Locations,
-        tasks: ['babel'],
+        tasks: ['newer:babel'],
         options: {
           spawn: false
         }
@@ -122,12 +122,14 @@ module.exports = function(grunt) {
     grunt.config('gitpush.deploy-dev.branch', sourceBranch + ':v1cs-dev');
   });
 
-  grunt.registerTask('devs', ['less', 'babel', 'express', 'watch']);
+  grunt.registerTask('devs', ['newer:less', 'newer:babel', 'express', 'watch']);
   grunt.registerTask('devm', ['shell:devm']);
   grunt.registerTask('dev', ['shell:dev']);
+  grunt.registerTask('babelify', ['newer:babel']);
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-git');
+  grunt.loadNpmTasks('grunt-newer');
 };

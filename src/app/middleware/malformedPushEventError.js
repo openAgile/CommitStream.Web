@@ -12,9 +12,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _CsError2 = require('./CsError');
+var _csError = require('./csError');
 
-var _CsError3 = _interopRequireDefault(_CsError2);
+var _csError2 = _interopRequireDefault(_csError);
 
 var MalformedPushEventError = (function (_CsError) {
   _inherits(MalformedPushEventError, _CsError);
@@ -24,11 +24,12 @@ var MalformedPushEventError = (function (_CsError) {
 
     _classCallCheck(this, MalformedPushEventError);
 
-    _get(Object.getPrototypeOf(MalformedPushEventError.prototype), 'constructor', this).call(this, [error]);
+    _get(Object.getPrototypeOf(MalformedPushEventError.prototype), 'constructor', this).call(this, ['Push event could not be processed.']);
+    this.originalError = error;
   }
 
   return MalformedPushEventError;
-})(_CsError3['default']);
+})(_csError2['default']);
 
 exports['default'] = MalformedPushEventError;
 module.exports = exports['default'];

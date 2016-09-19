@@ -12,21 +12,23 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
-var _CsError2 = require('./CsError');
+var _csError = require('./csError');
 
-var _CsError3 = _interopRequireDefault(_CsError2);
+var _csError2 = _interopRequireDefault(_csError);
 
 var GitLabCommitMalformedError = (function (_CsError) {
 	_inherits(GitLabCommitMalformedError, _CsError);
 
-	function GitLabCommitMalformedError() {
+	function GitLabCommitMalformedError(error, pushEvent) {
 		_classCallCheck(this, GitLabCommitMalformedError);
 
 		_get(Object.getPrototypeOf(GitLabCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your GitLab push event.']);
+		this.originalError = error;
+		this.pushEvent = pushEvent;
 	}
 
 	return GitLabCommitMalformedError;
-})(_CsError3['default']);
+})(_csError2['default']);
 
 exports['default'] = GitLabCommitMalformedError;
 module.exports = exports['default'];

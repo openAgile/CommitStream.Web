@@ -1,5 +1,6 @@
 (function(inboxAdded) {
   var uuid = require('uuid-v4'),
+    vcsFamilies = require('../helpers/vcsFamilies')
     schemaValidator = require('../schemaValidator');
 
   inboxAdded.create = function(instanceId, digestId, family, name, url) {
@@ -47,7 +48,8 @@
           "GitHub",
           "GitLab",
           "Bitbucket",
-          "VsoGit"
+          "VsoGit",
+          vcsFamilies.Svn
         ]
       },
       "name": {
