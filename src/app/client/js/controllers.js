@@ -309,10 +309,61 @@
       }
     };
 
+    $scope.hoverEdit = false;
+
     var inboxConfigure = function inboxConfigure(inbox) {
       var links = inbox.$links();
       inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
       inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
+      inboxSvnScriptResources(inbox);
+    };
+
+    $scope.thereIsOneSvnInbox = function (family) {
+      var thereIs = false;
+      $scope.inboxes.forEach(function (inbox) {
+        if (inbox.family == family) thereIs = true;
+      });
+      return thereIs;
+    };
+
+    $scope.getHelpIconSrc = function () {
+      return serviceUrl + '/icon-help-16x16.png';
+    };
+
+    $scope.svnScriptPlatformIcon = function (platform, mouseHover) {
+      return mouseHover ? serviceUrl + '/icon-' + platform + '-selected-24x24.png' : serviceUrl + '/icon-' + platform + '-nonselected-24x24.png';
+    };
+
+    // we need to use this function declaration in both of the below functions to make use of "this"
+    // "this" need to be bound to the <a> element
+    $scope.hoverIn = function () {
+      this.mouseHover = true;
+    };
+
+    $scope.hoverOut = function () {
+      this.mouseHover = false;
+    };
+
+    var inboxSvnScriptResources = function inboxSvnScriptResources(inbox) {
+      if (inbox.family == "Svn") {
+        inbox.$get('svn-scripts').then(function (scripts) {
+          var scriptUrl = [];
+          scripts.forEach(function (script) {
+            var links = script.$links();
+            scriptUrl.push({
+              'href': links['self'].href + '&apiKey=' + persistentOptions.headers.Bearer,
+              'platform': script.platform
+            });
+          });
+          inbox.scripts = scriptUrl;
+        });
+      }
+    };
+
+    $scope.showTooltip = false;
+
+    $scope.clickTooltip = function () {
+      $scope.showTooltip = !$scope.showTooltip;
     };
 
     var inboxesGet = function inboxesGet() {

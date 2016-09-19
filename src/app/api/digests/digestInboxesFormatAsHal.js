@@ -1,5 +1,6 @@
 (function() {
   var _ = require('underscore');
+  var decoratorFactory = require('../inboxes/halDecorators/decoratorFactory');
 
   module.exports = function(href, instanceId, digest, state) {
     var inboxIds = _.keys(state.inboxes);
@@ -40,6 +41,10 @@
         }
       };
 
+      var halDecorator = decoratorFactory.create(inbox.family);
+      if(halDecorator) {      
+        result = halDecorator.decorateHalResponse(result);
+      };
       result = _.extend(result, _.omit(inbox, 'digestId'));
 
       return result;

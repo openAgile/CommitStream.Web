@@ -8,6 +8,8 @@
 
     app.get('/api/:instanceId/inboxes/:inboxId', require('./inboxGet'));
 
+    app.get('/api/:instanceId/inboxes/:inboxId/script', require('./inboxScriptConfiguration'));
+
     app.delete('/api/:instanceId/inboxes/:inboxId', require('./inboxRemove'));
   };
 }(module.exports));
