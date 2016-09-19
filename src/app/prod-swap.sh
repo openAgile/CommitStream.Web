@@ -1,1 +1,1 @@
-azure site swap commitstream staging production
+azure webapp swap commitstream staging production
