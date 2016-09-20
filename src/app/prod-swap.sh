@@ -1,1 +1,2 @@
-azure webapp swap commitstream staging production
+azure config mode asm
+azure site swap commitstream staging production
