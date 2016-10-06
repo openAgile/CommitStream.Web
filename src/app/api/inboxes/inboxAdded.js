@@ -50,7 +50,8 @@
           "Bitbucket",
           "VsoGit",
           vcsFamilies.Svn,
-          vcsFamilies.GitSwarm
+          vcsFamilies.GitSwarm,
+          vcsFamilies.P4V
         ]
       },
       "name": {
