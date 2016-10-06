@@ -10,7 +10,8 @@ var vcsFamilies = {
 	'Bitbucket': "Bitbucket",
 	'GitLab': "GitLab",
 	'VsoGit': "VsoGit",
-	'GitSwarm': "GitSwarm"
+	'GitSwarm': "GitSwarm",
+	'P4V': "P4V"
 };
 
 exports['default'] = vcsFamilies;
