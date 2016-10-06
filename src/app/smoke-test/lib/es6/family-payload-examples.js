@@ -1,4 +1,53 @@
 export default {
+	Deveo: {
+		validWithOneCommit: message => ({
+    "after": "67ec79c2cc2737eec07b649555b3da32c47d095b",
+    "ref": "refs/heads/master",
+    "before": "c58a421ed77556d217abc7638de9ba9b3589b36d",
+    "compare": "",
+    "forced": false,
+    "created": false,
+    "deleted": false,
+    "project": {
+        "uuid": "c788fd2a-788c-4888-8673-90e027b1b849",
+        "name": "Test project",
+        "url": "https://deveo.com/example/code/diff/test"
+    },
+    "repository": {
+        "uuid": "ff8f33e9-d619-493e-872d-be7dd4a10235",
+        "name": "website",
+        "type": "git",
+        "url": "https://deveo.com/example/code/overview/test/repositories/website",
+        "https_url": "https://deveo.com/example/projects/test/repositories/git/website",
+        "ssh_url": "deveo@deveo.com:deveo/projects/test/repositories/git/website",
+        "owner": {
+            "uuid": "a94ea07c-4590-4dc9-b397-c83ca5daf976",
+            "name": "chuck",
+            "email": "chuck@deveo.com"
+        }
+    },
+    "pusher": {
+        "uuid": "a94ea07c-4590-4dc9-b397-c83ca5daf976",
+        "name": "chuck",
+        "display_name": "Chuck Norris"
+    },
+    "commit_count": 1,
+    "commits": [{
+        "distinct": true,
+        "removed": [],
+        "message": "Update readme",
+        "added": [],
+        "timestamp": "2015-01-30T12:17:56Z",
+        "modified": ["readme"],
+        "url": "https://deveo.com/example/code/diff/test/repositories/website/commits/67ec79c2cc2737eec07b649555b3da32c47d095b",
+        "author": {
+            "name": "Chuck Norris",
+            "email": "chuck@deveo.com"
+        },
+        "id": "67ec79c2cc2737eec07b649555b3da32c47d095b"
+    }]
+})
+	},
 	GitHub : {
 		validWithOneCommit: message => ({
 			"ref": "refs/heads/teamRoomUX2_S-51083",
@@ -174,7 +223,7 @@ export default {
 			"type": "User",
 			"site_admin": false
 			}
-		})					
+		})
 	},
 
 	GitLab: {
