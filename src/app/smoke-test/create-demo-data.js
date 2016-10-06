@@ -35,6 +35,9 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
         inboxesToCreate = [{
+          name: 'Deveo Repo ' + iteration,
+          family: 'Deveo'
+        }, {
           name: 'GitHub Repo ' + iteration,
           family: 'GitHub'
         }, {

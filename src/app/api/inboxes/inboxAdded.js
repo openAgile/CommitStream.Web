@@ -45,6 +45,7 @@
         "title": "Version Control System type",
         "type": "string",
         "enum": [
+          "Deveo",
           "GitHub",
           "GitLab",
           "Bitbucket",
