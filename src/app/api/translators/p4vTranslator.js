@@ -73,7 +73,7 @@ var p4vTranslator = {
         }
       }];
     } catch (ex) {
-      throw new SvnCommitMalformedError(ex, commitEvent);
+      throw new _middlewareP4vCommitMalformedError2['default'](ex, commitEvent);
     }
   },
   getProperties: function getProperties(event) {

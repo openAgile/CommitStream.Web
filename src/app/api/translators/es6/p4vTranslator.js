@@ -1,5 +1,5 @@
   import uuid from 'uuid-v4';
-  import P4VCommitMalformedError from '../../middleware/p4vCommitMalformedError';
+  import P4vCommitMalformedError from '../../middleware/p4vCommitMalformedError';
   import VcsFamilies from '../helpers/vcsFamilies';
 
   const hasCorrectHeaders = (headers) => headers.hasOwnProperty('cs-p4v-event')
@@ -56,7 +56,7 @@
           }
         }];
       } catch (ex) {
-        throw new SvnCommitMalformedError(ex, commitEvent);
+        throw new P4vCommitMalformedError(ex, commitEvent);
       }
     },
     getProperties(event) {
