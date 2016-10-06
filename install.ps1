@@ -1,5 +1,6 @@
 # Install EventStore from custom Chocolatey package on MyGet
 choco install eventstore -source https://www.myget.org/F/versionone/ -force
+choco install nssm -force
 
 # Set up the default configuration to use
 sc "C:\ProgramData\eventstore.3.5.0\config.yml" "Db: C:\ProgramData\eventstore.3.5.0\Data`nLog: C:\ProgramData\eventstore.3.5.0\Log`nRunProjections: ALL"
