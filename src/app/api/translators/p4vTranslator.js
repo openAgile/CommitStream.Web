@@ -32,9 +32,8 @@ var p4vTranslator = {
   },
   translatePush: function translatePush(commitEvent, instanceId, digestId, inboxId) {
     try {
-      //svn does not have a branch information
+      //p4v does not have a branch information
       var branch = "";
-      var revisionNumber = commitEvent.revision;
       //TODO: CHECK WHAT ARE GOING TO SHOW HERE
       var repository = {
         name: commitEvent.repository.substr(commitEvent.repository.lastIndexOf('/') + 1),
@@ -42,8 +41,7 @@ var p4vTranslator = {
       };
 
       var commit = {
-        //svn it doesn't contains a commit id so we can use the revision number
-        sha: "r#:" + revisionNumber[revisionNumber.length - 1],
+        sha: "r#:" + commitEvent.revision,
         commit: {
           author: {
             'name': commitEvent.author,
