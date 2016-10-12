@@ -1,5 +1,6 @@
 const decoratorNames = [
-  'svnDecorator'
+  'svnDecorator',
+  'p4vDecorator'
 ];
 
 const decorators = decoratorNames.map(name => require(`../halDecorators/${name}`));
