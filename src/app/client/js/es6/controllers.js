@@ -289,11 +289,12 @@
         inboxSvnScriptResources(inbox);
       };
 
-      $scope.thereIsOneSvnInbox = (family) => {
+      $scope.hasResourceToDownload = (families) => {
         let thereIs = false;
         $scope.inboxes.forEach(inbox => {
-          if (inbox.family == family) 
-            thereIs = true;
+          thereIs = families.indexOf(inbox.family) != -1;
+          if (thereIs)
+            return thereIs;
         });
         return thereIs;
       }

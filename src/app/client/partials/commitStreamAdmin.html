@@ -505,6 +505,9 @@ div.vcs-vso-options input[type="radio"] {
         <div class='vcs-family'>
           <button type='button' ng-click='familySelect("GitSwarm")' ng-mouseenter='familyHover("GitSwarm")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitSwarm")}}'>GitSwarm&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitSwarm")}}' style="height:32px;" /></button>
         </div>
+        <div class='vcs-family'>
+          <button type='button' ng-click='familySelect("P4V")' ng-mouseenter='familyHover("P4V")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("P4V")}}'>P4V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("P4V")}}' style="height:32px;" /></button>
+        </div>
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
@@ -524,7 +527,7 @@ div.vcs-vso-options input[type="radio"] {
         <tr>
           <th>Repository Name</th>
           <th>Webhook URL</th>
-          <th ng-if='thereIsOneSvnInbox("Svn")' style="width: 6.1em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
+          <th ng-if='hasResourceToDownload(["Svn","P4V"])' style="width: 6.1em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
             <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a class='helpSvnLink' href="http://community.versionone.com/?cid=UsingCommitStreamWithSubversion" target="_blank">here</a>.</h6></div>
           </th>   
           <th ng-if='!thereIsOneSvnInbox("Svn")' style="width: 6em;position: relative;">&nbsp;</th>       

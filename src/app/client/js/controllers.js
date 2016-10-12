@@ -318,10 +318,11 @@
       inboxSvnScriptResources(inbox);
     };
 
-    $scope.thereIsOneSvnInbox = function (family) {
+    $scope.hasResourceToDownload = function (families) {
       var thereIs = false;
       $scope.inboxes.forEach(function (inbox) {
-        if (inbox.family == family) thereIs = true;
+        thereIs = families.indexOf(inbox.family) != -1;
+        if (thereIs) return thereIs;
       });
       return thereIs;
     };
