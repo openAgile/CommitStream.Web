@@ -50,7 +50,7 @@ var sendScriptFile = function sendScriptFile(req, res) {
 	if (validatePlatform(platform)) {
 		(function () {
 			var fileToRead = getFileNameToRead(platform);
-			_fs2['default'].readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err, data) {
+			_fs2['default'].readFile("./api/inboxes/resources/" + req.inbox.family.toLowerCase() + '/' + fileToRead, 'utf8', function (err, data) {
 				if (err) {
 					throw new _middlewareInboxScriptRetrievedError2['default'](err);
 				}
@@ -65,7 +65,7 @@ var sendScriptFile = function sendScriptFile(req, res) {
 };
 
 exports['default'] = function (req, res) {
-	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family) {
+	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family || _helpersVcsFamilies2['default'].P4V == req.inbox.family) {
 		sendScriptFile(req, res);
 	} else {
 		throw new _middlewareInboxHasNoScriptError2['default']();

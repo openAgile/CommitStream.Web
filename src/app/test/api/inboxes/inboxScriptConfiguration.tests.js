@@ -48,7 +48,7 @@ describe('inboxScriptConfiguration', function() {
         });
 
         it('should call readFile with correct args', function() {
-            fsStub.readFile.should.have.been.calledWith("./api/inboxes/resources/commit-event.ps1", "utf8", sinon.match.func);
+            fsStub.readFile.should.have.been.calledWith("./api/inboxes/resources/svn/commit-event.ps1", "utf8", sinon.match.func);
         });
     });
 

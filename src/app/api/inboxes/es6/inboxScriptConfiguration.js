@@ -26,7 +26,7 @@ const sendScriptFile = (req, res) => {
 	let platform = req.query.platform;
 	if (validatePlatform(platform)) {
 		const fileToRead = getFileNameToRead(platform);
-		fs.readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err,data) {
+		fs.readFile("./api/inboxes/resources/" + req.inbox.family.toLowerCase() + '/' + fileToRead, 'utf8', function (err,data) {
 			if (err) {
 				throw new InboxScriptRetrievedError(err);
 			}
@@ -40,7 +40,7 @@ const sendScriptFile = (req, res) => {
 }
 
 export default function(req, res) {
-	if (VcsFamilies.Svn == req.inbox.family) {
+	if ((VcsFamilies.Svn == req.inbox.family) || (VcsFamilies.P4V == req.inbox.family) ){
 		sendScriptFile(req, res);
 	} else {
 		throw new InboxHasNoScriptError();
