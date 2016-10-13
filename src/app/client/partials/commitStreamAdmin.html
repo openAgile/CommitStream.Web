@@ -530,7 +530,7 @@ div.vcs-vso-options input[type="radio"] {
           <th ng-if='hasResourceToDownload(["Svn","P4V"])' style="width: 6.1em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
             <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a class='helpSvnLink' href="http://community.versionone.com/?cid=UsingCommitStreamWithSubversion" target="_blank">here</a>.</h6></div>
           </th>   
-          <th ng-if='!thereIsOneSvnInbox("Svn")' style="width: 6em;position: relative;">&nbsp;</th>       
+          <th ng-if='!hasResourceToDownload(["Svn","P4V"])' style="width: 6em;position: relative;">&nbsp;</th>       
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
           <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " ng-class="inbox.family === 'GitSwarm' ? 'gitSwarmIcon' : ''"/>&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
@@ -540,8 +540,8 @@ div.vcs-vso-options input[type="radio"] {
                <span class="iconRemove"></span>
             </div>
           </td>
-          <td ng-if='!thereIsOneSvnInbox("Svn")'>&nbsp;</td>
-          <td ng-if='thereIsOneSvnInbox("Svn")'>
+          <td ng-if='!hasResourceToDownload(["Svn","P4V"])'>&nbsp;</td>
+          <td ng-if='hasResourceToDownload(["Svn","P4V"])'>
             <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' ng-style="height:24px;" /></a>
           </td>
         </tr>

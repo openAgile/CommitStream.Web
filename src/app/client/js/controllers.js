@@ -321,8 +321,10 @@
     $scope.hasResourceToDownload = function (families) {
       var thereIs = false;
       $scope.inboxes.forEach(function (inbox) {
-        thereIs = families.indexOf(inbox.family) != -1;
-        if (thereIs) return thereIs;
+        var index = families.indexOf(inbox.family);
+        if (index != -1) {
+          thereIs = true;
+        }
       });
       return thereIs;
     };
@@ -348,6 +350,19 @@
     var inboxSvnScriptResources = function inboxSvnScriptResources(inbox) {
       if (inbox.family == "Svn") {
         inbox.$get('svn-scripts').then(function (scripts) {
+          var scriptUrl = [];
+          scripts.forEach(function (script) {
+            var links = script.$links();
+            scriptUrl.push({
+              'href': links['self'].href + '&apiKey=' + persistentOptions.headers.Bearer,
+              'platform': script.platform
+            });
+          });
+          inbox.scripts = scriptUrl;
+        });
+      }
+      if (inbox.family == "P4V") {
+        inbox.$get('p4v-scripts').then(function (scripts) {
           var scriptUrl = [];
           scripts.forEach(function (script) {
             var links = script.$links();

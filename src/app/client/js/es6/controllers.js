@@ -292,9 +292,10 @@
       $scope.hasResourceToDownload = (families) => {
         let thereIs = false;
         $scope.inboxes.forEach(inbox => {
-          thereIs = families.indexOf(inbox.family) != -1;
-          if (thereIs)
-            return thereIs;
+          let index = families.indexOf(inbox.family);
+          if(index != -1) {
+            thereIs = true;
+          }
         });
         return thereIs;
       }
@@ -317,6 +318,19 @@
       let inboxSvnScriptResources = inbox => {
         if(inbox.family == "Svn") {
           inbox.$get('svn-scripts').then(scripts => {
+            let scriptUrl = [];
+            scripts.forEach(script => {
+              let links = script.$links();
+              scriptUrl.push({
+                'href': links['self'].href + '&apiKey=' + persistentOptions.headers.Bearer,
+                'platform': script.platform
+              });
+            });
+            inbox.scripts = scriptUrl;
+          });
+        }
+        if(inbox.family == "P4V") {
+          inbox.$get('p4v-scripts').then(scripts => {
             let scriptUrl = [];
             scripts.forEach(script => {
               let links = script.$links();
