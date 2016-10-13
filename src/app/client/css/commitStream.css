@@ -1218,6 +1218,9 @@ h6 {
 .commitStream-panel .csSvn {
   background-image: url(../icon-svn-selected-32x32.png);
 }
+.commitStream-panel .csP4V {
+  background-image: url(../icon-p4v-selected-32x32.png);
+}
 .commitStream-panel .csBitbucket {
   background-image: url(../icon-bitbucket-selected-32x32.png);
 }
@@ -1259,7 +1262,4 @@ div.window > ol {
 .toggle-cs-childrenasset-label {
   position: relative;
   top: -15px;
-}
-.helpSvnLink {
-  color: #ea6c02;
 }
