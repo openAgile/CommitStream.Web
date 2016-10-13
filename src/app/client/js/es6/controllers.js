@@ -286,7 +286,7 @@
         let links = inbox.$links();
         inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
         inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
-        inboxSvnScriptResources(inbox);
+        inboxExternalResourceScript(inbox);
       };
 
       $scope.hasResourceToDownload = (families) => {
@@ -315,7 +315,7 @@
         this.mouseHover = false;
       };
 
-      let inboxSvnScriptResources = inbox => {
+      let inboxExternalResourceScript = inbox => {
         if(inbox.family == "Svn") {
           inbox.$get('svn-scripts').then(scripts => {
             let scriptUrl = [];

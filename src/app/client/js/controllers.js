@@ -315,7 +315,7 @@
       var links = inbox.$links();
       inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
       inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
-      inboxSvnScriptResources(inbox);
+      inboxExternalResourceScript(inbox);
     };
 
     $scope.hasResourceToDownload = function (families) {
@@ -347,7 +347,7 @@
       this.mouseHover = false;
     };
 
-    var inboxSvnScriptResources = function inboxSvnScriptResources(inbox) {
+    var inboxExternalResourceScript = function inboxExternalResourceScript(inbox) {
       if (inbox.family == "Svn") {
         inbox.$get('svn-scripts').then(function (scripts) {
           var scriptUrl = [];
