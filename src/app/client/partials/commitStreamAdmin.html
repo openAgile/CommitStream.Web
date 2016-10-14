@@ -528,7 +528,7 @@ div.vcs-vso-options input[type="radio"] {
           <th>Repository Name</th>
           <th>Webhook URL</th>
           <th ng-if='hasResourceToDownload(["Svn","P4V"])' style="width: 6.1em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
-            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a class='helpSvnLink' href="http://community.versionone.com/?cid=UsingCommitStreamWithSubversion" target="_blank">here</a>.</h6></div>
+            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Script file must be placed in the relevant folder that handles post-commit actions. Find out more <a class='helpSvnLink' href="http://community.versionone.com/?cid=CommitStreamScriptBased" target="_blank">here</a>.</h6></div>
           </th>   
           <th ng-if='!hasResourceToDownload(["Svn","P4V"])' style="width: 6em;position: relative;">&nbsp;</th>       
         </tr>
