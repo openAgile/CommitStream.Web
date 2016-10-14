@@ -533,7 +533,7 @@ div.vcs-vso-options input[type="radio"] {
           <th ng-if='!hasResourceToDownload(["Svn","P4V"])' style="width: 6em;position: relative;">&nbsp;</th>       
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " ng-class="inbox.family === 'GitSwarm' ? 'gitSwarmIcon' : ''"/>&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>          
             <div ng-if='editAllowed()'  ng-click='inboxRemove(inbox)' title='Remove' class="buttonRemove">
