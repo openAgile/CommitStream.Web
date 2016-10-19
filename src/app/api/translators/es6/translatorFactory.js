@@ -1,4 +1,5 @@
 const translatorNames = [
+  'deveoTranslator'
   'githubTranslator',
   'gitLabTranslator',
   'bitbucketTranslator',
