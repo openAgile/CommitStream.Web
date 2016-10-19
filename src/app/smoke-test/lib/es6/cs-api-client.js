@@ -68,7 +68,7 @@ let postToInboxForFamily = (client, inbox, message, family, extraHeaders) => {
 
 let families = {
   Deveo : {
-    commitAdd: (client, inbox, message='Deveo commit') => postToInboxForFamily(client, inbox, message, 'Deveo', {'x-github-event': 'push'})
+    commitAdd: (client, inbox, message='Deveo commit') => postToInboxForFamily(client, inbox, message, 'Deveo', {'x-deveo-event': 'push'})
   },
   GitHub : {
     commitAdd: (client, inbox, message='GitHub commit') => postToInboxForFamily(client, inbox, message, 'GitHub', {'x-github-event': 'push'})

@@ -59,7 +59,7 @@ let deveoTranslator = {
   },
   canTranslate(request) {
     const headers = request.headers;
-    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
   },
   getProperties(event) {
     return getProperties(event, '/commit', 'tree');

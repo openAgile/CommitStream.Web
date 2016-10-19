@@ -109,7 +109,7 @@ var families = {
   Deveo: {
     commitAdd: function commitAdd(client, inbox) {
       var message = arguments.length <= 2 || arguments[2] === undefined ? 'Deveo commit' : arguments[2];
-      return postToInboxForFamily(client, inbox, message, 'Deveo', { 'x-github-event': 'push' });
+      return postToInboxForFamily(client, inbox, message, 'Deveo', { 'x-deveo-event': 'push' });
     }
   },
   GitHub: {
