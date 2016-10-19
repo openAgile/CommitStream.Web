@@ -100,7 +100,7 @@ var deveoTranslator = {
   },
   canTranslate: function canTranslate(request) {
     var headers = request.headers;
-    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
   },
   getProperties: function getProperties(event) {
     return (0, _getProperties3['default'])(event, '/commit', 'tree');
