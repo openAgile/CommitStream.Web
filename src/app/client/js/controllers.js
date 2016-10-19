@@ -258,7 +258,18 @@
       return url;
     };
 
-    $scope.urlPattern = /^https?\:\/\/.{1,}\/.{1,}$/;
+    $scope.urlPattern = (function () {
+      var regex = /^https?\:\/\/.{1,}\/.{1,}$/;
+      return {
+        test: function test(value) {
+          if (family === "P4V") {
+            return value.length > 0 ? true : false;
+          } else {
+            return regex.test(value);
+          }
+        }
+      };
+    })();
 
     $scope.digestConfig = {
       selection: 'disabled'
