@@ -9,7 +9,7 @@ var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var translatorNames = ['githubTranslator', 'gitLabTranslator', 'bitbucketTranslator', 'vsoGitTranslator', 'svnTranslator'];
+var translatorNames = ['deveoTranslator', 'githubTranslator', 'gitLabTranslator', 'bitbucketTranslator', 'vsoGitTranslator', 'svnTranslator'];
 
 var translators = translatorNames.map(function (name) {
   return require('../translators/' + name);

@@ -55,7 +55,7 @@ var deveoTranslator = {
       var _ret = (function () {
         var branch = (0, _branchNameParse2['default'])(pushEvent.ref);
         var repository = {
-          id: pushEvent.repository.id,
+          id: pushEvent.repository.uuid,
           name: pushEvent.repository.name
         };
 
@@ -64,10 +64,10 @@ var deveoTranslator = {
             var commit = {
               sha: aCommit.id,
               commit: {
-                author: aCommit.author,
+                author: pushEvent.pusher.display_name,
                 committer: {
-                  name: aCommit.committer.name,
-                  email: aCommit.committer.email,
+                  name: aCommit.author.name,
+                  email: aCommit.author.email,
                   date: aCommit.timestamp
                 },
                 message: aCommit.message
