@@ -56,7 +56,7 @@ var deveoTranslator = {
         var branch = (0, _branchNameParse2['default'])(pushEvent.ref);
         var repository = {
           id: pushEvent.repository.uuid,
-          name: pushEvent.repository.name
+          name: pushEvent.project.name + '/' + pushEvent.repository.name
         };
 
         return {
