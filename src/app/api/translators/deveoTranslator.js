@@ -103,7 +103,13 @@ var deveoTranslator = {
     return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
   },
   getProperties: function getProperties(event) {
-    return (0, _getProperties3['default'])(event, '/commit', 'tree');
+    var props = {
+      repo: event.project.name + '/' + event.repository.name,
+      branchHref: event.project.url + '/repositories/' + event.repository.name + '/' + branch,
+      repoHref: event.project.url + '/repositories/' + event.repository.name
+    };
+
+    return props;
   }
 };
 
