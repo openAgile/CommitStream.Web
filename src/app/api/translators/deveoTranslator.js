@@ -58,6 +58,10 @@ var deveoTranslator = {
           id: pushEvent.repository.uuid,
           name: pushEvent.project.name + '/' + pushEvent.repository.name
         };
+        var project = {
+          name: pushEvent.project.name,
+          url: pushEvent.project.url
+        };
 
         return {
           v: pushEvent.commits.map(function (aCommit) {
@@ -75,6 +79,7 @@ var deveoTranslator = {
               html_url: aCommit.url,
               repository: repository,
               branch: branch,
+              project: project,
               originalMessage: aCommit
             };
             return {
@@ -105,8 +110,8 @@ var deveoTranslator = {
   getProperties: function getProperties(event) {
     var props = {
       repo: event.project.name + '/' + event.repository.name,
-      branchHref: event.project.url + '/repositories/' + event.repository.name + '/' + branch,
-      repoHref: event.project.url + '/repositories/' + event.repository.name
+      branchHref: event.project.url + '/repositories/' + event.repository.name + '/tree/' + branch,
+      repoHref: event.repository.url,
     };
 
     return props;
