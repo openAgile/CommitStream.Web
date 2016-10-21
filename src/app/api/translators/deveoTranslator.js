@@ -64,7 +64,7 @@ var deveoTranslator = {
             var commit = {
               sha: aCommit.id,
               commit: {
-                author: pushEvent.pusher.display_name,
+                author: aCommit.author.name,
                 committer: {
                   name: aCommit.author.name,
                   email: aCommit.author.email,
