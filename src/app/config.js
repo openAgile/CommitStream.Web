@@ -14,7 +14,7 @@
     config.port = process.env.PORT;
   }
 
-  config.protocol = nconf.get('protocol') || 'https';
+  config.protocol = nconf.get('protocol') || 'http';
   config.eventStoreUser = nconf.get('eventStoreUser') || 'admin';
   config.eventStorePassword = nconf.get('eventStorePassword') || 'changeit';
   config.eventStoreBaseUrl = nconf.get('eventStoreBaseUrl') || 'http://localhost:2113';
