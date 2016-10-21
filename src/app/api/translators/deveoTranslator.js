@@ -56,11 +56,7 @@ var deveoTranslator = {
         var branch = (0, _branchNameParse2['default'])(pushEvent.ref);
         var repository = {
           id: pushEvent.repository.uuid,
-          name: pushEvent.project.name + '/' + pushEvent.repository.name
-        };
-        var project = {
-          name: pushEvent.project.name,
-          url: pushEvent.project.url
+          name: pushEvent.repository.name
         };
 
         return {
@@ -79,7 +75,6 @@ var deveoTranslator = {
               html_url: aCommit.url,
               repository: repository,
               branch: branch,
-              project: project,
               originalMessage: aCommit
             };
             return {
@@ -108,11 +103,29 @@ var deveoTranslator = {
     return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
   },
   getProperties: function getProperties(event) {
+    var commit = event.commit;
+    var branch = event.branch;
+    var html_url = event.html_url;
     var props = {
-      repo: event.project.name + '/' + event.repository.name,
-      branchHref: event.project.url + '/repositories/' + event.repository.name + '/tree/' + branch,
-      repoHref: event.repository.url,
+      repo: '',
+      branchHref: '',
+      repoHref: ''
     };
+
+    var urlParts = html_url.match(/.+\/(.+)\/projects\/(.+)\/repositories\/(.+)\/.+\/.+/g);
+    var serverUrl = html_url.match(/(http.?:)\/\/(.*?)\//);
+
+    if (urlParts !== null && serverUrl !== null) {
+      var company_name = urlParts[0]
+      var project_name = urlParts[1];
+      var repo_name = urlParts[2];
+      props.repo = project_name + '/' + repo_name
+      props.repoHref = serverUrl + company_name + '/projects/' + project_name + '/repositories/' + repo_name
+      props.branchHref = props.repoHref + '/tree/' + branch
+
+    } else {
+      throw 'Could not parse DeveoCommitReceived event props correctly.';
+    }
 
     return props;
   }
