@@ -19,7 +19,7 @@
       },
       "inboxId": inbox.inboxId,
       "family": inbox.family,
-      "name": inbox.name,
+      "name": decodeURIComponent(inbox.name),
       "url": inbox.url
     };
 
