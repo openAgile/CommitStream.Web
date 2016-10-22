@@ -436,7 +436,7 @@
       $scope.inboxRemove = inbox =>
         prompt({
           title: 'Remove Repository?',
-          message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
+          message: 'Are you sure you want to remove the repository ' + decodeURIComponent(inbox.name) + '?',
           buttons: [{
             label: 'Remove',
             primary: true,
