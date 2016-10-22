@@ -442,11 +442,11 @@
         try {
           $scope.inboxCreating = true;
           let index = $scope.newInbox.url.lastIndexOf('/');
-          $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+          $scope.newInbox.name = decodeURIComponent($scope.newInbox.url.substr(index + 1));
 
           digest.$post('inbox-create', {}, $scope.newInbox)
             .then(inbox => {
-              inboxConfigure(inbox);              
+              inboxConfigure(inbox);
               $scope.inboxes.unshift(inbox);
               $scope.newInbox.url = '';
               $scope.inboxHighlightTop(inbox.removeHref);
