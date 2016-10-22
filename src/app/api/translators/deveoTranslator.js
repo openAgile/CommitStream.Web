@@ -118,9 +118,9 @@ var deveoTranslator = {
     if (urlParts !== null && serverUrl !== null) {
       var company_name = urlParts[1]
       var project_name = urlParts[2];
-      var repo_name = urlParts[3];
+      var repo_name = decodeURIComponent(urlParts[3]);
       props.repo = project_name + '/' + repo_name
-      props.repoHref = serverUrl[0] + company_name + '/projects/' + project_name + '/repositories/' + repo_name
+      props.repoHref = serverUrl[0] + company_name + '/projects/' + project_name + '/repositories/' + repo_name;
       props.branchHref = props.repoHref + '/tree/' + branch
 
     } else {
