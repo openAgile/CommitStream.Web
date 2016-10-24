@@ -6,8 +6,12 @@
     		<span class="commitStreamTime">{{timeFormatted}},</span>
     		<p>{{author}} {{action}}</p>
     		<div class="csInfo cs{{family}}">
-    			<p><a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a> {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
-    		</div>
+                {{#if isLocalVCS}}
+                    {{sha1Partial}} at {{repo}}
+                {{else}}
+                    <p><a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a> {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
+                {{/if}}
+            </div>
    	</div>
     <p class="csMessage commit.message"><span class="message">{{{message}}}</span></p>
   </li>
