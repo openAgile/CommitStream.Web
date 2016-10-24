@@ -259,14 +259,15 @@
     };
 
     $scope.urlPattern = (function () {
-      var regex = /^https?\:\/\/.{1,}\/.{1,}$/;
+      var regex = '';
       return {
         test: function test(value) {
           if (family === "P4V") {
-            return value.length > 0 ? true : false;
+            regex = /^(\\(\\[^\s\\]+)+|([A-Za-z]:(\\)?|[A-z]:(\\[^\s\\]+)+))(\\)?$/;
           } else {
-            return regex.test(value);
+            regex = /^https?\:\/\/.{1,}\/.{1,}$/;
           }
+          return regex.test(value);
         }
       };
     })();
