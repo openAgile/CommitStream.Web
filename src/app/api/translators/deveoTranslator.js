@@ -64,9 +64,9 @@ var deveoTranslator = {
             var commit = {
               sha: aCommit.id,
               commit: {
-                author: aCommit.author.name,
+                author: pushEvent.repository.type == "subversion" ? pushEvent.pusher.display_name : aCommit.author.name,
                 committer: {
-                  name: aCommit.author.name,
+                  name: pushEvent.repository.type == "subversion" ? pushEvent.pusher.display_name : aCommit.author.name,
                   email: aCommit.author.email,
                   date: aCommit.timestamp
                 },
@@ -78,6 +78,7 @@ var deveoTranslator = {
               originalMessage: aCommit
             };
             return {
+
               eventId: (0, _uuidV42['default'])(),
               eventType: 'DeveoCommitReceived',
               data: commit,
