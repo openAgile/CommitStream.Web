@@ -41,9 +41,9 @@ var setOurHeaders = function setOurHeaders(res, fileToRead) {
 };
 
 var replaceValues = function replaceValues(req, contentString, platform) {
-	contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
+	contentString = contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
 	if (platform == "linux") {
-		contentString.replace(/\r/g, '');
+		contentString = contentString.replace(/\r/g, "");
 	}
 	return contentString;
 };
@@ -59,7 +59,7 @@ var sendScriptFile = function sendScriptFile(req, res) {
 					throw new _middlewareInboxScriptRetrievedError2['default'](err);
 				}
 				res = setOurHeaders(res, fileToRead);
-				result = replaceValues(req, data);
+				result = replaceValues(req, data, platform);
 				res.end(result);
 			});
 		})();

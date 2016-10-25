@@ -17,10 +17,10 @@ const setOurHeaders = (res, fileToRead) => {
 }
 
 const replaceValues = (req, contentString, platform) => {
-	contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url)
+	contentString = contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url)
 		.replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey="+ req.query.apiKey));
 	if (platform == "linux") {
-		contentString.replace(/\r/g, '');
+		contentString = contentString.replace(/\r/g, "");
 	}
 	return contentString;
 }
@@ -35,7 +35,7 @@ const sendScriptFile = (req, res) => {
 				throw new InboxScriptRetrievedError(err);
 			}
 			res = setOurHeaders(res, fileToRead);
-			result = replaceValues(req, data);
+			result = replaceValues(req, data, platform);
 			res.end(result);
 		});
 	} else {
