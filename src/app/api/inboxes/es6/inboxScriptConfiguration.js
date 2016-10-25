@@ -20,7 +20,7 @@ const replaceValues = (req, contentString, platform) => {
 	contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url)
 		.replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey="+ req.query.apiKey));
 	if (platform == "linux") {
-		contentString.replace('\r', '');
+		contentString.replace(/\r/g, '');
 	}
 	return contentString;
 }
