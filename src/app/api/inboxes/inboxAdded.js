@@ -64,7 +64,7 @@
         "type": "string",
         "title": "URL of the repository",
         "maxLength": 2000,
-        "minLength": 10
+        "minLength": 3
       }
     }
   };
