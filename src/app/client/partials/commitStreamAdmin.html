@@ -545,7 +545,7 @@ div.vcs-vso-options input[type="radio"] {
           </td>
           <td ng-if='!hasResourceToDownload(["Svn","P4V"])'>&nbsp;</td>
           <td ng-if='hasResourceToDownload(["Svn","P4V"])'>
-            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' ng-style="height:24px;" /></a>
+            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' style="{height:24px}" /></a>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
