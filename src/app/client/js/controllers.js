@@ -262,8 +262,8 @@
       var regex = '';
       return {
         test: function test(value) {
-          if (family === "P4V") {
-            regex = /^(\\(\\[^\s\\]+)+|([A-Za-z]:(\\)?|[A-z]:(\\[^\s\\]+)+))(\\)?|^https?\:\/\/.{1,}\/.{1,}$/;
+          if (family === "P4V" || family === "Svn") {
+            regex = /^(\/\/?[\w^ ]+)+\/?$|^([\w^]:?\/\/?[\w^ ]+)+\/?$|^https?\:\/\/.{1,}\/.{1,}$/;
           } else {
             regex = /^https?\:\/\/.{1,}\/.{1,}$/;
           }
