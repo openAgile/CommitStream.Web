@@ -22,7 +22,7 @@ var P4vCommitMalformedError = (function (_CsError) {
 	function P4vCommitMalformedError(error, pushEvent) {
 		_classCallCheck(this, P4vCommitMalformedError);
 
-		_get(Object.getPrototypeOf(P4vCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your P4 Helix commit event.']);
+		_get(Object.getPrototypeOf(P4vCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your P4V commit event.']);
 		this.originalError = error;
 		this.pushEvent = pushEvent;
 	}
