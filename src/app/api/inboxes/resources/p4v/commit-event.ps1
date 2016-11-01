@@ -9,7 +9,7 @@ $p4AdminUser = "ADMINISTRATOR CREDENTIALS HERE"
 $p4AdminPass = "ADMINISTRATOR CREDENTIALS HERE"
 
 $repository = "PLACE REPO URL HERE"
-$html_url = "PLACE BASE URL TO INSPECT YOUR REVISIONS"
+$html_url = ""
 $endpoint = "PLACE INBOX URL HERE"
 $headers = @{"CS-P4V-Event"="Commit Event"}
 
