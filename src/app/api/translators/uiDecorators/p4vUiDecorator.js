@@ -18,12 +18,18 @@ var p4vUiDecorator = {
     return false;
   },
   decorateUIResponse: function decorateUIResponse(commit) {
+    if (isCommitHref(commit.commitHref)) {
+      commit.isCommitHref = true;
     }
     return commit;
   }
 };
 
+var isCommitHref = function isCommitHref(commitHref) {
+  if (commitHref.length > 0) {
+    return true;
   }
+  return false;
 };
 
 exports['default'] = p4vUiDecorator;

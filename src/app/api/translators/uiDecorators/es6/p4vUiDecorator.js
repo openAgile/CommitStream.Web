@@ -8,11 +8,18 @@ const p4vUiDecorator = {
     return false;
   },
   decorateUIResponse(commit) {
+    if(isCommitHref(commit.commitHref)){
+      commit.isCommitHref = true;
+    }
     return commit;
   }
 };
 
+const isCommitHref = (commitHref) => {
+  if (commitHref.length > 0){
+    return true;
   }
+  return false;
 };
 
 export default p4vUiDecorator;
