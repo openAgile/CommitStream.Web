@@ -18,18 +18,12 @@ var p4vUiDecorator = {
     return false;
   },
   decorateUIResponse: function decorateUIResponse(commit) {
-    if (isLocalVCS(commit.repoHref)) {
-      commit.isLocalVCS = true;
     }
     return commit;
   }
 };
 
-var isLocalVCS = function isLocalVCS(repoHref) {
-  if (repoHref.startsWith('http')) {
-    return false;
   }
-  return true;
 };
 
 exports['default'] = p4vUiDecorator;

@@ -8,18 +8,11 @@ const p4vUiDecorator = {
     return false;
   },
   decorateUIResponse(commit) {
-     if(isLocalVCS(commit.repoHref)){
-       commit.isLocalVCS = true;
-     }
     return commit;
   }
 };
 
-const isLocalVCS = (repoHref) => {
-  if (repoHref.startsWith('http')){
-    return false;
   }
-  return true;
 };
 
 export default p4vUiDecorator;
