@@ -18,11 +18,22 @@ var p4vUiDecorator = {
     return false;
   },
   decorateUIResponse: function decorateUIResponse(commit) {
+    if (isLocalVCS(commit.repoHref)) {
+      commit.isLocalVCS = true;
+    }
+
     if (isCommitHref(commit.commitHref)) {
       commit.isCommitHref = true;
     }
     return commit;
   }
+};
+
+var isLocalVCS = function isLocalVCS(repoHref) {
+  if (repoHref.startsWith('http')) {
+    return false;
+  }
+  return true;
 };
 
 var isCommitHref = function isCommitHref(commitHref) {

@@ -8,12 +8,23 @@ const p4vUiDecorator = {
     return false;
   },
   decorateUIResponse(commit) {
+    if(isLocalVCS(commit.repoHref)){
+      commit.isLocalVCS = true;
+    }
+
     if(isCommitHref(commit.commitHref)){
       commit.isCommitHref = true;
     }
     return commit;
   }
 };
+
+const isLocalVCS = (repoHref) => {
+  if (repoHref.startsWith('http')) {
+    return false;
+  }
+  return true;
+}
 
 const isCommitHref = (commitHref) => {
   if (commitHref.length > 0){
