@@ -7,9 +7,22 @@
     		<p>{{author}} {{action}}</p>
     		<div class="csInfo cs{{family}}">
                 {{#if isCommitHref}}
-                    <p><a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a> {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
+                    <p><a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a>
+                        {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}}
+                        at
+                        {{#if isLocalVCS }}
+                            {{repo}}</p>
+                        {{else}}
+                            <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
+                        {{/if}}
                 {{else}}
-                    <p>{{sha1Partial}} {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}} at <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
+                    <p>{{sha1Partial}} {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a>{{/if}}
+                        at
+                        {{#if isLocalVCS }}
+                            {{repo}}</p>
+                        {{else}}
+                            <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
+                        {{/if}}
                 {{/if}}
             </div>
    	</div>
