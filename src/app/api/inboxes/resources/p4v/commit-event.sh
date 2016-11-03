@@ -54,7 +54,7 @@ authorDate="${splitResult[0]}"
 authorDate=( $authorDate )
 
 WHO="${authorDate[3]}"
-WHEN="${authorDate[5]} ${authorDate[6]}"
+WHEN=$(date --date="${authorDate[5]} ${authorDate[6]}" -u +"%Y-%m-%dT%H:%M:%SZ")
 
 PAYLOAD='{"pretext":"Commit completed: rev. '"$REVISION"'","committer":{"name":"'"$WHO"'","date":"'"$WHEN"'"},"author":"'"$WHO"'","revision":"'"$REVISION"'","message":"'"$LOG"'","changes":['"$CHANGESFORJSON"'], "repository":"'"$REPOSITORY"'", "html_url":"'"$HTML_URL$REVISION"'"}'
 

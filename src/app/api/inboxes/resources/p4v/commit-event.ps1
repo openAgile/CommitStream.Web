@@ -31,13 +31,13 @@ $message = $changeListEvent[2..($ndx-2)]
 $authorDate = ($changeListEvent[0] -split ' ') |? {$_ -ne ''}
 
 $author = $authorDate[3]
-$date = $authorDate[5] + ' ' + $authorDate[6]
+$date =  $authorDate[5] + ' ' + $authorDate[6]
 
 $payload = @{
     author = "$author"
     committer = @{
         name = "$author"
-        date = "$date"
+        date = [DateTime]::SpecifyKind("$date", “Utc”).ToString("yyyy-MM-ddTHH:mm:ssZ")
     }
     revision = "$change"
     message = "$message"
