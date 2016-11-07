@@ -37,7 +37,7 @@ $payload = @{
     author = "$author"
     committer = @{
         name = "$author"
-        date = [DateTime]::SpecifyKind("$date", “Utc”).ToString("yyyy-MM-ddTHH:mm:ssZ")
+        date = [DateTime]::SpecifyKind("$date", "Utc").ToString("yyyy-MM-ddTHH:mm:ssZ")
     }
     revision = "$change"
     message = "$message"
