@@ -29,7 +29,7 @@
   }, {
     "data": {
       "commit": {
-        "message": "S-12345 S-98765 I mentioned 3 items s-19285"
+        "message": "S-12345 S-12345 S-98765 I mentioned 3 items s-19285"
       }
     },
     "metadata": {
@@ -52,6 +52,16 @@
       "inboxId": "someId"
     }
   }],
+  "byMentions": [{
+    "eventType": "eventType",
+    "metadata": { "instanceId": "id" },
+    "data": {
+      "commit": {
+        "message": "S-47665 S-47665 S-47664 Take location.search.substring(1) to remove ?"
+      }
+    }
+  }
+  ],
   "byAsset": [{
     "data": {
       "commit": {

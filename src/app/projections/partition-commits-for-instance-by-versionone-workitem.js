@@ -8,7 +8,11 @@ var callback = function(state, ev) {
   if (ev.eventType[0] != '$' && ev.metadata && ev.metadata.instanceId 
       && ev.data && ev.data.commit && ev.data.commit.message) {
     var workItems = getWorkitems(ev.data.commit.message);
-    workItems.forEach(function(workItem) {
+    var workItems = getWorkitems(ev.data.commit.message);
+    var withOutDuplicates = workItems.filter(function (i, p) {
+      return workItems.indexOf(i) == p;
+    });
+    withOutDuplicates.forEach(function(workItem) {
       workItem = workItem.toUpperCase();
       linkTo('versionOne_CommitsWithWorkitems-' + ev.metadata.instanceId + '_' + workItem, ev);
     });
