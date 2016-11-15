@@ -1,10 +1,5 @@
 #!/bin/bash
 
-#The next 3 line should be added in post-commit file under hooks folder
-#REPOS="$1"
-#REV="$2"
-#"$REPOS"/hooks/commit-event.sh "$REPOS" "$REV"
-
 p4AdminUser="ADMINISTRATOR CREDENTIALS HERE"
 p4AdminPass="ADMINISTRATOR CREDENTIALS HERE"
 
