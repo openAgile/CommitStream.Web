@@ -280,11 +280,14 @@
 }
 
 .commitstream-admin .vcs-families {
-  display: table-row;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .commitstream-admin .vcs-family {
-  display: table-cell;
+  display: inline-block;
   vertical-align: top;
 }
 
@@ -311,7 +314,7 @@
 
 .commitstream-admin .vcs-families img {
   vertical-align: middle;
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 .commitstream-admin .vcs-families .family-selected {
@@ -401,7 +404,7 @@
 
 div.vcs-vso-options input[type="radio"] {
   vertical-align: middle;
-  margin-left: 16px;
+  margin-left: 5px;
   width: 20px;
 }
 
@@ -422,6 +425,15 @@ div.vcs-vso-options input[type="radio"] {
   right: 10px;
   top: 12px;
 }
+
+.helpSvnLink{
+  color: #ea6c02;
+}
+.gitSwarmIcon{
+  width: 22px !important;
+}
+
+
 
 
 </style>
@@ -473,37 +485,43 @@ div.vcs-vso-options input[type="radio"] {
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
         <div class='vcs-family'>
-          <button type='button' ng-click='familySelect("GitHub")' ng-mouseenter='familyHover("GitHub")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitHub")}}'>GitHub&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitHub")}}' /></button>&nbsp;
+          <button type='button' ng-click='familySelect("GitHub")' ng-mouseenter='familyHover("GitHub")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitHub")}}'>GitHub&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitHub")}}' /></button>&nbsp;
         </div>
         <div class='vcs-family'>
-          <button type='button' ng-click='familySelect("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitLab")}}'>GitLab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
+          <button type='button' ng-click='familySelect("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitLab")}}'>GitLab&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
         </div>
         <div class='vcs-family'>          
-          <button type='button' ng-click='familySelect("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Bitbucket")}}'>Bitbucket&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
+          <button type='button' ng-click='familySelect("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Bitbucket")}}'>Bitbucket<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
         </div>
         <div class='vcs-family'>        
-          <button type='button' ng-click='familySelect("VsoGit")' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("VsoGit")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
+          <button type='button' ng-click='familySelect("VsoGit")' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("VsoGit")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
           <div class='vcs-vso-options' ng-if='familyIsSelected("VsoGit")'>
-            <label><input type="radio" checked="true"/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:16px;" />&nbspGit</label>
+            <label><input type="radio" checked="true"/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
             <br/>
             <br/>
-            <label title='TFVC is not currently supported'><input type='radio' disabled='disabled'><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:16px;" />&nbspTFVC</label>
+            <label title='TFVC is not currently supported'><input type='radio' disabled='disabled'><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:6px;" />&nbspTFVC</label>
           </div>
         </div>
         <div class='vcs-family'>
-          <button type='button' ng-click='familySelect("Svn")' ng-mouseenter='familyHover("Svn")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Svn")}}'>Subversion&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Svn")}}' style="height:32px;" /></button>
-        </div>       
+          <button type='button' ng-click='familySelect("Svn")' ng-mouseenter='familyHover("Svn")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Svn")}}'>Subversion<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Svn")}}' style="height:32px;" /></button>
+        </div>
+        <div class='vcs-family'>
+          <button type='button' ng-click='familySelect("GitSwarm")' ng-mouseenter='familyHover("GitSwarm")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitSwarm")}}'>GitSwarm<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitSwarm")}}' style="height:32px;" /></button>
+        </div>
+        <div class='vcs-family'>
+          <button type='button' ng-click='familySelect("P4V")' ng-mouseenter='familyHover("P4V")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("P4V")}}'>Perforce P4V<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("P4V")}}' style="height:32px;" /></button>
+        </div>
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
         <div class='input-group'>
-          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL'>
+          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL or Path'>
           <span class='input-group-btn'>
             <button class='repo-add' type='button' ng-disabled='inboxCreating' ng-click='inboxCreate()' ng-hide='inboxesForm.$invalid'>Add</button>
             <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
           </span>
         </div>
-        <div class='repo-instruction'>Example: http://versioncontrol.com/acme/repo-name</div>
+        <div class='repo-instruction'>URL Example: http://versioncontrol.com/acme/repo-name <br>Path Example: //acme/repo-name</div>
       </form>
     </div>
     <div ng-if='inboxes.length > 0'>
@@ -512,22 +530,22 @@ div.vcs-vso-options input[type="radio"] {
         <tr>
           <th>Repository Name</th>
           <th>Webhook URL</th>
-          <th ng-if='thereIsOneSvnInbox("Svn")' style="width: 6em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
-            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Place this script file in your "hooks" folder after you have updated your "post-commit" file. Find out more <a href="http://community.versionone.com/?cid=UsingCommitStreamWithSubversion" target="_blank">here</a>.</h6></div>
+          <th ng-if='hasResourceToDownload(["Svn","P4V"])' style="width: 6.1em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
+            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Script file must be placed in the relevant folder that handles post-commit actions. Find out more <a class='helpSvnLink' href="http://community.versionone.com/?cid=CommitStreamScriptBased" target="_blank">here</a>.</h6></div>
           </th>   
-          <th ng-if='!thereIsOneSvnInbox("Svn")' style="width: 6em;position: relative;">&nbsp;</th>       
+          <th ng-if='!hasResourceToDownload(["Svn","P4V"])' style="width: 6em;position: relative;">&nbsp;</th>       
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>          
             <div ng-if='editAllowed()'  ng-click='inboxRemove(inbox)' title='Remove' class="buttonRemove">
                <span class="iconRemove"></span>
             </div>
           </td>
-          <td ng-if='!thereIsOneSvnInbox("Svn")'>&nbsp;</td>
-          <td ng-if='thereIsOneSvnInbox("Svn")'>
-            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' style="height:24px;" /></a>
+          <td ng-if='!hasResourceToDownload(["Svn","P4V"])'>&nbsp;</td>
+          <td ng-if='hasResourceToDownload(["Svn","P4V"])'>
+            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' style="{height:24px}" /></a>
           </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>

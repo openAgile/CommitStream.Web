@@ -16,6 +16,10 @@ var _translatorFactory = require('./translatorFactory');
 
 var _translatorFactory2 = _interopRequireDefault(_translatorFactory);
 
+var _uiDecoratorsUiDecoratorFactory = require('./uiDecorators/uiDecoratorFactory');
+
+var _uiDecoratorsUiDecoratorFactory2 = _interopRequireDefault(_uiDecoratorsUiDecoratorFactory);
+
 var getFamily = function getFamily(eventType) {
   return eventType.slice(0, -14);
 };
@@ -36,7 +40,7 @@ exports['default'] = function (entries) {
         var translator = _translatorFactory2['default'].getByFamily(family);
         var props = translator.getProperties(e);
 
-        commits.push({
+        var commit = {
           commitDate: e.commit.committer.date,
           timeFormatted: (0, _moment2['default'])(e.commit.committer.date).fromNow(),
           author: e.commit.committer.name,
@@ -49,7 +53,13 @@ exports['default'] = function (entries) {
           branch: e.branch,
           branchHref: props.branchHref,
           repoHref: props.repoHref
-        });
+        };
+        var uiDecorator = _uiDecoratorsUiDecoratorFactory2['default'].create(family);
+
+        if (uiDecorator) {
+          commit = uiDecorator.decorateUIResponse(commit);
+        }
+        commits.push(commit);
       } catch (ex) {
         console.log(ex);
       }

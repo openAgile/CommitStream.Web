@@ -227,7 +227,19 @@
         return url;
       };
 
-      $scope.urlPattern = /^https?\:\/\/.{1,}\/.{1,}$/;
+      $scope.urlPattern = (function() {
+        let regex='';
+        return {
+          test: function(value) {
+            if ((family === "P4V") || (family === "Svn")){
+               regex = /^(\/\/?[\w^ ]+)+\/?$|^([\w^]:?\/\/?[\w^ ]+)+\/?$|^https?\:\/\/.{1,}\/.{1,}$/;
+            } else {
+               regex = /^https?\:\/\/.{1,}\/.{1,}$/;
+            }
+            return regex.test(value);
+          }
+        };
+      })();
 
       $scope.digestConfig = {
         selection: 'disabled'
@@ -286,14 +298,16 @@
         let links = inbox.$links();
         inbox.addCommit = links['add-commit'].href + '?apiKey=' + persistentOptions.headers.Bearer;
         inbox.removeHref = links['self'].href + '?apiKey=' + persistentOptions.headers.Bearer;
-        inboxSvnScriptResources(inbox);
+        inboxExternalResourceScript(inbox);
       };
 
-      $scope.thereIsOneSvnInbox = (family) => {
+      $scope.hasResourceToDownload = (families) => {
         let thereIs = false;
         $scope.inboxes.forEach(inbox => {
-          if (inbox.family == family) 
+          let index = families.indexOf(inbox.family);
+          if(index != -1) {
             thereIs = true;
+          }
         });
         return thereIs;
       }
@@ -313,9 +327,22 @@
         this.mouseHover = false;
       };
 
-      let inboxSvnScriptResources = inbox => {
+      let inboxExternalResourceScript = inbox => {
         if(inbox.family == "Svn") {
           inbox.$get('svn-scripts').then(scripts => {
+            let scriptUrl = [];
+            scripts.forEach(script => {
+              let links = script.$links();
+              scriptUrl.push({
+                'href': links['self'].href + '&apiKey=' + persistentOptions.headers.Bearer,
+                'platform': script.platform
+              });
+            });
+            inbox.scripts = scriptUrl;
+          });
+        }
+        if(inbox.family == "P4V") {
+          inbox.$get('p4v-scripts').then(scripts => {
             let scriptUrl = [];
             scripts.forEach(script => {
               let links = script.$links();

@@ -1212,8 +1212,14 @@ h6 {
   background-position: 0 10px;
   background-size: 16px;
 }
+.commitStream-panel .csGitSwarm {
+  background-image: url(../icon-gitswarm-selected-32x32.png);
+}
 .commitStream-panel .csSvn {
   background-image: url(../icon-svn-selected-32x32.png);
+}
+.commitStream-panel .csP4V {
+  background-image: url(../icon-p4v-selected-32x32.png);
 }
 .commitStream-panel .csBitbucket {
   background-image: url(../icon-bitbucket-selected-32x32.png);

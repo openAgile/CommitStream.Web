@@ -2,9 +2,9 @@ var chai = require('chai'),
   should = chai.should(),
   proxyquire = require('proxyquire'),
   sinon = require('sinon'),
-  GitLabCommitMalformedError = require('../../../middleware/gitLabCommitMalformedError'),
+  GitSwarmCommitMalformedError = require('../../../middleware/gitSwarmCommitMalformedError'),
   uuidStub = sinon.stub(),
-  gitLabTranslator = proxyquire('../../../api/translators/gitLabTranslator', {
+  gitSwarmTranslator = proxyquire('../../../api/translators/gitSwarmTranslator', {
     'uuid-v4': uuidStub
   });
 require('../../helpers')(global);
@@ -43,17 +43,18 @@ var pushEventWithOneCommit = {
 var pushEventWithSlashInBranchName = clone(pushEventWithOneCommit);
 pushEventWithSlashInBranchName.ref = 'refs/heads/my-cool-feature/the-thing-we-broke/and-now-we-fix';
 
-describe('gitLabTranslator', function() {
+describe('gitSwarmTranslator', function() {
 
   describe('with appropriate headers', function() {
 
     it('canTranslate should return true', function() {
       var request = {
         'headers': {
-          'x-gitlab-event': 'Push Hook'
+          'x-gitlab-event': 'Push Hook',
+          'x-gitswarm-event': 'Push Hook'
         }
       }
-      gitLabTranslator.canTranslate(request).should.equal(true);
+      gitSwarmTranslator.canTranslate(request).should.equal(true);
     });
 
   });
@@ -63,28 +64,19 @@ describe('gitLabTranslator', function() {
     it('canTranslate should return false when invalid headers are present', function() {
       var request = {
         'headers': {
-          'x-gitlab-event': 'meffeled'
+          'x-gitlab-event': 'meffeled',
+          'x-gitswarm-event': 'meffeled'
         }
       }
-      gitLabTranslator.canTranslate(request).should.equal(false);
+      gitSwarmTranslator.canTranslate(request).should.equal(false);
     });
 
-    it('canTranslate should return false when x-gitlab-event headers aren\'t present', function() {
+    it('canTranslate should return false when x-gitlab-event and x-gitswarm-event headers aren\'t present', function() {
       var request = {
         'headers': {
         }
       }
-      gitLabTranslator.canTranslate(request).should.equal(false);
-    });
-
-    it('canTranslate should return false when x-gitswarm-event headers are present', function() {
-      var request = {
-        'headers': {
-          'x-gitlab-event': 'Push Hook',
-          'x-gitswarm-event': 'Push Hook'
-        }
-      }
-      gitLabTranslator.canTranslate(request).should.equal(false);
+      gitSwarmTranslator.canTranslate(request).should.equal(false);
     });
 
   });
@@ -99,12 +91,12 @@ describe('gitLabTranslator', function() {
             digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
             inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
 
-        gitLabTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId);
+        gitSwarmTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId);
       }
     });
 
-    it('should throw a GitLabCommitMalformedError.', function() {
-      invokeTranslatePush.should.throw(GitLabCommitMalformedError);
+    it('should throw a GitSwarmCommitMalformedError.', function() {
+      invokeTranslatePush.should.throw(GitSwarmCommitMalformedError);
     })
   });
 
@@ -124,7 +116,7 @@ describe('gitLabTranslator', function() {
 
       var expected = [{
         eventId: eventId,
-        eventType: 'GitLabCommitReceived',
+        eventType: 'GitSwarmCommitReceived',
         data: {
           sha: 'b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327',
           commit: {
@@ -162,14 +154,14 @@ describe('gitLabTranslator', function() {
         }
       }];
 
-      var actual = gitLabTranslator.translatePush(pushEventWithOneCommit, instanceId, digestId, inboxId);
+      var actual = gitSwarmTranslator.translatePush(pushEventWithOneCommit, instanceId, digestId, inboxId);
 
       actual.should.deep.equal(expected);
     });
 
     it('should parse branch names with slashes correctly', function() {
       var expectedBranchName = 'my-cool-feature/the-thing-we-broke/and-now-we-fix';
-      var actual = gitLabTranslator.translatePush(pushEventWithSlashInBranchName, instanceId, digestId, inboxId);
+      var actual = gitSwarmTranslator.translatePush(pushEventWithSlashInBranchName, instanceId, digestId, inboxId);
       actual[0].data.branch.should.equal(expectedBranchName);
     });
   });
