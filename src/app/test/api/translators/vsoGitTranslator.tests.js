@@ -150,7 +150,7 @@ describe('vsoGitTranslator', function() {
                     },
                     "message": "changed code"
                 },
-                "html_url": "https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/commit/cf383dd370a74a8a5062385f6c1723fcc7cc66eb",
+                "html_url": "https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1 Integration/commit/cf383dd370a74a8a5062385f6c1723fcc7cc66eb",
                 "repository": {
                     "id": "d29767bb-8f5f-4c43-872f-6c73635a1256",
                     "name": "V1 Integration"
@@ -183,6 +183,8 @@ describe('vsoGitTranslator', function() {
             var actual = vsoGitTranslator.translatePush(pushEventWithOneCommit, '111', '222', '333');
             actual.should.deep.equal(expected);
         });
+
+
     });
 
     describe('when translating a malformed push event', function() {
