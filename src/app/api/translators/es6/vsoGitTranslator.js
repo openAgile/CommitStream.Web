@@ -22,8 +22,8 @@ const vsoGitTranslator = {
       const getHtmlCommitUrl = theCommit => {
         const repositoryName = encodeURIComponent(pushEvent.resource.repository.name);
         // Original format: https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/commits/e771d9b9d5abab2da4107a0e6db05cef21e40ce8
-        // Expected format: https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1%20Integration/commit/e771d9b9d5abab2da4107a0e6db05cef21e40ce8
-        const url = theCommit.url.replace(/_apis\/git\/repositories\/.*?\/commits\//i, `_git/${repositoryName}/commit/`);
+        // Expected format: https://v1platformtest.visualstudio.com/DefaultCollection/_git/V1 Integration/commit/e771d9b9d5abab2da4107a0e6db05cef21e40ce8
+        const url = pushEvent.resource.repository.remoteUrl + '/commit/' + theCommit.commitId;
         return url;
       };
 
