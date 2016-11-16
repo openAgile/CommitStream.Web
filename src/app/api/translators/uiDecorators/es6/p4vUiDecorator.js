@@ -27,7 +27,7 @@ const isLocalVCS = (repoHref) => {
 }
 
 const isCommitHref = (commitHref) => {
-  if (commitHref.length > 0){
+  if (commitHref.length > 0 && commitHref.startsWith('http')){
     return true;
   }
   return false;

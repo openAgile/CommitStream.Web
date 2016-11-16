@@ -42,7 +42,7 @@ $payload = @{
     revision = "$change"
     message = "$message"
     repository = "$repository"
-    html_url = "$($html_url)$($revision)"
+    html_url = "$($html_url)$($change)"
     changes = $affectedFiles
 }
 $json = (ConvertTo-Json $payload -Depth 99)
