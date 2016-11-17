@@ -1,17 +1,13 @@
 import vcsFamilies from '../../helpers/vcsFamilies';
 
-const p4vUiDecorator = {
+const svnUiDecorator = {
   shouldDecorate(vcsFamily) {
-    if (vcsFamily === vcsFamilies.P4V) {
+    if (vcsFamily === vcsFamilies.Svn) {
       return true;
     }
     return false;
   },
   decorateUIResponse(commit) {
-    if(isLocalVCS(commit.repoHref)){
-      commit.isLocalVCS = true;
-    }
-
     if(isCommitHref(commit.commitHref)){
       commit.isCommitHref = true;
     }
@@ -22,13 +18,6 @@ const p4vUiDecorator = {
   }
 };
 
-const isLocalVCS = (repoHref) => {
-  if (repoHref.startsWith('http')) {
-    return false;
-  }
-  return true;
-}
-
 const isCommitHref = (commitHref) => {
   if (commitHref.length > 0 && commitHref.startsWith('http')){
     return true;
@@ -36,4 +25,4 @@ const isCommitHref = (commitHref) => {
   return false;
 };
 
-export default p4vUiDecorator;
+export default svnUiDecorator;
