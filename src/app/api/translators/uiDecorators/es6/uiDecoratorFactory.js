@@ -1,5 +1,6 @@
 const decoratorNames = [
-  'p4vUiDecorator'
+  'p4vUiDecorator',
+  'svnUiDecorator'
 ];
 
 const decorators = decoratorNames.map(name => require(`../uiDecorators/${name}`));
