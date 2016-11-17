@@ -1,5 +1,6 @@
 import moment from 'moment';
 import translatorFactory from './translatorFactory';
+import uiDecoratorFactory from './uiDecorators/uiDecoratorFactory';
 
 const getFamily = (eventType) => eventType.slice(0, -14);
 
@@ -12,7 +13,7 @@ export default (entries) => {
       const translator = translatorFactory.getByFamily(family);
       const props = translator.getProperties(e);
 
-      commits.push({
+      let commit = {
         commitDate: e.commit.committer.date,
         timeFormatted: moment(e.commit.committer.date).fromNow(),
         author: e.commit.committer.name,
@@ -25,11 +26,18 @@ export default (entries) => {
         branch: e.branch,
         branchHref: props.branchHref,
         repoHref: props.repoHref
-      });
+      };
+      const uiDecorator = uiDecoratorFactory.create(family);
+
+      if (uiDecorator){
+        commit = uiDecorator.decorateUIResponse(commit);
+      }
+      commits.push(commit);
     } catch (ex) {
       console.log(ex);
     }
   }
+
   const response = {
     commits
   };

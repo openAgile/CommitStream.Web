@@ -49,7 +49,9 @@
           "GitLab",
           "Bitbucket",
           "VsoGit",
-          vcsFamilies.Svn
+          vcsFamilies.Svn,
+          vcsFamilies.GitSwarm,
+          vcsFamilies.P4V
         ]
       },
       "name": {
@@ -62,7 +64,7 @@
         "type": "string",
         "title": "URL of the repository",
         "maxLength": 2000,
-        "minLength": 10
+        "minLength": 3
       }
     }
   };

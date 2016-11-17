@@ -16,9 +16,13 @@ const setOurHeaders = (res, fileToRead) => {
 	return res;
 }
 
-const replaceValues = (req, contentString) => {
-	return contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url)
-			.replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey="+ req.query.apiKey));
+const replaceValues = (req, contentString, platform) => {
+	contentString = contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url)
+		.replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey="+ req.query.apiKey));
+	if (platform == "linux") {
+		contentString = contentString.replace(/\r/g, "");
+	}
+	return contentString;
 }
 
 const sendScriptFile = (req, res) => {
@@ -26,12 +30,12 @@ const sendScriptFile = (req, res) => {
 	let platform = req.query.platform;
 	if (validatePlatform(platform)) {
 		const fileToRead = getFileNameToRead(platform);
-		fs.readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err,data) {
+		fs.readFile("./api/inboxes/resources/" + req.inbox.family.toLowerCase() + '/' + fileToRead, 'utf8', function (err,data) {
 			if (err) {
 				throw new InboxScriptRetrievedError(err);
 			}
 			res = setOurHeaders(res, fileToRead);
-			result = replaceValues(req, data);
+			result = replaceValues(req, data, platform);
 			res.end(result);
 		});
 	} else {
@@ -40,7 +44,7 @@ const sendScriptFile = (req, res) => {
 }
 
 export default function(req, res) {
-	if (VcsFamilies.Svn == req.inbox.family) {
+	if ((VcsFamilies.Svn == req.inbox.family) || (VcsFamilies.P4V == req.inbox.family) ){
 		sendScriptFile(req, res);
 	} else {
 		throw new InboxHasNoScriptError();

@@ -40,8 +40,12 @@ var setOurHeaders = function setOurHeaders(res, fileToRead) {
 	return res;
 };
 
-var replaceValues = function replaceValues(req, contentString) {
-	return contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
+var replaceValues = function replaceValues(req, contentString, platform) {
+	contentString = contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
+	if (platform == "linux") {
+		contentString = contentString.replace(/\r/g, "");
+	}
+	return contentString;
 };
 
 var sendScriptFile = function sendScriptFile(req, res) {
@@ -50,12 +54,12 @@ var sendScriptFile = function sendScriptFile(req, res) {
 	if (validatePlatform(platform)) {
 		(function () {
 			var fileToRead = getFileNameToRead(platform);
-			_fs2['default'].readFile("./api/inboxes/resources/" + fileToRead, 'utf8', function (err, data) {
+			_fs2['default'].readFile("./api/inboxes/resources/" + req.inbox.family.toLowerCase() + '/' + fileToRead, 'utf8', function (err, data) {
 				if (err) {
 					throw new _middlewareInboxScriptRetrievedError2['default'](err);
 				}
 				res = setOurHeaders(res, fileToRead);
-				result = replaceValues(req, data);
+				result = replaceValues(req, data, platform);
 				res.end(result);
 			});
 		})();
@@ -65,7 +69,7 @@ var sendScriptFile = function sendScriptFile(req, res) {
 };
 
 exports['default'] = function (req, res) {
-	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family) {
+	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family || _helpersVcsFamilies2['default'].P4V == req.inbox.family) {
 		sendScriptFile(req, res);
 	} else {
 		throw new _middlewareInboxHasNoScriptError2['default']();

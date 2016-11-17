@@ -1,11 +1,10 @@
 const decoratorNames = [
-  'svnDecorator',
-  'p4vDecorator'
+  'p4vUiDecorator'
 ];
 
-const decorators = decoratorNames.map(name => require(`../halDecorators/${name}`));
+const decorators = decoratorNames.map(name => require(`../uiDecorators/${name}`));
 
-class DecoratorFactory {
+class UiDecoratorFactory {
   create(vcsFamily) {
     for(let decorator of decorators) {
       if (decorator.shouldDecorate(vcsFamily)) return decorator;
@@ -14,4 +13,4 @@ class DecoratorFactory {
   }
 }
 
-export default new DecoratorFactory();
+export default new UiDecoratorFactory();

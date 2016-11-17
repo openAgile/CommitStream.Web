@@ -5,8 +5,6 @@
 #REV="$2"
 #"$REPOS"/hooks/commit-event.sh "$REPOS" "$REV"
 
-# BASH 4.0 or higher is required
-# THIS IS SO WE CAN USE MAPFILE
 
 SVNPATH="$1"
 REVISION="$2"

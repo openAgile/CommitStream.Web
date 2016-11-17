@@ -9,18 +9,18 @@ var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var decoratorNames = ['svnDecorator', 'p4vDecorator'];
+var decoratorNames = ['p4vUiDecorator'];
 
 var decorators = decoratorNames.map(function (name) {
-  return require('../halDecorators/' + name);
+  return require('../uiDecorators/' + name);
 });
 
-var DecoratorFactory = (function () {
-  function DecoratorFactory() {
-    _classCallCheck(this, DecoratorFactory);
+var UiDecoratorFactory = (function () {
+  function UiDecoratorFactory() {
+    _classCallCheck(this, UiDecoratorFactory);
   }
 
-  _createClass(DecoratorFactory, [{
+  _createClass(UiDecoratorFactory, [{
     key: 'create',
     value: function create(vcsFamily) {
       var _iteratorNormalCompletion = true;
@@ -52,8 +52,8 @@ var DecoratorFactory = (function () {
     }
   }]);
 
-  return DecoratorFactory;
+  return UiDecoratorFactory;
 })();
 
-exports['default'] = new DecoratorFactory();
+exports['default'] = new UiDecoratorFactory();
 module.exports = exports['default'];

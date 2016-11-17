@@ -4,7 +4,9 @@ const vcsFamilies = {
 	'Svn': "Svn",
 	'Bitbucket': "Bitbucket",
 	'GitLab': "GitLab",
-	'VsoGit': "VsoGit"
+	'VsoGit': "VsoGit",
+	'GitSwarm': "GitSwarm",
+	'P4V': "P4V"
 }
 
 export default vcsFamilies;
