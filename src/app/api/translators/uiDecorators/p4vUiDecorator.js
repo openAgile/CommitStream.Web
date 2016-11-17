@@ -24,6 +24,8 @@ var p4vUiDecorator = {
 
     if (isCommitHref(commit.commitHref)) {
       commit.isCommitHref = true;
+    } else {
+      commit.isCommitHref = false;
     }
     return commit;
   }
