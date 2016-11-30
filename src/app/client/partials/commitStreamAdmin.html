@@ -409,7 +409,7 @@ div.vcs-vso-options input[type="radio"] {
 }
 
 .legend-wrapper.popover-content-v1 {
-  position: absolute;  
+  position: absolute;
 }
 
 .commitstream-admin .popover-content-v1:before {
@@ -490,10 +490,10 @@ div.vcs-vso-options input[type="radio"] {
         <div class='vcs-family'>
           <button type='button' ng-click='familySelect("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("GitLab")}}'>GitLab&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
         </div>
-        <div class='vcs-family'>          
+        <div class='vcs-family'>
           <button type='button' ng-click='familySelect("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Bitbucket")}}'>Bitbucket<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
         </div>
-        <div class='vcs-family'>        
+        <div class='vcs-family'>
           <button type='button' ng-click='familySelect("VsoGit")' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("VsoGit")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
           <div class='vcs-vso-options' ng-if='familyIsSelected("VsoGit")'>
             <label><input type="radio" checked="true"/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
@@ -502,7 +502,7 @@ div.vcs-vso-options input[type="radio"] {
             <label title='TFVC is not currently supported'><input type='radio' disabled='disabled'><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:6px;" />&nbspTFVC</label>
           </div>
         </div>
-        <div class='vcs-family'>
+       <div class='vcs-family'>
           <button type='button' ng-click='familySelect("Svn")' ng-mouseenter='familyHover("Svn")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Svn")}}'>Subversion<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Svn")}}' style="height:32px;" /></button>
         </div>
         <div class='vcs-family'>
@@ -511,6 +511,9 @@ div.vcs-vso-options input[type="radio"] {
         <div class='vcs-family'>
           <button type='button' ng-click='familySelect("P4V")' ng-mouseenter='familyHover("P4V")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("P4V")}}'>Perforce P4V<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("P4V")}}' style="height:32px;" /></button>
         </div>
+		<div class='vcs-family'>
+			<button type='button' ng-click='familySelect("Deveo")' ng-mouseenter='familyHover("Deveo")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Deveo")}}'>Deveo&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Deveo")}}' /></button>
+		</div>
       </div>
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>

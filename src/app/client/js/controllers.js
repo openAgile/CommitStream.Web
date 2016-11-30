@@ -475,7 +475,7 @@
       try {
         $scope.inboxCreating = true;
         var index = $scope.newInbox.url.lastIndexOf('/');
-        $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+        $scope.newInbox.name = decodeURIComponent($scope.newInbox.url.substr(index + 1));
 
         digest.$post('inbox-create', {}, $scope.newInbox).then(function (inbox) {
           inboxConfigure(inbox);
