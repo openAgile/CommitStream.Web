@@ -69,7 +69,7 @@ app.controller('CommitStreamController',
           digestId: $scope.digest.digestId
         }).then(function(digestFromRoot) {
           var index = $scope.newInbox.url.lastIndexOf('/');
-          $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+          $scope.newInbox.name = decodeURIComponent($scope.newInbox.url.substr(index + 1));
 
           digestFromRoot.$post('inbox-create', {}, $scope.newInbox)
           .then(function(inbox) {
@@ -87,7 +87,7 @@ app.controller('CommitStreamController',
 
       $scope.addInbox = function() {
         var index = $scope.newInbox.url.lastIndexOf('/');
-        $scope.newInbox.name = $scope.newInbox.url.substr(index + 1);
+        $scope.newInbox.name = decodeURIComponent($scope.newInbox.url.substr(index + 1));
 
         digest.$post('inbox-create', {}, $scope.newInbox)
         .then(function(inbox) {

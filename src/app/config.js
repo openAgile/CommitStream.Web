@@ -14,14 +14,14 @@
     config.port = process.env.PORT;
   }
 
-  config.protocol = nconf.get('protocol') || null;
-  config.eventStoreUser = nconf.get('eventStoreUser') || '';
-  config.eventStorePassword = nconf.get('eventStorePassword') || '';
+  config.protocol = nconf.get('protocol') || 'http';
+  config.eventStoreUser = nconf.get('eventStoreUser') || 'admin';
+  config.eventStorePassword = nconf.get('eventStorePassword') || 'changeit';
   config.eventStoreBaseUrl = nconf.get('eventStoreBaseUrl') || 'http://localhost:2113';
   config.eventStoreAssetStreamUrl = config.eventStoreBaseUrl + '/streams/asset-';
   config.eventStoreAllowSelfSignedCert = nconf.get('eventStoreAllowSelfSignedCert') === 'true';
   config.eventStoreAssetQueryParams = nconf.get('eventStoreAssetQueryParams') || '/head/backward/5?embed=content';
-  var notSet = nconf.get('production') == undefined;
+  var notSet = nconf.get('production') == false;
   config.production = nconf.get('production') === 'true' || notSet;
   config.controllerResponseDelay = nconf.get('controllerResponseDelay') || 1000;
   var showChildrenFeature = nconf.get('showChildrenFeature');

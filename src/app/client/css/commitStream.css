@@ -1224,6 +1224,9 @@ h6 {
 .commitStream-panel .csBitbucket {
   background-image: url(../icon-bitbucket-selected-32x32.png);
 }
+.commitStream-panel .csDeveo {
+  background-image: url(../icon-deveo-selected-32x32.png);
+}
 .commitStream-panel .csGitHub {
   background-image: url(../icon-github-selected-32x32.png);
 }
