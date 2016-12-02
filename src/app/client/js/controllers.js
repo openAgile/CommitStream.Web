@@ -114,6 +114,7 @@
         config.configMode.configured = true;
         if (!firstCall) configDigestModeSave(config.configMode);
         if (!digestResponse.created) inboxesUpdate(config.enabled);
+        if (digestResponse.created) getInboxesDone();
       });
     };
 
@@ -493,7 +494,7 @@
     $scope.inboxRemove = function (inbox) {
       return prompt({
         title: 'Remove Repository?',
-        message: 'Are you sure you want to remove the repository ' + inbox.name + '?',
+        message: 'Are you sure you want to remove the repository ' + decodeURIComponent(inbox.name) + '?',
         buttons: [{
           label: 'Remove',
           primary: true,
