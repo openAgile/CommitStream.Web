@@ -107,6 +107,7 @@
           config.configMode.configured = true;
           if (!firstCall) configDigestModeSave(config.configMode);
           if (!digestResponse.created) inboxesUpdate(config.enabled);
+          if (digestResponse.created) getInboxesDone();
         });
       };
 
