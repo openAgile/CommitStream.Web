@@ -1,8 +1,6 @@
-"use strict";
-
-(function () {
-    module.exports = function (href, instance) {
-        var formatted = {
+((()=> {
+    module.exports = (href, instance) => {
+        const formatted = {
             "_links": {
                 "self": {
                     "href": href("/api/instances/" + instance.instanceId)
@@ -21,4 +19,4 @@
         };
         return formatted;
     };
-})();
+})());
