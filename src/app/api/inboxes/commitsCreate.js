@@ -1,39 +1,55 @@
-(function() {
-  var validateUUID = require('../validateUUID'),
-    eventStore = require('../helpers/eventStoreClient'),
-    translatorFactory = require('../translators/translatorFactory'),
-    commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal'),
-    MalformedPushEventError = require('../../middleware/malformedPushEventError');
+'use strict';
 
-  module.exports = function(req, res) {
-    var instanceId = req.instance.instanceId,
-      digestId = req.inbox.digestId,
-      inboxId = req.params.inboxId;
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-    validateUUID('inbox', inboxId);
+var _validateUUID = require('../validateUUID');
 
-    var translator = translatorFactory.create(req);
+var _validateUUID2 = _interopRequireDefault(_validateUUID);
 
-    if (translator) {
-      var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
+var _helpersEventStoreClient = require('../helpers/eventStoreClient');
 
-      var postArgs = {
-        name: 'inboxCommits-' + inboxId,
-        events: events
-      };
+var _helpersEventStoreClient2 = _interopRequireDefault(_helpersEventStoreClient);
 
-      eventStore.postToStream(postArgs)
-        .then(function() {
-          var inboxData = {
-            inboxId: inboxId,
-            digestId: digestId
-          };
+var _translatorsTranslatorFactory = require('../translators/translatorFactory');
 
-          var hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
-          res.hal(hypermedia, 201);
-        });
-    } else {
-      throw new MalformedPushEventError(req);
-    }
-  };
-}());
+var _translatorsTranslatorFactory2 = _interopRequireDefault(_translatorsTranslatorFactory);
+
+var _commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal');
+
+var _commitsAddedFormatAsHal2 = _interopRequireDefault(_commitsAddedFormatAsHal);
+
+var _middlewareMalformedPushEventError = require('../../middleware/malformedPushEventError');
+
+var _middlewareMalformedPushEventError2 = _interopRequireDefault(_middlewareMalformedPushEventError);
+
+(function () {
+    module.exports = function (req, res) {
+        var instanceId = req.instance.instanceId;
+        var digestId = req.inbox.digestId;
+        var inboxId = req.params.inboxId;
+
+        (0, _validateUUID2['default'])('inbox', inboxId);
+
+        var translator = _translatorsTranslatorFactory2['default'].create(req);
+
+        if (translator) {
+            var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
+            var postArgs = {
+                name: 'inboxCommits-' + inboxId,
+                events: events
+            };
+
+            _helpersEventStoreClient2['default'].postToStream(postArgs).then(function () {
+                var inboxData = {
+                    inboxId: inboxId,
+                    digestId: digestId
+                };
+
+                var hypermedia = (0, _commitsAddedFormatAsHal2['default'])(req.href, instanceId, inboxData);
+                res.hal(hypermedia, 201);
+            });
+        } else {
+            throw new _middlewareMalformedPushEventError2['default'](req);
+        }
+    };
+})();
