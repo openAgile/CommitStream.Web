@@ -9,24 +9,26 @@ var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
-	value: true
+  value: true
 });
 
-var _CsError2 = require('./CsError');
+var _csError = require('./csError');
 
-var _CsError3 = _interopRequireDefault(_CsError2);
+var _csError2 = _interopRequireDefault(_csError);
 
-var GitLabCommitMalformedError = (function (_CsError) {
-	_inherits(GitLabCommitMalformedError, _CsError);
+var DeveoCommitMalformedError = (function (_CSError) {
+  _inherits(DeveoCommitMalformedError, _CSError);
 
-	function GitLabCommitMalformedError() {
-		_classCallCheck(this, GitLabCommitMalformedError);
+  function DeveoCommitMalformedError(error, pushEvent) {
+    _classCallCheck(this, DeveoCommitMalformedError);
 
-		_get(Object.getPrototypeOf(GitLabCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your GitLab push event.']);
-	}
+    _get(Object.getPrototypeOf(DeveoCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your Deveo push event.']);
+    this.originalError = error;
+    this.pushEvent = pushEvent;
+  }
 
-	return GitLabCommitMalformedError;
-})(_CsError3['default']);
+  return DeveoCommitMalformedError;
+})(_csError2['default']);
 
-exports['default'] = GitLabCommitMalformedError;
+exports['default'] = DeveoCommitMalformedError;
 module.exports = exports['default'];
