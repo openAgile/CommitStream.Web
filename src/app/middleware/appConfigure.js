@@ -3,7 +3,7 @@
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
-	value: true
+  value: true
 });
 
 var _resHref = require('./resHref');
@@ -15,9 +15,7 @@ var _resHal = require('./resHal');
 var _resHal2 = _interopRequireDefault(_resHal);
 
 exports['default'] = function (app) {
-	app.use(_resHref2['default']);
-	app.use(_resHal2['default']);
-	return app;
+  return app.use(_resHref2['default']).use(_resHal2['default']);
 };
 
 module.exports = exports['default'];
