@@ -273,12 +273,9 @@ describe('deveoTranslator', function() {
       eventId: eventId,
       eventType: "DeveoCommitReceived",
       data: {
-        sha: "ssss bd4a158555d69bd41fa1b6429c816031152d091d",
+        sha: "bd4a158555d69bd41fa1b6429c816031152d091d",
         commit: {
-          author: {
-            "name": "Ilmari Kontulainen",
-            "email": "ilmari@deveo.com"
-          },
+          author: "Ilmari Kontulainen",
           committer: {
             name: "Ilmari Kontulainen",
             email: "ilmari@deveo.com",
@@ -289,7 +286,7 @@ describe('deveoTranslator', function() {
         html_url: "https://app.deveo.com/Gexample/projects/demo-/repositories/gitti1/changesets/bd4a158555d69bd41fa1b6429c816031152d091d",
         repository: {
           id: "7b23046e-405f-4ec5-b1c9-38875e65369f",
-          name: "demo-/gitti1"
+          name: "gitti1"
         },
         branch: "master",
         originalMessage: gitPushEventMessageWithOneCommit.commits[0]
