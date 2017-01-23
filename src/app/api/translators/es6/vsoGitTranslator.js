@@ -73,7 +73,7 @@ const vsoGitTranslator = {
       repoHref: ''
     };
 
-    const urlComponents = html_url.match(/http.?:\/\/(.*?)\..*?_git\/(.*?)\/commit/);
+    const urlComponents = html_url.match(/http.?:\/\/..*?_git\/(.*?)\/commit/);
     const serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
 
     if (urlComponents !== null && serverUrlMatch !== null) {
