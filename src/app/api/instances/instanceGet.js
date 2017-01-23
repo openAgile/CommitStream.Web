@@ -11,7 +11,7 @@ var _instanceFormatAsHal = require('./instanceFormatAsHal');
 var _instanceFormatAsHal2 = _interopRequireDefault(_instanceFormatAsHal);
 
 exports['default'] = function (req, res) {
-	res.hal(instanceFormatAsHal(req.href, req.instance));
+	res.hal((0, _instanceFormatAsHal2['default'])(req.href, req.instance));
 };
 
 module.exports = exports['default'];
