@@ -3,9 +3,7 @@
 		var controllers = [
 			'digests/digests',
 			'health/health',
-			'import',
-			'inboxes/inboxes',
-			'query',
+			'inboxes/inboxes'
 		];
 		controllers.forEach(function(controllerPrefix) {
 			var controller = require('./' + controllerPrefix + 'Controller');
