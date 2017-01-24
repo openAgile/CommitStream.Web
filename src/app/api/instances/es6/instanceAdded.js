@@ -1,47 +1,45 @@
-(((instanceAdded) => {
-    const uuid = require('uuid-v4')
-    const schemaValidator = require('../schemaValidator');
+import uuid from 'uuid-v4';
+import schemaValidator from '../schemaValidator';
 
-    instanceAdded.create = function() {
+const SCHEMA = {
+    "title": "instance",
+    "type": "object",
+    "required": [
+        "instanceId"
+    ],
+    "properties": {
+        "instanceId": {
+            "title": "ID of the instance",
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36
+        },
+        "apiKey": {
+            "title": "API Key for this instance",
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36
+        }
+    }
+};
+
+export default {
+    create() {
         const eventId = uuid();
         const instanceId = uuid();
         const apiKey = uuid();
         const instanceAddedEvent = {
             eventType: 'InstanceAdded',
-            eventId: eventId,
+            eventId,
             data: {
-                instanceId: instanceId,
-                apiKey: apiKey,
+                instanceId,
+                apiKey,
             }
         };
 
         return instanceAddedEvent;
-    };
-
-    instanceAdded.SCHEMA = {
-        "title": "instance",
-        "type": "object",
-        "required": [
-            "instanceId"
-        ],
-        "properties": {
-            "instanceId": {
-                "title": "ID of the instance",
-                "type": "string",
-                "minLength": 36,
-                "maxLength": 36
-            },
-            "apiKey": {
-                "title": "API Key for this instance",
-                "type": "string",
-                "minLength": 36,
-                "maxLength": 36
-            }
-        }
-    };
-
-    instanceAdded.validate = function(data) {
-        return schemaValidator.validate('instance', data, instanceAdded.SCHEMA);
-    };
-
-}))(module.exports);
+    },
+    validate(data) {
+        return schemaValidator.validate('instance', data, SCHEMA);
+    }
+};
