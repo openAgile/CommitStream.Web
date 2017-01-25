@@ -2,6 +2,10 @@
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
 var _validateUUID = require('../validateUUID');
 
 var _validateUUID2 = _interopRequireDefault(_validateUUID);
@@ -22,34 +26,34 @@ var _middlewareMalformedPushEventError = require('../../middleware/malformedPush
 
 var _middlewareMalformedPushEventError2 = _interopRequireDefault(_middlewareMalformedPushEventError);
 
-(function () {
-    module.exports = function (req, res) {
-        var instanceId = req.instance.instanceId;
-        var digestId = req.inbox.digestId;
-        var inboxId = req.params.inboxId;
+exports['default'] = function (req, res) {
+    var instanceId = req.instance.instanceId;
+    var digestId = req.inbox.digestId;
+    var inboxId = req.params.inboxId;
 
-        (0, _validateUUID2['default'])('inbox', inboxId);
+    (0, _validateUUID2['default'])('inbox', inboxId);
 
-        var translator = _translatorsTranslatorFactory2['default'].create(req);
+    var translator = _translatorsTranslatorFactory2['default'].create(req);
 
-        if (translator) {
-            var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
-            var postArgs = {
-                name: 'inboxCommits-' + inboxId,
-                events: events
+    if (translator) {
+        var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
+        var postArgs = {
+            name: 'inboxCommits-' + inboxId,
+            events: events
+        };
+
+        _helpersEventStoreClient2['default'].postToStream(postArgs).then(function () {
+            var inboxData = {
+                inboxId: inboxId,
+                digestId: digestId
             };
 
-            _helpersEventStoreClient2['default'].postToStream(postArgs).then(function () {
-                var inboxData = {
-                    inboxId: inboxId,
-                    digestId: digestId
-                };
+            var hypermedia = (0, _commitsAddedFormatAsHal2['default'])(req.href, instanceId, inboxData);
+            res.hal(hypermedia, 201);
+        });
+    } else {
+        throw new _middlewareMalformedPushEventError2['default'](req);
+    }
+};
 
-                var hypermedia = (0, _commitsAddedFormatAsHal2['default'])(req.href, instanceId, inboxData);
-                res.hal(hypermedia, 201);
-            });
-        } else {
-            throw new _middlewareMalformedPushEventError2['default'](req);
-        }
-    };
-})();
+module.exports = exports['default'];
