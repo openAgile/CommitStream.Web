@@ -1,64 +1,76 @@
-(function() {
-  var EventStore = require('eventstore-client'),
-    config = require('../../config'),
-    _ = require('underscore'),
-    statusCodeValidator = require('./statusCodeValidator');
+'use strict';
 
-  var client = new EventStore({
-    baseUrl: config.eventStoreBaseUrl,
-    username: config.eventStoreUser,
-    password: config.eventStorePassword
-  });
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-  client.queryStatePartitionById = function(args) {
-    var partition = args.partition || args.name + '-' + args.id;
-    var stateArgs = {
-      name: args.name,
-      partition: partition
-    };
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-    return client.projection.getStateAsync(stateArgs)
-      .then(statusCodeValidator.validateGetProjection(args.name, args.id));
+var _eventstoreClient = require('eventstore-client');
+
+var _eventstoreClient2 = _interopRequireDefault(_eventstoreClient);
+
+var _config = require('../../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _statusCodeValidator = require('./statusCodeValidator');
+
+var _statusCodeValidator2 = _interopRequireDefault(_statusCodeValidator);
+
+var client = new _eventstoreClient2['default']({
+  baseUrl: _config2['default'].eventStoreBaseUrl,
+  username: _config2['default'].eventStoreUser,
+  password: _config2['default'].eventStorePassword
+});
+
+client.queryStatePartitionById = function (args) {
+  var partition = args.partition || args.name + '-' + args.id;
+  var stateArgs = {
+    name: args.name,
+    partition: partition
   };
 
-  client.postToStream = function(args) {
-    // Stay immutable, bro
-    var events = args.events;
-    if (!_.isArray(events)) {
-      events = [events];
-    }
-    events = JSON.stringify(events);
+  return client.projection.getStateAsync(stateArgs).then(_statusCodeValidator2['default'].validateGetProjection(args.name, args.id));
+};
 
-    var postArgs = {
-      name: args.name,
-      events: events
-    };
+client.postToStream = function (args) {
+  // Stay immutable, bro
+  var events = args.events;
+  if (!_underscore2['default'].isArray(events)) {
+    events = [events];
+  }
+  events = JSON.stringify(events);
 
-    return client.streams.postAsync(postArgs)
-      .then(statusCodeValidator.validateStreamsPost);
+  var postArgs = {
+    name: args.name,
+    events: events
   };
 
-  client.getFromStream = function(args) {
-    var getArgs = _.pick(args, 'name', 'count', 'pageUrl', 'embed');
+  return client.streams.postAsync(postArgs).then(_statusCodeValidator2['default'].validateStreamsPost);
+};
 
-    return client.streams.getAsync(getArgs)
-      .then(statusCodeValidator.validateGetStream(args.name));
-  };
+client.getFromStream = function (args) {
+  var getArgs = _underscore2['default'].pick(args, 'name', 'count', 'pageUrl', 'embed');
 
-  client.queryCreate = function(args) {
-    return client.query.postAsync(args)
-      .then(statusCodeValidator.validateQueryCreate);
-  };
+  return client.streams.getAsync(getArgs).then(_statusCodeValidator2['default'].validateGetStream(args.name));
+};
 
-  client.queryGetState = function(args) {
-    return client.query.getStateAsync(args)
-      .then(statusCodeValidator.validateQueryGetState);
-  };
+client.queryCreate = function (args) {
+  return client.query.postAsync(args).then(_statusCodeValidator2['default'].validateQueryCreate);
+};
 
-  client.queryGetStatus = function(args) {
-    return client.query.getStatusAsync(args)
-      .then(statusCodeValidator.validateQueryGetStatus);
-  };
+client.queryGetState = function (args) {
+  return client.query.getStateAsync(args).then(_statusCodeValidator2['default'].validateQueryGetState);
+};
 
-  module.exports = client;
-})();
+client.queryGetStatus = function (args) {
+  return client.query.getStatusAsync(args).then(_statusCodeValidator2['default'].validateQueryGetStatus);
+};
+
+exports['default'] = client;
+module.exports = exports['default'];
