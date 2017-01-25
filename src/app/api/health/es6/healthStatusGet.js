@@ -1,4 +1,1 @@
-export default (req, res) => {
-  const health = {status: 'healthy'};
-  res.json(health);
-};
+export default (req, res) => res.json({status: 'healthy'});

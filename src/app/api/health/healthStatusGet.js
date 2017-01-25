@@ -5,8 +5,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 
 exports['default'] = function (req, res) {
-  var health = { status: 'healthy' };
-  res.json(health);
+  return res.json({ status: 'healthy' });
 };
 
 module.exports = exports['default'];
