@@ -1,50 +1,32 @@
-(function(pager) {
-  var _ = require('underscore'),
-    uuid = require('uuid-v4');
+'use strict';
 
-  var hasPageSize = function(query) {
-    return _.has(query, "pageSize");
-  };
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-  var getPageSize = function(query) {
-    return query.pageSize;
-  };
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-  var convertToInt = function(stringVal) {
-    if (!isNaN(stringVal))
-      return parseInt(stringVal);
-    else
-      return NaN;
-  };
+var _underscore = require('underscore');
 
-  var getDefaultWhenNaN = function(value, defaultValue) {
-    if (_.isNaN(value)) {
-      return defaultValue;
-    } else
-      return value;
-  };
+var _underscore2 = _interopRequireDefault(_underscore);
 
-  var getConvertedPageSizeOrDefault = function(query) {
-    var defaultSize = 25;
-    if (!hasPageSize(query)) return defaultSize;
-    var convertedSize = convertToInt(getPageSize(query));
-    return getDefaultWhenNaN(convertedSize, defaultSize);
-  };
+var _uuidV4 = require('uuid-v4');
 
-  pager.getPageSize = function(query) {
-    var pageSize = getConvertedPageSizeOrDefault(query);
-    return pageSize;
-  };
+var _uuidV42 = _interopRequireDefault(_uuidV4);
 
+var pager = {
+  getPageSize: function getPageSize(query) {
+    return getConvertedPageSizeOrDefault(query);
+  },
   // TODO, not sure if we should really set the cache here or back
   // in the caller...
-  pager.getPagedResponse = function(apiResponse, links, currentPage, buildUri, cache) {
-    var guid = uuid();
+  getPagedResponse: function getPagedResponse(apiResponse, links, currentPage, buildUri, cache) {
+    var guid = (0, _uuidV42['default'])();
 
     var pagedResponse = JSON.parse(JSON.stringify(apiResponse));
     pagedResponse._links = {};
 
-    var nextESPage = _.find(links, function(el) {
+    var nextESPage = _underscore2['default'].find(links, function (el) {
       return el.relation === 'next';
     });
 
@@ -58,5 +40,31 @@
       };
     }
     return pagedResponse;
-  };
-}(module.exports));
+  }
+};
+
+var hasPageSize = function hasPageSize(query) {
+  return _underscore2['default'].has(query, "pageSize");
+};
+
+var getPageSize = function getPageSize(query) {
+  return query.pageSize;
+};
+
+var convertToInt = function convertToInt(stringVal) {
+  if (!isNaN(stringVal)) return parseInt(stringVal);else return NaN;
+};
+
+var getDefaultWhenNaN = function getDefaultWhenNaN(value, defaultValue) {
+  return _underscore2['default'].isNaN(value) ? defaultValue : value;
+};
+
+var getConvertedPageSizeOrDefault = function getConvertedPageSizeOrDefault(query) {
+  var defaultSize = 25;
+  if (!hasPageSize(query)) return defaultSize;
+  var convertedSize = convertToInt(getPageSize(query));
+  return getDefaultWhenNaN(convertedSize, defaultSize);
+};
+
+exports['default'] = pager;
+module.exports = exports['default'];
