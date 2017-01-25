@@ -1,12 +1,38 @@
-(function(digestAdded) {
-  var uuid = require('uuid-v4'),
-    schemaValidator = require('../schemaValidator');
+'use strict';
 
-  digestAdded.create = function(instanceId, description) {
-    var eventId = uuid();
-    var digestId = uuid();
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-    return {
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _uuidV4 = require('uuid-v4');
+
+var _uuidV42 = _interopRequireDefault(_uuidV4);
+
+var _schemaValidator = require('../schemaValidator');
+
+var _schemaValidator2 = _interopRequireDefault(_schemaValidator);
+
+var SCHEMA = {
+  "title": "digest",
+  "type": "object",
+  "required": ["description"],
+  "properties": {
+    "description": {
+      "title": "",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 140
+    }
+  }
+};
+
+exports['default'] = {
+  create: function create(instanceId, description) {
+    var eventId = (0, _uuidV42['default'])();
+    var digestId = (0, _uuidV42['default'])();
+    var DigestAddedEvent = {
       eventType: 'DigestAdded',
       eventId: eventId,
       data: {
@@ -15,26 +41,11 @@
         description: description
       }
     };
-  };
+    return DigestAddedEvent;
+  },
 
-  digestAdded.SCHEMA = {
-    "title": "digest",
-    "type": "object",
-    "required": [
-      "description"
-    ],
-    "properties": {
-      "description": {
-        "title": "",
-        "type": "string",
-        "minLength": 1,
-        "maxLength": 140
-      }
-    }
-  };
-
-  digestAdded.validate = function(data) {
-    return schemaValidator.validate('digest', data, digestAdded.SCHEMA);
-  };
-
-})(module.exports);
+  validate: function validate(data) {
+    return _schemaValidator2['default'].validate('digest', data, SCHEMA);
+  }
+};
+module.exports = exports['default'];
