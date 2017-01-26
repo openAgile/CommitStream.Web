@@ -1,15 +1,26 @@
-(function(inboxesController) {
-  var bodyParser = require('body-parser');
+'use strict';
 
-  inboxesController.init = function(app) {
-    app.post('/api/:instanceId/digests/:digestId/inboxes', bodyParser.json(), require('./inboxCreate'));
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-    app.post('/api/:instanceId/inboxes/:inboxId/commits', bodyParser.json({limit: '50mb'}	), require('./commitsCreate'));
+Object.defineProperty(exports, '__esModule', {
+        value: true
+});
 
-    app.get('/api/:instanceId/inboxes/:inboxId', require('./inboxGet'));
+var _bodyParser = require('body-parser');
 
-    app.get('/api/:instanceId/inboxes/:inboxId/script', require('./inboxScriptConfiguration'));
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-    app.delete('/api/:instanceId/inboxes/:inboxId', require('./inboxRemove'));
-  };
-}(module.exports));
+exports['default'] = inboxesController(function () {
+        var init = function init(app) {
+                app.post('/api/:instanceId/digests/:digestId/inboxes', _bodyParser2['default'].json(), require('./inboxCreate'));
+
+                app.post('/api/:instanceId/inboxes/:inboxId/commits', _bodyParser2['default'].json({ limit: '50mb' }), require('./commitsCreate'));
+
+                app.get('/api/:instanceId/inboxes/:inboxId', require('./inboxGet'));
+
+                app.get('/api/:instanceId/inboxes/:inboxId/script', require('./inboxScriptConfiguration'));
+
+                app['delete']('/api/:instanceId/inboxes/:inboxId', require('./inboxRemove'));
+        };
+});
+module.exports = exports['default'];
