@@ -5,17 +5,15 @@ import setTimeout from '../helpers/setTimeout';
 import config from '../../config';
 
 
-export default (req, res) => {
-    let instanceAddedEvent = instanceAdded.create();
-    let args = {
+export default async (req, res) => {
+    const instanceAddedEvent = instanceAdded.create();
+    const args = {
         name: 'instances',
         events: instanceAddedEvent
     };
-    eventStore.postToStream(args)
-            .then(() => {
-                let hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent.data);
-                setTimeout(() => {
-                    res.hal(hypermedia, 201);
-                }, config.controllerResponseDelay);
-            });
+    await eventStore.postToStream(args);
+    const hypermedia = instanceFormatAsHal(req.href, instanceAddedEvent.data);
+    setTimeout(() => {
+        res.hal(hypermedia, 201);
+    }, config.controllerResponseDelay);
 };
