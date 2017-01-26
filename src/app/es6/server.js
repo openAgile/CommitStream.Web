@@ -109,7 +109,7 @@ api.init(app);
 // DO NOT MOVE THIS. It must be here to catch unhandled errors.
 app.use(csErrorHandler);
 
-const  getHostSettings = (req) => ({
+const getHostSettings = (req) => ({
   protocol: config.protocol || req.protocol,
   host: req.get('host'),
   key: req.query.key
