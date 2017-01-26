@@ -1,5 +1,7 @@
 'use strict';
 
+var _Object$assign = require('babel-runtime/core-js/object/assign')['default'];
+
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -14,7 +16,32 @@ var _uuidV4 = require('uuid-v4');
 
 var _uuidV42 = _interopRequireDefault(_uuidV4);
 
-var pager = {
+var hasPageSize = function hasPageSize(query) {
+  return _underscore2['default'].has(query, "pageSize");
+};
+
+var getPageSize = function getPageSize(query) {
+  return query.pageSize;
+};
+
+var convertToInt = function convertToInt(stringVal) {
+  if (!isNaN(stringVal)) return parseInt(stringVal);else return NaN;
+};
+
+var getConvertedPageSizeOrDefault = function getConvertedPageSizeOrDefault(query) {
+  var defaultSize = 25;
+  if (!hasPageSize(query)) return defaultSize;
+  var convertedSize = convertToInt(getPageSize(query));
+  return getDefaultWhenNaN(convertedSize, defaultSize);
+};
+
+var getDefaultWhenNaN = function getDefaultWhenNaN(value, defaultValue) {
+  return _underscore2['default'].isNaN(value) ? defaultValue : value;
+};
+
+var pager = {};
+
+exports['default'] = _Object$assign(pager, {
   getPageSize: function getPageSize(query) {
     return getConvertedPageSizeOrDefault(query);
   },
@@ -41,30 +68,5 @@ var pager = {
     }
     return pagedResponse;
   }
-};
-
-var hasPageSize = function hasPageSize(query) {
-  return _underscore2['default'].has(query, "pageSize");
-};
-
-var getPageSize = function getPageSize(query) {
-  return query.pageSize;
-};
-
-var convertToInt = function convertToInt(stringVal) {
-  if (!isNaN(stringVal)) return parseInt(stringVal);else return NaN;
-};
-
-var getDefaultWhenNaN = function getDefaultWhenNaN(value, defaultValue) {
-  return _underscore2['default'].isNaN(value) ? defaultValue : value;
-};
-
-var getConvertedPageSizeOrDefault = function getConvertedPageSizeOrDefault(query) {
-  var defaultSize = 25;
-  if (!hasPageSize(query)) return defaultSize;
-  var convertedSize = convertToInt(getPageSize(query));
-  return getDefaultWhenNaN(convertedSize, defaultSize);
-};
-
-exports['default'] = pager;
+});
 module.exports = exports['default'];

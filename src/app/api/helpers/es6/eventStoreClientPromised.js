@@ -2,7 +2,7 @@ import EventStore from 'eventstore-client';
 import Promise from 'bluebird';
 import config from '../../config';
 
-var client = new EventStore({
+const client = new EventStore({
   baseUrl: config.eventStoreBaseUrl,
   username: config.eventStoreUser,
   password: config.eventStorePassword
