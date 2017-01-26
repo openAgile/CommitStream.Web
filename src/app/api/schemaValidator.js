@@ -19,7 +19,6 @@ exports['default'] = {
       console.log(error);
       return error.property + ' ' + error.message;
     });
-
     return errors;
   }
 };
