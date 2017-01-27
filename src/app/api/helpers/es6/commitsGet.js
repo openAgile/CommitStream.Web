@@ -1,12 +1,11 @@
-(function() {
-  var config = require('../../config'),
-    _ = require('underscore'),
-    commitEventsToApiResponse = require('../translators/commitEventsToApiResponse'),
-    eventStore = require('../helpers/eventStoreClient'),
-    pager = require('../helpers/pager'),
-    CSError = require('../../middleware/csError');
+import config from '../../config';
+import _ from 'underscore';
+import commitEventsToApiResponse from '../translators/commitEventsToApiResponse';
+import eventStore from '../helpers/eventStoreClient';
+import pager from '../helpers/pager';
+import CSError from '../../middleware/csError';
 
-  class InputRequired extends CSError {
+class InputRequired extends CSError {
     constructor(objectType) {
       const message = objectType + ' is required';
       const errors = [message];
@@ -14,38 +13,35 @@
     }
   };
 
-  function validate(propertyName, property) {
-    if (property === undefined || property === null || property == '') {
-      throw new InputRequired(propertyName);
-    }
+const validate = (propertyName, property) => {
+  if (property === undefined || property === null || property == '') {
+    throw new InputRequired(propertyName);
   }
+}
 
-  module.exports = function(query, stream, buildUri, cache) {
-    validate('stream', stream);
-    validate('buildUri', buildUri);
+export default async (query, stream, buildUri, cache)  => {
+  validate('stream', stream);
+  validate('buildUri', buildUri);
 
-    var pageSize = pager.getPageSize(query);
-    var currentPage = cache.get(query.page);
-
-    var args = {
-      name: stream,
-      count: pageSize,
-      pageUrl: currentPage,
-      embed: 'tryharder'
-    };
-
-    return eventStore.getFromStream(args)
-      .then(function(response) {
-        var links = response.links;
-        var apiResponse = commitEventsToApiResponse(response.entries);
-        var pagedResponse = pager.getPagedResponse(apiResponse, links, currentPage, buildUri, cache);
-        return pagedResponse;
-      }).catch(function(error) {        
-        // TODO: not sure how clean this approach is, of totally ignoring ANY error. Maybe it should catch a specific error type...
-        return {
-          commits: [],
-          _links: {}
-        };
-      });
+  const pageSize = pager.getPageSize(query);
+  const currentPage = cache.get(query.page);
+  const args = {
+    name: stream,
+    count: pageSize,
+    pageUrl: currentPage,
+    embed: 'tryharder'
   };
-}());
+  try {
+    const response =  await eventStore.getFromStream(args);
+    console.log("AAAAAAAAAAAAAA" + response)
+    const links = response.links;
+    const apiResponse = commitEventsToApiResponse(response.entries);
+    const pagedResponse = pager.getPagedResponse(apiResponse, links, currentPage, buildUri, cache);
+    return pagedResponse;
+  } catch (error) {
+    return {
+      commits: [],
+      _links: {}
+    };
+  }
+};
