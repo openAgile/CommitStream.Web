@@ -17,14 +17,14 @@ export default (req, res) => {
         const events = translator.translatePush(req.body, instanceId, digestId, inboxId);
         const postArgs = {
             name: `inboxCommits-${inboxId}`,
-            events: events
+            events
         };
 
         eventStore.postToStream(postArgs)
             .then(() => {
                 const inboxData = {
-                    inboxId: inboxId,
-                    digestId: digestId
+                    inboxId,
+                    digestId
                 };
 
                 const hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
@@ -33,4 +33,4 @@ export default (req, res) => {
     } else {
         throw new MalformedPushEventError(req);
     }
-}
+};

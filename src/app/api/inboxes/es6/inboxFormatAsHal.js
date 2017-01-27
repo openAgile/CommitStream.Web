@@ -28,4 +28,4 @@ export default ((href, instanceId, inbox) => {
     };
 
     return result;
-})
+});

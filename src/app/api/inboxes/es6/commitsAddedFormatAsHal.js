@@ -14,4 +14,4 @@ export default (href, instanceId, inbox) => ({
         }
     },
     "message": "The commits have been added to the CommitStream inbox."
-})
+});

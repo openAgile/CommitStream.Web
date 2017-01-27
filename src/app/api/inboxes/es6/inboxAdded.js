@@ -72,4 +72,4 @@ export default {
     validate(data){
         return schemaValidator.validate('inbox', data, schema);
     }
-}
+};

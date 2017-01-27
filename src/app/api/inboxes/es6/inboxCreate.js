@@ -26,5 +26,5 @@ export default async (req,res) => {
     setTimeout(() => {
         res.hal(hypermedia, 201);
     }, config.controllerResponseDelay);
-}
+};
 
