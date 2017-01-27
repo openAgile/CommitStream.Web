@@ -39,7 +39,5 @@ export default {
 
        return instanceAddedEvent;
    },
-   validate(data) {
-       return schemaValidator.validate('instance', data, SCHEMA);
-   }
+   validate: data => schemaValidator.validate('instance', data, SCHEMA)
 };
