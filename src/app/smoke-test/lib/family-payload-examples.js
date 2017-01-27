@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports["default"] = {
+exports.default = {
 	Deveo: {
 		validWithOneCommit: function validWithOneCommit(message) {
 			return {
@@ -444,4 +444,3 @@ exports["default"] = {
 		}
 	}
 };
-module.exports = exports["default"];
