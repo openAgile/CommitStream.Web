@@ -27,11 +27,11 @@ var _middlewareInboxScriptBadPlatformRequestedError = require('../../middleware/
 var _middlewareInboxScriptBadPlatformRequestedError2 = _interopRequireDefault(_middlewareInboxScriptBadPlatformRequestedError);
 
 var validatePlatform = function validatePlatform(platform) {
-	return platform == "windows" || platform == "linux";
+	return platform === "windows" || platform === "linux";
 };
 
 var getFileNameToRead = function getFileNameToRead(platform) {
-	return "commit-event." + (platform == "windows" ? "ps1" : "sh");
+	return "commit-event." + (platform === "windows" ? "ps1" : "sh");
 };
 
 var setOurHeaders = function setOurHeaders(res, fileToRead) {
@@ -41,8 +41,9 @@ var setOurHeaders = function setOurHeaders(res, fileToRead) {
 };
 
 var replaceValues = function replaceValues(req, contentString, platform) {
-	contentString = contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url).replace(/PLACE INBOX URL HERE/g, req.href("/api/" + req.instance.instanceId + "/inboxes/" + req.inbox.inboxId + "/commits?apiKey=" + req.query.apiKey));
-	if (platform == "linux") {
+	contentString = contentString.replace(/PLACE REPO URL HERE/g, req.inbox.url).replace(/PLACE INBOX URL HERE/g, req.href('/api/' + req.instance.instanceId + '/inboxes/' + req.inbox.inboxId + '/commits?apiKey=' + req.query.apiKey));
+
+	if (platform === "linux") {
 		contentString = contentString.replace(/\r/g, "");
 	}
 	return contentString;
@@ -54,7 +55,7 @@ var sendScriptFile = function sendScriptFile(req, res) {
 	if (validatePlatform(platform)) {
 		(function () {
 			var fileToRead = getFileNameToRead(platform);
-			_fs2['default'].readFile("./api/inboxes/resources/" + req.inbox.family.toLowerCase() + '/' + fileToRead, 'utf8', function (err, data) {
+			_fs2['default'].readFile('./api/inboxes/resources/' + req.inbox.family.toLowerCase() + '/' + fileToRead, 'utf8', function (err, data) {
 				if (err) {
 					throw new _middlewareInboxScriptRetrievedError2['default'](err);
 				}
@@ -69,7 +70,7 @@ var sendScriptFile = function sendScriptFile(req, res) {
 };
 
 exports['default'] = function (req, res) {
-	if (_helpersVcsFamilies2['default'].Svn == req.inbox.family || _helpersVcsFamilies2['default'].P4V == req.inbox.family) {
+	if (_helpersVcsFamilies2['default'].Svn === req.inbox.family || _helpersVcsFamilies2['default'].P4V === req.inbox.family) {
 		sendScriptFile(req, res);
 	} else {
 		throw new _middlewareInboxHasNoScriptError2['default']();
