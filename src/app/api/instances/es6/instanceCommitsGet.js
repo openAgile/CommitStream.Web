@@ -4,20 +4,18 @@ import commitsChildrenGet from '../helpers/commitsChildrenGet';
 import _ from 'underscore';
 import config from '../../config';
 
-let cache = cacheCreate();
+const cache = cacheCreate();
 
 export default function(req, res) {
-  let workitemNumbers = req.query.numbers || '';
-  let instanceId = req.instance.instanceId;
+  const workitemNumbers = req.query.numbers || '';
+  const instanceId = req.instance.instanceId;
 
-  let buildUri = (page) =>
-    req.href('/api/' + instanceId + '/commits/tags/versionone/workitem?numbers=' +
-      workitemNumbers + '&page=' + page + '&apiKey=' + req.instance.apiKey);
+  const buildUri = page => req.href(`/api/${instanceId}/commits/tags/versionone/workitem?numbers=${workitemNumbers}&page=${page}&apiKey=${req.instance.apiKey}`);
 
-  let workitemNumbersArray = workitemNumbers.split(',');
+  const workitemNumbersArray = workitemNumbers.split(',');
 
   if (workitemNumbersArray.length === 1) {
-    let stream = 'versionOne_CommitsWithWorkitems-' + instanceId + '_' + workitemNumbers;
+    const stream = `versionOne_CommitsWithWorkitems-${instanceId}_${workitemNumbers}`;
 
     commitsGet(req.query, stream, buildUri, cache).then(function(commits) {
       // TODO use hal?
