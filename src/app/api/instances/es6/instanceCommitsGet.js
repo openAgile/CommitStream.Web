@@ -22,13 +22,13 @@ export default function(req, res) {
       res.send(commits);
     });
   } else if (config.showChildrenFeatureToggle) {
-    let streams = [];
-    _.each(workitemNumbersArray, function(e, i) {
-      streams.push('versionOne_CommitsWithWorkitems-' + instanceId + '_' + e);
-    });
-    commitsChildrenGet(req.query, streams, buildUri).then(function(commits) {
-      res.send(commits);
-    });
+      let streams = [];
+        _.each(workitemNumbersArray, function(e, i) {
+        streams.push(`versionOne_CommitsWithWorkitems-${instanceId}_${e}`);
+      });
+      commitsChildrenGet(req.query, streams, buildUri).then(function(commits) {
+        reqes.send(commits);
+      });
   } else {
     // Daniel says OK to send empty array here (9/24/2015)
     res.send({commits:[]});
