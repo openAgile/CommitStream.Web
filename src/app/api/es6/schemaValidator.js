@@ -10,5 +10,5 @@ export default {
       return `${error.property} ${error.message}`;
     });
     return errors;
-	}
+  }
 };
