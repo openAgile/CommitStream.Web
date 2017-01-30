@@ -19,7 +19,7 @@ exports["default"] = function (href, instanceId, digests) {
     }
   };
 
-  function createDigestHyperMediaResult(digest) {
+  var createDigestHyperMediaResult = function createDigestHyperMediaResult(digest) {
     return {
       "_links": {
         "self": {
@@ -29,7 +29,7 @@ exports["default"] = function (href, instanceId, digests) {
       "digestId": digest.digestId,
       "description": digest.description
     };
-  }
+  };
 
   if (digests) {
     var _iteratorNormalCompletion = true;

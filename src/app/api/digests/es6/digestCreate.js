@@ -1,4 +1,3 @@
-
 import digestAdded from './digestAdded';
 import digestFormatAsHal from './digestFormatAsHal';
 import eventStore from '../helpers/eventStoreClient';

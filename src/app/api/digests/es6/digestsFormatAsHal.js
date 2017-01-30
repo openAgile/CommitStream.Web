@@ -1,5 +1,5 @@
 export default (href, instanceId, digests) => {
-const response = {
+  const response = {
     "_links": {
       "self": {
         "href": href(`/api/${instanceId}/digests`)
@@ -9,19 +9,17 @@ const response = {
     "_embedded": {
       "digests": []
     }
-  }
+  };
 
-  function createDigestHyperMediaResult(digest) {
-    return {
-      "_links": {
-        "self": {
-         "href": href(`/api/${instanceId}/digests/${digest.digestId}`)
-        }
-      },
-      "digestId": digest.digestId,
-      "description": digest.description
-    }
-  }
+  const createDigestHyperMediaResult = digest => ({
+    "_links": {
+      "self": {
+        "href": href(`/api/${instanceId}/digests/${digest.digestId}`)
+      }
+    },
+    "digestId": digest.digestId,
+    "description": digest.description
+  });
 
   if (digests) {
     for(const digest of digests) {
@@ -31,4 +29,3 @@ const response = {
 
   return response;
 };
-

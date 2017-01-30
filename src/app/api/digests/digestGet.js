@@ -14,7 +14,7 @@ var _validateUUID = require('../validateUUID');
 
 var _validateUUID2 = _interopRequireDefault(_validateUUID);
 
-exports['default'] = function (req, res, next) {
+exports['default'] = function (req, res) {
     (0, _validateUUID2['default'])('digests', req.params.digestId);
 
     var hypermedia = (0, _digestFormatAsHal2['default'])(req.href, req.params.instanceId, req.digest);

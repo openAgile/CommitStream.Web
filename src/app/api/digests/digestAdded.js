@@ -43,7 +43,6 @@ exports['default'] = {
     };
     return DigestAddedEvent;
   },
-
   validate: function validate(data) {
     return _schemaValidator2['default'].validate('digest', data, SCHEMA);
   }

@@ -5,7 +5,7 @@ var _regeneratorRuntime = require('babel-runtime/regenerator')['default'];
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+  value: true
 });
 
 var _this = this;
@@ -27,46 +27,46 @@ var _validateUUID = require('../validateUUID');
 var _validateUUID2 = _interopRequireDefault(_validateUUID);
 
 exports['default'] = function callee$0$0(req, res) {
-    var digestId, instanceId, digest, inboxes, hypermedia;
-    return _regeneratorRuntime.async(function callee$0$0$(context$1$0) {
-        while (1) switch (context$1$0.prev = context$1$0.next) {
-            case 0:
-                digestId = req.params.digestId;
-                instanceId = req.instance.instanceId;
-                digest = req.digest;
+  var digestId, instanceId, digest, inboxes, hypermedia;
+  return _regeneratorRuntime.async(function callee$0$0$(context$1$0) {
+    while (1) switch (context$1$0.prev = context$1$0.next) {
+      case 0:
+        digestId = req.params.digestId;
+        instanceId = req.instance.instanceId;
+        digest = req.digest;
 
-                (0, _validateUUID2['default'])('digest', digestId);
+        (0, _validateUUID2['default'])('digest', digestId);
 
-                context$1$0.prev = 4;
-                context$1$0.next = 7;
-                return _regeneratorRuntime.awrap(_helpersEventStoreClient2['default'].queryStatePartitionById({
-                    name: 'inboxes-for-digest',
-                    partition: 'digestInbox-' + digest.digestId
-                }));
+        context$1$0.prev = 4;
+        context$1$0.next = 7;
+        return _regeneratorRuntime.awrap(_helpersEventStoreClient2['default'].queryStatePartitionById({
+          name: 'inboxes-for-digest',
+          partition: 'digestInbox-' + digest.digestId
+        }));
 
-            case 7:
-                inboxes = context$1$0.sent;
-                hypermedia = (0, _digestInboxesFormatAsHal2['default'])(req.href, instanceId, digest, inboxes);
+      case 7:
+        inboxes = context$1$0.sent;
+        hypermedia = (0, _digestInboxesFormatAsHal2['default'])(req.href, instanceId, digest, inboxes);
 
-                res.hal(hypermedia);
-                context$1$0.next = 15;
-                break;
+        res.hal(hypermedia);
+        context$1$0.next = 15;
+        break;
 
-            case 12:
-                context$1$0.prev = 12;
-                context$1$0.t0 = context$1$0['catch'](4);
+      case 12:
+        context$1$0.prev = 12;
+        context$1$0.t0 = context$1$0['catch'](4);
 
-                if (context$1$0.t0 instanceof _middlewareCsError2['default'].ProjectionNotFound) {
-                    hypermedia = (0, _digestInboxesFormatAsHal2['default'])(req.href, instanceId, digest, { inboxes: {} });
+        if (context$1$0.t0 instanceof _middlewareCsError2['default'].ProjectionNotFound) {
+          hypermedia = (0, _digestInboxesFormatAsHal2['default'])(req.href, instanceId, digest, { inboxes: {} });
 
-                    res.hal(hypermedia);
-                }
-
-            case 15:
-            case 'end':
-                return context$1$0.stop();
+          res.hal(hypermedia);
         }
-    }, null, _this, [[4, 12]]);
+
+      case 15:
+      case 'end':
+        return context$1$0.stop();
+    }
+  }, null, _this, [[4, 12]]);
 };
 
 module.exports = exports['default'];
