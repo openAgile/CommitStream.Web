@@ -15,7 +15,7 @@ const response = {
     return {
       "_links": {
         "self": {
-         "href": href(`api/${instanceId}/digests/${digest.digestId}`);
+         "href": href(`/api/${instanceId}/digests/${digest.digestId}`)
         }
       },
       "digestId": digest.digestId,
@@ -24,9 +24,9 @@ const response = {
   }
 
   if (digests) {
-    digests.forEach( digest => {
+    for(const digest of digests) {
       response._embedded.digests.push(createDigestHyperMediaResult(digest.content.data));
-    });
+    }
   }
 
   return response;
