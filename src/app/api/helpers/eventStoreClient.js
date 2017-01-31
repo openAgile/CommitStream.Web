@@ -48,7 +48,7 @@ exports['default'] = _Object$assign(client, {
 
         case 4:
           response = context$1$0.sent;
-          return context$1$0.abrupt('return', _statusCodeValidator2['default'].validateGetProjection(args.name, args.id)(response));
+          return context$1$0.abrupt('return', _statusCodeValidator2['default'].validateGetProjection(args.name, partition)(response));
 
         case 6:
         case 'end':
@@ -114,8 +114,7 @@ exports['default'] = _Object$assign(client, {
 
         case 2:
           response = context$1$0.sent;
-
-          _statusCodeValidator2['default'].validateQueryCreate(response);
+          return context$1$0.abrupt('return', _statusCodeValidator2['default'].validateQueryCreate(response));
 
         case 4:
         case 'end':
@@ -133,8 +132,7 @@ exports['default'] = _Object$assign(client, {
 
         case 2:
           response = context$1$0.sent;
-
-          _statusCodeValidator2['default'].validateQueryGetState(response);
+          return context$1$0.abrupt('return', _statusCodeValidator2['default'].validateQueryGetState(response));
 
         case 4:
         case 'end':
@@ -152,8 +150,7 @@ exports['default'] = _Object$assign(client, {
 
         case 2:
           response = context$1$0.sent;
-
-          _statusCodeValidator2['default'].validateQueryGetStatus(response);
+          return context$1$0.abrupt('return', _statusCodeValidator2['default'].validateQueryGetStatus(response));
 
         case 4:
         case 'end':

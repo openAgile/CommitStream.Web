@@ -57,7 +57,7 @@ var InputRequired = (function (_CSError) {
 ;
 
 var validate = function validate(propertyName, property) {
-  if (property === undefined || property === null || property == '') {
+  if (property === undefined || property === null || property === '') {
     throw new InputRequired(propertyName);
   }
 };
@@ -84,26 +84,24 @@ exports['default'] = function callee$0$0(query, stream, buildUri, cache) {
 
       case 8:
         response = context$1$0.sent;
-
-        console.log("AAAAAAAAAAAAAA" + response);
         links = response.links;
         apiResponse = (0, _translatorsCommitEventsToApiResponse2['default'])(response.entries);
         pagedResponse = _helpersPager2['default'].getPagedResponse(apiResponse, links, currentPage, buildUri, cache);
         return context$1$0.abrupt('return', pagedResponse);
 
-      case 16:
-        context$1$0.prev = 16;
+      case 15:
+        context$1$0.prev = 15;
         context$1$0.t0 = context$1$0['catch'](5);
         return context$1$0.abrupt('return', {
           commits: [],
           _links: {}
         });
 
-      case 19:
+      case 18:
       case 'end':
         return context$1$0.stop();
     }
-  }, null, _this, [[5, 16]]);
+  }, null, _this, [[5, 15]]);
 };
 
 module.exports = exports['default'];

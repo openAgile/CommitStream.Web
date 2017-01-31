@@ -1,5 +1,5 @@
 import instanceCreate from './instanceCreate';
-import instanceGet from './instanceCommitsGet';
+import instanceGet from './instanceGet';
 import instanceCommitGet from './instanceCommitsGet';
 
 export default {

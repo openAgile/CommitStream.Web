@@ -18,8 +18,8 @@ export default Object.assign(client, {
     };
 
     const response = await client.projection.getStateAsync(stateArgs);
-
-    return statusCodeValidator.validateGetProjection(args.name, args.id)(response);
+   
+    return statusCodeValidator.validateGetProjection(args.name, partition)(response);
   },
   async postToStream(args) {
     // Stay immutable, bro
@@ -47,14 +47,17 @@ export default Object.assign(client, {
   },
   async queryCreate(args) {
     const response = await client.query.postAsync(args);
-    statusCodeValidator.validateQueryCreate(response);
+
+    return statusCodeValidator.validateQueryCreate(response);
   },
   async queryGetState(args) {
     const response = await client.query.getStateAsync(args);
-    statusCodeValidator.validateQueryGetState(response);
+
+    return statusCodeValidator.validateQueryGetState(response);
   },
   async queryGetStatus(args) {
     const response = await client.query.getStatusAsync(args);
-    statusCodeValidator.validateQueryGetStatus(response);
+
+    return statusCodeValidator.validateQueryGetStatus(response);
   }
 });

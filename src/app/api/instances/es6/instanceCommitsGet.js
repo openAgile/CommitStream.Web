@@ -27,7 +27,7 @@ export default function(req, res) {
         streams.push(`versionOne_CommitsWithWorkitems-${instanceId}_${e}`);
       });
       commitsChildrenGet(req.query, streams, buildUri).then(function(commits) {
-        reqes.send(commits);
+        res.send(commits);
       });
   } else {
     // Daniel says OK to send empty array here (9/24/2015)
