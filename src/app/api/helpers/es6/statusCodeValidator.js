@@ -29,9 +29,7 @@ CSError.ProjectionNotFound = ProjectionNotFound;
 CSError.StreamNotFound = StreamNotFound;
 CSError.QueryError = QueryError;
 
-const statusCodeValidator = {};
-
-export default Object.assign(statusCodeValidator, {
+export default {
   validateGetProjection: (objectType, objectId) => response => {
     if (!response.body || response.body.length < 1 || response.statusCode === 404) {
       throw new ProjectionNotFound(`Could not find ${objectType} with id ${objectId}.`);
@@ -91,4 +89,4 @@ export default Object.assign(statusCodeValidator, {
       }
     }
   }
-});
+}

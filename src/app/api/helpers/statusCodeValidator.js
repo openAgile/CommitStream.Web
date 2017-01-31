@@ -6,8 +6,6 @@ var _inherits = require('babel-runtime/helpers/inherits')['default'];
 
 var _classCallCheck = require('babel-runtime/helpers/class-call-check')['default'];
 
-var _Object$assign = require('babel-runtime/core-js/object/assign')['default'];
-
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -88,9 +86,7 @@ _middlewareCsError2['default'].ProjectionNotFound = ProjectionNotFound;
 _middlewareCsError2['default'].StreamNotFound = StreamNotFound;
 _middlewareCsError2['default'].QueryError = QueryError;
 
-var statusCodeValidator = {};
-
-exports['default'] = _Object$assign(statusCodeValidator, {
+exports['default'] = {
   validateGetProjection: function validateGetProjection(objectType, objectId) {
     return function (response) {
       if (!response.body || response.body.length < 1 || response.statusCode === 404) {
@@ -154,5 +150,5 @@ exports['default'] = _Object$assign(statusCodeValidator, {
       }
     }
   }
-});
+};
 module.exports = exports['default'];
