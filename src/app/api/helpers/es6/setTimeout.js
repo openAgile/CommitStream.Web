@@ -1,0 +1,1 @@
+export default (callback, delay) => setTimeout(callback, delay);
