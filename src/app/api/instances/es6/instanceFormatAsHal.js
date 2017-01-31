@@ -1,11 +1,5 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-exports["default"] = function (href, instance) {
-    var formatted = {
+export default (href, instance) => {
+    const formatted = {
         "_links": {
             "self": {
                 "href": href("/api/instances/" + instance.instanceId)
@@ -23,6 +17,4 @@ exports["default"] = function (href, instance) {
         "apiKey": instance.apiKey
     };
     return formatted;
-};
-
-module.exports = exports["default"];
+}
