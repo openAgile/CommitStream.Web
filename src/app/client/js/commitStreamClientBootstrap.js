@@ -13,7 +13,7 @@
         }
 
         function createSafeOrEmptyURL(url){
-            if(isValidUrl(url))
+            if(commitStreamUrlValidator.isValidUrl(url))
                 return url;
             return '';
         }
