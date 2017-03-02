@@ -1,4 +1,4 @@
-# Notes about the Azure Cluster
+# Notes about the Azure Cluster config
 
 1) Deleted port 2113 from Node 1 in Azure
 
