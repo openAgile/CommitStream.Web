@@ -12,12 +12,6 @@
             return null;
         }
 
-        function createSafeOrEmptyURL(url){
-            if(commitStreamUrlValidator.isValidUrl(url))
-                return url;
-            return '';
-        }
-
         function handleError(data, status) {
             $('#commits').html('<div class="commitStream-panel"><div class="stream-title-area"><h3>Error Contacting CommitStream</h3>Please try again.</h3></div></div>');
         }
@@ -32,7 +26,6 @@
         var instanceId = getQueryVariable('instanceId');
         var workitem = getQueryVariable('workitem');
         var mentionDetailUrl = getQueryVariable('mentionDetailUrlTemplate');
-        var mentionDetailSafeURL = createSafeOrEmptyURL(mentionDetailUrl);
 
         $.getScript('app',
             function(data, status, jqxhr) {
@@ -44,7 +37,7 @@
                     instanceId,
                     apiKey,
                     undefined,
-                    mentionDetailSafeURL);
+                    mentionDetailUrl);
             }
         );
     });

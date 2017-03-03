@@ -1,5 +1,6 @@
 (function() {
   var handlebarsUrl = '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min',
+    urlCleaner = '{{{resourcePath}}}js/urlCleaner',
     requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js',
     commitStreamDomId,
     instanceId,
@@ -13,7 +14,7 @@
     autoRefreshIntervalId,
     showChildrenChecked,
     assetNumbers,
-    mentionUrl;    
+    mentionUrl;
 
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
@@ -25,7 +26,8 @@
         var commit = model.commits[i];
         var processedMessage = commit.message.replace(context.assetMentionPattern, function(match, p1) {
           var mentionUrlWithReplacement = mentionUrl.replace("\{\{mention\}\}", p1);
-          return '<a href="' + mentionUrlWithReplacement + '" target="_blank">' + match + '</a>';
+          var cleanedMentionUrl = commitStreamUrlCleaner.clean(mentionUrlWithReplacement);
+          return '<a href="' + cleanedMentionUrl + '" target="_blank">' + match + '</a>';
         });
         commit.message = processedMessage;
       }
@@ -48,12 +50,13 @@
   var configureCommitStreamDependencies = function() {
     require.config({
       paths: {
-        handlebars: handlebarsUrl
+        handlebars: handlebarsUrl,
+        urlCleaner: urlCleaner
       }
     });
   };
 
-  var deps = ['handlebars'];
+  var deps = ['handlebars', 'urlCleaner'];
 
   var hasAllDeps = function() {
     if (!window.requirejs) return false;
