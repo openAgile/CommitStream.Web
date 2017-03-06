@@ -1,8 +1,7 @@
 (function() {
   var handlebarsUrl = '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min',
-    urlCleaner = '{{{resourcePath}}}js/urlCleaner',
     requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js',
-    validatorUrl = '//https://cdnjs.cloudflare.com/ajax/libs/validator/7.0.0/validator.js',
+    validatorUrl = '//cdnjs.cloudflare.com/ajax/libs/validator/7.0.0/validator',
     commitStreamDomId,
     instanceId,
     digestId,
@@ -15,7 +14,8 @@
     autoRefreshIntervalId,
     showChildrenChecked,
     assetNumbers,
-    mentionUrl;
+    mentionUrl,
+    validator;
 
   var clone = function(source) {
     return JSON.parse(JSON.stringify(source));
@@ -26,14 +26,17 @@
       for (var i = 0; i < model.commits.length; i++) {
         var commit = model.commits[i];
         var processedMessage = commit.message.replace(context.assetMentionPattern, function(match, p1) {
-          var mentionUrlWithReplacement = mentionUrl.replace("\{\{mention\}\}", p1);
-          var cleanedMentionUrl = commitStreamUrlCleaner.clean(mentionUrlWithReplacement);
-          return '<a href="' + cleanedMentionUrl + '" target="_blank">' + match + '</a>';
+        var mentionUrlWithReplacement = mentionUrl.replace("\{\{mention\}\}", p1);
+        return '<a href="' + validUrl(mentionUrlWithReplacement) + '" target="_blank">' + match + '</a>';
         });
         commit.message = processedMessage;
       }
     }
   ];
+
+  function validUrl(mentionUrlWithReplacement) {
+    return validator.isURL(mentionUrlWithReplacement) ? mentionUrlWithReplacement : '';
+  }
 
   var commitsListModelPreprocessorPluginContext = {
     assetMentionPattern: new RegExp('([A-Z,a-z]{1,2}-[0-9]{5,})', 'g')
@@ -52,13 +55,12 @@
     require.config({
       paths: {
         handlebars: handlebarsUrl,
-        urlCleaner: urlCleaner,
         validator: validatorUrl
       }
     });
   };
 
-  var deps = ['handlebars', 'urlCleaner', 'validatorUrl'];
+  var deps = ['handlebars', 'validator'];
 
   var hasAllDeps = function() {
     if (!window.requirejs) return false;
@@ -149,13 +151,15 @@
   };
 
   var compileSource = function(source, cb) {
-    require(deps, function(handlebars) {
+    require(deps, function(handlebars, validatorDep) {
+      validator = validatorDep;
       cb(handlebars.default.compile(source));
     }, errorHandler);
   };
 
   var registerPartial = function(partialName, template, cb) {
-    require(deps, function(handlebars) {
+    require(deps, function(handlebars, validatorDep) {
+      validator = validatorDep;
       handlebars.default.registerPartial(partialName, template);
       cb();
     }, errorHandler);
