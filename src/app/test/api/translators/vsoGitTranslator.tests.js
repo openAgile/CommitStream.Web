@@ -9,7 +9,6 @@ var chai = require('chai'),
     });
 require('../../helpers')(global);
 
-
 var pushEventWithOneCommit = {
     "subscriptionId": "a36104aa-ef6c-4643-ac08-5c42fd2115d3",
     "notificationId": 7,
@@ -104,7 +103,10 @@ describe('vsoGitTranslator', function() {
             var request = {
                 body: {
                     'eventType': 'git.push',
-                    'publisherId': 'tfs'
+                    'publisherId': 'tfs',
+                    'resource': {
+                        'commits': []
+                    }
                 }
             };
             vsoGitTranslator.canTranslate(request).should.equal(true);
