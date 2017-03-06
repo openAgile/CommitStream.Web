@@ -2,6 +2,7 @@
   var handlebarsUrl = '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.amd.min',
     urlCleaner = '{{{resourcePath}}}js/urlCleaner',
     requirejsUrl = '//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js',
+    validatorUrl = '//https://cdnjs.cloudflare.com/ajax/libs/validator/7.0.0/validator.js',
     commitStreamDomId,
     instanceId,
     digestId,
@@ -51,12 +52,13 @@
     require.config({
       paths: {
         handlebars: handlebarsUrl,
-        urlCleaner: urlCleaner
+        urlCleaner: urlCleaner,
+        validator: validatorUrl
       }
     });
   };
 
-  var deps = ['handlebars', 'urlCleaner'];
+  var deps = ['handlebars', 'urlCleaner', 'validatorUrl'];
 
   var hasAllDeps = function() {
     if (!window.requirejs) return false;
