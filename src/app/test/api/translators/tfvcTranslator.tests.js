@@ -63,3 +63,49 @@ var tfvcPushEventForOneProject = {
     },
     "createdDate": "2017-01-20T16:28:47.755774Z"
 };
+
+describe('when translating a push event that contains one commit', function() {
+    var eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
+    uuidStub.returns(eventId);
+
+    var digestId = 'cd0b1089-7d6d-435a-adf2-125209b1c2c8';
+    var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
+    var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
+
+    describe('when translating a push event that contains one commit', function() {
+        var expected = [{
+            eventId: eventId,
+            eventType: "TfvcCommitReceived",
+            data: {
+                sha: "b72be65b-614d-4652-9ca9-11d2942a5c91",
+                commit: {
+                    author: {
+                        name: "Josh Gough",
+                        email: "jsgough@gmail.com"
+                    },
+                    committer: {
+                        name: "Josh Gough",
+                        email: "jsgough@gmail.com",
+                        date: ''
+                    },
+                    message: "Josh Gough checked in changeset 17: Updated README.md S-12345"
+                },
+                html_url: "https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/changeset/17",
+                repository: '',
+                branch: '',
+                originalMessage: tfvcPushEventForOneProject
+            },
+            metadata: {
+                instanceId: instanceId,
+                digestId: digestId,
+                inboxId: inboxId
+            }
+        }];
+
+        var actual = tfvcTranslator.translatePush(tfvcPushEventForOneProject, instanceId, digestId, inboxId);
+
+        it('should match the expected translation', function () {
+            actual.should.deep.equal(expected);
+        });
+    });
+});

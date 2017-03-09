@@ -10,6 +10,7 @@ var vcsFamilies = {
 	'Bitbucket': "Bitbucket",
 	'GitLab': "GitLab",
 	'VsoGit': "VsoGit",
+	'Tfvc': "Tfvc",
 	'GitSwarm': "GitSwarm",
 	'P4V': "P4V"
 };
