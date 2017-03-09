@@ -8,7 +8,8 @@ const vsoGitTranslator = {
   family: 'VsoGit',
   canTranslate(request) {
     return (_.isString(request.body.eventType) && request.body.eventType === 'git.push')
-    && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
+    && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs')
+    && (request.body.resource.commits != undefined);
   },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
