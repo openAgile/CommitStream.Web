@@ -1,5 +1,5 @@
 const translatorNames = [
-  'deveoTranslator'
+  'deveoTranslator',
   'githubTranslator',
   'gitLabTranslator',
   'bitbucketTranslator',

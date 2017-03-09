@@ -32,23 +32,6 @@ var ProjectionNotFound = (function (_CSError) {
 })(_middlewareCsError2['default']);
 
 ;
-_middlewareCsError2['default'].ProjectionNotFound = ProjectionNotFound;
-
-var statusCodeValidator = {};
-
-statusCodeValidator.validateGetProjection = function (objectType, objectId) {
-  return function (response) {
-    if (!response.body || response.body.length < 1 || response.statusCode === 404) {
-      throw new ProjectionNotFound('Could not find ' + objectType + ' with id ' + objectId + '.');
-    }
-    if (response.statusCode !== 200) {
-      throw new Error(response.statusCode);
-    }
-    // TODO handle ***UNKNOWN** with 200 status code
-    var data = JSON.parse(response.body);
-    return data;
-  };
-};
 
 var StreamNotFound = (function (_CSError2) {
   _inherits(StreamNotFound, _CSError2);
@@ -66,21 +49,6 @@ var StreamNotFound = (function (_CSError2) {
 })(_middlewareCsError2['default']);
 
 ;
-_middlewareCsError2['default'].StreamNotFound = StreamNotFound;
-
-statusCodeValidator.validateGetStream = function (streamName) {
-  return function (response) {
-    if (!response.body || response.body.length < 1 || response.statusCode === 404) {
-      throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
-    }
-    if (response.statusCode !== 200) {
-      throw new Error(response.statusCode);
-    }
-    var data = JSON.parse(response.body);
-    return data;
-  };
-};
-
 // TODO: should we handle 408 using this specific failure in each case
 
 var EventStoreClusterFailure = (function (_CSError3) {
@@ -98,18 +66,6 @@ var EventStoreClusterFailure = (function (_CSError3) {
 
 ;
 
-statusCodeValidator.validateStreamsPost = function () {
-  return function (response) {
-    if (response.statusCode === 408) {
-      throw new EventStoreClusterFailure();
-    }
-    if (response.statusCode !== 201) {
-      throw new Error(response.statusCode);
-    }
-    return true;
-  };
-};
-
 var QueryError = (function (_CSError4) {
   _inherits(QueryError, _CSError4);
 
@@ -126,39 +82,73 @@ var QueryError = (function (_CSError4) {
 })(_middlewareCsError2['default']);
 
 ;
+_middlewareCsError2['default'].ProjectionNotFound = ProjectionNotFound;
+_middlewareCsError2['default'].StreamNotFound = StreamNotFound;
 _middlewareCsError2['default'].QueryError = QueryError;
 
-statusCodeValidator.validateQueryGetState = function (response) {
-  if (response.statusCode !== 200) {
-    throw new QueryError('An error happend when try to query');
-  }
-  return !response.body || response.body.length < 1 ? {
-    'events': []
-  } : JSON.parse(response.body);
-};
-
-statusCodeValidator.validateQueryCreate = function (response) {
-  if (response.statusCode !== 201) {
-    throw new QueryError('An error happend when try to create query');
-  }
-  return !response.body || response.body.length < 1 ? {} : JSON.parse(response.body);
-};
-
-statusCodeValidator.validateQueryGetStatus = function (response) {
-  if (response.statusCode !== 200) {
-    throw new QueryError('An error happend when try to get the query\'s status');
-  }
-  if (!response.body || response.body.length < 1) {
-    throw new QueryError('An error happend when try to get the query\'s status');
-  } else {
-    var body = JSON.parse(response.body);
-    if (body.status === 'Faulted') {
-      throw new QueryError('An error happend when try to get the query\'s status: Faulted');
+exports['default'] = {
+  validateGetProjection: function validateGetProjection(objectType, objectId) {
+    return function (response) {
+      if (!response.body || response.body.length < 1 || response.statusCode === 404) {
+        throw new ProjectionNotFound('Could not find ' + objectType + ' with id ' + objectId + '.');
+      }
+      if (response.statusCode !== 200) {
+        throw new Error(response.statusCode);
+      }
+      // TODO handle ***UNKNOWN** with 200 status code
+      var data = JSON.parse(response.body);
+      return data;
+    };
+  },
+  validateGetStream: function validateGetStream(streamName) {
+    return function (response) {
+      if (!response.body || response.body.length < 1 || response.statusCode === 404) {
+        throw new StreamNotFound('Could not find stream with name ' + streamName + '.');
+      }
+      if (response.statusCode !== 200) {
+        throw new Error(response.statusCode);
+      }
+      var data = JSON.parse(response.body);
+      return data;
+    };
+  },
+  validateStreamsPost: function validateStreamsPost(response) {
+    if (response.statusCode === 408) {
+      throw new EventStoreClusterFailure();
+    }
+    if (response.statusCode !== 201) {
+      throw new Error(response.statusCode);
+    }
+    return true;
+  },
+  validateQueryGetState: function validateQueryGetState(response) {
+    if (response.statusCode !== 200) {
+      throw new QueryError('An error happend when try to query');
+    }
+    return !response.body || response.body.length < 1 ? {
+      'events': []
+    } : JSON.parse(response.body);
+  },
+  validateQueryCreate: function validateQueryCreate(response) {
+    if (response.statusCode !== 201) {
+      throw new QueryError('An error happend when try to create query');
+    }
+    return !response.body || response.body.length < 1 ? {} : JSON.parse(response.body);
+  },
+  validateQueryGetStatus: function validateQueryGetStatus(response) {
+    if (response.statusCode !== 200) {
+      throw new QueryError('An error happend when try to get the query\'s status');
+    }
+    if (!response.body || response.body.length < 1) {
+      throw new QueryError('An error happend when try to get the query\'s status');
     } else {
-      return body;
+      var body = JSON.parse(response.body);
+      if (body.status === 'Faulted') {
+        throw new QueryError('An error happend when try to get the query\'s status: Faulted');
+      } else {
+        return body;
+      }
     }
   }
 };
-
-exports['default'] = statusCodeValidator;
 module.exports = exports['default'];

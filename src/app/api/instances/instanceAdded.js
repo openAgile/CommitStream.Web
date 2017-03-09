@@ -1,47 +1,57 @@
-(function(instanceAdded) {
-  var uuid = require('uuid-v4'),
-    schemaValidator = require('../schemaValidator');
+'use strict';
 
-  instanceAdded.create = function() {
-    var eventId = uuid();
-    var instanceId = uuid();
-    var apiKey = uuid();
-    var instanceAddedEvent = {
-      eventType: 'InstanceAdded',
-      eventId: eventId,
-      data: {
-        instanceId: instanceId,
-        apiKey: apiKey,
-      }
-    };    
-    
-    return instanceAddedEvent;
-  };
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
-  instanceAdded.SCHEMA = {
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _uuidV4 = require('uuid-v4');
+
+var _uuidV42 = _interopRequireDefault(_uuidV4);
+
+var _schemaValidator = require('../schemaValidator');
+
+var _schemaValidator2 = _interopRequireDefault(_schemaValidator);
+
+var SCHEMA = {
     "title": "instance",
     "type": "object",
-    "required": [
-      "instanceId"
-    ],
+    "required": ["instanceId"],
     "properties": {
-      "instanceId": {
-        "title": "ID of the instance",
-        "type": "string",
-        "minLength": 36,
-        "maxLength": 36
-      },
-      "apiKey": {
-        "title": "API Key for this instance",
-        "type": "string",
-        "minLength": 36,
-        "maxLength": 36
-      }
+        "instanceId": {
+            "title": "ID of the instance",
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36
+        },
+        "apiKey": {
+            "title": "API Key for this instance",
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36
+        }
     }
-  };
+};
 
-  instanceAdded.validate = function(data) {
-    return schemaValidator.validate('instance', data, instanceAdded.SCHEMA);
-  };
+exports['default'] = {
+    create: function create() {
+        var eventId = (0, _uuidV42['default'])();
+        var instanceId = (0, _uuidV42['default'])();
+        var apiKey = (0, _uuidV42['default'])();
+        var instanceAddedEvent = {
+            eventType: 'InstanceAdded',
+            eventId: eventId,
+            data: {
+                instanceId: instanceId,
+                apiKey: apiKey
+            }
+        };
 
-})(module.exports);
+        return instanceAddedEvent;
+    },
+    validate: function validate(data) {
+        return _schemaValidator2['default'].validate('instance', data, SCHEMA);
+    }
+};
+module.exports = exports['default'];

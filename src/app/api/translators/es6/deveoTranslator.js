@@ -1,17 +1,8 @@
 ﻿import util from 'util';
 import uuid from 'uuid-v4';
-import CSError from '../../middleware/csError';
+import DeveoCommitMalformedError from '../../middleware/deveoCommitMalformedError';
 import getProperties from './getProperties';
 import branchNameParse from './branchNameParse';
-
-//TODO: do we want this kind of library to know about status codes?
-class DeveoCommitMalformedError extends CSError {
-  constructor(error, pushEvent) {
-    super(['There was an unexpected error when processing your Deveo push event.']);
-    this.originalError = error;
-    this.pushEvent = pushEvent;
-  }
-}
 
 let deveoTranslator = {
   family: 'Deveo',
@@ -30,7 +21,7 @@ let deveoTranslator = {
             author: pushEvent.repository.type == 'subversion' ? pushEvent.pusher.display_name : aCommit.author.name,
             committer: {
               name: pushEvent.repository.type == 'subversion' ? pushEvent.pusher.display_name : aCommit.author.name,
-              email: aCommit.committer.email,
+              email: aCommit.author.email,
               date: aCommit.timestamp,
             },
             message: aCommit.message,
@@ -52,10 +43,7 @@ let deveoTranslator = {
         };
       });
     } catch (ex) {
-      var otherEx = new DeveoCommitMalformedError(ex, pushEvent);
-
-      //console.log(otherEx, otherEx.originalError.stack);
-      throw otherEx;
+      throw new DeveoCommitMalformedError(ex, pushEvent);
     }
   },
 

@@ -2,7 +2,7 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   var es6Locations = [
-    './es6/*.js',
+    'es6/*.js',
     'api/**/es6/*.js',
     'middleware/**/es6/*.js',
     'client/**/es6/*.js',
@@ -15,7 +15,9 @@ module.exports = function(grunt) {
     dest: '',
     ext: '.js',
     rename: function(dest, src) {
-      return src.replace('/es6/', '/');
+      src = src.replace(/\/?es6\//, '/');
+      src = src.replace(/^\//, '');
+      return src;
     }
   };
 

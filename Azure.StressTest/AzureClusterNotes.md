@@ -1,3 +1,5 @@
+# Notes about the Azure Cluster config
+
 1) Deleted port 2113 from Node 1 in Azure
 
 2) Added a new port of 2113 on Node 1, making it a Balanced Set named ESClust
