@@ -17,6 +17,10 @@ var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 var tfvcTranslator = {
     family: _helpersVcsFamilies2['default'].Tfvc,
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
+        var repository = {
+            url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
+        };
+
         try {
             var commit = {
                 sha: event.id,
@@ -33,7 +37,7 @@ var tfvcTranslator = {
                     message: event.message.text
                 },
                 html_url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/changeset/" + event.resource.changesetId,
-                repository: '',
+                repository: repository,
                 branch: '',
                 originalMessage: event
             };

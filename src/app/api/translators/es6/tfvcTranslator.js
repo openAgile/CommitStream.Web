@@ -4,6 +4,10 @@ import VcsFamilies from '../helpers/vcsFamilies';
 let tfvcTranslator = {
     family: VcsFamilies.Tfvc,
     translatePush(event, instanceId, digestId, inboxId) {
+        const repository = {
+            url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
+        }
+
         try {
             const commit = {
                 sha: event.id,
@@ -20,7 +24,7 @@ let tfvcTranslator = {
                     message: event.message.text
                 },
                 html_url: event.resourceContainers.collection.baseUrl +  event.resource.teamProjectIds[0] + "/_versionControl/changeset/" + event.resource.changesetId,
-                repository:'',
+                repository,
                 branch:'',
                 originalMessage: event
             }
@@ -30,9 +34,9 @@ let tfvcTranslator = {
                 eventType: tfvcTranslator.family + 'CommitReceived',
                 data: commit,
                 metadata: {
-                    instanceId: instanceId,
-                    digestId: digestId,
-                    inboxId: inboxId
+                    instanceId,
+                    digestId,
+                    inboxId
                 }
             }];
         } catch (ex) {

@@ -91,7 +91,9 @@ describe('tfvcTranslator', function() {
                     message: "Josh Gough checked in changeset 17: Updated README.md S-12345"
                 },
                 html_url: "https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/changeset/17",
-                repository: '',
+                repository: {
+                    url: "https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/"
+                },
                 branch: '',
                 originalMessage: tfvcPushEventForOneProject
             },
@@ -109,5 +111,6 @@ describe('tfvcTranslator', function() {
         it('translated event should match our expected shape of data', function () {
             actual.should.deep.equal(expected);
         });
+
     });
 });
