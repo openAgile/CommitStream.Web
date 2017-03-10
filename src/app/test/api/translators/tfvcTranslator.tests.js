@@ -8,7 +8,6 @@ var chai = require('chai'),
     });
 require('../../helpers')(global);
 
-
 var tfvcPushEventForOneProject = {
     "subscriptionId": "20019a9b-3534-4705-a755-198d23de2ed7",
     "notificationId": 6,
@@ -64,15 +63,16 @@ var tfvcPushEventForOneProject = {
     "createdDate": "2017-01-20T16:28:47.755774Z"
 };
 
-describe('when translating a push event that contains one commit', function() {
+describe('tfvcTranslator', function() {
     var eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
     uuidStub.returns(eventId);
 
     var digestId = 'cd0b1089-7d6d-435a-adf2-125209b1c2c8';
     var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
     var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
+    var actual;
 
-    describe('when translating a push event that contains one commit', function() {
+    describe('when translating a push event that contains one commit for one project', function() {
         var expected = [{
             eventId: eventId,
             eventType: "TfvcCommitReceived",
@@ -102,9 +102,11 @@ describe('when translating a push event that contains one commit', function() {
             }
         }];
 
-        var actual = tfvcTranslator.translatePush(tfvcPushEventForOneProject, instanceId, digestId, inboxId);
+        beforeEach(function() {
+            actual = tfvcTranslator.translatePush(tfvcPushEventForOneProject, instanceId, digestId, inboxId);
+        });
 
-        it('should match the expected translation', function () {
+        it('translated event should match our expected shape of data', function () {
             actual.should.deep.equal(expected);
         });
     });
