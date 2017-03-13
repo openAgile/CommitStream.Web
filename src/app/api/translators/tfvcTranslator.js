@@ -14,14 +14,18 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
+var _middlewareTfvcCommitMalformedError = require('../../middleware/tfvcCommitMalformedError');
+
+var _middlewareTfvcCommitMalformedError2 = _interopRequireDefault(_middlewareTfvcCommitMalformedError);
+
 var tfvcTranslator = {
     family: _helpersVcsFamilies2['default'].Tfvc,
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
-        var repository = {
-            url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
-        };
-
         try {
+            var repository = {
+                url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
+            };
+
             var commit = {
                 sha: event.id,
                 commit: {
@@ -52,7 +56,9 @@ var tfvcTranslator = {
                     inboxId: inboxId
                 }
             }];
-        } catch (ex) {}
+        } catch (ex) {
+            throw new _middlewareTfvcCommitMalformedError2['default'](ex, event);
+        }
     }
 };
 

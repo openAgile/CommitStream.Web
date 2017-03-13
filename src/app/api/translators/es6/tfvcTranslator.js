@@ -1,14 +1,15 @@
 import uuid from 'uuid-v4';
 import VcsFamilies from '../helpers/vcsFamilies';
+import tfvcCommitMalformedError from'../../middleware/tfvcCommitMalformedError'
 
 let tfvcTranslator = {
     family: VcsFamilies.Tfvc,
     translatePush(event, instanceId, digestId, inboxId) {
-        const repository = {
-            url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
-        }
-
         try {
+            const repository = {
+                url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
+            }
+
             const commit = {
                 sha: event.id,
                 commit: {
@@ -40,6 +41,7 @@ let tfvcTranslator = {
                 }
             }];
         } catch (ex) {
+            throw new tfvcCommitMalformedError(ex, event);
         }
     }
 }
