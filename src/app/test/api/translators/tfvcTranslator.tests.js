@@ -124,7 +124,6 @@ describe('tfvcTranslator', function() {
     var digestId = 'cd0b1089-7d6d-435a-adf2-125209b1c2c8';
     var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
     var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
-    var actual;
 
     describe('when translating a push event that contains one commit for one project', function() {
         var expected = [{
@@ -144,9 +143,9 @@ describe('tfvcTranslator', function() {
                     },
                     message: "Josh Gough checked in changeset 17: Updated README.md S-12345"
                 },
-                html_url: "https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/changeset/17",
+                html_url: ["https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/changeset/17"],
                 repository: {
-                    url: "https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/"
+                    url: ["https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/"]
                 },
                 branch: '',
                 originalMessage: tfvcPushEventForOneProject
@@ -157,6 +156,8 @@ describe('tfvcTranslator', function() {
                 inboxId: inboxId
             }
         }];
+
+        var actual;
 
         beforeEach(function() {
             actual = tfvcTranslator.translatePush(tfvcPushEventForOneProject, instanceId, digestId, inboxId);
@@ -186,9 +187,11 @@ describe('tfvcTranslator', function() {
                     },
                     message: "Sally Ann Cavanaugh checked in changeset 22"
                 },
-                html_url: "",
+                html_url:[ "https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/changeset/22",
+                           "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/changeset/22"],
                 repository: {
-                    url: ""
+                    url: ["https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/",
+                          "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/"]
                 },
                 branch: '',
                 originalMessage: tfvcPushEventForMoreThanOneProject
@@ -199,6 +202,8 @@ describe('tfvcTranslator', function() {
                 inboxId: inboxId
             }
         }];
+
+        var actual;
 
         beforeEach(function() {
             actual = tfvcTranslator.translatePush(tfvcPushEventForMoreThanOneProject, instanceId, digestId, inboxId);

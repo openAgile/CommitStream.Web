@@ -6,10 +6,6 @@ let tfvcTranslator = {
     family: VcsFamilies.Tfvc,
     translatePush(event, instanceId, digestId, inboxId) {
         try {
-            const repository = {
-                url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
-            }
-
             const commit = {
                 sha: event.id,
                 commit: {
@@ -24,8 +20,8 @@ let tfvcTranslator = {
                     },
                     message: event.message.text
                 },
-                html_url: event.resourceContainers.collection.baseUrl +  event.resource.teamProjectIds[0] + "/_versionControl/changeset/" + event.resource.changesetId,
-                repository,
+                html_url: getHTMLUrlsPerProject(event),
+                repository: getRepositoryUrlsPerProject(event),
                 branch:'',
                 originalMessage: event
             }
@@ -44,6 +40,30 @@ let tfvcTranslator = {
             throw new tfvcCommitMalformedError(ex, event);
         }
     }
+}
+
+const getHTMLUrlsPerProject = (event) => {
+    let htmlUrlsPerProject = [];
+
+    event.resource.teamProjectIds.forEach((projectId) => {
+        htmlUrlsPerProject.push(event.resourceContainers.collection.baseUrl +  projectId + "/_versionControl/changeset/" + event.resource.changesetId)
+    })
+
+    return htmlUrlsPerProject;
+}
+
+const getRepositoryUrlsPerProject = (event) => {
+    let repositoryUrlsPerProject = [];
+
+    event.resource.teamProjectIds.forEach((projectId) => {
+        repositoryUrlsPerProject.push(event.resourceContainers.collection.baseUrl + projectId + "/_versionControl/")
+    });
+
+    const repositoryUrls = {
+        url: repositoryUrlsPerProject
+    }
+
+    return repositoryUrls;
 }
 
 export default tfvcTranslator;

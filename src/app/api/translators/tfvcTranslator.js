@@ -22,10 +22,6 @@ var tfvcTranslator = {
     family: _helpersVcsFamilies2['default'].Tfvc,
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
         try {
-            var repository = {
-                url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/"
-            };
-
             var commit = {
                 sha: event.id,
                 commit: {
@@ -40,8 +36,8 @@ var tfvcTranslator = {
                     },
                     message: event.message.text
                 },
-                html_url: event.resourceContainers.collection.baseUrl + event.resource.teamProjectIds[0] + "/_versionControl/changeset/" + event.resource.changesetId,
-                repository: repository,
+                html_url: getHTMLUrlsPerProject(event),
+                repository: getRepositoryUrlsPerProject(event),
                 branch: '',
                 originalMessage: event
             };
@@ -60,6 +56,30 @@ var tfvcTranslator = {
             throw new _middlewareTfvcCommitMalformedError2['default'](ex, event);
         }
     }
+};
+
+var getHTMLUrlsPerProject = function getHTMLUrlsPerProject(event) {
+    var htmlUrlsPerProject = [];
+
+    event.resource.teamProjectIds.forEach(function (projectId) {
+        htmlUrlsPerProject.push(event.resourceContainers.collection.baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
+    });
+
+    return htmlUrlsPerProject;
+};
+
+var getRepositoryUrlsPerProject = function getRepositoryUrlsPerProject(event) {
+    var repositoryUrlsPerProject = [];
+
+    event.resource.teamProjectIds.forEach(function (projectId) {
+        repositoryUrlsPerProject.push(event.resourceContainers.collection.baseUrl + projectId + "/_versionControl/");
+    });
+
+    var repositoryUrls = {
+        url: repositoryUrlsPerProject
+    };
+
+    return repositoryUrls;
 };
 
 exports['default'] = tfvcTranslator;
