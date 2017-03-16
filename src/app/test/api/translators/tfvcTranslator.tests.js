@@ -3,7 +3,7 @@ var chai = require('chai'),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
     uuidStub = sinon.stub(),
-    tfvcCommitMalformedError = require('../../../middleware/tfvcCommitMalformedError'),
+    TfvcCommitMalformedError = require('../../../middleware/tfvcCommitMalformedError'),
     tfvcTranslator = proxyquire('../../../api/translators/tfvcTranslator', {
         'uuid-v4': uuidStub
     });
@@ -273,8 +273,8 @@ describe('tfvcTranslator', function() {
             }
         });
 
-        it('should throw tfvcCommitMalformedError', function() {
-            invokeTranslatePush.should.throw(tfvcCommitMalformedError);
+        it('should throw TfvcCommitMalformedError', function() {
+            invokeTranslatePush.should.throw(TfvcCommitMalformedError);
         });
     });
 });

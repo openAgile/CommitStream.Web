@@ -1,6 +1,6 @@
 import uuid from 'uuid-v4';
 import VcsFamilies from '../helpers/vcsFamilies';
-import tfvcCommitMalformedError from'../../middleware/tfvcCommitMalformedError';
+import TfvcCommitMalformedError from'../../middleware/tfvcCommitMalformedError';
 import _ from 'underscore';
 
 let tfvcTranslator = {
@@ -42,7 +42,7 @@ let tfvcTranslator = {
                 }
             }];
         } catch (ex) {
-            throw new tfvcCommitMalformedError(ex, event);
+            throw new TfvcCommitMalformedError(ex, event);
         }
     },
     getProperties(commitEvent) {

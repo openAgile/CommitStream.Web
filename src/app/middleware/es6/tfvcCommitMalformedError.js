@@ -1,6 +1,6 @@
 import CSError from './csError';
 
-class tfvcCommitMalformedError extends CSError {
+class TfvcCommitMalformedError extends CSError {
     constructor(error, pushEvent) {
         super(['There was an unexpected error when processing your TFVC push event.']);
         this.originalError = error;
@@ -8,4 +8,4 @@ class tfvcCommitMalformedError extends CSError {
     }
 }
 
-export default tfvcCommitMalformedError;
+export default TfvcCommitMalformedError;
