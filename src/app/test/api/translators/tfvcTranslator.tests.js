@@ -137,6 +137,11 @@ describe('tfvcTranslator', function() {
         it('the translator should say it can translate the event', function() {
             tfvcTranslator.canTranslate(request).should.equal(true);
         });
+
+        it('it should have valid properties', function() {
+            tfvcTranslator.canTranslate(request).should.equal(true);
+        });
+    });
     });
 
     describe('when translating a push event that contains one commit for one project', function() {
@@ -170,7 +175,6 @@ describe('tfvcTranslator', function() {
                 inboxId: inboxId
             }
         }];
-
         var actual;
 
         beforeEach(function() {
@@ -180,7 +184,6 @@ describe('tfvcTranslator', function() {
         it('translated event should match our expected shape of data', function () {
             actual.should.deep.equal(expected);
         });
-
     });
 
     describe('when translating a push event that contains more than one commit for one project', function() {
@@ -216,7 +219,6 @@ describe('tfvcTranslator', function() {
                 inboxId: inboxId
             }
         }];
-
         var actual;
 
         beforeEach(function() {
@@ -226,7 +228,6 @@ describe('tfvcTranslator', function() {
         it('translated event should match our expected shape of data', function () {
             actual.should.deep.equal(expected);
         });
-
     });
 
     describe('when translating a malformed push event', function() {
