@@ -1,8 +1,13 @@
 import uuid from 'uuid-v4';
 import VcsFamilies from '../helpers/vcsFamilies';
-import tfvcCommitMalformedError from'../../middleware/tfvcCommitMalformedError'
+import tfvcCommitMalformedError from'../../middleware/tfvcCommitMalformedError';
+import _ from 'underscore';
 
 let tfvcTranslator = {
+    canTranslate(request) {
+      return (_.isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin')
+        && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
+    },
     family: VcsFamilies.Tfvc,
     translatePush(event, instanceId, digestId, inboxId) {
         try {

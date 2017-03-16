@@ -125,6 +125,20 @@ describe('tfvcTranslator', function() {
     var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
     var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
 
+    describe('when translating any valid TFVC push event', function() {
+        var request;
+
+        before(function() {
+            request = {
+                body: tfvcPushEventForOneProject
+            };
+        });
+
+        it('the translator should say it can translate the event', function() {
+            tfvcTranslator.canTranslate(request).should.equal(true);
+        });
+    });
+
     describe('when translating a push event that contains one commit for one project', function() {
         var expected = [{
             eventId: eventId,

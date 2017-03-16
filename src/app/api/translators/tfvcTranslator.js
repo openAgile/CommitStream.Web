@@ -18,7 +18,14 @@ var _middlewareTfvcCommitMalformedError = require('../../middleware/tfvcCommitMa
 
 var _middlewareTfvcCommitMalformedError2 = _interopRequireDefault(_middlewareTfvcCommitMalformedError);
 
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
 var tfvcTranslator = {
+    canTranslate: function canTranslate(request) {
+        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
+    },
     family: _helpersVcsFamilies2['default'].Tfvc,
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
         try {
