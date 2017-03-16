@@ -142,6 +142,39 @@ describe('tfvcTranslator', function() {
             tfvcTranslator.canTranslate(request).should.equal(true);
         });
     });
+
+    describe('when getting properties for a Tfvc commitEvent', function() {
+        var repositoryUrls = ["https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/",
+            "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/"];
+
+        var expectedProperties = {
+            repo: '',
+            repoHref: repositoryUrls,
+            branchHref: ''
+        };
+
+        var commitEvent = {
+            sha: '87b66de8-8307-4e03-b2d3-da447c66501a',
+            commit: {
+                author:{
+                    name: "Sally Ann Cavanaugh",
+                    email: "scavanaugh@nowhere.com"
+                },
+                committer: {
+                    name: "Sally Ann Cavanaugh",
+                    email: "scavanaugh@nowhere.com",
+                    date: ''
+                },
+                message: "Sally Ann Cavanaugh checked in changeset 22"
+            },
+            html_url: ["https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/changeset/22",
+                        "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/changeset/22"],
+            repository: repositoryUrls,
+            branch:'',
+            originalMessage: {}
+        };
+
+        tfvcTranslator.getProperties(commitEvent).should.deep.equal(expectedProperties);
     });
 
     describe('when translating a push event that contains one commit for one project', function() {

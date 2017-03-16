@@ -62,6 +62,14 @@ var tfvcTranslator = {
         } catch (ex) {
             throw new _middlewareTfvcCommitMalformedError2['default'](ex, event);
         }
+    },
+    getProperties: function getProperties(commitEvent) {
+        var props = {
+            repo: '',
+            repoHref: commitEvent.repository,
+            branchHref: ''
+        };
+        return props;
     }
 };
 

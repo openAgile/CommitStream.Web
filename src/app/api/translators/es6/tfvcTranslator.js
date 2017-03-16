@@ -44,6 +44,14 @@ let tfvcTranslator = {
         } catch (ex) {
             throw new tfvcCommitMalformedError(ex, event);
         }
+    },
+    getProperties(commitEvent) {
+        const props = {
+            repo: '',
+            repoHref: commitEvent.repository,
+            branchHref: ''
+        };
+        return props;
     }
 }
 
