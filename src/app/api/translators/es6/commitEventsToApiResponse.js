@@ -8,22 +8,22 @@ export default (entries) => {
   const commits = [];
   for (let entry of entries) {
     try {
-      const e = JSON.parse(entry.data);
+      const commitEvent = JSON.parse(entry.data);
       const family = getFamily(entry.eventType);
       const translator = translatorFactory.getByFamily(family);
-      const props = translator.getProperties(e);
+      const props = translator.getProperties(commitEvent);
 
       let commit = {
-        commitDate: e.commit.committer.date,
-        timeFormatted: moment(e.commit.committer.date).fromNow(),
-        author: e.commit.committer.name,
-        sha1Partial: e.sha.substring(0, 6),
+        commitDate: commitEvent.commit.committer.date,
+        timeFormatted: moment(commitEvent.commit.committer.date).fromNow(),
+        author: commitEvent.commit.committer.name,
+        sha1Partial: commitEvent.sha.substring(0, 6),
         family,
         action: 'committed',
-        message: e.commit.message,
-        commitHref: e.html_url,
+        message: commitEvent.commit.message,
+        commitHref: commitEvent.html_url,
         repo: props.repo,
-        branch: e.branch,
+        branch: commitEvent.branch,
         branchHref: props.branchHref,
         repoHref: props.repoHref,
         isCommitHref: true
