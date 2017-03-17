@@ -137,10 +137,6 @@ describe('tfvcTranslator', function() {
         it('the translator should say it can translate the event', function() {
             tfvcTranslator.canTranslate(request).should.equal(true);
         });
-
-        it('it should have valid properties', function() {
-            tfvcTranslator.canTranslate(request).should.equal(true);
-        });
     });
 
     describe('when getting properties for a Tfvc commitEvent', function() {
