@@ -170,7 +170,9 @@ describe('tfvcTranslator', function() {
             originalMessage: {}
         };
 
-        tfvcTranslator.getProperties(commitEvent).should.deep.equal(expectedProperties);
+        it('it should provide appropriate properties refencing repositories and branches', function() {
+            tfvcTranslator.getProperties(commitEvent).should.deep.equal(expectedProperties);
+        })
     });
 
     describe('when translating a push event that contains one commit for one project', function() {
