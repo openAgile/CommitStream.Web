@@ -14,6 +14,10 @@ var _digestGet = require('./digestGet');
 
 var _digestGet2 = _interopRequireDefault(_digestGet);
 
+var _digestsGet = require('./digestsGet');
+
+var _digestsGet2 = _interopRequireDefault(_digestsGet);
+
 var _digestCommitsGet = require('./digestCommitsGet');
 
 var _digestCommitsGet2 = _interopRequireDefault(_digestCommitsGet);
@@ -30,7 +34,7 @@ exports['default'] = {
   init: function init(app) {
     app.post('/api/:instanceId/digests', _bodyParser2['default'].json(), _digestCreate2['default']);
     app.get('/api/:instanceId/digests/:digestId', _digestGet2['default']);
-    app.get('/api/:instanceId/digests', _digestGet2['default']);
+    app.get('/api/:instanceId/digests', _digestsGet2['default']);
     app.get('/api/:instanceId/digests/:digestId/commits', _digestCommitsGet2['default']);
     app.get('/api/:instanceId/digests/:digestId/inboxes', _digestInboxesGet2['default']);
   }
