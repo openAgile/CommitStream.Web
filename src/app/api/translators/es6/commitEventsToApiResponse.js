@@ -27,7 +27,7 @@ export default (entries) => {
         branchHref: props.branchHref,
         repoHref: props.repoHref,
         isCommitHref: true,
-        isTfvc: false
+        isVsoTfvc: false
       };
       const uiDecorator = uiDecoratorFactory.create(family);
 

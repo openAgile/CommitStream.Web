@@ -2,12 +2,12 @@ var chai = require('chai'),
   should = chai.should(),
   proxyquire = require('proxyquire');
 
-var tfvcUiTranslator = proxyquire('../../../../api/translators/uiDecorators/tfvcUiDecorator', {});
+var vsoTfvcUiTranslator = proxyquire('../../../../api/translators/uiDecorators/vsoTfvcUiDecorator', {});
 
-describe('tfvcUiTranslator', function() {
+describe('vsoTfvcUiTranslator', function() {
 
-  it('it should say it should decorate a TFVC family', function() {
-    tfvcUiTranslator.shouldDecorate('Tfvc').should.equal(true);
+  it('it should say it should decorate a VsoTfvc family', function() {
+    vsoTfvcUiTranslator.shouldDecorate('VsoTfvc').should.equal(true);
   });
 
   describe('when decorating the commit', function () {
@@ -17,7 +17,7 @@ describe('tfvcUiTranslator', function() {
       timeFormatted: '3 Hours Ago',
       author: 'Sally Ann Cavanaugh',
       sha1Partial: 'abcxyz',
-      family: 'Tfvc',
+      family: 'VsoTfvc',
       action: 'committed',
       message: 'Sally Ann Cavanaugh checked in changeset 22',
       commitHref: [ "https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/changeset/22",
@@ -28,7 +28,7 @@ describe('tfvcUiTranslator', function() {
       repoHref: ["https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/",
         "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/"],
       isCommitHref: true,
-      isTfvc: false
+      isVsoTfvc: false
     };
 
     var expectedDecoratedCommit = {
@@ -36,7 +36,7 @@ describe('tfvcUiTranslator', function() {
       timeFormatted: '3 Hours Ago',
       author: 'Sally Ann Cavanaugh',
       sha1Partial: 'abcxyz',
-      family: 'Tfvc',
+      family: 'VsoTfvc',
       action: 'committed',
       message: 'Sally Ann Cavanaugh checked in changeset 22',
       commitHref: [ "https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/changeset/22",
@@ -47,14 +47,14 @@ describe('tfvcUiTranslator', function() {
       repoHref: ["https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/",
         "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/"],
       isCommitHref: true,
-      isTfvc: true
+      isVsoTfvc: true
     };
 
     before(function() {
-      decoratedCommit = tfvcUiTranslator.decorateUIResponse(commitToDecorate);
+      decoratedCommit = vsoTfvcUiTranslator.decorateUIResponse(commitToDecorate);
     })
 
-    it('it should mark the commit as a TFVC commit', function() {
+    it('it should mark the commit as a VsoTfvc commit', function() {
       decoratedCommit.should.deep.equal(expectedDecoratedCommit);
     })
   });

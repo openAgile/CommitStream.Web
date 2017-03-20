@@ -14,19 +14,19 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-var _middlewareTfvcCommitMalformedError = require('../../middleware/tfvcCommitMalformedError');
+var _middlewareVsoTfvcCommitMalformedError = require('../../middleware/vsoTfvcCommitMalformedError');
 
-var _middlewareTfvcCommitMalformedError2 = _interopRequireDefault(_middlewareTfvcCommitMalformedError);
+var _middlewareVsoTfvcCommitMalformedError2 = _interopRequireDefault(_middlewareVsoTfvcCommitMalformedError);
 
 var _underscore = require('underscore');
 
 var _underscore2 = _interopRequireDefault(_underscore);
 
-var tfvcTranslator = {
+var vsoTfvcTranslator = {
     canTranslate: function canTranslate(request) {
-        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
+        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'vsoTfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
     },
-    family: _helpersVcsFamilies2['default'].Tfvc,
+    family: _helpersVcsFamilies2['default'].VsoTfvc,
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
         try {
             var commit = {
@@ -51,7 +51,7 @@ var tfvcTranslator = {
 
             return [{
                 eventId: (0, _uuidV42['default'])(),
-                eventType: tfvcTranslator.family + 'CommitReceived',
+                eventType: vsoTfvcTranslator.family + 'CommitReceived',
                 data: commit,
                 metadata: {
                     instanceId: instanceId,
@@ -60,7 +60,7 @@ var tfvcTranslator = {
                 }
             }];
         } catch (ex) {
-            throw new _middlewareTfvcCommitMalformedError2['default'](ex, event);
+            throw new _middlewareVsoTfvcCommitMalformedError2['default'](ex, event);
         }
     },
     getProperties: function getProperties(commitEvent) {
@@ -97,5 +97,5 @@ var getRepositoryUrlsPerProject = function getRepositoryUrlsPerProject(event) {
     return repositoryUrls;
 };
 
-exports['default'] = tfvcTranslator;
+exports['default'] = vsoTfvcTranslator;
 module.exports = exports['default'];

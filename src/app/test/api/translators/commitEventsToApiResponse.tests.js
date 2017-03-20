@@ -106,7 +106,7 @@ describe('commitEventsToApiResponse', function() {
     });
 
     it('defaults to marking the commit as not being from Tfvc', function() {
-      actual.commits[0].isTfvc.should.equal(false);
+      actual.commits[0].isVsoTfvc.should.equal(false);
     });
 
     it('defaults to marking the commit as having a commitHref', function() {

@@ -1,14 +1,14 @@
 import uuid from 'uuid-v4';
 import VcsFamilies from '../helpers/vcsFamilies';
-import TfvcCommitMalformedError from'../../middleware/tfvcCommitMalformedError';
+import VsoTfvcCommitMalformedError from'../../middleware/vsoTfvcCommitMalformedError';
 import _ from 'underscore';
 
-let tfvcTranslator = {
+let vsoTfvcTranslator = {
     canTranslate(request) {
-      return (_.isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin')
+      return (_.isString(request.body.eventType) && request.body.eventType === 'vsoTfvc.checkin')
         && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
     },
-    family: VcsFamilies.Tfvc,
+    family: VcsFamilies.VsoTfvc,
     translatePush(event, instanceId, digestId, inboxId) {
         try {
             const commit = {
@@ -33,7 +33,7 @@ let tfvcTranslator = {
 
             return [{
                 eventId: uuid(),
-                eventType: tfvcTranslator.family + 'CommitReceived',
+                eventType: vsoTfvcTranslator.family + 'CommitReceived',
                 data: commit,
                 metadata: {
                     instanceId,
@@ -42,7 +42,7 @@ let tfvcTranslator = {
                 }
             }];
         } catch (ex) {
-            throw new TfvcCommitMalformedError(ex, event);
+            throw new VsoTfvcCommitMalformedError(ex, event);
         }
     },
     getProperties(commitEvent) {
@@ -79,4 +79,4 @@ const getRepositoryUrlsPerProject = (event) => {
     return repositoryUrls;
 }
 
-export default tfvcTranslator;
+export default vsoTfvcTranslator;

@@ -10,15 +10,15 @@ var _helpersVcsFamilies = require('../../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-var tfvcUiDecorator = {
+var vsoTfvcUiDecorator = {
   shouldDecorate: function shouldDecorate(vcsFamily) {
-    return vcsFamily === _helpersVcsFamilies2['default'].Tfvc ? true : false;
+    return vcsFamily === _helpersVcsFamilies2['default'].VsoTfvc ? true : false;
   },
   decorateUIResponse: function decorateUIResponse(commit) {
-    commit.isTfvc = true;
+    commit.isVsoTfvc = true;
     return commit;
   }
 };
 
-exports['default'] = tfvcUiDecorator;
+exports['default'] = vsoTfvcUiDecorator;
 module.exports = exports['default'];

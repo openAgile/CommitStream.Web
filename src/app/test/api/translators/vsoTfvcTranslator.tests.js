@@ -3,17 +3,17 @@ var chai = require('chai'),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
     uuidStub = sinon.stub(),
-    TfvcCommitMalformedError = require('../../../middleware/tfvcCommitMalformedError'),
-    tfvcTranslator = proxyquire('../../../api/translators/tfvcTranslator', {
+    VsoTfvcCommitMalformedError = require('../../../middleware/vsoTfvcCommitMalformedError'),
+    vsoTfvcTranslator = proxyquire('../../../api/translators/vsoTfvcTranslator', {
         'uuid-v4': uuidStub
     });
 require('../../helpers')(global);
 
-var tfvcPushEventForOneProject = {
+var vsoTfvcPushEventForOneProject = {
     "subscriptionId": "20019a9b-3534-4705-a755-198d23de2ed7",
     "notificationId": 6,
     "id": "b72be65b-614d-4652-9ca9-11d2942a5c91",
-    "eventType": "tfvc.checkin",
+    "eventType": "vsoTfvc.checkin",
     "publisherId": "tfs",
     "scope": "all",
     "message": {
@@ -64,11 +64,11 @@ var tfvcPushEventForOneProject = {
     "createdDate": "2017-01-20T16:28:47.755774Z"
 };
 
-var tfvcPushEventForMoreThanOneProject= {
+var vsoTfvcPushEventForMoreThanOneProject= {
     "subscriptionId": "5a5419f9-8deb-46ca-8c9b-825e80311c6c",
     "notificationId": 1,
     "id": "b396843b-6f58-408d-b6dd-468be8d7a615",
-    "eventType": "tfvc.checkin",
+    "eventType": "vsoTfvc.checkin",
     "publisherId": "tfs",
     "scope": "all",
     "message": {
@@ -117,7 +117,7 @@ var tfvcPushEventForMoreThanOneProject= {
     "createdDate": "2017-03-08T20:54:37.2569716Z"
 };
 
-describe('tfvcTranslator', function() {
+describe('vsoTfvcTranslator', function() {
     var eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
     uuidStub.returns(eventId);
 
@@ -125,21 +125,21 @@ describe('tfvcTranslator', function() {
     var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
     var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
 
-    describe('when translating any valid TFVC push event', function() {
+    describe('when translating any valid VsoTfvc push event', function() {
         var request;
 
         before(function() {
             request = {
-                body: tfvcPushEventForOneProject
+                body: vsoTfvcPushEventForOneProject
             };
         });
 
         it('the translator should say it can translate the event', function() {
-            tfvcTranslator.canTranslate(request).should.equal(true);
+            vsoTfvcTranslator.canTranslate(request).should.equal(true);
         });
     });
 
-    describe('when getting properties for a Tfvc commitEvent', function() {
+    describe('when getting properties for a vsoTfvc commitEvent', function() {
         var repositoryUrls = ["https://testsystem.visualstudio.com/70cf8e3a-3ee1-4127-95d2-7f2563e5dc9e/_versionControl/",
             "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/"];
 
@@ -171,14 +171,14 @@ describe('tfvcTranslator', function() {
         };
 
         it('it should provide appropriate properties refencing repositories and branches', function() {
-            tfvcTranslator.getProperties(commitEvent).should.deep.equal(expectedProperties);
+            vsoTfvcTranslator.getProperties(commitEvent).should.deep.equal(expectedProperties);
         })
     });
 
     describe('when translating a push event that contains one commit for one project', function() {
         var expected = [{
             eventId: eventId,
-            eventType: "TfvcCommitReceived",
+            eventType: "VsoTfvcCommitReceived",
             data: {
                 sha: "b72be65b-614d-4652-9ca9-11d2942a5c91",
                 commit: {
@@ -198,7 +198,7 @@ describe('tfvcTranslator', function() {
                     url: ["https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/"]
                 },
                 branch: '',
-                originalMessage: tfvcPushEventForOneProject
+                originalMessage: vsoTfvcPushEventForOneProject
             },
             metadata: {
                 instanceId: instanceId,
@@ -209,7 +209,7 @@ describe('tfvcTranslator', function() {
         var actual;
 
         beforeEach(function() {
-            actual = tfvcTranslator.translatePush(tfvcPushEventForOneProject, instanceId, digestId, inboxId);
+            actual = vsoTfvcTranslator.translatePush(vsoTfvcPushEventForOneProject, instanceId, digestId, inboxId);
         });
 
         it('translated event should match our expected shape of data', function () {
@@ -229,7 +229,7 @@ describe('tfvcTranslator', function() {
     describe('when translating a push event for two projects', function() {
         var expected = [{
             eventId: eventId,
-            eventType: "TfvcCommitReceived",
+            eventType: "VsoTfvcCommitReceived",
             data: {
                 sha: "b396843b-6f58-408d-b6dd-468be8d7a615",
                 commit: {
@@ -251,7 +251,7 @@ describe('tfvcTranslator', function() {
                           "https://testsystem.visualstudio.com/fdc49ee6-ec19-43a4-bd08-55800484b342/_versionControl/"]
                 },
                 branch: '',
-                originalMessage: tfvcPushEventForMoreThanOneProject
+                originalMessage: vsoTfvcPushEventForMoreThanOneProject
             },
             metadata: {
                 instanceId: instanceId,
@@ -262,7 +262,7 @@ describe('tfvcTranslator', function() {
         var actual;
 
         beforeEach(function() {
-            actual = tfvcTranslator.translatePush(tfvcPushEventForMoreThanOneProject, instanceId, digestId, inboxId);
+            actual = vsoTfvcTranslator.translatePush(vsoTfvcPushEventForMoreThanOneProject, instanceId, digestId, inboxId);
         });
 
         it('translated event should match our expected shape of data', function () {
@@ -284,12 +284,12 @@ describe('tfvcTranslator', function() {
         beforeEach(function() {
             invokeTranslatePush = function() {
                 var malformedPushEvent = {};
-                tfvcTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId)
+                vsoTfvcTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId)
             }
         });
 
-        it('should throw TfvcCommitMalformedError', function() {
-            invokeTranslatePush.should.throw(TfvcCommitMalformedError);
+        it('should throw VsoTfvcCommitMalformedError', function() {
+            invokeTranslatePush.should.throw(VsoTfvcCommitMalformedError);
         });
     });
 });
