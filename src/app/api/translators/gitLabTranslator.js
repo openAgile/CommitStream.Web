@@ -52,11 +52,6 @@ var gitLabTranslator = {
             commit: {
               author: aCommit.author,
               // gitLab does not have a commit.committer object. Using the same thing as author for now.
-              // committer: {
-              //   name: aCommit.committer.name,
-              //   email: aCommit.committer.email,
-              //   date: aCommit.timestamp
-              // },
               committer: {
                 name: aCommit.author.name,
                 email: aCommit.author.email,
