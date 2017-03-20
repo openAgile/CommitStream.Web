@@ -13,6 +13,10 @@ var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 var tfvcUiDecorator = {
   shouldDecorate: function shouldDecorate(vcsFamily) {
     return vcsFamily === _helpersVcsFamilies2['default'].Tfvc ? true : false;
+  },
+  decorateUIResponse: function decorateUIResponse(commit) {
+    commit.isTfvc = true;
+    return commit;
   }
 };
 

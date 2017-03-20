@@ -26,7 +26,8 @@ export default (entries) => {
         branch: commitEvent.branch,
         branchHref: props.branchHref,
         repoHref: props.repoHref,
-        isCommitHref: true
+        isCommitHref: true,
+        isTfvc: false
       };
       const uiDecorator = uiDecoratorFactory.create(family);
 

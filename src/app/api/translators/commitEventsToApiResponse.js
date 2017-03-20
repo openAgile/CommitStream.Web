@@ -53,7 +53,8 @@ exports['default'] = function (entries) {
           branch: commitEvent.branch,
           branchHref: props.branchHref,
           repoHref: props.repoHref,
-          isCommitHref: true
+          isCommitHref: true,
+          isTfvc: false
         };
         var uiDecorator = _uiDecoratorsUiDecoratorFactory2['default'].create(family);
 
