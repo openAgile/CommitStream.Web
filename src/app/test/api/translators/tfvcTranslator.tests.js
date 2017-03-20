@@ -215,9 +215,13 @@ describe('tfvcTranslator', function() {
         it('translated event should match our expected shape of data', function () {
             actual.should.deep.equal(expected);
         });
+
+        it('translated event should have one html_url', function() {
+            actual[0].data.html_url.length.should.equal(1);
+        })
     });
 
-    describe('when translating a push event that contains more than one commit for one project', function() {
+    describe('when translating a push event for two projects', function() {
         var expected = [{
             eventId: eventId,
             eventType: "TfvcCommitReceived",
@@ -259,6 +263,10 @@ describe('tfvcTranslator', function() {
         it('translated event should match our expected shape of data', function () {
             actual.should.deep.equal(expected);
         });
+
+        it('translated event should have 2 html_urls', function() {
+            actual[0].data.html_url.length.should.equal(2);
+        })
     });
 
     describe('when translating a malformed push event', function() {
