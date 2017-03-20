@@ -216,9 +216,14 @@ describe('tfvcTranslator', function() {
             actual.should.deep.equal(expected);
         });
 
-        it('translated event should have one html_url', function() {
-            actual[0].data.html_url.length.should.equal(1);
+        it('translated event should have one repository url', function() {
+            actual[0].data.repository.url.length.should.equal(1);
         })
+
+
+      it('translated event should have one html_url', function() {
+        actual[0].data.html_url.length.should.equal(1);
+      })
     });
 
     describe('when translating a push event for two projects', function() {
@@ -266,6 +271,10 @@ describe('tfvcTranslator', function() {
 
         it('translated event should have 2 html_urls', function() {
             actual[0].data.html_url.length.should.equal(2);
+        })
+
+        it('translated event should have 2 repository urls', function() {
+          actual[0].data.repository.url.length.should.equal(2);
         })
     });
 
