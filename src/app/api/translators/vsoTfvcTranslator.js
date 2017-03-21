@@ -24,7 +24,7 @@ var _underscore2 = _interopRequireDefault(_underscore);
 
 var vsoTfvcTranslator = {
     canTranslate: function canTranslate(request) {
-        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'vsoTfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
+        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
     },
     family: _helpersVcsFamilies2['default'].VsoTfvc,
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {

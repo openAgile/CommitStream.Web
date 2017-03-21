@@ -5,7 +5,7 @@ import _ from 'underscore';
 
 let vsoTfvcTranslator = {
     canTranslate(request) {
-      return (_.isString(request.body.eventType) && request.body.eventType === 'vsoTfvc.checkin')
+      return (_.isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin')
         && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
     },
     family: VcsFamilies.VsoTfvc,

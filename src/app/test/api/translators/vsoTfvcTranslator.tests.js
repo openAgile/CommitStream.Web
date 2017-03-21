@@ -13,7 +13,7 @@ var vsoTfvcPushEventForOneProject = {
     "subscriptionId": "20019a9b-3534-4705-a755-198d23de2ed7",
     "notificationId": 6,
     "id": "b72be65b-614d-4652-9ca9-11d2942a5c91",
-    "eventType": "vsoTfvc.checkin",
+    "eventType": "tfvc.checkin",
     "publisherId": "tfs",
     "scope": "all",
     "message": {
@@ -68,7 +68,7 @@ var vsoTfvcPushEventForMoreThanOneProject= {
     "subscriptionId": "5a5419f9-8deb-46ca-8c9b-825e80311c6c",
     "notificationId": 1,
     "id": "b396843b-6f58-408d-b6dd-468be8d7a615",
-    "eventType": "vsoTfvc.checkin",
+    "eventType": "tfvc.checkin",
     "publisherId": "tfs",
     "scope": "all",
     "message": {
