@@ -34,7 +34,8 @@ const schema = {
                 'VsoGit',
                 vcsFamilies.Svn,
                 vcsFamilies.GitSwarm,
-                vcsFamilies.P4V
+                vcsFamilies.P4V,
+                vcsFamilies.VsoTfvc
             ]
         },
         name: {

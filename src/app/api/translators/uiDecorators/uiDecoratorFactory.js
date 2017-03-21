@@ -9,7 +9,7 @@ var _getIterator = require('babel-runtime/core-js/get-iterator')['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var decoratorNames = ['p4vUiDecorator', 'svnUiDecorator'];
+var decoratorNames = ['p4vUiDecorator', 'svnUiDecorator', 'vsoTfvcUiDecorator'];
 
 var decorators = decoratorNames.map(function (name) {
   return require('../uiDecorators/' + name);

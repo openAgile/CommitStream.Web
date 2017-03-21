@@ -38,7 +38,7 @@ var schema = {
         family: {
             title: 'Version Control System type',
             type: 'string',
-            'enum': ['Deveo', 'GitHub', 'GitLab', 'Bitbucket', 'VsoGit', _helpersVcsFamilies2['default'].Svn, _helpersVcsFamilies2['default'].GitSwarm, _helpersVcsFamilies2['default'].P4V]
+            'enum': ['Deveo', 'GitHub', 'GitLab', 'Bitbucket', 'VsoGit', _helpersVcsFamilies2['default'].Svn, _helpersVcsFamilies2['default'].GitSwarm, _helpersVcsFamilies2['default'].P4V, _helpersVcsFamilies2['default'].VsoTfvc]
         },
         name: {
             type: 'string',
