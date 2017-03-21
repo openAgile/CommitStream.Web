@@ -39,7 +39,7 @@ var vsoTfvcTranslator = {
                     committer: {
                         name: event.resource.checkedInBy.displayName,
                         email: event.resource.checkedInBy.uniqueName,
-                        date: ''
+                        date: event.resource.createdDate
                     },
                     message: event.message.text
                 },

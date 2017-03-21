@@ -189,7 +189,7 @@ describe('vsoTfvcTranslator', function() {
                     committer: {
                         name: "Josh Gough",
                         email: "jsgough@gmail.com",
-                        date: ''
+                        date: "2017-01-20T16:28:45Z"
                     },
                     message: "Josh Gough checked in changeset 17: Updated README.md S-12345"
                 },
@@ -240,7 +240,7 @@ describe('vsoTfvcTranslator', function() {
                     committer: {
                         name: "Sally Ann Cavanaugh",
                         email: "scavanaugh@nowhere.com",
-                        date: ''
+                        date: "2017-03-08T20:54:34Z"
                     },
                     message: "Sally Ann Cavanaugh checked in changeset 22"
                 },
