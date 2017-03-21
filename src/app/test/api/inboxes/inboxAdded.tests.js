@@ -60,7 +60,6 @@ describe('inboxAdded', function() {
       it('has data.name of passed argument value', function() {
         inboxAddedEvent.data.should.have.property('name', name);
       });
-
     });
   });
 });
