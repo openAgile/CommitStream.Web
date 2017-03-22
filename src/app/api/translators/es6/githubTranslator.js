@@ -3,9 +3,10 @@ import uuid from 'uuid-v4';
 import getProperties from './getProperties';
 import GitHubCommitMalformedError from '../../middleware/gitHubCommitMalformedError';
 import branchNameParse from './branchNameParse';
+import VcsFamilies from '../helpers/vcsFamilies';
 
 let githubTranslator = {
-  family: 'GitHub',
+  family: VcsFamilies.GitHub,
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       const branch = branchNameParse(pushEvent.ref);
@@ -33,7 +34,7 @@ let githubTranslator = {
         };
         return {
           eventId: uuid(),
-          eventType: 'GitHubCommitReceived',
+          eventType: githubTranslator.family + 'CommitReceived',
           data: commit,
           metadata: {
             instanceId,

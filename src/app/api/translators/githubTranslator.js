@@ -26,8 +26,12 @@ var _branchNameParse = require('./branchNameParse');
 
 var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
 var githubTranslator = {
-  family: 'GitHub',
+  family: _helpersVcsFamilies2['default'].GitHub,
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
@@ -57,7 +61,7 @@ var githubTranslator = {
             };
             return {
               eventId: (0, _uuidV42['default'])(),
-              eventType: 'GitHubCommitReceived',
+              eventType: githubTranslator.family + 'CommitReceived',
               data: commit,
               metadata: {
                 instanceId: instanceId,
