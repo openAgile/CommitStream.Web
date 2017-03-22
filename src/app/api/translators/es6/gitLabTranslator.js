@@ -2,12 +2,13 @@
   import GitLabCommitMalformedError from '../../middleware/gitLabCommitMalformedError';
   import getProperties from './getProperties';
   import branchNameParse from './branchNameParse';
+  import VcsFamilies from '../helpers/vcsFamilies';
 
   const hasCorrectHeaders = (headers) => headers.hasOwnProperty('x-gitlab-event')
     && headers['x-gitlab-event'] === 'Push Hook' && !headers.hasOwnProperty('x-gitswarm-event');
 
   const gitLabTranslator = {
-    family: 'GitLab',
+    family: VcsFamilies.GitLab,
     canTranslate(request) {
       // gitLab does not have a pusheEvent.repository.id field, and github does
       // gitLab does not have a commit.committer object, and github does
@@ -45,7 +46,7 @@
           };
           return {
             eventId: uuid(),
-            eventType: 'GitLabCommitReceived',
+            eventType: gitLabTranslator.family + 'CommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,

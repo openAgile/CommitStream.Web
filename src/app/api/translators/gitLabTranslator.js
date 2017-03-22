@@ -22,12 +22,16 @@ var _branchNameParse = require('./branchNameParse');
 
 var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
 var hasCorrectHeaders = function hasCorrectHeaders(headers) {
   return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook' && !headers.hasOwnProperty('x-gitswarm-event');
 };
 
 var gitLabTranslator = {
-  family: 'GitLab',
+  family: _helpersVcsFamilies2['default'].GitLab,
   canTranslate: function canTranslate(request) {
     // gitLab does not have a pusheEvent.repository.id field, and github does
     // gitLab does not have a commit.committer object, and github does
@@ -66,7 +70,7 @@ var gitLabTranslator = {
           };
           return {
             eventId: (0, _uuidV42['default'])(),
-            eventType: 'GitLabCommitReceived',
+            eventType: gitLabTranslator.family + 'CommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,
