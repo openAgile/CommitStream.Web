@@ -18,6 +18,14 @@ var _schemaValidator = require('../schemaValidator');
 
 var _schemaValidator2 = _interopRequireDefault(_schemaValidator);
 
+var getVcsFamilies = function getVcsFamilies() {
+    var families = [];
+    for (var family in _helpersVcsFamilies2['default']) {
+        families.push(_helpersVcsFamilies2['default'][family]);
+    }
+    return families.sort();
+};
+
 var schema = {
     title: 'inbox',
     type: 'object',
@@ -38,7 +46,7 @@ var schema = {
         family: {
             title: 'Version Control System type',
             type: 'string',
-            'enum': ['Deveo', 'GitHub', 'GitLab', 'Bitbucket', 'VsoGit', _helpersVcsFamilies2['default'].Svn, _helpersVcsFamilies2['default'].GitSwarm, _helpersVcsFamilies2['default'].P4V, _helpersVcsFamilies2['default'].VsoTfvc]
+            'enum': getVcsFamilies()
         },
         name: {
             type: 'string',

@@ -61,6 +61,7 @@ describe('inboxAdded', function() {
         inboxAddedEvent.data.should.have.property('name', name);
       });
     });
+
     describe('when validating', function() {
       var schemaValidator;
 
@@ -73,7 +74,7 @@ describe('inboxAdded', function() {
             type: "string"
           },
           family: {
-            enum: ["Deveo", "GitHub", "GitLab", "Bitbucket", "VsoGit", "Svn", "GitSwarm", "P4V", "VsoTfvc"],
+            enum: ["Bitbucket", "Deveo", "GitHub", "GitLab", "GitSwarm", "P4V", "Svn", "VsoGit", "VsoTfvc"],
             title: "Version Control System type",
             type: "string"
           },
@@ -105,16 +106,12 @@ describe('inboxAdded', function() {
             'uuid-v4': sinon.stub(),
             '../schemaValidator': schemaValidator
           });
-
           inboxAdded.validate({})
-
-      })
-
-
+      });
 
       it('the schemaValidator should be called with appropriate arguments', function() {
         schemaValidator.validate.should.have.been.calledWith('inbox', {}, expectedSchema);
-      })
+      });
     })
   });
 });
