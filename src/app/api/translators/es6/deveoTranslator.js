@@ -3,9 +3,10 @@ import uuid from 'uuid-v4';
 import DeveoCommitMalformedError from '../../middleware/deveoCommitMalformedError';
 import getProperties from './getProperties';
 import branchNameParse from './branchNameParse';
+import VcsFamilies from '../helpers/vcsFamilies';
 
 let deveoTranslator = {
-  family: 'Deveo',
+  family: VcsFamilies.Deveo,
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       const branch = branchNameParse(pushEvent.ref);
@@ -33,7 +34,7 @@ let deveoTranslator = {
         };
         return {
           eventId: uuid(),
-          eventType: 'DeveoCommitReceived',
+          eventType: deveoTranslator.family + 'CommitReceived',
           data: commit,
           metadata: {
             instanceId,

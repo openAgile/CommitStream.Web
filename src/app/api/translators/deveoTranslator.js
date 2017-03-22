@@ -26,8 +26,12 @@ var _branchNameParse = require('./branchNameParse');
 
 var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
 var deveoTranslator = {
-  family: 'Deveo',
+  family: _helpersVcsFamilies2['default'].Deveo,
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
@@ -57,7 +61,7 @@ var deveoTranslator = {
             };
             return {
               eventId: (0, _uuidV42['default'])(),
-              eventType: 'DeveoCommitReceived',
+              eventType: deveoTranslator.family + 'CommitReceived',
               data: commit,
               metadata: {
                 instanceId: instanceId,

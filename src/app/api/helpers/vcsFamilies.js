@@ -12,7 +12,8 @@ var vcsFamilies = {
 	'VsoGit': "VsoGit",
 	'VsoTfvc': "VsoTfvc",
 	'GitSwarm': "GitSwarm",
-	'P4V': "P4V"
+	'P4V': "P4V",
+	'Deveo': "Deveo"
 };
 
 exports['default'] = vcsFamilies;
