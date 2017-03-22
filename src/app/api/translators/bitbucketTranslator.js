@@ -22,8 +22,12 @@ var _getProperties2 = require('./getProperties');
 
 var _getProperties3 = _interopRequireDefault(_getProperties2);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
 var bitbucketTranslator = {
-  family: 'Bitbucket',
+  family: _helpersVcsFamilies2['default'].Bitbucket,
   hasCorrectHeaders: function hasCorrectHeaders(headers) {
     return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
   },
@@ -71,7 +75,7 @@ var bitbucketTranslator = {
           };
           return {
             eventId: (0, _uuidV42['default'])(),
-            eventType: 'BitbucketCommitReceived',
+            eventType: bitbucketTranslator.family + 'CommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,

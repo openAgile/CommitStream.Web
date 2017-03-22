@@ -2,9 +2,10 @@ import _ from 'underscore';
 import uuid from 'uuid-v4';
 import BitbucketCommitMalformedError from '../../middleware/bitbucketCommitMalformedError';
 import getProperties from './getProperties';
+import VcsFamilies from '../helpers/vcsFamilies';
 
 const bitbucketTranslator = {
-  family: 'Bitbucket',
+  family: VcsFamilies.Bitbucket,
   hasCorrectHeaders(headers) {
     return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
   },
@@ -52,7 +53,7 @@ const bitbucketTranslator = {
         };
         return {
           eventId: uuid(),
-          eventType: 'BitbucketCommitReceived',
+          eventType: bitbucketTranslator.family + 'CommitReceived',
           data: commit,
           metadata: {
             instanceId,
