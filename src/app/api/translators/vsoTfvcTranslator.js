@@ -23,10 +23,10 @@ var _underscore = require('underscore');
 var _underscore2 = _interopRequireDefault(_underscore);
 
 var vsoTfvcTranslator = {
+    family: _helpersVcsFamilies2['default'].VsoTfvc,
     canTranslate: function canTranslate(request) {
         return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
     },
-    family: _helpersVcsFamilies2['default'].VsoTfvc,
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
         try {
             var commit = {

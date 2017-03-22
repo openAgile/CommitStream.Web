@@ -3,8 +3,12 @@ import DeveoCommitMalformedError from '../../middleware/deveoCommitMalformedErro
 import branchNameParse from './branchNameParse';
 import VcsFamilies from '../helpers/vcsFamilies';
 
-let deveoTranslator = {
+const deveoTranslator = {
   family: VcsFamilies.Deveo,
+  canTranslate(request) {
+    const headers = request.headers;
+    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
+  },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       const branch = branchNameParse(pushEvent.ref);
@@ -45,12 +49,6 @@ let deveoTranslator = {
       throw new DeveoCommitMalformedError(ex, pushEvent);
     }
   },
-
-  canTranslate(request) {
-    const headers = request.headers;
-    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
-  },
-
   getProperties(event) {
     var commit = event.commit;
     var branch = event.branch;

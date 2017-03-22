@@ -6,11 +6,8 @@ import VcsFamilies from '../helpers/vcsFamilies';
 
 const bitbucketTranslator = {
   family: VcsFamilies.Bitbucket,
-  hasCorrectHeaders(headers) {
-    return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
-  },
-  canTranslate(request) { 
-    return this.hasCorrectHeaders(request.headers);
+  canTranslate(request) {
+    return hasCorrectHeaders(request.headers);
   },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
@@ -71,6 +68,10 @@ const bitbucketTranslator = {
   getProperties(event) {
     return getProperties(event, '/commits', 'branch');
   }
+};
+
+const hasCorrectHeaders = (headers) => {
+  return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
 };
 
 export default bitbucketTranslator;

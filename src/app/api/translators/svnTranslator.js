@@ -18,10 +18,6 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-var hasCorrectHeaders = function hasCorrectHeaders(headers) {
-  return headers.hasOwnProperty('cs-svn-event') && headers['cs-svn-event'] === 'Commit Event';
-};
-
 var svnTranslator = {
   family: _helpersVcsFamilies2['default'].Svn,
   canTranslate: function canTranslate(request) {
@@ -83,6 +79,10 @@ var svnTranslator = {
     };
     return props;
   }
+};
+
+var hasCorrectHeaders = function hasCorrectHeaders(headers) {
+  return headers.hasOwnProperty('cs-svn-event') && headers['cs-svn-event'] === 'Commit Event';
 };
 
 exports['default'] = svnTranslator;

@@ -24,6 +24,10 @@ var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
 var deveoTranslator = {
   family: _helpersVcsFamilies2['default'].Deveo,
+  canTranslate: function canTranslate(request) {
+    var headers = request.headers;
+    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
+  },
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
@@ -70,12 +74,6 @@ var deveoTranslator = {
       throw new _middlewareDeveoCommitMalformedError2['default'](ex, pushEvent);
     }
   },
-
-  canTranslate: function canTranslate(request) {
-    var headers = request.headers;
-    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
-  },
-
   getProperties: function getProperties(event) {
     var commit = event.commit;
     var branch = event.branch;

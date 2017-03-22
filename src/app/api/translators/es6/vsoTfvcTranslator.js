@@ -3,12 +3,12 @@ import VcsFamilies from '../helpers/vcsFamilies';
 import VsoTfvcCommitMalformedError from'../../middleware/vsoTfvcCommitMalformedError';
 import _ from 'underscore';
 
-let vsoTfvcTranslator = {
+const vsoTfvcTranslator = {
+    family: VcsFamilies.VsoTfvc,
     canTranslate(request) {
       return (_.isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin')
         && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
     },
-    family: VcsFamilies.VsoTfvc,
     translatePush(event, instanceId, digestId, inboxId) {
         try {
             const commit = {

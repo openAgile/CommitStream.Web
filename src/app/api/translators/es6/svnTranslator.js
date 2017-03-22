@@ -1,19 +1,16 @@
-  import uuid from 'uuid-v4';
-  import SvnCommitMalformedError from '../../middleware/svnCommitMalformedError';
-  import VcsFamilies from '../helpers/vcsFamilies';
+import uuid from 'uuid-v4';
+import SvnCommitMalformedError from '../../middleware/svnCommitMalformedError';
+import VcsFamilies from '../helpers/vcsFamilies';
 
-  const hasCorrectHeaders = (headers) => headers.hasOwnProperty('cs-svn-event')
-    && headers['cs-svn-event'] === 'Commit Event';
-
-  const svnTranslator = {
-    family: VcsFamilies.Svn,
-    canTranslate(request) {
+const svnTranslator = {
+  family: VcsFamilies.Svn,
+  canTranslate(request) {
       if (hasCorrectHeaders(request.headers)) {
         return true;
       }
       return false;
     },
-    translatePush(commitEvent, instanceId, digestId, inboxId) {
+  translatePush(commitEvent, instanceId, digestId, inboxId) {
       try {
         //svn does not have a branch information
         const branch = "";
@@ -58,7 +55,7 @@
         throw new SvnCommitMalformedError(ex, commitEvent);
       }
     },
-    getProperties(event) {
+  getProperties(event) {
       const props = {
         repo: event.repository.name,
         repoHref: event.repository.url,
@@ -67,5 +64,8 @@
       return props;
     }
 };
+
+const hasCorrectHeaders = (headers) => headers.hasOwnProperty('cs-svn-event')
+&& headers['cs-svn-event'] === 'Commit Event';
 
 export default svnTranslator;

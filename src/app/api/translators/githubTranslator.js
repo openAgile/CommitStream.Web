@@ -28,6 +28,10 @@ var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
 var githubTranslator = {
   family: _helpersVcsFamilies2['default'].GitHub,
+  canTranslate: function canTranslate(request) {
+    var headers = request.headers;
+    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+  },
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
@@ -73,10 +77,6 @@ var githubTranslator = {
     } catch (ex) {
       throw new _middlewareGitHubCommitMalformedError2['default'](ex, pushEvent);
     }
-  },
-  canTranslate: function canTranslate(request) {
-    var headers = request.headers;
-    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
   },
   getProperties: function getProperties(event) {
     return (0, _getProperties3['default'])(event, '/commit', 'tree');

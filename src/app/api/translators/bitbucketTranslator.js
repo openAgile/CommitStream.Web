@@ -28,11 +28,8 @@ var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
 var bitbucketTranslator = {
   family: _helpersVcsFamilies2['default'].Bitbucket,
-  hasCorrectHeaders: function hasCorrectHeaders(headers) {
-    return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
-  },
   canTranslate: function canTranslate(request) {
-    return this.hasCorrectHeaders(request.headers);
+    return hasCorrectHeaders(request.headers);
   },
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
@@ -98,6 +95,10 @@ var bitbucketTranslator = {
   getProperties: function getProperties(event) {
     return (0, _getProperties3['default'])(event, '/commits', 'branch');
   }
+};
+
+var hasCorrectHeaders = function hasCorrectHeaders(headers) {
+  return headers.hasOwnProperty('x-event-key') && headers['x-event-key'] === 'repo:push';
 };
 
 exports['default'] = bitbucketTranslator;

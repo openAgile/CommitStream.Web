@@ -4,8 +4,12 @@ import GitHubCommitMalformedError from '../../middleware/gitHubCommitMalformedEr
 import branchNameParse from './branchNameParse';
 import VcsFamilies from '../helpers/vcsFamilies';
 
-let githubTranslator = {
+const githubTranslator = {
   family: VcsFamilies.GitHub,
+  canTranslate(request) {
+    const headers = request.headers;
+    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+  },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       const branch = branchNameParse(pushEvent.ref);
@@ -45,10 +49,6 @@ let githubTranslator = {
     } catch (ex) {
       throw new GitHubCommitMalformedError(ex, pushEvent);
     }
-  },
-  canTranslate(request) {
-    const headers = request.headers;
-    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
   },
   getProperties(event) {
     return getProperties(event, '/commit', 'tree');
