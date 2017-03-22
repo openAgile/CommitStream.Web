@@ -6,10 +6,6 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _util = require('util');
-
-var _util2 = _interopRequireDefault(_util);
-
 var _uuidV4 = require('uuid-v4');
 
 var _uuidV42 = _interopRequireDefault(_uuidV4);

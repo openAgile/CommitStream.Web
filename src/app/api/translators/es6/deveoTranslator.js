@@ -1,7 +1,5 @@
-﻿import util from 'util';
-import uuid from 'uuid-v4';
+﻿import uuid from 'uuid-v4';
 import DeveoCommitMalformedError from '../../middleware/deveoCommitMalformedError';
-import getProperties from './getProperties';
 import branchNameParse from './branchNameParse';
 import VcsFamilies from '../helpers/vcsFamilies';
 

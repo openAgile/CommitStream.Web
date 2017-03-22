@@ -1,5 +1,4 @@
-﻿import util from 'util';
-import uuid from 'uuid-v4';
+﻿import uuid from 'uuid-v4';
 import getProperties from './getProperties';
 import GitHubCommitMalformedError from '../../middleware/gitHubCommitMalformedError';
 import branchNameParse from './branchNameParse';
