@@ -181,7 +181,7 @@
 
       let family = '';
       let familyHover = '';
-      let showVsoChoices = false;
+      let showVSTSChoices = false;
       let selectedVcs = '';
 
       $scope.vstsSelection = function(value) {
@@ -194,7 +194,7 @@
         }
       }
 
-      let toggleVsoChoices = () => showVsoChoices = !showVsoChoices;
+      let toggleVsoChoices = () => showVSTSChoices = !showVSTSChoices;
 
       $scope.setSelectedVcs = (Vcs) => {
         selectedVcs = Vcs;
@@ -221,7 +221,7 @@
 
       $scope.familyIsSelected = familyName => family === familyName;
 
-      $scope.showVsoChoices = () => { return showVsoChoices; }
+      $scope.showVSTSChoices = () => { return showVSTSChoices; }
 
       $scope.familyHasBeenSelected = () => family !== '';
 
