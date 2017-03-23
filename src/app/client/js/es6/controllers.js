@@ -194,6 +194,8 @@
         }
       }
 
+      let toggleVsoChoices = () => showVsoChoices = !showVsoChoices;
+
       $scope.setSelectedVcs = (Vcs) => {
         selectedVcs = Vcs;
         setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
@@ -218,8 +220,6 @@
         (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
 
       $scope.familyIsSelected = familyName => family === familyName;
-
-      let toggleVsoChoices = () => showVsoChoices = !showVsoChoices;
 
       $scope.showVsoChoices = () => { return showVsoChoices; }
 

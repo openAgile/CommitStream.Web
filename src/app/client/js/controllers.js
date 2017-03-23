@@ -208,6 +208,10 @@
       }
     };
 
+    var toggleVsoChoices = function toggleVsoChoices() {
+      return showVsoChoices = !showVsoChoices;
+    };
+
     $scope.setSelectedVcs = function (Vcs) {
       selectedVcs = Vcs;
       setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
@@ -239,10 +243,6 @@
 
     $scope.familyIsSelected = function (familyName) {
       return family === familyName;
-    };
-
-    var toggleVsoChoices = function toggleVsoChoices() {
-      return showVsoChoices = !showVsoChoices;
     };
 
     $scope.showVsoChoices = function () {
