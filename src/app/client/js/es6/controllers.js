@@ -192,9 +192,7 @@
         selectedVcs = Vcs;
       }
 
-      $scope.setClass = (Vcs) => {
-        return (selectedVcs === Vcs) ? 'family-selected' : '';
-      }
+      $scope.getClass = (Vcs) => (selectedVcs === Vcs) ? 'family-selected' : '';
 
       $scope.familySelect = newFamily => {
         family = newFamily;

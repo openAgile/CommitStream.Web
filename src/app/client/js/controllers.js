@@ -206,7 +206,7 @@
       selectedVcs = Vcs;
     };
 
-    $scope.setClass = function (Vcs) {
+    $scope.getClass = function (Vcs) {
       return selectedVcs === Vcs ? 'family-selected' : '';
     };
 
