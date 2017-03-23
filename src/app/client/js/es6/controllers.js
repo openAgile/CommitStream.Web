@@ -189,13 +189,17 @@
       }
 
       let setFamilyOnlyForVCSWithNoSubFamilies = (Vcs) => {
-        if(Vcs != "VSTS")
-          $scope.familySelect(Vcs)
+        if(Vcs != "VSTS") {
+          $scope.familySelect(Vcs);
+        }
       }
       
       $scope.setSelectedVcs = (Vcs) => {
         selectedVcs = Vcs;
         setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
+        if(Vcs == "VSTS") {
+          $scope.toggleVsoChoices();
+        }
       }
 
       $scope.getClass = (Vcs) => (selectedVcs === Vcs) ? 'family-selected' : '';

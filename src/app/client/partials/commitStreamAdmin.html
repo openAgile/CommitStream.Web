@@ -494,7 +494,7 @@ div.vcs-vso-options input[type="radio"] {
           <button type='button' ng-click='setSelectedVcs("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{getClass("Bitbucket")}}'>Bitbucket<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
         </div>
         <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedVcs("VSTS");toggleVsoChoices()' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{getClass("VSTS")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
+          <button type='button' ng-click='setSelectedVcs("VSTS")' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{getClass("VSTS")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
           <div class='vcs-vso-options' ng-if='showVsoChoices()'>
               <label><input type="radio" name="vsoFamily" ng-model="value" value="VsoGit" ng-change='vstsSelection(value)'/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
               <br/>

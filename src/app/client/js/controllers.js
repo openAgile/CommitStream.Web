@@ -203,12 +203,17 @@
     };
 
     var setFamilyOnlyForVCSWithNoSubFamilies = function setFamilyOnlyForVCSWithNoSubFamilies(Vcs) {
-      if (Vcs != "VSTS") $scope.familySelect(Vcs);
+      if (Vcs != "VSTS") {
+        $scope.familySelect(Vcs);
+      }
     };
 
     $scope.setSelectedVcs = function (Vcs) {
       selectedVcs = Vcs;
       setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
+      if (Vcs == "VSTS") {
+        $scope.toggleVsoChoices();
+      }
     };
 
     $scope.getClass = function (Vcs) {
