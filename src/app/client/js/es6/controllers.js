@@ -190,6 +190,8 @@
 
       $scope.setSelectedVcs = (Vcs) => {
         selectedVcs = Vcs;
+       if(Vcs != "VSTS")
+          $scope.familySelect(Vcs)
       }
 
       $scope.getClass = (Vcs) => (selectedVcs === Vcs) ? 'family-selected' : '';

@@ -204,6 +204,7 @@
 
     $scope.setSelectedVcs = function (Vcs) {
       selectedVcs = Vcs;
+      if (Vcs != "VSTS") $scope.familySelect(Vcs);
     };
 
     $scope.getClass = function (Vcs) {
