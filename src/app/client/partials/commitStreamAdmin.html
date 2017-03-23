@@ -496,10 +496,10 @@ div.vcs-vso-options input[type="radio"] {
         <div class='vcs-family'>
           <button type='button' ng-click='familySelect("VsoGit")' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("VsoGit")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
           <div class='vcs-vso-options' ng-if='familyIsSelected("VsoGit")'>
-            <label><input type="radio" checked="true"/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
+            <label><input type="radio" checked name="vsoFamily"/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
             <br/>
             <br/>
-            <label title='VsoTfvc is not currently supported'><input type='radio' disabled='disabled'><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:6px;" />&nbspVsoTfvc</label>
+            <label><input type='radio' name="vsoFamily"><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:6px;" />&nbspVsoTfvc</label>
           </div>
         </div>
        <div class='vcs-family'>
