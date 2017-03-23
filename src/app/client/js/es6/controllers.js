@@ -181,6 +181,11 @@
 
       let family = '';
       let familyHover = '';
+      let showVsoChoices = false;
+
+      $scope.vstsSelection = function(value) {
+        $scope.familySelect(value);
+      }
 
       $scope.familySelect = newFamily => {
         family = newFamily;
@@ -196,6 +201,10 @@
         (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
 
       $scope.familyIsSelected = familyName => family === familyName;
+
+      $scope.toggleVsoChoices = () => showVsoChoices = !showVsoChoices;
+
+      $scope.showVsoChoices = () => { return showVsoChoices; }
 
       $scope.familyHasBeenSelected = () => family !== '';
 

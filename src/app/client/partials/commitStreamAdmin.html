@@ -494,12 +494,11 @@ div.vcs-vso-options input[type="radio"] {
           <button type='button' ng-click='familySelect("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("Bitbucket")}}'>Bitbucket<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
         </div>
         <div class='vcs-family'>
-          <button type='button' ng-click='familySelect("VsoGit")' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("VsoGit")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
-          <div class='vcs-vso-options' ng-if='familyIsSelected("VsoGit")'>
-            <label><input type="radio" checked name="vsoFamily"/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
-            <br/>
-            <br/>
-            <label><input type='radio' name="vsoFamily"><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:6px;" />&nbspVsoTfvc</label>
+          <button type='button' ng-click='toggleVsoChoices()' ng-mouseenter='familyHover("VsoGit")' ng-mouseleave='familyHover("")' class='{{familyIsSelectedClass("VsoGit")}} {{familyIsSelectedClass("VsoTfvc")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("VsoGit")}}' style="height:32px;" /></button>
+          <div class='vcs-vso-options' ng-if='showVsoChoices()'>
+              <label><input type="radio" name="vsoFamily" ng-model="value" value="VsoGit" ng-change='vstsSelection(value)'/><img ng-src='{{familyOptionIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
+              <br/>
+              <label><input type='radio' name="vsoFamily" ng-model="value" value="VsoTfvc" ng-change='vstsSelection(value)'><img ng-src='{{familyOptionIcon("vso-tfvc")}}' style="height:24px; margin-left:6px;" />&nbspVsoTfvc</label>
           </div>
         </div>
        <div class='vcs-family'>

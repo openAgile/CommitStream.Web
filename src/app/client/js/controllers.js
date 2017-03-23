@@ -195,6 +195,11 @@
 
     var family = '';
     var familyHover = '';
+    var showVsoChoices = false;
+
+    $scope.vstsSelection = function (value) {
+      $scope.familySelect(value);
+    };
 
     $scope.familySelect = function (newFamily) {
       family = newFamily;
@@ -215,6 +220,14 @@
 
     $scope.familyIsSelected = function (familyName) {
       return family === familyName;
+    };
+
+    $scope.toggleVsoChoices = function () {
+      return showVsoChoices = !showVsoChoices;
+    };
+
+    $scope.showVsoChoices = function () {
+      return showVsoChoices;
     };
 
     $scope.familyHasBeenSelected = function () {
