@@ -182,9 +182,18 @@
       let family = '';
       let familyHover = '';
       let showVsoChoices = false;
+      let selectedVcs = '';
 
       $scope.vstsSelection = function(value) {
         $scope.familySelect(value);
+      }
+
+      $scope.setSelectedVcs = (Vcs) => {
+        selectedVcs = Vcs;
+      }
+
+      $scope.setClass = (Vcs) => {
+        return (selectedVcs === Vcs) ? 'family-selected' : '';
       }
 
       $scope.familySelect = newFamily => {

@@ -196,9 +196,18 @@
     var family = '';
     var familyHover = '';
     var showVsoChoices = false;
+    var selectedVcs = '';
 
     $scope.vstsSelection = function (value) {
       $scope.familySelect(value);
+    };
+
+    $scope.setSelectedVcs = function (Vcs) {
+      selectedVcs = Vcs;
+    };
+
+    $scope.setClass = function (Vcs) {
+      return selectedVcs === Vcs ? 'family-selected' : '';
     };
 
     $scope.familySelect = function (newFamily) {
