@@ -193,12 +193,12 @@
           $scope.familySelect(Vcs);
         }
       }
-      
+
       $scope.setSelectedVcs = (Vcs) => {
         selectedVcs = Vcs;
         setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
         if(Vcs == "VSTS") {
-          $scope.toggleVsoChoices();
+          toggleVsoChoices();
         }
       }
 
@@ -219,7 +219,7 @@
 
       $scope.familyIsSelected = familyName => family === familyName;
 
-      $scope.toggleVsoChoices = () => showVsoChoices = !showVsoChoices;
+      let toggleVsoChoices = () => showVsoChoices = !showVsoChoices;
 
       $scope.showVsoChoices = () => { return showVsoChoices; }
 

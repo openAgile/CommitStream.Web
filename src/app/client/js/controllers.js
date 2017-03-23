@@ -212,7 +212,7 @@
       selectedVcs = Vcs;
       setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
       if (Vcs == "VSTS") {
-        $scope.toggleVsoChoices();
+        toggleVsoChoices();
       }
     };
 
@@ -241,7 +241,7 @@
       return family === familyName;
     };
 
-    $scope.toggleVsoChoices = function () {
+    var toggleVsoChoices = function toggleVsoChoices() {
       return showVsoChoices = !showVsoChoices;
     };
 
