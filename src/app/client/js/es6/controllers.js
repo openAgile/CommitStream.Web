@@ -225,7 +225,13 @@
 
       $scope.familyHasBeenSelected = () => family !== '';
 
-      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
+      $scope.familyIcon = familyName => {
+        if(familyName == "VsoTfvc") {
+          familyName = "VsoGit"
+        }
+
+        return `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
+      }
 
       $scope.familyOptionIcon = familyOptionName => `${serviceUrl}/icon-${familyOptionName.toLowerCase()}-selected-24x24.png`;
 
