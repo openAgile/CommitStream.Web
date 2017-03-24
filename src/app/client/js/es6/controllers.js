@@ -188,10 +188,6 @@
         $scope.familySelect(value);
       }
 
-
-
-      let toggleVsoChoices = () => showVSTSChoices = !showVSTSChoices;
-
       let setFamilyWhenNotVsts = (Vcs) => {
         if(Vcs != "VSTS") {
           $scope.familySelect(Vcs);
@@ -200,7 +196,7 @@
 
       let alwaysToggleWhenVsts = (Vcs) => {
         if(Vcs == "VSTS") {
-          toggleVsoChoices();
+          showVSTSChoices = true;
         }
       }
 

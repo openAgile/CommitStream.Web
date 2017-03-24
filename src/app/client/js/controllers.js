@@ -214,7 +214,7 @@
 
     var alwaysToggleWhenVsts = function alwaysToggleWhenVsts(Vcs) {
       if (Vcs == "VSTS") {
-        toggleVsoChoices();
+        showVSTSChoices = true;
       }
     };
 
