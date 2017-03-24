@@ -188,7 +188,7 @@
         if ($scope.isDigestMode()) {
           if (isCustomDigest()) {
             return 'Setup TeamRoom Repositories';
-          } else return $scope.inboxes.length > 0 ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+          } else return hasInboxes() ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
         }
       }
     };
@@ -450,14 +450,26 @@
             inboxConfigure(inbox);
             $scope.inboxes.unshift(inbox);
           });
-          if ($scope.inboxes.length > 0) {
-            $scope.familySelect($scope.inboxes[0].family);
-          }
+          setCurrentFamilyToLastCreatedInboxFamily();
           getInboxesDone();
         })['catch'](errorHandler);
       } else {
         getInboxesDone();
       }
+    };
+
+    var setCurrentFamilyToLastCreatedInboxFamily = function setCurrentFamilyToLastCreatedInboxFamily() {
+      if (hasInboxes()) {
+        $scope.familySelect(getLastCreatedInboxFamily());
+      }
+    };
+
+    var getLastCreatedInboxFamily = function getLastCreatedInboxFamily() {
+      return $scope.inboxes[0].family;
+    };
+
+    var hasInboxes = function hasInboxes() {
+      return $scope.inboxes.length > 0;
     };
 
     var inboxesUpdate = function inboxesUpdate(enabled) {
