@@ -6,10 +6,6 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _util = require('util');
-
-var _util2 = _interopRequireDefault(_util);
-
 var _uuidV4 = require('uuid-v4');
 
 var _uuidV42 = _interopRequireDefault(_uuidV4);
@@ -18,16 +14,20 @@ var _middlewareDeveoCommitMalformedError = require('../../middleware/deveoCommit
 
 var _middlewareDeveoCommitMalformedError2 = _interopRequireDefault(_middlewareDeveoCommitMalformedError);
 
-var _getProperties = require('./getProperties');
-
-var _getProperties2 = _interopRequireDefault(_getProperties);
-
 var _branchNameParse = require('./branchNameParse');
 
 var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
 var deveoTranslator = {
-  family: 'Deveo',
+  family: _helpersVcsFamilies2['default'].Deveo,
+  canTranslate: function canTranslate(request) {
+    var headers = request.headers;
+    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
+  },
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       var _ret = (function () {
@@ -57,7 +57,7 @@ var deveoTranslator = {
             };
             return {
               eventId: (0, _uuidV42['default'])(),
-              eventType: 'DeveoCommitReceived',
+              eventType: deveoTranslator.family + 'CommitReceived',
               data: commit,
               metadata: {
                 instanceId: instanceId,
@@ -74,12 +74,6 @@ var deveoTranslator = {
       throw new _middlewareDeveoCommitMalformedError2['default'](ex, pushEvent);
     }
   },
-
-  canTranslate: function canTranslate(request) {
-    var headers = request.headers;
-    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
-  },
-
   getProperties: function getProperties(event) {
     var commit = event.commit;
     var branch = event.branch;

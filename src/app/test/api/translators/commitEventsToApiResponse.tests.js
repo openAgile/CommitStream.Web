@@ -1,6 +1,7 @@
 var chai = require('chai'),
   should = chai.should(),
-  commitEventsToApiResponse = require('../../../api/translators/commitEventsToApiResponse');
+  proxyquire = require('proxyquire'),
+  sinon = require('sinon');
 
 var eventsData = {};
 
@@ -29,18 +30,52 @@ eventsData.single = [{
 
 describe('commitEventsToApiResponse', function() {
 
-  describe('when 0 events present', function() {
+  describe('given 0 events present', function() {
+    var actual;
+    var commitEventsToApiResponse;
+    var uiDecorator;
+    var uiDecoratorFactory;
+
+    before(function() {
+      uiDecorator = {
+        decorateUIResponse: sinon.spy()
+      };
+
+      uiDecoratorFactory = {
+        create: uiDecorator
+      };
+
+      commitEventsToApiResponse = proxyquire('../../../api/translators/commitEventsToApiResponse', {
+        './uiDecorators/uiDecoratorFactory': uiDecoratorFactory
+      });
+
+      actual = commitEventsToApiResponse([]);
+    });
+
     it('returns an empty array', function() {
-      var actual = commitEventsToApiResponse([]);
       actual.should.deep.equal({
         commits: []
       });
     });
   });
 
-  describe('when 1 event present', function() {
+  describe('given 1 event present', function() {
 
-    var actual = commitEventsToApiResponse(eventsData.single);
+    var actual;
+    var commitEventsToApiResponse;
+    var uiDecoratorFactory;
+
+    before(function() {
+      uiDecoratorFactory = {
+        create: sinon.stub()
+      };
+
+      commitEventsToApiResponse = proxyquire('../../../api/translators/commitEventsToApiResponse', {
+        './uiDecorators/uiDecoratorFactory': uiDecoratorFactory
+      });
+
+      actual = commitEventsToApiResponse(eventsData.single);
+    });
 
     it('returns 1 mapped event', function() {
       actual.commits.length.should.equal(1);
@@ -70,6 +105,39 @@ describe('commitEventsToApiResponse', function() {
       );
     });
 
+    it('defaults to marking the commit as not being from Tfvc', function() {
+      actual.commits[0].isVsoTfvc.should.equal(false);
+    });
+
+    it('defaults to marking the commit as having a commitHref', function() {
+      actual.commits[0].isCommitHref.should.equal(true);
+    });
   });
 
+  describe('when a commit should be decorated', function() {
+    var commitEventsToApiResponse;
+    var uiDecorator;
+    var uiDecoratorFactory;
+
+    before(function() {
+      uiDecorator = {
+        decorateUIResponse: sinon.spy()
+      };
+
+      uiDecoratorFactory = {
+        create: sinon.stub()
+      };
+
+      commitEventsToApiResponse = proxyquire('../../../api/translators/commitEventsToApiResponse', {
+        './uiDecorators/uiDecoratorFactory': uiDecoratorFactory
+      });
+
+      uiDecoratorFactory.create.returns(uiDecorator);
+      commitEventsToApiResponse(eventsData.single);
+    });
+
+    it('it should ask the UIDecorator to decorate the commit', function() {
+      uiDecorator.decorateUIResponse.should.be.calledOnce;
+    });
+  });
 });

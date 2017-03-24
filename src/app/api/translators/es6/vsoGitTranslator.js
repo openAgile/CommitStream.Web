@@ -1,11 +1,11 @@
-import util from 'util';
 import uuid from 'uuid-v4';
 import branchNameParse from './branchNameParse';
 import _ from 'underscore';
 import VsoGitCommitMalformedError from '../../middleware/vsoGitCommitMalformedError';
+import VcsFamilies from '../helpers/vcsFamilies';
 
 const vsoGitTranslator = {
-  family: 'VsoGit',
+  family: VcsFamilies.VsoGit,
   canTranslate(request) {
     return (_.isString(request.body.eventType) && request.body.eventType === 'git.push')
     && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs')
@@ -50,7 +50,7 @@ const vsoGitTranslator = {
         };
         return {
           eventId: uuid(),
-          eventType: 'VsoGitCommitReceived',
+          eventType: vsoGitTranslator.family + 'CommitReceived',
           data: commit,
           metadata: {
             instanceId: instanceId,

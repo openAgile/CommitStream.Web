@@ -1,11 +1,15 @@
-﻿import util from 'util';
-import uuid from 'uuid-v4';
+﻿import uuid from 'uuid-v4';
 import getProperties from './getProperties';
 import GitHubCommitMalformedError from '../../middleware/gitHubCommitMalformedError';
 import branchNameParse from './branchNameParse';
+import VcsFamilies from '../helpers/vcsFamilies';
 
-let githubTranslator = {
-  family: 'GitHub',
+const githubTranslator = {
+  family: VcsFamilies.GitHub,
+  canTranslate(request) {
+    const headers = request.headers;
+    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
+  },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       const branch = branchNameParse(pushEvent.ref);
@@ -33,7 +37,7 @@ let githubTranslator = {
         };
         return {
           eventId: uuid(),
-          eventType: 'GitHubCommitReceived',
+          eventType: githubTranslator.family + 'CommitReceived',
           data: commit,
           metadata: {
             instanceId,
@@ -45,10 +49,6 @@ let githubTranslator = {
     } catch (ex) {
       throw new GitHubCommitMalformedError(ex, pushEvent);
     }
-  },
-  canTranslate(request) {
-    const headers = request.headers;
-    return headers.hasOwnProperty('x-github-event') && headers['x-github-event'] === 'push';
   },
   getProperties(event) {
     return getProperties(event, '/commit', 'tree');

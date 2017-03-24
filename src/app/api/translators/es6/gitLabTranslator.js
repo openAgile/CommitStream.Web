@@ -1,14 +1,12 @@
-  import uuid from 'uuid-v4';
-  import GitLabCommitMalformedError from '../../middleware/gitLabCommitMalformedError';
-  import getProperties from './getProperties';
-  import branchNameParse from './branchNameParse';
+import uuid from 'uuid-v4';
+import GitLabCommitMalformedError from '../../middleware/gitLabCommitMalformedError';
+import getProperties from './getProperties';
+import branchNameParse from './branchNameParse';
+import VcsFamilies from '../helpers/vcsFamilies';
 
-  const hasCorrectHeaders = (headers) => headers.hasOwnProperty('x-gitlab-event')
-    && headers['x-gitlab-event'] === 'Push Hook' && !headers.hasOwnProperty('x-gitswarm-event');
-
-  const gitLabTranslator = {
-    family: 'GitLab',
-    canTranslate(request) {
+const gitLabTranslator = {
+  family: VcsFamilies.GitLab,
+  canTranslate(request) {
       // gitLab does not have a pusheEvent.repository.id field, and github does
       // gitLab does not have a commit.committer object, and github does
       if (hasCorrectHeaders(request.headers)) {
@@ -16,7 +14,7 @@
       }
       return false;
     },
-    translatePush(pushEvent, instanceId, digestId, inboxId) {
+  translatePush(pushEvent, instanceId, digestId, inboxId) {
       try {
         const branch = branchNameParse(pushEvent.ref);
         const repository = {
@@ -31,11 +29,6 @@
             commit: {
               author: aCommit.author,
               // gitLab does not have a commit.committer object. Using the same thing as author for now.
-              // committer: {
-              //   name: aCommit.committer.name,
-              //   email: aCommit.committer.email,
-              //   date: aCommit.timestamp
-              // },
               committer: {
                 name: aCommit.author.name,
                 email: aCommit.author.email,
@@ -50,7 +43,7 @@
           };
           return {
             eventId: uuid(),
-            eventType: 'GitLabCommitReceived',
+            eventType: gitLabTranslator.family + 'CommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,
@@ -65,9 +58,12 @@
         throw new GitLabCommitMalformedError(ex, pushEvent);
       }
     },
-    getProperties(event) {
+  getProperties(event) {
       return getProperties(event, '/commit', 'tree');
     }
 };
+
+const hasCorrectHeaders = (headers) => headers.hasOwnProperty('x-gitlab-event')
+&& headers['x-gitlab-event'] === 'Push Hook' && !headers.hasOwnProperty('x-gitswarm-event');
 
 export default gitLabTranslator;

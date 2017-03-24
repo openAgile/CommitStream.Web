@@ -18,10 +18,6 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-var hasCorrectHeaders = function hasCorrectHeaders(headers) {
-  return headers.hasOwnProperty('cs-p4v-event') && headers['cs-p4v-event'] === 'Commit Event';
-};
-
 var p4vTranslator = {
   family: _helpersVcsFamilies2['default'].P4V,
   canTranslate: function canTranslate(request) {
@@ -82,6 +78,10 @@ var p4vTranslator = {
     };
     return props;
   }
+};
+
+var hasCorrectHeaders = function hasCorrectHeaders(headers) {
+  return headers.hasOwnProperty('cs-p4v-event') && headers['cs-p4v-event'] === 'Commit Event';
 };
 
 exports['default'] = p4vTranslator;

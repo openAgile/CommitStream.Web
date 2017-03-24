@@ -1,19 +1,16 @@
-  import uuid from 'uuid-v4';
-  import P4vCommitMalformedError from '../../middleware/p4vCommitMalformedError';
-  import VcsFamilies from '../helpers/vcsFamilies';
+import uuid from 'uuid-v4';
+import P4vCommitMalformedError from '../../middleware/p4vCommitMalformedError';
+import VcsFamilies from '../helpers/vcsFamilies';
 
-  const hasCorrectHeaders = (headers) => headers.hasOwnProperty('cs-p4v-event')
-    && headers['cs-p4v-event'] === 'Commit Event';
-
-  const p4vTranslator = {
-    family: VcsFamilies.P4V,
-    canTranslate(request) {
+const p4vTranslator = {
+  family: VcsFamilies.P4V,
+  canTranslate(request) {
       if (hasCorrectHeaders(request.headers)) {
         return true;
       }
       return false;
     },
-    translatePush(commitEvent, instanceId, digestId, inboxId) {
+  translatePush(commitEvent, instanceId, digestId, inboxId) {
       try {
         //p4v does not have a branch information
         const branch = "";
@@ -57,7 +54,7 @@
         throw new P4vCommitMalformedError(ex, commitEvent);
       }
     },
-    getProperties(event) {
+  getProperties(event) {
       const props = {
         repo: event.repository.name,
         repoHref: event.repository.url,
@@ -66,5 +63,8 @@
       return props;
     }
 };
+
+const hasCorrectHeaders = (headers) => headers.hasOwnProperty('cs-p4v-event')
+  && headers['cs-p4v-event'] === 'Commit Event';
 
 export default p4vTranslator;
