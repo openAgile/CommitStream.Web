@@ -214,6 +214,15 @@
         alwaysCloseWhenNotVsts(Vcs);
       }
 
+      $scope.initializeButtonOnLoad = (Vcs) => {
+        $scope.familySelect(Vcs);
+        selectedVcs = Vcs;
+        if(Vcs == "VsoGit" || Vcs == "VsoTfvc") {
+          showVSTSChoices = true;
+          selectedVcs = "VSTS";
+        }
+      }
+
       $scope.getClass = (Vcs) => (selectedVcs === Vcs) ? 'family-selected' : '';
 
       $scope.familySelect = newFamily => {
@@ -428,7 +437,7 @@
 
       let setCurrentFamilyToLastCreatedInboxFamily = () => {
         if (hasInboxes()) {
-          $scope.familySelect(getLastCreatedInboxFamily());
+          $scope.initializeButtonOnLoad(getLastCreatedInboxFamily());
         }
       }
 

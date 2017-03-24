@@ -228,6 +228,15 @@
       alwaysCloseWhenNotVsts(Vcs);
     };
 
+    $scope.initializeButtonOnLoad = function (Vcs) {
+      $scope.familySelect(Vcs);
+      selectedVcs = Vcs;
+      if (Vcs == "VsoGit" || Vcs == "VsoTfvc") {
+        showVSTSChoices = true;
+        selectedVcs = "VSTS";
+      }
+    };
+
     $scope.getClass = function (Vcs) {
       return selectedVcs === Vcs ? 'family-selected' : '';
     };
@@ -460,7 +469,7 @@
 
     var setCurrentFamilyToLastCreatedInboxFamily = function setCurrentFamilyToLastCreatedInboxFamily() {
       if (hasInboxes()) {
-        $scope.familySelect(getLastCreatedInboxFamily());
+        $scope.initializeButtonOnLoad(getLastCreatedInboxFamily());
       }
     };
 
