@@ -250,16 +250,8 @@
       return familyHover = familyName;
     };
 
-    $scope.familyIsSelectedClass = function (familyName) {
-      return family === familyName ? 'family-selected' : '';
-    };
-
     $scope.familyIsSelectedIcon = function (familyName) {
       return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
-    };
-
-    $scope.familyIsSelected = function (familyName) {
-      return family === familyName;
     };
 
     $scope.showVSTSChoices = function () {

@@ -232,13 +232,8 @@
 
       $scope.familyHover = familyName => familyHover = familyName;
 
-      $scope.familyIsSelectedClass = familyName =>
-        (family === familyName) ? 'family-selected' : '';
-
       $scope.familyIsSelectedIcon = familyName =>
         (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
-
-      $scope.familyIsSelected = familyName => family === familyName;
 
       $scope.showVSTSChoices = () => { return showVSTSChoices; }
 
