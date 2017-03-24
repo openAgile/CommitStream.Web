@@ -202,10 +202,6 @@
       $scope.familySelect(value);
     };
 
-    var toggleVsoChoices = function toggleVsoChoices() {
-      return showVSTSChoices = !showVSTSChoices;
-    };
-
     var setFamilyWhenNotVsts = function setFamilyWhenNotVsts(Vcs) {
       if (Vcs != "VSTS") {
         $scope.familySelect(Vcs);
@@ -215,6 +211,7 @@
     var alwaysToggleWhenVsts = function alwaysToggleWhenVsts(Vcs) {
       if (Vcs == "VSTS") {
         showVSTSChoices = true;
+        $scope.familySelect("VsoGit");
       }
     };
 

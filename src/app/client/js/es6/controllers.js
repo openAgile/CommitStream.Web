@@ -197,6 +197,7 @@
       let alwaysToggleWhenVsts = (Vcs) => {
         if(Vcs == "VSTS") {
           showVSTSChoices = true;
+          $scope.familySelect("VsoGit");
         }
       }
 
