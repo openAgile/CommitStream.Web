@@ -188,20 +188,33 @@
         $scope.familySelect(value);
       }
 
-      let setFamilyOnlyForVCSWithNoSubFamilies = (Vcs) => {
+
+
+      let toggleVsoChoices = () => showVSTSChoices = !showVSTSChoices;
+
+      let setFamilyWhenNotVsts = (Vcs) => {
         if(Vcs != "VSTS") {
           $scope.familySelect(Vcs);
         }
       }
 
-      let toggleVsoChoices = () => showVSTSChoices = !showVSTSChoices;
-
-      $scope.setSelectedVcs = (Vcs) => {
-        selectedVcs = Vcs;
-        setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
+      let alwaysToggleWhenVsts = (Vcs) => {
         if(Vcs == "VSTS") {
           toggleVsoChoices();
         }
+      }
+
+      let alwaysCloseWhenNotVsts = (Vcs) => {
+        if(Vcs != "VSTS") {
+          showVSTSChoices = false;
+        }
+      }
+
+      $scope.setSelectedVcs = (Vcs) => {
+        selectedVcs = Vcs;
+        setFamilyWhenNotVsts(Vcs);
+        alwaysToggleWhenVsts(Vcs);
+        alwaysCloseWhenNotVsts(Vcs);
       }
 
       $scope.getClass = (Vcs) => (selectedVcs === Vcs) ? 'family-selected' : '';

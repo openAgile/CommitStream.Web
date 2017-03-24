@@ -202,22 +202,33 @@
       $scope.familySelect(value);
     };
 
-    var setFamilyOnlyForVCSWithNoSubFamilies = function setFamilyOnlyForVCSWithNoSubFamilies(Vcs) {
+    var toggleVsoChoices = function toggleVsoChoices() {
+      return showVSTSChoices = !showVSTSChoices;
+    };
+
+    var setFamilyWhenNotVsts = function setFamilyWhenNotVsts(Vcs) {
       if (Vcs != "VSTS") {
         $scope.familySelect(Vcs);
       }
     };
 
-    var toggleVsoChoices = function toggleVsoChoices() {
-      return showVSTSChoices = !showVSTSChoices;
+    var alwaysToggleWhenVsts = function alwaysToggleWhenVsts(Vcs) {
+      if (Vcs == "VSTS") {
+        toggleVsoChoices();
+      }
+    };
+
+    var alwaysCloseWhenNotVsts = function alwaysCloseWhenNotVsts(Vcs) {
+      if (Vcs != "VSTS") {
+        showVSTSChoices = false;
+      }
     };
 
     $scope.setSelectedVcs = function (Vcs) {
       selectedVcs = Vcs;
-      setFamilyOnlyForVCSWithNoSubFamilies(Vcs);
-      if (Vcs == "VSTS") {
-        toggleVsoChoices();
-      }
+      setFamilyWhenNotVsts(Vcs);
+      alwaysToggleWhenVsts(Vcs);
+      alwaysCloseWhenNotVsts(Vcs);
     };
 
     $scope.getClass = function (Vcs) {
