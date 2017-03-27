@@ -6,23 +6,29 @@
     		<span class="commitStreamTime">{{timeFormatted}},</span>
     		<p>{{author}} {{action}}</p>
     		<div class="csInfo cs{{family}}">
-                {{#if isCommitHref}}
-                    <p><a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a>
-                        {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}}
-                        at
-                        {{#if isLocalVCS }}
-                            {{repo}}</p>
-                        {{else}}
-                            <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
-                        {{/if}}
+                {{#if isVsoTfvc}}
+                    I-AM-VSO-TFVC
                 {{else}}
-                    <p>{{sha1Partial}} {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a>{{/if}}
-                        at
-                        {{#if isLocalVCS }}
-                            {{repo}}</p>
+                    {{#unless isVsoTfvc}}
+                        {{#if isCommitHref}}
+                            <p><a href="{{commitHref}}" target="_blank">{{sha1Partial}}</a>
+                                {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}}
+                                at
+                                {{#if isLocalVCS }}
+                                    {{repo}}</p>
+                                {{else}}
+                                    <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
+                                {{/if}}
                         {{else}}
-                            <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
+                            <p>{{sha1Partial}} {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a>{{/if}}
+                                at
+                                {{#if isLocalVCS }}
+                                    {{repo}}</p>
+                                {{else}}
+                                    <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
+                                {{/if}}
                         {{/if}}
+                    {{/unless}}
                 {{/if}}
             </div>
    	</div>
