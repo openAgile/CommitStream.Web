@@ -188,6 +188,17 @@
         $scope.familySelect(value);
       }
 
+      $scope.VSTSIcon = '';
+
+      $scope.setVSTSFamilyIcon = (Vcs) =>{
+        if(Vcs == "VSTS"|| selectedVcs == "VSTS") {
+          $scope.VSTSIcon = `icon-vsogit-selected-32x32.png`
+        }
+        else {
+          $scope.VSTSIcon = `icon-vsogit-nonselected-32x32.png`
+        }
+      }
+
       let setFamilyWhenNotVsts = (Vcs) => {
         if(Vcs != "VSTS") {
           $scope.familySelect(Vcs);
@@ -195,6 +206,7 @@
       }
 
       let alwaysToggleWhenVsts = (Vcs) => {
+        $scope.setVSTSFamilyIcon(Vcs)
         if(Vcs == "VSTS") {
           showVSTSChoices = true;
           $scope.familySelect("VsoGit");
@@ -220,6 +232,7 @@
         if(Vcs == "VsoGit" || Vcs == "VsoTfvc") {
           showVSTSChoices = true;
           selectedVcs = "VSTS";
+          $scope.setVSTSFamilyIcon(selectedVcs);
         }
       }
 

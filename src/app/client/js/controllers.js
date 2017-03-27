@@ -202,6 +202,16 @@
       $scope.familySelect(value);
     };
 
+    $scope.VSTSIcon = '';
+
+    $scope.setVSTSFamilyIcon = function (Vcs) {
+      if (Vcs == "VSTS" || selectedVcs == "VSTS") {
+        $scope.VSTSIcon = 'icon-vsogit-selected-32x32.png';
+      } else {
+        $scope.VSTSIcon = 'icon-vsogit-nonselected-32x32.png';
+      }
+    };
+
     var setFamilyWhenNotVsts = function setFamilyWhenNotVsts(Vcs) {
       if (Vcs != "VSTS") {
         $scope.familySelect(Vcs);
@@ -209,6 +219,7 @@
     };
 
     var alwaysToggleWhenVsts = function alwaysToggleWhenVsts(Vcs) {
+      $scope.setVSTSFamilyIcon(Vcs);
       if (Vcs == "VSTS") {
         showVSTSChoices = true;
         $scope.familySelect("VsoGit");
@@ -234,6 +245,7 @@
       if (Vcs == "VsoGit" || Vcs == "VsoTfvc") {
         showVSTSChoices = true;
         selectedVcs = "VSTS";
+        $scope.setVSTSFamilyIcon(selectedVcs);
       }
     };
 
