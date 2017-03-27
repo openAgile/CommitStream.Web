@@ -7,7 +7,9 @@
     		<p>{{author}} {{action}}</p>
     		<div class="csInfo cs{{family}}">
                 {{#if isVsoTfvc}}
-                    I-AM-VSO-TFVC
+                    {{#each commitHref}}
+                        <a href="{{this}}" target="_blank">{{this}}</a></p>
+                    {{/each}}
                 {{else}}
                     {{#unless isVsoTfvc}}
                         {{#if isCommitHref}}
