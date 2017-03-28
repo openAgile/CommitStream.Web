@@ -238,7 +238,6 @@
 
       $scope.familyHasBeenSelected = () => family !== '';
 
-
       $scope.familyIsSelectedIcon = familyName =>
         (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
 
@@ -246,10 +245,10 @@
 
       $scope.setVSTSFamilyIcon = (Vcs) =>{
         if(Vcs == "VSTS"|| selectedVcs == "VSTS") {
-          $scope.VSTSIcon = `icon-vsogit-selected-32x32.png`
+          $scope.VSTSIcon = `icon-vsts-selected-32x32.png`
         }
         else {
-          $scope.VSTSIcon = `icon-vsogit-nonselected-32x32.png`
+          $scope.VSTSIcon = `icon-vsts-nonselected-32x32.png`
         }
       }
 
