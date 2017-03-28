@@ -275,10 +275,9 @@
     };
 
     $scope.familyIcon = function (familyName) {
-      if (familyName == "VsoTfvc") {
-        familyName = "VsoGit";
+      if (familyName === "VsoTfvc" || familyName === "VsoGit") {
+        return serviceUrl + '/icon-vsts-selected-32x32.png';
       }
-
       return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
     };
 
