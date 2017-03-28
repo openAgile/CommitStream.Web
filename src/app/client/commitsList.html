@@ -23,18 +23,20 @@
                                 {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a> {{/if}}
                                 at
                                 {{#if isLocalVCS }}
-                                    {{repo}}</p>
+                                    {{repo}}
                                 {{else}}
-                                    <a href="{{repoHref}}" target="_blank">{{repo}}</a></p>
+                                    <a href="{{repoHref}}" target="_blank">{{repo}}</a>
                                 {{/if}}
+                            </p>
                         {{else}}
                             <p>{{sha1Partial}} {{#if branch }} to branch <a href="{{branchHref}}" target="_blank">{{branch}}</a>{{/if}}
                                 at
                                 {{#if isLocalVCS }}
-                                    {{repo}}</p>
+                                    {{repo}}
                                 {{else}}
-                                    <a href="{{repoHref}}" target="_blank">{{repo}}</a></span></p>
+                                    <a href="{{repoHref}}" target="_blank">{{repo}}</a>
                                 {{/if}}
+                            </p>
                         {{/if}}
                     {{/unless}}
                 {{/if}}
