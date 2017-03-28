@@ -188,17 +188,6 @@
         $scope.familySelect(value);
       }
 
-      $scope.VSTSIcon = '';
-
-      $scope.setVSTSFamilyIcon = (Vcs) =>{
-        if(Vcs == "VSTS"|| selectedVcs == "VSTS") {
-          $scope.VSTSIcon = `icon-vsogit-selected-32x32.png`
-        }
-        else {
-          $scope.VSTSIcon = `icon-vsogit-nonselected-32x32.png`
-        }
-      }
-
       let setFamilyWhenNotVsts = (Vcs) => {
         if(Vcs != "VSTS") {
           $scope.familySelect(Vcs);
@@ -245,12 +234,24 @@
 
       $scope.familyHover = familyName => familyHover = familyName;
 
-      $scope.familyIsSelectedIcon = familyName =>
-        (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
-
       $scope.showVSTSChoices = () => { return showVSTSChoices; }
 
       $scope.familyHasBeenSelected = () => family !== '';
+
+
+      $scope.familyIsSelectedIcon = familyName =>
+        (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
+
+      $scope.VSTSIcon = '';
+
+      $scope.setVSTSFamilyIcon = (Vcs) =>{
+        if(Vcs == "VSTS"|| selectedVcs == "VSTS") {
+          $scope.VSTSIcon = `icon-vsogit-selected-32x32.png`
+        }
+        else {
+          $scope.VSTSIcon = `icon-vsogit-nonselected-32x32.png`
+        }
+      }
 
       $scope.familyIcon = familyName => {
         if(familyName == "VsoTfvc") {
@@ -260,7 +261,7 @@
         return `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
       }
 
-      $scope.familyOptionIcon = familyOptionName => `${serviceUrl}/icon-${familyOptionName.toLowerCase()}-selected-24x24.png`;
+      $scope.vsoIcon = vsoVCS => `${serviceUrl}/icon-${vsoVCS.toLowerCase()}-selected-24x24.png`;
 
       let setupNewInbox = selectedFamily =>
         $scope.newInbox = {

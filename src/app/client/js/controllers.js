@@ -202,16 +202,6 @@
       $scope.familySelect(value);
     };
 
-    $scope.VSTSIcon = '';
-
-    $scope.setVSTSFamilyIcon = function (Vcs) {
-      if (Vcs == "VSTS" || selectedVcs == "VSTS") {
-        $scope.VSTSIcon = 'icon-vsogit-selected-32x32.png';
-      } else {
-        $scope.VSTSIcon = 'icon-vsogit-nonselected-32x32.png';
-      }
-    };
-
     var setFamilyWhenNotVsts = function setFamilyWhenNotVsts(Vcs) {
       if (Vcs != "VSTS") {
         $scope.familySelect(Vcs);
@@ -262,16 +252,26 @@
       return familyHover = familyName;
     };
 
-    $scope.familyIsSelectedIcon = function (familyName) {
-      return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
-    };
-
     $scope.showVSTSChoices = function () {
       return showVSTSChoices;
     };
 
     $scope.familyHasBeenSelected = function () {
       return family !== '';
+    };
+
+    $scope.familyIsSelectedIcon = function (familyName) {
+      return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
+    };
+
+    $scope.VSTSIcon = '';
+
+    $scope.setVSTSFamilyIcon = function (Vcs) {
+      if (Vcs == "VSTS" || selectedVcs == "VSTS") {
+        $scope.VSTSIcon = 'icon-vsogit-selected-32x32.png';
+      } else {
+        $scope.VSTSIcon = 'icon-vsogit-nonselected-32x32.png';
+      }
     };
 
     $scope.familyIcon = function (familyName) {
@@ -282,8 +282,8 @@
       return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
     };
 
-    $scope.familyOptionIcon = function (familyOptionName) {
-      return serviceUrl + '/icon-' + familyOptionName.toLowerCase() + '-selected-24x24.png';
+    $scope.vsoIcon = function (vsoVCS) {
+      return serviceUrl + '/icon-' + vsoVCS.toLowerCase() + '-selected-24x24.png';
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
