@@ -7,9 +7,15 @@
     		<p>{{author}} {{action}}</p>
     		<div class="csInfo cs{{family}}">
                 {{#if isVsoTfvc}}
-                    {{#each commitHref}}
-                        <a href="{{this}}" target="_blank">{{this}}</a></p>
-                    {{/each}}
+                    <div class="vsoTfvcProjects">Project Changesets:
+                            <ul>
+                                {{#each commitHref}}
+                                <li>
+                                    <a href="{{this}}" target="_blank">Project</a>
+                                </li>
+                                {{/each}}
+                            </ul>
+                    </div>
                 {{else}}
                     {{#unless isVsoTfvc}}
                         {{#if isCommitHref}}
