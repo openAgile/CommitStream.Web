@@ -281,8 +281,8 @@
       return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
     };
 
-    $scope.vsoIcon = function (vsoVCS) {
-      return serviceUrl + '/icon-' + vsoVCS.toLowerCase() + '-selected-24x24.png';
+    $scope.vsoIcon = function (vsoVcs) {
+      return serviceUrl + '/icon-' + vsoVcs.toLowerCase() + '-selected-24x24.png';
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {

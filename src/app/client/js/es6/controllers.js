@@ -259,7 +259,7 @@
         return `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
       }
 
-      $scope.vsoIcon = vsoVCS => `${serviceUrl}/icon-${vsoVCS.toLowerCase()}-selected-24x24.png`;
+      $scope.vsoIcon = vsoVcs => `${serviceUrl}/icon-${vsoVcs.toLowerCase()}-selected-24x24.png`;
 
       let setupNewInbox = selectedFamily =>
         $scope.newInbox = {
