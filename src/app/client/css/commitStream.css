@@ -1235,7 +1235,7 @@ h6 {
 }
 .commitStream-panel .csVsoGit,
 .commitStream-panel .csVsoTfvc {
-  background-image: url(../icon-vsogit-selected-32x32.png);
+  background-image: url(../icon-vsts-selected-32x32.png);
 }
 .commitStream-panel .vsoTfvcProjects ul {
   padding-left: 0.5em;
