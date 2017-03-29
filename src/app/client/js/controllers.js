@@ -225,7 +225,7 @@
       return familyName === "VsoTfvc" || familyName === "VsoGit" || familyName === "VSTS";
     };
 
-    $scope.setSelectedVcs = function (Vcs) {
+    $scope.setSelectedButton = function (Vcs) {
       selectedVcs = Vcs;
       setFamilyWhenNotVsts(Vcs);
       alwaysToggleWhenVsts(Vcs);
@@ -233,7 +233,7 @@
     };
 
     $scope.initializeButtonOnLoad = function (familyName) {
-      shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedVcs("VSTS") : $scope.setSelectedVcs(familyName);
+      shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedButton("VSTS") : $scope.setSelectedButton(familyName);
     };
 
     $scope.getClass = function (Vcs) {

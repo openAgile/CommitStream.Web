@@ -182,7 +182,7 @@
       let family = '';
       let familyHover = '';
       let showVSTSChoices = false;
-      let selectedVcs = '';
+      let selectedButton = '';
 
       $scope.vstsSelection = function(value) {
         $scope.familySelect(value);
@@ -211,18 +211,18 @@
         return familyName === "VsoTfvc" || familyName === "VsoGit" || familyName === "VSTS";
       }
 
-      $scope.setSelectedVcs = (Vcs) => {
-        selectedVcs = Vcs;
+      $scope.setSelectedButton = (Vcs) => {
+        selectedButton = Vcs;
         setFamilyWhenNotVsts(Vcs);
         alwaysToggleWhenVsts(Vcs);
         alwaysCloseWhenNotVsts(Vcs);
       }
 
       $scope.initializeButtonOnLoad = (familyName) => {
-        shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedVcs("VSTS") : $scope.setSelectedVcs(familyName);
+        shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedButton("VSTS") : $scope.setSelectedButton(familyName);
       }
 
-      $scope.getClass = (Vcs) => (selectedVcs === Vcs) ? 'family-selected' : '';
+      $scope.getClass = (Vcs) => (selectedButton === Vcs) ? 'family-selected' : '';
 
       $scope.familySelect = newFamily => {
         family = newFamily;
