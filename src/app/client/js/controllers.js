@@ -209,7 +209,6 @@
     };
 
     var alwaysToggleWhenVsts = function alwaysToggleWhenVsts(Vcs) {
-      $scope.setVSTSFamilyIcon(Vcs);
       if (Vcs == "VSTS") {
         showVSTSChoices = true;
         $scope.familySelect("VsoGit");
@@ -222,21 +221,51 @@
       }
     };
 
+    var shouldBeTreatedAsVsts = function shouldBeTreatedAsVsts(familyName) {
+      return familyName === "VsoTfvc" || familyName === "VsoGit" || familyName === "VSTS";
+    };
+
     $scope.setSelectedVcs = function (Vcs) {
       selectedVcs = Vcs;
       setFamilyWhenNotVsts(Vcs);
       alwaysToggleWhenVsts(Vcs);
       alwaysCloseWhenNotVsts(Vcs);
+      console.log('in setSelectedVcs family: ', family);
+      console.log('in setSelectedVcs familyHover: ', familyHover);
     };
 
-    $scope.initializeButtonOnLoad = function (Vcs) {
-      $scope.familySelect(Vcs);
-      selectedVcs = Vcs;
-      if (Vcs == "VsoGit" || Vcs == "VsoTfvc") {
-        showVSTSChoices = true;
-        selectedVcs = "VSTS";
-        $scope.setVSTSFamilyIcon(selectedVcs);
-      }
+    $scope.initializeButtonOnLoad = function (familyName) {
+
+      // So it looks like what we did for setSelelctedVcs is a good button manager call for the top level
+      // button selects. I almost wonder if we should change the variable named 'selectedVcs' to 'selectedVcsButton'
+      // it's primary purpose seems to be to control whether a 'family-selected' class is put on a top level button
+
+      // A ONE LINER IS EVEN BETTER
+      // This further demonstrates that there is one strategy for the top level VSTS button and another strategy for
+      // all other top level buttons
+      shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedVcs("VSTS") : $scope.setSelectedVcs(familyName);
+
+      // I think this should maybe just delegate to $scope.setSelectedVcs or something close to it
+
+      // THIS WORKS TOO
+      // $scope.setSelectedVcs(familyName);
+      //
+      // if(shouldBeTreatedAsVsts(familyName)) {
+      //   selectedVcs = "VSTS";
+      //   showVSTSChoices = true;
+      // }
+
+      // THIS WORKS
+      // $scope.familySelect(familyName);
+      // selectedVcs = familyName;
+      // if(shouldBeTreatedAsVsts(familyName)) {
+      //   showVSTSChoices = true;
+      //   console.log('in initilizaButtonLoad inside shouldBeTreatedAsVsts familyName: ', familyName);
+      //   console.log('in initilizaButtonLoad inside shouldBeTreatedAsVsts selectedVcs: ', selectedVcs);
+      //   selectedVcs = "VSTS";
+      // }
+      // console.log('in initilizaButtonLoad family: ', family);
+      // console.log('in initilizaButtonLoad familyHover: ', familyHover);
     };
 
     $scope.getClass = function (Vcs) {
@@ -249,7 +278,8 @@
     };
 
     $scope.familyHover = function (familyName) {
-      return familyHover = familyName;
+      console.log('familyHover familyName:', familyName);
+      familyHover = familyName;
     };
 
     $scope.showVSTSChoices = function () {
@@ -261,21 +291,23 @@
     };
 
     $scope.familyIsSelectedIcon = function (familyName) {
-      return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
+      // if(shouldBeTreatedAsVsts('VSTS') || shouldBeTreatedAsVsts(familyHover)) {
+      if (shouldBeTreatedAsVsts(familyName) || shouldBeTreatedAsVsts(familyHover)) {}
+      // family = "vsts";
+      // familyHover = "vsts";
+      // familyName = "vsts"
+      // console.log('we are in the if')
+
+      // return (family === familyName || familyHover === familyName || shouldBeTreatedAsVsts(family)) ? `icon-${familyName.toLowerCase()}-selected-32x32.png` : `icon-${familyName.toLowerCase()}-nonselected-32x32.png`;
+      return family === familyName || familyHover === familyName ? 'icon-' + familyName.toLowerCase() + '-selected-32x32.png' : 'icon-' + familyName.toLowerCase() + '-nonselected-32x32.png';
     };
 
-    $scope.VSTSIcon = '';
-
-    $scope.setVSTSFamilyIcon = function (Vcs) {
-      if (Vcs == "VSTS" || selectedVcs == "VSTS") {
-        $scope.VSTSIcon = 'icon-vsts-selected-32x32.png';
-      } else {
-        $scope.VSTSIcon = 'icon-vsts-nonselected-32x32.png';
-      }
+    $scope.vstsFamilyIsSelectedIcon = function (familyName) {
+      return familyHover === familyName || shouldBeTreatedAsVsts(family) ? 'icon-' + familyName.toLowerCase() + '-selected-32x32.png' : 'icon-' + familyName.toLowerCase() + '-nonselected-32x32.png';
     };
 
     $scope.familyIcon = function (familyName) {
-      if (familyName === "VsoTfvc" || familyName === "VsoGit") {
+      if (shouldBeTreatedAsVsts(familyName)) {
         return serviceUrl + '/icon-vsts-selected-32x32.png';
       }
       return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
