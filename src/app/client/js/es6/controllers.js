@@ -216,42 +216,10 @@
         setFamilyWhenNotVsts(Vcs);
         alwaysToggleWhenVsts(Vcs);
         alwaysCloseWhenNotVsts(Vcs);
-        console.log('in setSelectedVcs family: ', family);
-        console.log('in setSelectedVcs familyHover: ', familyHover);
       }
 
       $scope.initializeButtonOnLoad = (familyName) => {
-
-        // So it looks like what we did for setSelelctedVcs is a good button manager call for the top level
-        // button selects. I almost wonder if we should change the variable named 'selectedVcs' to 'selectedVcsButton'
-        // it's primary purpose seems to be to control whether a 'family-selected' class is put on a top level button
-
-        // A ONE LINER IS EVEN BETTER
-        // This further demonstrates that there is one strategy for the top level VSTS button and another strategy for
-        // all other top level buttons
         shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedVcs("VSTS") : $scope.setSelectedVcs(familyName);
-
-        // I think this should maybe just delegate to $scope.setSelectedVcs or something close to it
-
-        // THIS WORKS TOO
-        // $scope.setSelectedVcs(familyName);
-        //
-        // if(shouldBeTreatedAsVsts(familyName)) {
-        //   selectedVcs = "VSTS";
-        //   showVSTSChoices = true;
-        // }
-
-        // THIS WORKS
-        // $scope.familySelect(familyName);
-        // selectedVcs = familyName;
-        // if(shouldBeTreatedAsVsts(familyName)) {
-        //   showVSTSChoices = true;
-        //   console.log('in initilizaButtonLoad inside shouldBeTreatedAsVsts familyName: ', familyName);
-        //   console.log('in initilizaButtonLoad inside shouldBeTreatedAsVsts selectedVcs: ', selectedVcs);
-        //   selectedVcs = "VSTS";
-        // }
-        // console.log('in initilizaButtonLoad family: ', family);
-        // console.log('in initilizaButtonLoad familyHover: ', familyHover);
       }
 
       $scope.getClass = (Vcs) => (selectedVcs === Vcs) ? 'family-selected' : '';
@@ -262,7 +230,6 @@
       };
 
       $scope.familyHover = familyName => {
-        console.log('familyHover familyName:', familyName)
         familyHover = familyName;
       }
 
@@ -271,14 +238,6 @@
       $scope.familyHasBeenSelected = () => family !== '';
 
       $scope.familyIsSelectedIcon = familyName =>{
-        // if(shouldBeTreatedAsVsts('VSTS') || shouldBeTreatedAsVsts(familyHover)) {
-        if(shouldBeTreatedAsVsts(familyName) || shouldBeTreatedAsVsts(familyHover)) {
-          // family = "vsts";
-          // familyHover = "vsts";
-          // familyName = "vsts"
-          // console.log('we are in the if')
-        }
-        // return (family === familyName || familyHover === familyName || shouldBeTreatedAsVsts(family)) ? `icon-${familyName.toLowerCase()}-selected-32x32.png` : `icon-${familyName.toLowerCase()}-nonselected-32x32.png`;
         return (family === familyName || familyHover === familyName) ? `icon-${familyName.toLowerCase()}-selected-32x32.png` : `icon-${familyName.toLowerCase()}-nonselected-32x32.png`;
       }
 
