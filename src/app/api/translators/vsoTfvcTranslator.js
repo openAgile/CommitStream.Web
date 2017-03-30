@@ -41,7 +41,7 @@ var vsoTfvcTranslator = {
                         email: event.resource.checkedInBy.uniqueName,
                         date: event.resource.createdDate
                     },
-                    message: event.message.text
+                    message: event.detailedMessage.text
                 },
                 html_url: getHTMLUrlsPerProject(event),
                 repository: getRepositoryUrlsPerProject(event),

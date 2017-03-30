@@ -17,7 +17,7 @@ var vsoTfvcPushEventForOneProject = {
     "publisherId": "tfs",
     "scope": "all",
     "message": {
-        "text": "Josh Gough checked in changeset 17: Updated README.md S-12345",
+        "text": "Josh Gough checked in changeset 17: Updated README.md",
         "html": "Josh Gough checked in changeset <a href=\"https://v1platformtest.visualstudio.com/web/cs.aspx?pcguid=6b1d2d92-0bb2-4ff1-b1e0-5b79fd2abd67&amp;cs=17\">17</a>: Updated README.md S-12345",
         "markdown": "Josh Gough checked in changeset [17](https://v1platformtest.visualstudio.com/web/cs.aspx?pcguid=6b1d2d92-0bb2-4ff1-b1e0-5b79fd2abd67&cs=17): Updated README.md S-12345"
     },
