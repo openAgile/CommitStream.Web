@@ -22,12 +22,12 @@ var _branchNameParse = require('./branchNameParse');
 
 var _branchNameParse2 = _interopRequireDefault(_branchNameParse);
 
-var hasCorrectHeaders = function hasCorrectHeaders(headers) {
-  return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook' && !headers.hasOwnProperty('x-gitswarm-event');
-};
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
 var gitLabTranslator = {
-  family: 'GitLab',
+  family: _helpersVcsFamilies2['default'].GitLab,
   canTranslate: function canTranslate(request) {
     // gitLab does not have a pusheEvent.repository.id field, and github does
     // gitLab does not have a commit.committer object, and github does
@@ -52,11 +52,6 @@ var gitLabTranslator = {
             commit: {
               author: aCommit.author,
               // gitLab does not have a commit.committer object. Using the same thing as author for now.
-              // committer: {
-              //   name: aCommit.committer.name,
-              //   email: aCommit.committer.email,
-              //   date: aCommit.timestamp
-              // },
               committer: {
                 name: aCommit.author.name,
                 email: aCommit.author.email,
@@ -71,7 +66,7 @@ var gitLabTranslator = {
           };
           return {
             eventId: (0, _uuidV42['default'])(),
-            eventType: 'GitLabCommitReceived',
+            eventType: gitLabTranslator.family + 'CommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,
@@ -94,6 +89,10 @@ var gitLabTranslator = {
   getProperties: function getProperties(event) {
     return (0, _getProperties3['default'])(event, '/commit', 'tree');
   }
+};
+
+var hasCorrectHeaders = function hasCorrectHeaders(headers) {
+  return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook' && !headers.hasOwnProperty('x-gitswarm-event');
 };
 
 exports['default'] = gitLabTranslator;

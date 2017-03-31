@@ -1,11 +1,14 @@
-﻿import util from 'util';
-import uuid from 'uuid-v4';
+﻿import uuid from 'uuid-v4';
 import DeveoCommitMalformedError from '../../middleware/deveoCommitMalformedError';
-import getProperties from './getProperties';
 import branchNameParse from './branchNameParse';
+import VcsFamilies from '../helpers/vcsFamilies';
 
-let deveoTranslator = {
-  family: 'Deveo',
+const deveoTranslator = {
+  family: VcsFamilies.Deveo,
+  canTranslate(request) {
+    const headers = request.headers;
+    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
+  },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
       const branch = branchNameParse(pushEvent.ref);
@@ -33,7 +36,7 @@ let deveoTranslator = {
         };
         return {
           eventId: uuid(),
-          eventType: 'DeveoCommitReceived',
+          eventType: deveoTranslator.family + 'CommitReceived',
           data: commit,
           metadata: {
             instanceId,
@@ -46,12 +49,6 @@ let deveoTranslator = {
       throw new DeveoCommitMalformedError(ex, pushEvent);
     }
   },
-
-  canTranslate(request) {
-    const headers = request.headers;
-    return headers.hasOwnProperty('x-deveo-event') && headers['x-deveo-event'] === 'push';
-  },
-
   getProperties(event) {
     var commit = event.commit;
     var branch = event.branch;

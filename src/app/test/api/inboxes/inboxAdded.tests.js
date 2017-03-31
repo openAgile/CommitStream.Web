@@ -60,7 +60,58 @@ describe('inboxAdded', function() {
       it('has data.name of passed argument value', function() {
         inboxAddedEvent.data.should.have.property('name', name);
       });
-
     });
+
+    describe('when validating', function() {
+      var schemaValidator;
+
+      var expectedSchema = {
+        properties: {
+          digestId: {
+            maxLength: 36,
+            minLength: 36,
+            title: "ID of the digest to which this inbox will belong",
+            type: "string"
+          },
+          family: {
+            enum: ["Bitbucket", "Deveo", "GitHub", "GitLab", "GitSwarm", "P4V", "Svn", "VsoGit", "VsoTfvc"],
+            title: "Version Control System type",
+            type: "string"
+          },
+          instanceId: {
+            maxLength: 36,
+            minLength: 36,
+            title: "ID of the instance to which this inbox will belong",
+            type: "string"
+          },
+          name: {
+            maxLength: 140,
+            minLength: 1,
+            title: "Short name for this inbox",
+            type: "string"
+          },
+          url: { maxLength: 2000, minLength: 3, title: "URL of the repository", type: "string" }
+        },
+        required: ["digestId", "family", "name"],
+        title: "inbox",
+        type: "object"
+      };
+
+      before(function() {
+          schemaValidator = {
+            validate: sinon.spy()
+          };
+
+          inboxAdded = proxyquire('../../api/inboxes/inboxAdded', {
+            'uuid-v4': sinon.stub(),
+            '../schemaValidator': schemaValidator
+          });
+          inboxAdded.validate({})
+      });
+
+      it('the schemaValidator should be called with appropriate arguments', function() {
+        schemaValidator.validate.should.have.been.calledWith('inbox', {}, expectedSchema);
+      });
+    })
   });
 });

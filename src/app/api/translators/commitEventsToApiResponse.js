@@ -35,25 +35,26 @@ exports['default'] = function (entries) {
       var entry = _step.value;
 
       try {
-        var e = JSON.parse(entry.data);
+        var commitEvent = JSON.parse(entry.data);
         var family = getFamily(entry.eventType);
         var translator = _translatorFactory2['default'].getByFamily(family);
-        var props = translator.getProperties(e);
+        var props = translator.getProperties(commitEvent);
 
         var commit = {
-          commitDate: e.commit.committer.date,
-          timeFormatted: (0, _moment2['default'])(e.commit.committer.date).fromNow(),
-          author: e.commit.committer.name,
-          sha1Partial: e.sha.substring(0, 6),
+          commitDate: commitEvent.commit.committer.date,
+          timeFormatted: (0, _moment2['default'])(commitEvent.commit.committer.date).fromNow(),
+          author: commitEvent.commit.committer.name,
+          sha1Partial: commitEvent.sha.substring(0, 6),
           family: family,
           action: 'committed',
-          message: e.commit.message,
-          commitHref: e.html_url,
+          message: commitEvent.commit.message,
+          commitHref: commitEvent.html_url,
           repo: props.repo,
-          branch: e.branch,
+          branch: commitEvent.branch,
           branchHref: props.branchHref,
           repoHref: props.repoHref,
-          isCommitHref: true
+          isCommitHref: true,
+          isVsoTfvc: false
         };
         var uiDecorator = _uiDecoratorsUiDecoratorFactory2['default'].create(family);
 

@@ -26,10 +26,6 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-var hasCorrectHeaders = function hasCorrectHeaders(headers) {
-  return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook' && headers.hasOwnProperty('x-gitswarm-event') && headers['x-gitswarm-event'] === 'Push Hook';
-};
-
 var gitSwarmTranslator = {
   family: _helpersVcsFamilies2['default'].GitSwarm,
   canTranslate: function canTranslate(request) {
@@ -98,6 +94,10 @@ var gitSwarmTranslator = {
   getProperties: function getProperties(event) {
     return (0, _getProperties3['default'])(event, '/commit', 'tree');
   }
+};
+
+var hasCorrectHeaders = function hasCorrectHeaders(headers) {
+  return headers.hasOwnProperty('x-gitlab-event') && headers['x-gitlab-event'] === 'Push Hook' && headers.hasOwnProperty('x-gitswarm-event') && headers['x-gitswarm-event'] === 'Push Hook';
 };
 
 exports['default'] = gitSwarmTranslator;

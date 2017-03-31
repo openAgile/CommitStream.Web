@@ -2,6 +2,14 @@ import uuid from 'uuid-v4';
 import vcsFamilies from '../helpers/vcsFamilies';
 import schemaValidator from '../schemaValidator';
 
+const getVcsFamilies = () => {
+    let families = [];
+    for (var family in vcsFamilies) {
+      families.push(vcsFamilies[family]);
+    }
+    return families.sort();
+}
+
 const schema = {
     title: 'inbox',
     type: 'object',
@@ -26,16 +34,7 @@ const schema = {
         family: {
             title: 'Version Control System type',
             type: 'string',
-            enum: [
-                'Deveo',
-                'GitHub',
-                'GitLab',
-                'Bitbucket',
-                'VsoGit',
-                vcsFamilies.Svn,
-                vcsFamilies.GitSwarm,
-                vcsFamilies.P4V
-            ]
+            enum: getVcsFamilies()
         },
         name: {
             type: 'string',

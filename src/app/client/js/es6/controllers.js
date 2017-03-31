@@ -174,34 +174,85 @@
           if ($scope.isDigestMode()) {
             if (isCustomDigest()) {
               return 'Setup TeamRoom Repositories';
-            } else return ($scope.inboxes.length > 0) ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+            } else return (hasInboxes()) ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
           }
         }
       };
 
       let family = '';
       let familyHover = '';
+      let showVSTSChoices = false;
+      let selectedButton = '';
+
+      $scope.vstsSelection = function(value) {
+        $scope.familySelect(value);
+      }
+
+      let setFamilyWhenNotVsts = (Vcs) => {
+        if(Vcs != "VSTS") {
+          $scope.familySelect(Vcs);
+        }
+      }
+
+      let alwaysToggleWhenVsts = (Vcs) => {
+        if(Vcs == "VSTS") {
+          showVSTSChoices = true;
+          $scope.familySelect("VsoGit");
+        }
+      }
+
+      let alwaysCloseWhenNotVsts = (Vcs) => {
+        if(Vcs != "VSTS") {
+          showVSTSChoices = false;
+        }
+      }
+
+      let shouldBeTreatedAsVsts = (familyName) => {
+        return familyName === "VsoTfvc" || familyName === "VsoGit" || familyName === "VSTS";
+      }
+
+      $scope.setSelectedButton = (Vcs) => {
+        selectedButton = Vcs;
+        setFamilyWhenNotVsts(Vcs);
+        alwaysToggleWhenVsts(Vcs);
+        alwaysCloseWhenNotVsts(Vcs);
+      }
+
+      $scope.initializeButtonOnLoad = (familyName) => {
+        shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedButton("VSTS") : $scope.setSelectedButton(familyName);
+      }
+
+      $scope.getClass = (Vcs) => (selectedButton === Vcs) ? 'family-selected' : '';
 
       $scope.familySelect = newFamily => {
         family = newFamily;
         setupNewInbox(family);
       };
 
-      $scope.familyHover = familyName => familyHover = familyName;
+      $scope.familyHover = familyName => {
+        familyHover = familyName;
+      }
 
-      $scope.familyIsSelectedClass = familyName =>
-        (family === familyName) ? 'family-selected' : '';
-
-      $scope.familyIsSelectedIcon = familyName =>
-        (family === familyName || familyHover === familyName) ? `icon-${familyName}-selected-32x32.png` : `icon-${familyName}-nonselected-32x32.png`;
-
-      $scope.familyIsSelected = familyName => family === familyName;
+      $scope.showVSTSChoices = () => { return showVSTSChoices; }
 
       $scope.familyHasBeenSelected = () => family !== '';
 
-      $scope.familyIcon = familyName => `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
+      $scope.familyIsSelectedIcon = familyName =>{
+        return (family === familyName || familyHover === familyName) ? `icon-${familyName.toLowerCase()}-selected-32x32.png` : `icon-${familyName.toLowerCase()}-nonselected-32x32.png`;
+      }
 
-      $scope.familyOptionIcon = familyOptionName => `${serviceUrl}/icon-${familyOptionName.toLowerCase()}-selected-24x24.png`;
+      $scope.vstsFamilyIsSelectedIcon = familyName =>{
+        return (familyHover === familyName || shouldBeTreatedAsVsts(family)) ? `icon-${familyName.toLowerCase()}-selected-32x32.png` : `icon-${familyName.toLowerCase()}-nonselected-32x32.png`;
+      }
+
+      $scope.familyIcon = familyName => {
+        if(shouldBeTreatedAsVsts(familyName)) {
+          return `${serviceUrl}/icon-vsts-selected-32x32.png`;
+        }
+        return `${serviceUrl}/icon-${familyName.toLowerCase()}-selected-32x32.png`;
+      }
+
+      $scope.vsoIcon = vsoVcs => `${serviceUrl}/icon-${vsoVcs.toLowerCase()}-selected-24x24.png`;
 
       let setupNewInbox = selectedFamily =>
         $scope.newInbox = {
@@ -375,9 +426,7 @@
                 inboxConfigure(inbox);
                 $scope.inboxes.unshift(inbox);
               });
-              if ($scope.inboxes.length > 0) {
-                $scope.familySelect($scope.inboxes[0].family);
-              }
+              setCurrentFamilyToLastCreatedInboxFamily();
               getInboxesDone();
             })
             .catch(errorHandler);
@@ -385,6 +434,20 @@
           getInboxesDone();
         }
       };
+
+      let setCurrentFamilyToLastCreatedInboxFamily = () => {
+        if (hasInboxes()) {
+          $scope.initializeButtonOnLoad(getLastCreatedInboxFamily());
+        }
+      }
+
+      let getLastCreatedInboxFamily = () => {
+        return $scope.inboxes[0].family;
+      }
+
+      let hasInboxes = () => {
+        return $scope.inboxes.length > 0;
+      }
 
       let inboxesUpdate = enabled => {
         if (enabled) {

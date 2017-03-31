@@ -6,10 +6,6 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _util = require('util');
-
-var _util2 = _interopRequireDefault(_util);
-
 var _uuidV4 = require('uuid-v4');
 
 var _uuidV42 = _interopRequireDefault(_uuidV4);
@@ -26,8 +22,12 @@ var _middlewareVsoGitCommitMalformedError = require('../../middleware/vsoGitComm
 
 var _middlewareVsoGitCommitMalformedError2 = _interopRequireDefault(_middlewareVsoGitCommitMalformedError);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
 var vsoGitTranslator = {
-  family: 'VsoGit',
+  family: _helpersVcsFamilies2['default'].VsoGit,
   canTranslate: function canTranslate(request) {
     return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs' && request.body.resource.commits != undefined;
   },
@@ -71,7 +71,7 @@ var vsoGitTranslator = {
           };
           return {
             eventId: (0, _uuidV42['default'])(),
-            eventType: 'VsoGitCommitReceived',
+            eventType: vsoGitTranslator.family + 'CommitReceived',
             data: commit,
             metadata: {
               instanceId: instanceId,
