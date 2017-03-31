@@ -1233,8 +1233,17 @@ h6 {
 .commitStream-panel .csGitLab {
   background-image: url(../icon-gitlab-selected-32x32.png);
 }
-.commitStream-panel .csVsoGit {
-  background-image: url(../icon-vsogit-selected-32x32.png);
+.commitStream-panel .csVsoGit,
+.commitStream-panel .csVsoTfvc {
+  background-image: url(../icon-vsts-selected-32x32.png);
+}
+.commitStream-panel .vsoTfvcProjects ul {
+  padding-left: 0.5em;
+  margin-bottom: 5px;
+}
+.commitStream-panel .vsoTfvcProjects ul li {
+  border-top: none;
+  padding: 0.2em;
 }
 .commitStream-panel .csMessage {
   padding-left: 22px;

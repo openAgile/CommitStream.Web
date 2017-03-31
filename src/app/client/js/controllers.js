@@ -188,13 +188,57 @@
         if ($scope.isDigestMode()) {
           if (isCustomDigest()) {
             return 'Setup TeamRoom Repositories';
-          } else return $scope.inboxes.length > 0 ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
+          } else return hasInboxes() ? 'Active Global Repositories' : 'Your administrator has not added any global repositories';
         }
       }
     };
 
     var family = '';
     var familyHover = '';
+    var showVSTSChoices = false;
+    var selectedVcs = '';
+
+    $scope.vstsSelection = function (value) {
+      $scope.familySelect(value);
+    };
+
+    var setFamilyWhenNotVsts = function setFamilyWhenNotVsts(Vcs) {
+      if (Vcs != "VSTS") {
+        $scope.familySelect(Vcs);
+      }
+    };
+
+    var alwaysToggleWhenVsts = function alwaysToggleWhenVsts(Vcs) {
+      if (Vcs == "VSTS") {
+        showVSTSChoices = true;
+        $scope.familySelect("VsoGit");
+      }
+    };
+
+    var alwaysCloseWhenNotVsts = function alwaysCloseWhenNotVsts(Vcs) {
+      if (Vcs != "VSTS") {
+        showVSTSChoices = false;
+      }
+    };
+
+    var shouldBeTreatedAsVsts = function shouldBeTreatedAsVsts(familyName) {
+      return familyName === "VsoTfvc" || familyName === "VsoGit" || familyName === "VSTS";
+    };
+
+    $scope.setSelectedButton = function (Vcs) {
+      selectedVcs = Vcs;
+      setFamilyWhenNotVsts(Vcs);
+      alwaysToggleWhenVsts(Vcs);
+      alwaysCloseWhenNotVsts(Vcs);
+    };
+
+    $scope.initializeButtonOnLoad = function (familyName) {
+      shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedButton("VSTS") : $scope.setSelectedButton(familyName);
+    };
+
+    $scope.getClass = function (Vcs) {
+      return selectedVcs === Vcs ? 'family-selected' : '';
+    };
 
     $scope.familySelect = function (newFamily) {
       family = newFamily;
@@ -202,31 +246,34 @@
     };
 
     $scope.familyHover = function (familyName) {
-      return familyHover = familyName;
+      familyHover = familyName;
     };
 
-    $scope.familyIsSelectedClass = function (familyName) {
-      return family === familyName ? 'family-selected' : '';
-    };
-
-    $scope.familyIsSelectedIcon = function (familyName) {
-      return family === familyName || familyHover === familyName ? 'icon-' + familyName + '-selected-32x32.png' : 'icon-' + familyName + '-nonselected-32x32.png';
-    };
-
-    $scope.familyIsSelected = function (familyName) {
-      return family === familyName;
+    $scope.showVSTSChoices = function () {
+      return showVSTSChoices;
     };
 
     $scope.familyHasBeenSelected = function () {
       return family !== '';
     };
 
+    $scope.familyIsSelectedIcon = function (familyName) {
+      return family === familyName || familyHover === familyName ? 'icon-' + familyName.toLowerCase() + '-selected-32x32.png' : 'icon-' + familyName.toLowerCase() + '-nonselected-32x32.png';
+    };
+
+    $scope.vstsFamilyIsSelectedIcon = function (familyName) {
+      return familyHover === familyName || shouldBeTreatedAsVsts(family) ? 'icon-' + familyName.toLowerCase() + '-selected-32x32.png' : 'icon-' + familyName.toLowerCase() + '-nonselected-32x32.png';
+    };
+
     $scope.familyIcon = function (familyName) {
+      if (shouldBeTreatedAsVsts(familyName)) {
+        return serviceUrl + '/icon-vsts-selected-32x32.png';
+      }
       return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
     };
 
-    $scope.familyOptionIcon = function (familyOptionName) {
-      return serviceUrl + '/icon-' + familyOptionName.toLowerCase() + '-selected-24x24.png';
+    $scope.vsoIcon = function (vsoVcs) {
+      return serviceUrl + '/icon-' + vsoVcs.toLowerCase() + '-selected-24x24.png';
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
@@ -406,14 +453,26 @@
             inboxConfigure(inbox);
             $scope.inboxes.unshift(inbox);
           });
-          if ($scope.inboxes.length > 0) {
-            $scope.familySelect($scope.inboxes[0].family);
-          }
+          setCurrentFamilyToLastCreatedInboxFamily();
           getInboxesDone();
         })['catch'](errorHandler);
       } else {
         getInboxesDone();
       }
+    };
+
+    var setCurrentFamilyToLastCreatedInboxFamily = function setCurrentFamilyToLastCreatedInboxFamily() {
+      if (hasInboxes()) {
+        $scope.initializeButtonOnLoad(getLastCreatedInboxFamily());
+      }
+    };
+
+    var getLastCreatedInboxFamily = function getLastCreatedInboxFamily() {
+      return $scope.inboxes[0].family;
+    };
+
+    var hasInboxes = function hasInboxes() {
+      return $scope.inboxes.length > 0;
     };
 
     var inboxesUpdate = function inboxesUpdate(enabled) {
