@@ -20,6 +20,14 @@ var _uiDecoratorsUiDecoratorFactory = require('./uiDecorators/uiDecoratorFactory
 
 var _uiDecoratorsUiDecoratorFactory2 = _interopRequireDefault(_uiDecoratorsUiDecoratorFactory);
 
+var _helpersVcsFamilies = require('../helpers/vcsFamilies');
+
+var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+
+var _getFamilySpecificSha = require('./getFamilySpecificSha');
+
+var _getFamilySpecificSha2 = _interopRequireDefault(_getFamilySpecificSha);
+
 var getFamily = function getFamily(eventType) {
   return eventType.slice(0, -14);
 };
@@ -39,12 +47,13 @@ exports['default'] = function (entries) {
         var family = getFamily(entry.eventType);
         var translator = _translatorFactory2['default'].getByFamily(family);
         var props = translator.getProperties(commitEvent);
+        var sha1Partial = (0, _getFamilySpecificSha2['default'])(family, commitEvent.sha);
 
         var commit = {
           commitDate: commitEvent.commit.committer.date,
           timeFormatted: (0, _moment2['default'])(commitEvent.commit.committer.date).fromNow(),
           author: commitEvent.commit.committer.name,
-          sha1Partial: commitEvent.sha.substring(0, 6),
+          sha1Partial: sha1Partial,
           family: family,
           action: 'committed',
           message: commitEvent.commit.message,
