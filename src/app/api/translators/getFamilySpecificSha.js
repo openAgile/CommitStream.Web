@@ -1,11 +1,10 @@
 /*
  Rationale: In the API, we decided that as a default, each commit should display 7 characters of the commit ID.  This is the convention
- of Github. As we expand and add new VCSes, we add to VcsFamilySpecificShaTable
+ of Github. As we expand and add new VCSes and if any have lenghth requirements different from the default, we add it to VcsFamilySpecificShaLengthTable
  */
 
+//import VcsFamilies from '../helpers/vcsFamilies';
 'use strict';
-
-var _defineProperty = require('babel-runtime/helpers/define-property')['default'];
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
@@ -13,24 +12,19 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
-var _VcsFamilySpecificShaTable;
+var _helpersVcsFamilySpecificShaLengthTable = require('../helpers/vcsFamilySpecificShaLengthTable');
 
-var _helpersVcsFamilies = require('../helpers/vcsFamilies');
-
-var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
+var _helpersVcsFamilySpecificShaLengthTable2 = _interopRequireDefault(_helpersVcsFamilySpecificShaLengthTable);
 
 var defaultFamilyShaLength = 7;
 
-//If sha length to be displayed is a specific length
-var VcsFamilySpecificShaTable = (_VcsFamilySpecificShaTable = {}, _defineProperty(_VcsFamilySpecificShaTable, _helpersVcsFamilies2['default'].VsoGit, 8), _defineProperty(_VcsFamilySpecificShaTable, _helpersVcsFamilies2['default'].Svn, Infinity), _VcsFamilySpecificShaTable);
-
 exports['default'] = function (family, sha) {
-    return VcsFamilySpecificShaTable[family] ? sha.substring(0, VcsFamilySpecificShaTable[family]) : sha.substring(0, defaultFamilyShaLength);
-    if (VcsFamilySpecificShaTable.hasOwnProperty(family)) {
-        if (VcsFamilySpecificShaTable[family] === Infinity) {
+
+    if (_helpersVcsFamilySpecificShaLengthTable2['default'].hasOwnProperty(family)) {
+        if (_helpersVcsFamilySpecificShaLengthTable2['default'][family] === Infinity) {
             return sha;
         } else {
-            return sha.substring(0, VcsFamilySpecificShaTable[family]);
+            return sha.substring(0, _helpersVcsFamilySpecificShaLengthTable2['default'][family]);
         }
     } else {
         return sha.substring(0, defaultFamilyShaLength);
