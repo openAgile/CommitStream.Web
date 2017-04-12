@@ -75,9 +75,9 @@ const vsoGitTranslator = {
     };
 
    // const urlComponents = html_url.match(/http.?:\/\/..*?_git\/(.*?)\/commit/);
-    const urlComponents = html_url.match(/https?:\/\/(.*)_git\/(.*?)\/commit/);
+    const urlComponents = html_url.match(/https?:\/\/(.+?)[\:\.\/].+_git\/(.+)\/commit/);
     const serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
-
+    console.log("Hello");
     if (urlComponents !== null && serverUrlMatch !== null) {
       const repoName = urlComponents[2];
       const repoOwner = urlComponents[1];
