@@ -100,10 +100,8 @@ var vsoGitTranslator = {
       repoHref: ''
     };
 
-    // const urlComponents = html_url.match(/http.?:\/\/..*?_git\/(.*?)\/commit/);
     var urlComponents = html_url.match(/https?:\/\/(.+?)[\:\.\/].+_git\/(.+)\/commit/);
     var serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
-    console.log("Hello");
     if (urlComponents !== null && serverUrlMatch !== null) {
       var repoName = urlComponents[2];
       var repoOwner = urlComponents[1];
@@ -113,7 +111,6 @@ var vsoGitTranslator = {
       props.repoHref = serverUrl + '/' + repoName;
       props.branchHref = props.repoHref + '/#version=GB' + encodeURIComponent(branch);
     } else {
-      // TODO: use proper error here
       throw 'Could not parse VsoGitCommitReceived event props correctly.';
     }
 
