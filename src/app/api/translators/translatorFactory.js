@@ -10,6 +10,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 var translatorNames = ['deveoTranslator', 'githubTranslator', 'gitLabTranslator', 'bitbucketTranslator', 'vsoGitTranslator', 'svnTranslator', 'gitSwarmTranslator', 'p4vTranslator', 'vsoTfvcTranslator'];
+//const translatorShaMap = translatorNames.map(name =>[])
 
 var translators = translatorNames.map(function (name) {
   return require('../translators/' + name);
