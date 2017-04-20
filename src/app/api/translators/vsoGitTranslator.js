@@ -29,7 +29,7 @@ var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 var vsoGitTranslator = {
   family: _helpersVcsFamilies2['default'].VsoGit,
   canTranslate: function canTranslate(request) {
-    return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs' && request.body.resource.commits != undefined;
+    return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && (_underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs') && request.body.resource.commits != undefined;
   },
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {
@@ -100,9 +100,8 @@ var vsoGitTranslator = {
       repoHref: ''
     };
 
-    var urlComponents = html_url.match(/http.?:\/\/..*?_git\/(.*?)\/commit/);
+    var urlComponents = html_url.match(/https?:\/\/(.+?)[\:\.\/].+_git\/(.+)\/commit/);
     var serverUrlMatch = html_url.match(/(http.?:)\/\/(.*?_git)\//);
-
     if (urlComponents !== null && serverUrlMatch !== null) {
       var repoName = urlComponents[2];
       var repoOwner = urlComponents[1];
@@ -112,7 +111,6 @@ var vsoGitTranslator = {
       props.repoHref = serverUrl + '/' + repoName;
       props.branchHref = props.repoHref + '/#version=GB' + encodeURIComponent(branch);
     } else {
-      // TODO: use proper error here
       throw 'Could not parse VsoGitCommitReceived event props correctly.';
     }
 
