@@ -1,6 +1,8 @@
 import moment from 'moment';
 import translatorFactory from './translatorFactory';
 import uiDecoratorFactory from './uiDecorators/uiDecoratorFactory';
+import VcsFamilies from '../helpers/vcsFamilies';
+import getFamilySpecificSha from './getFamilySpecificSha';
 
 const getFamily = (eventType) => eventType.slice(0, -14);
 
@@ -12,12 +14,13 @@ export default (entries) => {
       const family = getFamily(entry.eventType);
       const translator = translatorFactory.getByFamily(family);
       const props = translator.getProperties(commitEvent);
+      const sha1Partial = getFamilySpecificSha(family,commitEvent.sha);
 
       let commit = {
         commitDate: commitEvent.commit.committer.date,
         timeFormatted: moment(commitEvent.commit.committer.date).fromNow(),
         author: commitEvent.commit.committer.name,
-        sha1Partial: commitEvent.sha.substring(0, 6),
+        sha1Partial,
         family,
         action: 'committed',
         message: commitEvent.commit.message,
