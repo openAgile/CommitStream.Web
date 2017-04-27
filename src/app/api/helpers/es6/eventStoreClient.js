@@ -10,16 +10,14 @@ const client = new EventStore({
 });
 
 export default Object.assign(client, {
-  async queryStatePartitionById(args) {
+  queryStatePartitionById(args) {
     const partition = args.partition || `${args.name}-${args.id}`;
     const stateArgs = {
       name: args.name,
       partition
     };
-
-    const response = await client.projection.getStateAsync(stateArgs);
-   
-    return statusCodeValidator.validateGetProjection(args.name, partition)(response);
+    return client.projection.getStateAsync(stateArgs)
+      .then(statusCodeValidator.validateGetProjection(args.name, args.id));
   },
   async postToStream(args) {
     // Stay immutable, bro
