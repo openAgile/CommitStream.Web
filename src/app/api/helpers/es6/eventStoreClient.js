@@ -10,15 +10,15 @@ const client = new EventStore({
 });
 
 export default Object.assign(client, {
-    queryStatePartitionById(args) {
-        const partition = args.partition || `${args.name}-${args.id}`;
-        const stateArgs = {
-            name: args.name,
-            partition
-        };
-        return client.projection.getStateAsync(stateArgs)
-            .then(statusCodeValidator.validateGetProjection(args.name, args.id));
-    },
+  queryStatePartitionById(args) {
+    const partition = args.partition || `${args.name}-${args.id}`;
+    const stateArgs = {
+      name: args.name,
+      partition
+    };
+    return client.projection.getStateAsync(stateArgs)
+      .then(statusCodeValidator.validateGetProjection(args.name, args.id));
+  },
   async postToStream(args) {
     // Stay immutable, bro
     let events = args.events;
