@@ -34,27 +34,12 @@ var client = new _eventstoreClient2['default']({
 
 exports['default'] = _Object$assign(client, {
   queryStatePartitionById: function queryStatePartitionById(args) {
-    var partition, stateArgs, response;
-    return _regeneratorRuntime.async(function queryStatePartitionById$(context$1$0) {
-      while (1) switch (context$1$0.prev = context$1$0.next) {
-        case 0:
-          partition = args.partition || args.name + '-' + args.id;
-          stateArgs = {
-            name: args.name,
-            partition: partition
-          };
-          context$1$0.next = 4;
-          return _regeneratorRuntime.awrap(client.projection.getStateAsync(stateArgs));
-
-        case 4:
-          response = context$1$0.sent;
-          return context$1$0.abrupt('return', _statusCodeValidator2['default'].validateGetProjection(args.name, partition)(response));
-
-        case 6:
-        case 'end':
-          return context$1$0.stop();
-      }
-    }, null, this);
+    var partition = args.partition || args.name + '-' + args.id;
+    var stateArgs = {
+      name: args.name,
+      partition: partition
+    };
+    return client.projection.getStateAsync(stateArgs).then(_statusCodeValidator2['default'].validateGetProjection(args.name, args.id));
   },
   postToStream: function postToStream(args) {
     var events, postArgs, response;
