@@ -12,15 +12,16 @@ const client = new EventStore({
 export default Object.assign(client, {
   queryStatePartitionById(args) {
     const partition = args.partition || `${args.name}-${args.id}`;
+
     const stateArgs = {
       name: args.name,
       partition
     };
+
     return client.projection.getStateAsync(stateArgs)
       .then(statusCodeValidator.validateGetProjection(args.name, args.id));
   },
-  async postToStream(args) {
-    // Stay immutable, bro
+  postToStream(args) {
     let events = args.events;
     if (!_.isArray(events)) {
       events = [events];
@@ -32,30 +33,25 @@ export default Object.assign(client, {
       events
     };
 
-    const response = await client.streams.postAsync(postArgs);
-
-    return statusCodeValidator.validateStreamsPost(response);
+    return client.streams.postAsync(postArgs)
+      .then(statusCodeValidator.validateStreamsPost);
   },
-  async getFromStream(args) {
+  getFromStream(args) {
     const getArgs = _.pick(args, 'name', 'count', 'pageUrl', 'embed');
 
-    const response = await client.streams.getAsync(getArgs);
-
-    return statusCodeValidator.validateGetStream(args.name)(response);
+    return client.streams.getAsync(getArgs)
+      .then(statusCodeValidator.validateGetStream(args.name));
   },
-  async queryCreate(args) {
-    const response = await client.query.postAsync(args);
-
-    return statusCodeValidator.validateQueryCreate(response);
+  queryCreate(args) {
+    return client.query.postAsync(args).
+      then(statusCodeValidator.validateQueryCreate);
   },
-  async queryGetState(args) {
-    const response = await client.query.getStateAsync(args);
-
-    return statusCodeValidator.validateQueryGetState(response);
+  queryGetState(args) {
+    return client.query.getStateAsync(args)
+      .then(statusCodeValidator.validateQueryGetState);
   },
-  async queryGetStatus(args) {
-    const response = await client.query.getStatusAsync(args);
-
-    return statusCodeValidator.validateQueryGetStatus(response);
+  queryGetStatus(args) {
+    return client.query.getStatusAsync(args)
+      .then(statusCodeValidator.validateQueryGetStatus);
   }
 });
