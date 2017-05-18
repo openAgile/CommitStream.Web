@@ -18,7 +18,7 @@ class InstanceToInboxRemoved extends CSError {
 }
 
 export default function(req, res, next, inboxId) {
-  eventStore.queryStatePartitionById({
+  return eventStore.queryStatePartitionById({
     name: 'inbox',
     id: inboxId
   }).then(function(inbox) {

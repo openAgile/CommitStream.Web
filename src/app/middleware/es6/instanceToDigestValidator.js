@@ -10,7 +10,7 @@ class InvalidInstanceToDigest extends CSError {
 }
 
 export default function(req, res, next, digestId) {
-  eventStore.queryStatePartitionById({
+  return eventStore.queryStatePartitionById({
     name: 'digest',
     id: digestId
   }).then(function(digest) {
