@@ -23,7 +23,15 @@ var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var debug = require('debug')('csErrorHandler');
+
+var count = 0;
+
 function errorHandler(err, req, res, next) {
+  if (debug.enabled) {
+    count++;
+  }
+  debug("csErrorHandler called " + count + " times.");
   var body = '';
   if (req.body) body = req.body;
   var errorMessage = {
