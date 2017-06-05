@@ -5,14 +5,16 @@ import logger from './logger';
 var debug = require('debug')('csErrorHandler');
 
 let count = 0;
+const pid = process.pid;
 
 export default function errorHandler(err, req, res, next) {
-    if (debug.enabled)
-    {
-        count++;
-    }
-    debug("csErrorHandler called " + count + " times.");
-    let body = '';
+  if (debug.enabled)
+  {
+      count++;
+  }
+  debug(`csErrorHandler on ${pid} called ${count} times.`);
+  
+  let body = '';
   if (req.body) body = req.body;
   var errorMessage = {
     level: 'error',
