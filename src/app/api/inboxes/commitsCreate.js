@@ -42,7 +42,7 @@ exports['default'] = function (req, res) {
             events: events
         };
 
-        _helpersEventStoreClient2['default'].postToStream(postArgs).then(function () {
+        return _helpersEventStoreClient2['default'].postToStream(postArgs).then(function () {
             var inboxData = {
                 inboxId: inboxId,
                 digestId: digestId

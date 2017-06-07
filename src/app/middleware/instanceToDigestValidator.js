@@ -35,7 +35,7 @@ var InvalidInstanceToDigest = (function (_CSError) {
 })(_csError2['default']);
 
 exports['default'] = function (req, res, next, digestId) {
-  _apiHelpersEventStoreClient2['default'].queryStatePartitionById({
+  return _apiHelpersEventStoreClient2['default'].queryStatePartitionById({
     name: 'digest',
     id: digestId
   }).then(function (digest) {
