@@ -2,8 +2,18 @@ import _ from 'underscore';
 import util from 'util';
 import CSError from './csError';
 import logger from './logger';
+var debug = require('debug')('csErrorHandler');
+
+let count = 0;
+const pid = process.pid;
 
 export default function errorHandler(err, req, res, next) {
+  if (debug.enabled)
+  {
+      count++;
+  }
+  debug(`csErrorHandler on ${pid} called ${count} times.`);
+  
   let body = '';
   if (req.body) body = req.body;
   var errorMessage = {
@@ -16,10 +26,6 @@ export default function errorHandler(err, req, res, next) {
     }),
     body: body,
     stackTrace: err.stack,
-    exception: util.inspect(err, {
-      showHidden: true,
-      depth: null
-    }).substr(0, 5000),
     internalMessage: ''
   };
 

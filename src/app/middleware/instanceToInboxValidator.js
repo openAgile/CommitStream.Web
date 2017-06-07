@@ -49,7 +49,7 @@ var InstanceToInboxRemoved = (function (_CSError2) {
 })(_csError2['default']);
 
 exports['default'] = function (req, res, next, inboxId) {
-  _apiHelpersEventStoreClient2['default'].queryStatePartitionById({
+  return _apiHelpersEventStoreClient2['default'].queryStatePartitionById({
     name: 'inbox',
     id: inboxId
   }).then(function (inbox) {

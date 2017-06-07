@@ -16,6 +16,7 @@ import methodOverride from 'method-override';
 import api from "./api";
 import bootstrapper from './bootstrapper';
 import instancesController from './api/instances/instancesController';
+import catchAsyncErrors from './middleware/catchAsyncErrors';
 
 // DO NOT MOVE THIS. It is here to wrap routes in a domain to catch unhandled errors
 app.use(domainMiddleware);
@@ -60,9 +61,9 @@ app.get('/instances', (req, res) => {
 });
 
 // Ensure that all routes with :instanceId parameters are properly authenticated
-app.param('instanceId', instanceAuthenticator);
-app.param('digestId', instanceToDigestValidator);
-app.param('inboxId', instanceToInboxValidator);
+app.param('instanceId', catchAsyncErrors(instanceAuthenticator));
+app.param('digestId', catchAsyncErrors(instanceToDigestValidator));
+app.param('inboxId', catchAsyncErrors(instanceToInboxValidator));
 
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.

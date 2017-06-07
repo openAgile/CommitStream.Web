@@ -23,7 +23,17 @@ var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var debug = require('debug')('csErrorHandler');
+
+var count = 0;
+var pid = process.pid;
+
 function errorHandler(err, req, res, next) {
+  if (debug.enabled) {
+    count++;
+  }
+  debug('csErrorHandler on ' + pid + ' called ' + count + ' times.');
+
   var body = '';
   if (req.body) body = req.body;
   var errorMessage = {
@@ -36,10 +46,6 @@ function errorHandler(err, req, res, next) {
     }),
     body: body,
     stackTrace: err.stack,
-    exception: _util2['default'].inspect(err, {
-      showHidden: true,
-      depth: null
-    }).substr(0, 5000),
     internalMessage: ''
   };
 

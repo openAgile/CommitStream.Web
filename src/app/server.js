@@ -70,6 +70,10 @@ var _apiInstancesInstancesController = require('./api/instances/instancesControl
 
 var _apiInstancesInstancesController2 = _interopRequireDefault(_apiInstancesInstancesController);
 
+var _middlewareCatchAsyncErrors = require('./middleware/catchAsyncErrors');
+
+var _middlewareCatchAsyncErrors2 = _interopRequireDefault(_middlewareCatchAsyncErrors);
+
 // DO NOT MOVE THIS. It is here to wrap routes in a domain to catch unhandled errors
 
 var app = (0, _express2['default'])();
@@ -115,9 +119,9 @@ app.get('/instances', function (req, res) {
 });
 
 // Ensure that all routes with :instanceId parameters are properly authenticated
-app.param('instanceId', _middlewareInstanceAuthenticator2['default']);
-app.param('digestId', _middlewareInstanceToDigestValidator2['default']);
-app.param('inboxId', _middlewareInstanceToInboxValidator2['default']);
+app.param('instanceId', (0, _middlewareCatchAsyncErrors2['default'])(_middlewareInstanceAuthenticator2['default']));
+app.param('digestId', (0, _middlewareCatchAsyncErrors2['default'])(_middlewareInstanceToDigestValidator2['default']));
+app.param('inboxId', (0, _middlewareCatchAsyncErrors2['default'])(_middlewareInstanceToInboxValidator2['default']));
 
 // NOTE: See above warning. Why are you even considering moving these?
 // Think thrice.
