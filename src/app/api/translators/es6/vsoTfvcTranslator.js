@@ -57,9 +57,18 @@ const vsoTfvcTranslator = {
 
 const getHTMLUrlsPerProject = (event) => {
     let htmlUrlsPerProject = [];
+    let baseUrl = event.resourceContainers.collection.baseUrl;
+    //const regex = /(https?:\/\/)(\w+\/)(\w+)\/(_apis\/tfvc)/g;
+    const regex = /(https?:\/\/\S+\/tfs)(\/\S+\/)(_apis\/tfvc\/changesets)/g;
+    let match = regex.exec(event.resource.url)
+    console.log('match='+match)
 
+    if (match != null)
+    {
+       baseUrl = match[1] + '/';
+    }
     event.resource.teamProjectIds.forEach((projectId) => {
-        htmlUrlsPerProject.push(event.resourceContainers.collection.baseUrl +  projectId + "/_versionControl/changeset/" + event.resource.changesetId)
+        htmlUrlsPerProject.push(baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
     })
 
     return htmlUrlsPerProject;
@@ -67,9 +76,17 @@ const getHTMLUrlsPerProject = (event) => {
 
 const getRepositoryUrlsPerProject = (event) => {
     let repositoryUrlsPerProject = [];
+    let baseUrl = event.resourceContainers.collection.baseUrl;
+    const regex = /(https?:\/\/)(\w+\/)(\w+)\/(_apis\/tfvc)/g;
+    let match = regex.exec(event.resource.url)
+
+    if (match != null)
+    {
+        baseUrl = match[0] + match[1];
+    }
 
     event.resource.teamProjectIds.forEach((projectId) => {
-        repositoryUrlsPerProject.push(event.resourceContainers.collection.baseUrl + projectId + "/_versionControl/")
+        repositoryUrlsPerProject.push(baseUrl + projectId + "/_versionControl/")
     });
 
     const repositoryUrls = {
