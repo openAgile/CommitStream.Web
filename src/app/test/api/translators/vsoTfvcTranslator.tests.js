@@ -10,6 +10,9 @@ var chai = require('chai'),
     });
 require('../../helpers')(global);
 chai.use(require('chai-match'));
+var vsoTfvcPushEventForOneProject2017 = {
+
+}
 
 var vsoTfvcPushEventForOneProject2015 = {
     "subscriptionId":"6c2db902-7af3-4f36-9410-7d80c81ca616",
@@ -383,10 +386,57 @@ describe('vsoTfvcTranslator', function() {
         });
 
         it('the html url should fit the 2015 format', function () {
-            actual[0].data.html_url[0].should.match(/(https?:\/\/\S+\/tfs\/)/);
-            console.log(actual[0].data.html_url[0]);
+            actual[0].data.html_url[0].should.match(/(https?:\/\/\S+\/tfs\/\S+\/_versionControl\/changeset)/);
+            console.log('Here is your html url=' + actual[0].data.html_url[0]);
         });
         it('the repository url should fit the 2015 format', function () {
+            actual[0].data.repository.url[0].should.match(/(https?:\/\/\S+\/tfs\/\S+\/_versionControl)/);
+            console.log(actual[0].data.repository.url[0]);
+        });
+    });
+    describe('the shape of the url given tfs2017 should be exactly the same', function() {
+        var expected = [{
+            eventId: eventId,
+            eventType: "VsoTfvcCommitReceived",
+            data: {
+                sha: "b72be65b-614d-4652-9ca9-11d2942a5c91",
+                commit: {
+                    author: {
+                        name: "Josh Gough",
+                        email: "jsgough@gmail.com"
+                    },
+                    committer: {
+                        name: "Josh Gough",
+                        email: "jsgough@gmail.com",
+                        date: "2017-01-20T16:28:45Z"
+                    },
+                    message: "Josh Gough checked in changeset 17: Updated README.md S-12345"
+                },
+                html_url: ["https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/changeset/17"],
+                repository: {
+                    url: ["https://v1platformtest.visualstudio.com/b70385b4-ae0f-4afd-b166-6aff62bfd0b0/_versionControl/"]
+                },
+                branch: '',
+                originalMessage: vsoTfvcPushEventForOneProject
+            },
+            metadata: {
+                instanceId: instanceId,
+                digestId: digestId,
+                inboxId: inboxId
+            }
+        }];
+        var actual;
+
+        beforeEach(function() {
+            actual = vsoTfvcTranslator.translatePush(vsoTfvcPushEventForOneProject, instanceId, digestId, inboxId);
+            console.log(actual[0].data.html_url[0]);
+        });
+
+        it('the html url should fit the 2017 format', function () {
+            actual[0].data.html_url[0].should.match(/(https?:\/\/\S+\/)/);
+            console.log(actual[0].data.html_url[0]);
+        });
+        it('the repository url should fit the 2017 format', function () {
             actual[0].data.repository.url[0].should.match(/(https?:\/\/\S+\/_versionControl\/)/);
             console.log(actual[0].data.repository.url[0]);
         });

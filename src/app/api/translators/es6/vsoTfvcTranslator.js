@@ -58,10 +58,9 @@ const vsoTfvcTranslator = {
 const getHTMLUrlsPerProject = (event) => {
     let htmlUrlsPerProject = [];
     let baseUrl = event.resourceContainers.collection.baseUrl;
-    //const regex = /(https?:\/\/)(\w+\/)(\w+)\/(_apis\/tfvc)/g;
-    const regex = /(https?:\/\/\S+\/tfs)(\/\S+\/)(_apis\/tfvc\/changesets)/g;
+    const regex = /(https?:\/\/\S+\/tfs\/\S+)(\/_apis\/tfvc\/changesets)/g;
     let match = regex.exec(event.resource.url)
-    console.log('match='+match)
+    console.log('baseurl=' + baseUrl)
 
     if (match != null)
     {
@@ -69,6 +68,7 @@ const getHTMLUrlsPerProject = (event) => {
     }
     event.resource.teamProjectIds.forEach((projectId) => {
         htmlUrlsPerProject.push(baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
+        console.log('htmlUrl=' + baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
     })
 
     return htmlUrlsPerProject;
@@ -77,16 +77,17 @@ const getHTMLUrlsPerProject = (event) => {
 const getRepositoryUrlsPerProject = (event) => {
     let repositoryUrlsPerProject = [];
     let baseUrl = event.resourceContainers.collection.baseUrl;
-    const regex = /(https?:\/\/)(\w+\/)(\w+)\/(_apis\/tfvc)/g;
+    const regex = /(https?:\/\/\S+\/tfs\/\S+)(\/_apis\/tfvc\/changesets)/g;
     let match = regex.exec(event.resource.url)
 
     if (match != null)
     {
-        baseUrl = match[0] + match[1];
+        baseUrl = match[1] + '/';
     }
 
     event.resource.teamProjectIds.forEach((projectId) => {
         repositoryUrlsPerProject.push(baseUrl + projectId + "/_versionControl/")
+        console.log('repourl' + baseUrl + projectId + "/_versionControl/")
     });
 
     const repositoryUrls = {

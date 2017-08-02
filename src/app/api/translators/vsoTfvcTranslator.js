@@ -25,7 +25,7 @@ var _underscore2 = _interopRequireDefault(_underscore);
 var vsoTfvcTranslator = {
     family: _helpersVcsFamilies2['default'].VsoTfvc,
     canTranslate: function canTranslate(request) {
-        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
+        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin' && (_underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs');
     },
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
         try {
@@ -75,9 +75,17 @@ var vsoTfvcTranslator = {
 
 var getHTMLUrlsPerProject = function getHTMLUrlsPerProject(event) {
     var htmlUrlsPerProject = [];
+    var baseUrl = event.resourceContainers.collection.baseUrl;
+    var regex = /(https?:\/\/\S+\/tfs\/\S+)(\/_apis\/tfvc\/changesets)/g;
+    var match = regex.exec(event.resource.url);
+    console.log('baseurl=' + baseUrl);
 
+    if (match != null) {
+        baseUrl = match[1] + '/';
+    }
     event.resource.teamProjectIds.forEach(function (projectId) {
-        htmlUrlsPerProject.push(event.resourceContainers.collection.baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
+        htmlUrlsPerProject.push(baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
+        console.log('htmlUrl=' + baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
     });
 
     return htmlUrlsPerProject;
@@ -85,9 +93,17 @@ var getHTMLUrlsPerProject = function getHTMLUrlsPerProject(event) {
 
 var getRepositoryUrlsPerProject = function getRepositoryUrlsPerProject(event) {
     var repositoryUrlsPerProject = [];
+    var baseUrl = event.resourceContainers.collection.baseUrl;
+    var regex = /(https?:\/\/\S+\/tfs\/\S+)(\/_apis\/tfvc\/changesets)/g;
+    var match = regex.exec(event.resource.url);
+
+    if (match != null) {
+        baseUrl = match[1] + '/';
+    }
 
     event.resource.teamProjectIds.forEach(function (projectId) {
-        repositoryUrlsPerProject.push(event.resourceContainers.collection.baseUrl + projectId + "/_versionControl/");
+        repositoryUrlsPerProject.push(baseUrl + projectId + "/_versionControl/");
+        console.log('repourl' + baseUrl + projectId + "/_versionControl/");
     });
 
     var repositoryUrls = {
