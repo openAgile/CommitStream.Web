@@ -78,14 +78,12 @@ var getHTMLUrlsPerProject = function getHTMLUrlsPerProject(event) {
     var baseUrl = event.resourceContainers.collection.baseUrl;
     var regex = /(https?:\/\/\S+\/tfs\/\S+)(\/_apis\/tfvc\/changesets)/g;
     var match = regex.exec(event.resource.url);
-    console.log('baseurl=' + baseUrl);
 
     if (match != null) {
         baseUrl = match[1] + '/';
     }
     event.resource.teamProjectIds.forEach(function (projectId) {
         htmlUrlsPerProject.push(baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
-        console.log('htmlUrl=' + baseUrl + projectId + "/_versionControl/changeset/" + event.resource.changesetId);
     });
 
     return htmlUrlsPerProject;
@@ -103,7 +101,6 @@ var getRepositoryUrlsPerProject = function getRepositoryUrlsPerProject(event) {
 
     event.resource.teamProjectIds.forEach(function (projectId) {
         repositoryUrlsPerProject.push(baseUrl + projectId + "/_versionControl/");
-        console.log('repourl' + baseUrl + projectId + "/_versionControl/");
     });
 
     var repositoryUrls = {

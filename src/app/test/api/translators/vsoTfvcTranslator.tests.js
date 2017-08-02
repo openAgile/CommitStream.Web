@@ -10,6 +10,7 @@ var chai = require('chai'),
     });
 require('../../helpers')(global);
 chai.use(require('chai-match'));
+
 var vsoTfvcPushEventForOneProject2017 = {
 
 }
@@ -171,13 +172,13 @@ var vsoTfvcPushEventForMoreThanOneProject= {
     "createdDate": "2017-03-08T20:54:37.2569716Z"
 };
 
-describe('vsoTfvcTranslator', function() {
-    var eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
-    uuidStub.returns(eventId);
+    describe('vsoTfvcTranslator', function() {
+        var eventId = '87b66de8-8307-4e03-b2d3-da447c66501a';
+        uuidStub.returns(eventId);
 
-    var digestId = 'cd0b1089-7d6d-435a-adf2-125209b1c2c8';
-    var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
-    var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
+        var digestId = 'cd0b1089-7d6d-435a-adf2-125209b1c2c8';
+        var instanceId = 'c4abe8e0-e4af-4cc0-8dee-92e698015694';
+        var inboxId = 'f68ad5b0-f0e2-428d-847d-1302322eeeb1';
 
     describe('when translating any valid VsoTfvc push event', function() {
         var request;
@@ -387,11 +388,9 @@ describe('vsoTfvcTranslator', function() {
 
         it('the html url should fit the 2015 format', function () {
             actual[0].data.html_url[0].should.match(/(https?:\/\/\S+\/tfs\/\S+\/_versionControl\/changeset)/);
-            console.log('Here is your html url=' + actual[0].data.html_url[0]);
         });
         it('the repository url should fit the 2015 format', function () {
             actual[0].data.repository.url[0].should.match(/(https?:\/\/\S+\/tfs\/\S+\/_versionControl)/);
-            console.log(actual[0].data.repository.url[0]);
         });
     });
     describe('the shape of the url given tfs2017 should be exactly the same', function() {
@@ -429,16 +428,13 @@ describe('vsoTfvcTranslator', function() {
 
         beforeEach(function() {
             actual = vsoTfvcTranslator.translatePush(vsoTfvcPushEventForOneProject, instanceId, digestId, inboxId);
-            console.log(actual[0].data.html_url[0]);
         });
 
         it('the html url should fit the 2017 format', function () {
             actual[0].data.html_url[0].should.match(/(https?:\/\/\S+\/)/);
-            console.log(actual[0].data.html_url[0]);
         });
         it('the repository url should fit the 2017 format', function () {
             actual[0].data.repository.url[0].should.match(/(https?:\/\/\S+\/_versionControl\/)/);
-            console.log(actual[0].data.repository.url[0]);
         });
     });
 });
