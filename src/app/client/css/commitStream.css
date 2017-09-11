@@ -1233,6 +1233,10 @@ h6 {
 .commitStream-panel .csGitLab {
   background-image: url(../icon-gitlab-selected-32x32.png);
 }
+.commitStream-panel .csCtfSvn,
+.commitStream-panel .csCtfGit {
+  background-image: url(../icon-teamforge-selected-32x32.png);
+}
 .commitStream-panel .csVsoGit,
 .commitStream-panel .csVsoTfvc {
   background-image: url(../icon-vsts-selected-32x32.png);

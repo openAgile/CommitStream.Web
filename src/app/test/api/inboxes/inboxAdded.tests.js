@@ -74,7 +74,7 @@ describe('inboxAdded', function() {
             type: "string"
           },
           family: {
-            enum: ["Bitbucket", "Deveo", "GitHub", "GitLab", "GitSwarm", "P4V", "Svn", "VsoGit", "VsoTfvc"],
+            enum: ["Bitbucket", "CtfGit", "CtfSvn", "Deveo", "GitHub", "GitLab", "GitSwarm", "P4V", "Svn", "VsoGit", "VsoTfvc"],
             title: "Version Control System type",
             type: "string"
           },

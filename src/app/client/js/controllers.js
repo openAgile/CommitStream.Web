@@ -33,6 +33,116 @@
       return loading;
     };
 
+    $scope.families = {
+      'GitHub': {
+        'name': 'GitHub',
+        'label': 'GitHub',
+        displayOrder: 0
+      },
+      'GitLab': {
+        'name': 'GitLab',
+        'label': 'GitLab',
+        displayOrder: 1
+      },
+      'Bitbucket': {
+        'name': 'Bitbucket',
+        'label': 'Bitbucket',
+        displayOrder: 2
+      },
+      'VSTS': {
+        'name': 'VSTS',
+        'label': 'VSTS',
+        displayOrder: 3,
+        'icon': {},
+        'families': {
+          'VsoGit': {
+            'name': 'VsoGit',
+            'label': 'Git',
+            'icon': {
+              'active': 'icon-vso-git-selected-24x24.png'
+            },
+            displayOrder: 0
+          },
+          'VsoTfvc': {
+            'name': 'VsoTfvc',
+            'label': 'TFVC',
+            'icon': {
+              'active': 'icon-vso-tfvc-selected-24x24.png'
+            },
+            displayOrder: 1
+          }
+        }
+      },
+      'Svn': {
+        'name': 'Svn',
+        'label': 'Subversion',
+        displayOrder: 4
+      },
+      'GitSwarm': {
+        'name': 'GitSwarm',
+        'label': 'GitSwarm',
+        displayOrder: 5
+      },
+      'P4V': {
+        'name': 'P4V',
+        'label': 'Perforce P4V',
+        displayOrder: 6
+      },
+      'Deveo': {
+        'name': 'Deveo',
+        'label': 'Deveo',
+        displayOrder: 7
+      },
+      'TeamForge': {
+        'name': 'TeamForge',
+        'label': 'TeamForge',
+        displayOrder: 8,
+        'icon': {},
+        'families': {
+          // TODO enable once TeamForge Git has webhook feature
+          //'CtfGit': {
+          //  'name': 'CtfGit',
+          //  'label': 'Git',
+          //  'icon' : {
+          //      'active': 'icon-ctfgit-selected-24x24.png'
+          //    },
+          //  displayOrder: 0
+          //},
+          'CtfSvn': {
+            'name': 'CtfSvn',
+            'label': 'Subversion',
+            'icon': {
+              'active': 'icon-ctfsvn-selected-24x24.png'
+            },
+            displayOrder: 1
+          }
+        }
+      }
+    };
+
+    $scope.getFamiliesArr = function () {
+      var famArr = [];
+      for (var famName in $scope.families) {
+        if ($scope.families.hasOwnProperty(famName)) {
+          famArr.push($scope.families[famName]);
+        }
+      }
+      return famArr;
+    };
+
+    $scope.getSubFamiliesArr = function (familyName) {
+      var sfamArr = [];
+      if (familyName && $scope.families.hasOwnProperty(familyName) && $scope.families[familyName].families) {
+        var subFams = $scope.families[familyName].families;
+        for (var famName in subFams) {
+          if (subFams.hasOwnProperty(famName)) {
+            sfamArr.push(subFams[famName]);
+          }
+        }
+      }
+      return sfamArr;
+    };
+
     var errorHandler = function errorHandler(error) {
       loading = false;
       if (error.data && error.data.errors && error.data.errors.length) {
@@ -196,48 +306,72 @@
     var family = '';
     var familyHover = '';
     var showVSTSChoices = false;
-    var selectedVcs = '';
+    var showCtfChoices = false;
+    var selectedButton = '';
 
-    $scope.vstsSelection = function (value) {
+    $scope.subFamilySelection = function (value) {
       $scope.familySelect(value);
     };
 
-    var setFamilyWhenNotVsts = function setFamilyWhenNotVsts(Vcs) {
-      if (Vcs != "VSTS") {
-        $scope.familySelect(Vcs);
-      }
-    };
-
-    var alwaysToggleWhenVsts = function alwaysToggleWhenVsts(Vcs) {
+    var alwaysToggleWhenWithSubfamily = function alwaysToggleWhenWithSubfamily(Vcs) {
       if (Vcs == "VSTS") {
         showVSTSChoices = true;
-        $scope.familySelect("VsoGit");
-      }
+        //$scope.familySelect("VsoGit");
+      } else if (Vcs == "TeamForge") {
+          showCtfChoices = true;
+          //$scope.familySelect("CtfSvn");
+        }
     };
 
-    var alwaysCloseWhenNotVsts = function alwaysCloseWhenNotVsts(Vcs) {
+    var alwaysCloseWhenNoSubfamily = function alwaysCloseWhenNoSubfamily(Vcs) {
       if (Vcs != "VSTS") {
         showVSTSChoices = false;
       }
+      if (Vcs != "TeamForge") {
+        showCtfChoices = false;
+      }
     };
 
-    var shouldBeTreatedAsVsts = function shouldBeTreatedAsVsts(familyName) {
-      return familyName === "VsoTfvc" || familyName === "VsoGit" || familyName === "VSTS";
+    var getParentFamilyName = function getParentFamilyName(familyName) {
+      for (var famName in $scope.families) {
+        if ($scope.families.hasOwnProperty(famName)) {
+          var fam = $scope.families[famName];
+          if (fam.families && fam.families.hasOwnProperty(familyName)) {
+            return fam.name;
+          }
+        }
+      }
+      return familyName;
     };
 
     $scope.setSelectedButton = function (Vcs) {
-      selectedVcs = Vcs;
-      setFamilyWhenNotVsts(Vcs);
-      alwaysToggleWhenVsts(Vcs);
-      alwaysCloseWhenNotVsts(Vcs);
+      selectedButton = Vcs;
+      var selectFamily = Vcs;
+      var subFams = $scope.getSubFamiliesArr(Vcs);
+      if (subFams && subFams.length > 0) {
+        // select the first sub-family if there are sub-families
+        var sFam = null;
+        for (var subFamilyI in subFams) {
+          var subFamily = subFams[subFamilyI];
+          if (subFamily && (!sFam || subFamily.displayOrder < sFam.displayOrder)) {
+            sFam = subFamily;
+          }
+        }
+        if (sFam) {
+          selectFamily = sFam.name;
+        }
+      }
+      $scope.familySelect(selectFamily);
+      alwaysToggleWhenWithSubfamily(Vcs);
+      alwaysCloseWhenNoSubfamily(Vcs);
     };
 
     $scope.initializeButtonOnLoad = function (familyName) {
-      shouldBeTreatedAsVsts(familyName) ? $scope.setSelectedButton("VSTS") : $scope.setSelectedButton(familyName);
+      $scope.setSelectedButton(getParentFamilyName(familyName));
     };
 
     $scope.getClass = function (Vcs) {
-      return selectedVcs === Vcs ? 'family-selected' : '';
+      return selectedButton === Vcs ? 'family-selected' : '';
     };
 
     $scope.familySelect = function (newFamily) {
@@ -249,31 +383,86 @@
       familyHover = familyName;
     };
 
-    $scope.showVSTSChoices = function () {
-      return showVSTSChoices;
+    $scope.showSubFamilyChoices = function (parentFamilyName) {
+      if (parentFamilyName === "TeamForge") {
+        return showCtfChoices;
+      }
+      if (parentFamilyName === "VSTS") {
+        return showVSTSChoices;
+      }
+      return false;
     };
 
     $scope.familyHasBeenSelected = function () {
       return family !== '';
     };
 
-    $scope.familyIsSelectedIcon = function (familyName) {
-      return family === familyName || familyHover === familyName ? 'icon-' + familyName.toLowerCase() + '-selected-32x32.png' : 'icon-' + familyName.toLowerCase() + '-nonselected-32x32.png';
-    };
-
-    $scope.vstsFamilyIsSelectedIcon = function (familyName) {
-      return familyHover === familyName || shouldBeTreatedAsVsts(family) ? 'icon-' + familyName.toLowerCase() + '-selected-32x32.png' : 'icon-' + familyName.toLowerCase() + '-nonselected-32x32.png';
-    };
-
     $scope.familyIcon = function (familyName) {
-      if (shouldBeTreatedAsVsts(familyName)) {
-        return serviceUrl + '/icon-vsts-selected-32x32.png';
+      var parentFamilyName = getParentFamilyName(familyName);
+      var icon = null;
+      if ($scope.families.hasOwnProperty(parentFamilyName)) {
+        var fam = $scope.families[parentFamilyName];
+        if (fam.icon) {
+          icon = fam.icon.active;
+        }
       }
-      return serviceUrl + '/icon-' + familyName.toLowerCase() + '-selected-32x32.png';
+      if (!icon) {
+        icon = 'icon-' + getParentFamilyName(familyName).toLowerCase() + '-selected-32x32.png';
+      }
+      return serviceUrl + '/' + icon;
     };
 
-    $scope.vsoIcon = function (vsoVcs) {
-      return serviceUrl + '/icon-' + vsoVcs.toLowerCase() + '-selected-24x24.png';
+    $scope.getSubFamilyIcon = function (familyName, subFamilyName) {
+      if (!familyName) {
+        familyName = getParentFamilyName(subFamilyName);
+      }
+      var icon = '';
+      var fams = $scope.families;
+      if (fams && fams.hasOwnProperty(familyName) && fams[familyName].families) {
+        var subFams = fams[familyName].families;
+        if (subFams.hasOwnProperty(subFamilyName)) {
+          var subFam = subFams[subFamilyName];
+          if (subFam.icon && subFam.icon.active) {
+            icon = subFam.icon.active;
+          }
+        }
+      }
+      if (!icon) {
+        icon = 'icon-' + subFamilyName.toLowerCase() + '-selected-24x24.png';
+      }
+      return serviceUrl + '/' + icon;
+    };
+
+    $scope.getIsSelectedFamilyIcon = function (familyName) {
+      var icon = '';
+      var fams = $scope.families;
+      var isActive = familyHover === familyName || getParentFamilyName(family) === familyName;
+      if (fams && fams.hasOwnProperty(familyName)) {
+        var fam = fams[familyName];
+        if (fam.icon) {
+          if (isActive) {
+            icon = fam.icon.active;
+          } else {
+            icon = fam.icon.inactive;
+          }
+        }
+      }
+      if (!icon) {
+        icon = isActive ? 'icon-' + familyName.toLowerCase() + '-selected-32x32.png' : 'icon-' + familyName.toLowerCase() + '-nonselected-32x32.png';
+      }
+      return icon;
+    };
+
+    $scope.isSubFamily = function (familyName) {
+      for (var famName in $scope.families) {
+        if ($scope.families.hasOwnProperty(famName)) {
+          var fam = $scope.families[famName];
+          if (fam.families && fam.families.hasOwnProperty(familyName)) {
+            return true;
+          }
+        }
+      }
+      return false;
     };
 
     var setupNewInbox = function setupNewInbox(selectedFamily) {
