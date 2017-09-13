@@ -84,6 +84,9 @@ let families = {
   },
   CtfSvn: {
     commitAdd: (client, inbox, message='TeamForge Subversion commit') => postToInboxForFamily(client, inbox, message, 'CtfSvn', {'x-ctf-scm': 'subversion'})
+  },
+  CtfGit: {
+    commitAdd: (client, inbox, message='TeamForge Git commit') => postToInboxForFamily(client, inbox, message, 'CtfGit', {'x-ctf-scm': 'git'})
   }
 };
 

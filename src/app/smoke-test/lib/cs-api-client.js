@@ -141,6 +141,12 @@ var families = {
       var message = arguments.length <= 2 || arguments[2] === undefined ? 'TeamForge Subversion commit' : arguments[2];
       return postToInboxForFamily(client, inbox, message, 'CtfSvn', { 'x-ctf-scm': 'subversion' });
     }
+  },
+  CtfGit: {
+    commitAdd: function commitAdd(client, inbox) {
+      var message = arguments.length <= 2 || arguments[2] === undefined ? 'TeamForge Git commit' : arguments[2];
+      return postToInboxForFamily(client, inbox, message, 'CtfGit', { 'x-ctf-scm': 'git' });
+    }
   }
 };
 

@@ -51,6 +51,10 @@ let createInstanceWithData = async (iteration) => {
     {
       name: `CtfSvn Repo ${iteration}`,
       family: 'CtfSvn'
+    },
+    {
+      name: `CtfGit Repo ${iteration}`,
+      family: 'CtfGit'
     }
   ];
 

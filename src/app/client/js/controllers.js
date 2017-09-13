@@ -99,15 +99,14 @@
         displayOrder: 8,
         'icon': {},
         'families': {
-          // TODO enable once TeamForge Git has webhook feature
-          //'CtfGit': {
-          //  'name': 'CtfGit',
-          //  'label': 'Git',
-          //  'icon' : {
-          //      'active': 'icon-ctfgit-selected-24x24.png'
-          //    },
-          //  displayOrder: 0
-          //},
+          'CtfGit': {
+            'name': 'CtfGit',
+            'label': 'Git',
+            'icon': {
+              'active': 'icon-ctfgit-selected-24x24.png'
+            },
+            displayOrder: 0
+          },
           'CtfSvn': {
             'name': 'CtfSvn',
             'label': 'Subversion',
@@ -316,11 +315,9 @@
     var alwaysToggleWhenWithSubfamily = function alwaysToggleWhenWithSubfamily(Vcs) {
       if (Vcs == "VSTS") {
         showVSTSChoices = true;
-        //$scope.familySelect("VsoGit");
       } else if (Vcs == "TeamForge") {
-          showCtfChoices = true;
-          //$scope.familySelect("CtfSvn");
-        }
+        showCtfChoices = true;
+      }
     };
 
     var alwaysCloseWhenNoSubfamily = function alwaysCloseWhenNoSubfamily(Vcs) {
