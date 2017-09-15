@@ -31,43 +31,30 @@ global.getStreamsInCategoryCount = function(category) {
     return streamsInCategory.length;
 };
 
+
 global.fromStream = function(streamSource) {
     return {
         when: function(eventSpec) {
             for (var eventType in eventSpec) {
-                var callback = eventSpec[eventType];
-                var evts = getEventsByType(eventType);
-                evts.forEach(function(evt) {
-                    callback(null, evt);
-                });
+                if (eventType === '$any') {
+                    var callback = eventSpec[eventType];
+                    getEvents().forEach(function(element) {
+                        callback(null, element);
+                    });
+                }
+                else {
+                    var callback = eventSpec[eventType];
+                    var evts = getEventsByType(eventType);
+                    evts.forEach(function(evt) {
+                        callback(null, evt);
+                    });
+                }
             }
-        },
-        whenAny: function(callback) {
-            getEvents().forEach(function(element) {
-                callback(null, element);
-            });
         }
     }
 };
+global.fromCategory = global.fromStream; // These fakes do the same thing!
 
-global.fromCategory = function(streamSource) {
-    return {
-        when: function(eventSpec) {
-            for (var eventType in eventSpec) {
-                var callback = eventSpec[eventType];
-                var evts = getEventsByType(eventType);
-                evts.forEach(function(evt) {
-                    callback(null, evt);
-                });
-            }
-        },
-        whenAny: function(callback) {
-            getEvents().forEach(function(element) {
-                callback(null, element);
-            });
-        }
-    }
-}
 
 global.linkTo = function(name, value) {
     if (streamResult[name])
