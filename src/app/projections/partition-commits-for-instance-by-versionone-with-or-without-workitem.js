@@ -14,5 +14,6 @@ var callback = function(state, ev) {
   }
 };
 
-fromCategory('inboxCommits')
-  .whenAny(callback);
+fromCategory('inboxCommits').when({
+   '$any' : callback
+});

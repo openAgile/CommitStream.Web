@@ -12,5 +12,6 @@ var callback = function (state, ev) {
     });
 };
 
-fromStream('mention-with')
-     .whenAny(callback);
+fromStream('mention-with').when({
+   '$any' : callback
+});
