@@ -312,19 +312,19 @@
       $scope.familySelect(value);
     };
 
-    var alwaysToggleWhenWithSubfamily = function alwaysToggleWhenWithSubfamily(Vcs) {
-      if (Vcs == "VSTS") {
+    var alwaysToggleWhenWithSubfamily = function alwaysToggleWhenWithSubfamily(vcs) {
+      if (vcs == "VSTS") {
         showVSTSChoices = true;
-      } else if (Vcs == "TeamForge") {
+      } else if (vcs == "TeamForge") {
         showCtfChoices = true;
       }
     };
 
-    var alwaysCloseWhenNoSubfamily = function alwaysCloseWhenNoSubfamily(Vcs) {
-      if (Vcs != "VSTS") {
+    var alwaysCloseWhenNoSubfamily = function alwaysCloseWhenNoSubfamily(vcs) {
+      if (vcs != "VSTS") {
         showVSTSChoices = false;
       }
-      if (Vcs != "TeamForge") {
+      if (vcs != "TeamForge") {
         showCtfChoices = false;
       }
     };
@@ -341,10 +341,10 @@
       return familyName;
     };
 
-    $scope.setSelectedButton = function (Vcs) {
-      selectedButton = Vcs;
-      var selectFamily = Vcs;
-      var subFams = $scope.getSubFamiliesArr(Vcs);
+    $scope.setSelectedButton = function (vcs) {
+      selectedButton = vcs;
+      var selectFamily = vcs;
+      var subFams = $scope.getSubFamiliesArr(vcs);
       if (subFams && subFams.length > 0) {
         // select the first sub-family if there are sub-families
         var sFam = null;
@@ -359,16 +359,16 @@
         }
       }
       $scope.familySelect(selectFamily);
-      alwaysToggleWhenWithSubfamily(Vcs);
-      alwaysCloseWhenNoSubfamily(Vcs);
+      alwaysToggleWhenWithSubfamily(vcs);
+      alwaysCloseWhenNoSubfamily(vcs);
     };
 
     $scope.initializeButtonOnLoad = function (familyName) {
       $scope.setSelectedButton(getParentFamilyName(familyName));
     };
 
-    $scope.getClass = function (Vcs) {
-      return selectedButton === Vcs ? 'family-selected' : '';
+    $scope.getClass = function (vcs) {
+      return selectedButton === vcs ? 'family-selected' : '';
     };
 
     $scope.familySelect = function (newFamily) {
