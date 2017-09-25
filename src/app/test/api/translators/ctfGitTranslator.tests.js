@@ -92,7 +92,8 @@ describe('ctfGitTranslator', function() {
             var request = {
                     'headers': {
                         "x-ctf-scm": "git"
-                    }
+                    },
+                    body: commit
             };
             ctfGitTranslator.canTranslate(request).should.equal(true);
         });
@@ -104,6 +105,22 @@ describe('ctfGitTranslator', function() {
             var request = {
                     'headers': {
                         "OTHERHEADER": "Commit Event"
+                    },
+                    body: commit
+            };
+            ctfGitTranslator.canTranslate(request).should.equal(false);
+        });
+    });
+
+    describe('with incorrect event type', function() {
+
+        it('canTranslate should return false when invalid event type information is present', function() {
+            var request = {
+                    'headers': {
+                        "x-ctf-scm": "git"
+                    },
+                    'body': {
+                        "event_type": "post-commit"
                     }
             };
             ctfGitTranslator.canTranslate(request).should.equal(false);
@@ -116,7 +133,8 @@ describe('ctfGitTranslator', function() {
             var request = {
                     'headers': {
                         "x-ctf-scm": "scm"
-                    }
+                    },
+                    body: commit
             };
             ctfGitTranslator.canTranslate(request).should.equal(false);
         });

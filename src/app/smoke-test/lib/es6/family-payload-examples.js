@@ -76,6 +76,11 @@ export default {
     CtfSvn: {
         validWithOneCommit: message => ({
             "event_type": "post-commit",
+            "project": {
+                "name": "CollabNet Desktop",
+                "id": "proj1010",
+                "url": "https://ctf.open.collab.net/sf/go/proj1010"
+            },
             "repository": {
                 "full_name": ".NET Desktops",
                 "name": "dotnet",
