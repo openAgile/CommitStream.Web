@@ -12,6 +12,11 @@ require('../../helpers')(global);
 
 var commit = {
     "event_type": "post-commit",
+    "project": {
+        "name": "CollabNet Desktop",
+        "id": "proj1010",
+        "url": "https://ctf.open.collab.net/sf/go/proj1010"
+    },
     "repository": {
         "full_name": ".NET Desktops",
         "name": "dotnet",
@@ -104,6 +109,11 @@ describe('ctfSvnTranslator', function() {
                 "branch": "",
                 "originalMessage": {
                     "event_type": "post-commit",
+                    "project": {
+                        "name": "CollabNet Desktop",
+                        "id": "proj1010",
+                        "url": "https://ctf.open.collab.net/sf/go/proj1010"
+                    },
                     "repository": {
                         "full_name": ".NET Desktops",
                         "name": "dotnet",
