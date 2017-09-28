@@ -3,7 +3,112 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.default = {
+exports["default"] = {
+	CtfGit: {
+		validWithOneCommit: function validWithOneCommit(message) {
+			return {
+				"project": {
+					"id": "proj1013",
+					"url": "http://main.server.collab.net/sf/projects/check_url_path"
+				},
+				"event_type": "ref-updated",
+				"ref": "refs/heads/master",
+				"before": "54823e9181f2ca78dc625e2fe13aecb1c3b4fd41",
+				"after": "3ddbe1ee1a0909e5dcbb62ac61b7b266922912c0",
+				"created": false,
+				"deleted": false,
+				"forced": false,
+				"commits": [{
+					"id": "3ddbe1ee1a0909e5dcbb62ac61b7b266922912c0",
+					"tree_id": "1a66c81509d148978a95638f114e31e6a217ae29",
+					"distinct": true,
+					"message": "" + message,
+					"timestamp": "2017-09-15T06:04:23Z",
+					"url": "http://main.server.collab.net/ctf/code/git/projects.check_url_path/scm.test_repo/commits?treeId=3ddbe1ee1a0909e5dcbb62ac61b7b266922912c0",
+					"author": {
+						"name": "TeamForge Administrator",
+						"email": "root@ctf-centos72-dev-box.collab.net",
+						"username": "admin"
+					},
+					"committer": {
+						"name": "TeamForge Administrator",
+						"email": "root@ctf-centos72-dev-box.collab.net",
+						"username": "admin"
+					},
+					"added": [],
+					"removed": [],
+					"modified": ["test.file"]
+				}],
+				"head_commit": {
+					"id": "3ddbe1ee1a0909e5dcbb62ac61b7b266922912c0",
+					"tree_id": "1a66c81509d148978a95638f114e31e6a217ae29",
+					"distinct": true,
+					"message": "" + message,
+					"timestamp": "2017-09-15T06:04:23Z",
+					"url": "http://main.server.collab.net/ctf/code/git/projects.check_url_path/scm.test_repo/commits?treeId=3ddbe1ee1a0909e5dcbb62ac61b7b266922912c0",
+					"author": {
+						"name": "TeamForge Administrator",
+						"email": "root@ctf-centos72-dev-box.collab.net",
+						"username": "admin"
+					},
+					"committer": {
+						"name": "TeamForge Administrator",
+						"email": "root@ctf-centos72-dev-box.collab.net",
+						"username": "admin"
+					},
+					"added": [],
+					"removed": [],
+					"modified": ["test.file"]
+				},
+				"repository": {
+					"id": "reps1004",
+					"name": "test_repo",
+					"full_name": "test_repo",
+					"description": "| Repo Category: optional_review, History Protection: On",
+					"url": "http://main.server.collab.net/ctf/code/git/projects.check_url_path/scm.test_repo/tree"
+				},
+				"pusher": {
+					"name": "TeamForge Administrator",
+					"email": "root@ctf-centos72-dev-box.collab.net",
+					"username": "admin"
+				}
+			};
+		}
+	},
+	CtfSvn: {
+		validWithOneCommit: function validWithOneCommit(message) {
+			return {
+				"event_type": "post-commit",
+				"project": {
+					"name": "CollabNet Desktop",
+					"id": "proj1010",
+					"url": "https://ctf.open.collab.net/sf/go/proj1010"
+				},
+				"repository": {
+					"full_name": ".NET Desktops",
+					"name": "dotnet",
+					"description": "Windows, Visual Studio and Outlook Desktops",
+					"id": "reps1900",
+					"type": "subversion",
+					"url": "https://ctf.open.collab.net/sf/scm/do/viewRepositorySource/projects.desktop/scm.NET_Desktops"
+				},
+				"revision": {
+					"changed_paths": {
+						"modified": ["trunk/www/index.html"]
+					},
+					"author": {
+						"name": "Full Name",
+						"email": "uname@teamforge.org",
+						"username": "uname"
+					},
+					"id": "372",
+					"message": "" + message,
+					"url": "https://ctf.open.collab.net/integration/viewvc/viewvc.cgi?view=revision&root=dotnet&system=exsy1005&revision=372",
+					"timestamp": "2015-08-18T18:43:11+00:00"
+				}
+			};
+		}
+	},
 	Deveo: {
 		validWithOneCommit: function validWithOneCommit(message) {
 			return {
@@ -444,3 +549,4 @@ exports.default = {
 		}
 	}
 };
+module.exports = exports["default"];

@@ -398,11 +398,11 @@
   width: 14px;
 }
 
-.vcs-vso-options {
+.vcs-subfamily-options {
   padding-top: 8px;
 }
 
-div.vcs-vso-options input[type="radio"] {
+div.vcs-subfamily-options input[type="radio"] {
   vertical-align: middle;
   margin-left: 5px;
   width: 20px;
@@ -484,36 +484,23 @@ div.vcs-vso-options input[type="radio"] {
     <h1>{{getHeading()}}</h1>
     <div class='well well-sm' ng-if='editAllowed()'>
       <div class='vcs-families'>
-        <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedButton("GitHub")' ng-mouseenter='familyHover("GitHub")' ng-mouseleave='familyHover("")' class='{{getClass("GitHub")}}'>GitHub&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitHub")}}' /></button>&nbsp;
-        </div>
-        <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedButton("GitLab")' ng-mouseenter='familyHover("GitLab")' ng-mouseleave='familyHover("")' class='{{getClass("GitLab")}}'>GitLab&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitLab")}}' style="height:32px;" /></button>
-        </div>
-        <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedButton("Bitbucket")' ng-mouseenter='familyHover("Bitbucket")' ng-mouseleave='familyHover("")' class='{{getClass("Bitbucket")}}'>Bitbucket<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Bitbucket")}}' style="height:32px;" /></button>
-        </div>
-        <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedButton("VSTS")' ng-mouseenter='familyHover("VSTS")' ng-mouseleave='familyHover("")' class='{{getClass("VSTS")}}'>VSTS&nbsp;&nbsp;&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{vstsFamilyIsSelectedIcon("VSTS")}}' style="height:32px;" /></button>
-          <div class='vcs-vso-options' ng-init="value='VsoGit'" ng-if='showVSTSChoices()'>
-              <label><input type="radio" name="vsoFamily" ng-model="value" value="VsoGit" ng-change='vstsSelection(value)'/><img ng-src='{{vsoIcon("vso-git")}}' style="height:24px; margin-left:6px;" />&nbspGit</label>
-              <br/>
-              <label><input type='radio' name="vsoFamily" ng-model="value" value="VsoTfvc" ng-change='vstsSelection(value)'><img ng-src='{{vsoIcon("vso-tfvc")}}' style="height:24px; margin-left:6px;" />&nbspTFVC</label>
+        <div class='vcs-family' ng-repeat="familyInfo in getFamiliesArr() | orderBy:'displayOrder'">
+          <button type='button' ng-click='setSelectedButton(familyInfo.name)' ng-mouseenter='familyHover(familyInfo.name)' ng-mouseleave='familyHover("")' class='{{getClass(familyInfo.name)}}'>{{familyInfo.label}}&nbsp;&nbsp;
+            <img ng-src='{{serviceUrl}}/{{getIsSelectedFamilyIcon(familyInfo.name)}}' style="height:32px;" />
+          </button>&nbsp;
+          <div ng-if="familyInfo.families">
+            <div class='vcs-subfamily-options' ng-if='showSubFamilyChoices(familyInfo.name)'>
+                <div ng-repeat="subFamily in getSubFamiliesArr(familyInfo.name) | orderBy:'displayOrder'">
+                <label>
+                  <input type="radio" name="{{familyInfo.name}}Family" ng-checked="$index==0?true:false" ng-model="selectedSubFamily" value="{{subFamily.name}}" ng-change='subFamilySelection(selectedSubFamily)'/>
+                    <img ng-src='{{getSubFamilyIcon(familyInfo.name, subFamily.name)}}' style="height:24px; margin-left:6px;" />&nbsp{{subFamily.label}}
+                </label>
+                </br>
+                </div>
+            </div>
           </div>
         </div>
-       <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedButton("Svn")' ng-mouseenter='familyHover("Svn")' ng-mouseleave='familyHover("")' class='{{getClass("Svn")}}'>Subversion<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Svn")}}' style="height:32px;" /></button>
-        </div>
-        <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedButton("GitSwarm")' ng-mouseenter='familyHover("GitSwarm")' ng-mouseleave='familyHover("")' class='{{getClass("GitSwarm")}}'>GitSwarm<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("GitSwarm")}}' style="height:32px;" /></button>
-        </div>
-        <div class='vcs-family'>
-          <button type='button' ng-click='setSelectedButton("P4V")' ng-mouseenter='familyHover("P4V")' ng-mouseleave='familyHover("")' class='{{getClass("P4V")}}'>Perforce P4V<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("P4V")}}' style="height:32px;" /></button>
-        </div>
-		<div class='vcs-family'>
-			<button type='button' ng-click='setSelectedButton("Deveo")' ng-mouseenter='familyHover("Deveo")' ng-mouseleave='familyHover("")' class='{{getClass("Deveo")}}'>Deveo&nbsp;&nbsp;<img ng-src='{{serviceUrl}}/{{familyIsSelectedIcon("Deveo")}}' /></button>
-		</div>
-      </div>
+      </div> 
       <br />
       <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
         <div class='input-group'>
@@ -538,7 +525,11 @@ div.vcs-vso-options input[type="radio"] {
           <th ng-if='!hasResourceToDownload(["Svn","P4V"])' style="width: 6em;position: relative;">&nbsp;</th>       
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link' style='width:25%'><img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link' style='width:25%'>
+            <img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " />
+            <img ng-if='isSubFamily(inbox.family)' ng-src='{{getSubFamilyIcon(null, inbox.family)}}' style="height:16px; width:16px; " />&nbsp;
+            <a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a>
+          </td>
           <td>
             <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>          
             <div ng-if='editAllowed()'  ng-click='inboxRemove(inbox)' title='Remove' class="buttonRemove">

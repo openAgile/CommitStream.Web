@@ -18,5 +18,6 @@ var callback = function(state, ev) {
   }
 };
 
-fromCategory('versionOne_CommitsWithWorkitemMention')
-  .whenAny(callback);
+fromCategory('versionOne_CommitsWithWorkitemMention').when({
+   '$any' : callback
+});
