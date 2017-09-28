@@ -49,6 +49,12 @@ var createInstanceWithData = function createInstanceWithData(iteration) {
         }, {
           name: 'VsoGit Repo ' + iteration,
           family: 'VsoGit'
+        }, {
+          name: 'CtfSvn Repo ' + iteration,
+          family: 'CtfSvn'
+        }, {
+          name: 'CtfGit Repo ' + iteration,
+          family: 'CtfGit'
         }];
         context$1$0.next = 3;
         return _regeneratorRuntime.awrap(client.instanceCreate());
