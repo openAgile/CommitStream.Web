@@ -13,7 +13,6 @@ const translatorNames = [
 ];
 
 const translators = translatorNames.map(name => require(`../translators/${name}`));
-
 class TranslatorFactory {
   create(req) {
     for(let translator of translators) {
