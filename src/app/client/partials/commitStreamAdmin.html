@@ -548,7 +548,11 @@ div.vcs-subfamily-options input[type="radio"] {
           <th>Repository Name</th>
         </tr>
         <tr ng-repeat-start='inbox in inboxes'>
-          <td class='inbox-link'><img ng-src='{{familyIcon(inbox.family)}}' style="height:32px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+          <td class='inbox-link'>
+            <img ng-src='{{familyIcon(inbox.family)}}' style="height:32px" />
+            <img ng-if='isSubFamily(inbox.family)' ng-src='{{getSubFamilyIcon(null, inbox.family)}}' style="height:16px; width:16px; " />&nbsp;
+            <a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a>
+          </td>
         </tr>
         <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
       </table>
