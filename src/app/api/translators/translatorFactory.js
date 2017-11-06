@@ -15,6 +15,8 @@ var translators = translatorNames.map(function (name) {
   return require('../translators/' + name);
 });
 
+var vsoGitPullRequestTranslator = require('../translators/vsoGitPullRequestTranslator');
+
 var TranslatorFactory = (function () {
   function TranslatorFactory() {
     _classCallCheck(this, TranslatorFactory);
@@ -49,6 +51,13 @@ var TranslatorFactory = (function () {
       }
 
       return undefined;
+    }
+  }, {
+    key: 'createPullRequestTranslator',
+    value: function createPullRequestTranslator(req) {
+      console.log('*******************************************');
+      console.log('in createPullRequestTranslator:', vsoGitPullRequestTranslator.canTranslate(req));
+      return vsoGitPullRequestTranslator.canTranslate(req) ? vsoGitPullRequestTranslator : undefined;
     }
   }, {
     key: 'getByFamily',

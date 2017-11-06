@@ -196,7 +196,7 @@
     var family = '';
     var familyHover = '';
     var showVSTSChoices = false;
-    var selectedVcs = '';
+    var selectedButton = '';
 
     $scope.vstsSelection = function (value) {
       $scope.familySelect(value);
@@ -226,7 +226,7 @@
     };
 
     $scope.setSelectedButton = function (Vcs) {
-      selectedVcs = Vcs;
+      selectedButton = Vcs;
       setFamilyWhenNotVsts(Vcs);
       alwaysToggleWhenVsts(Vcs);
       alwaysCloseWhenNotVsts(Vcs);
@@ -237,7 +237,7 @@
     };
 
     $scope.getClass = function (Vcs) {
-      return selectedVcs === Vcs ? 'family-selected' : '';
+      return selectedButton === Vcs ? 'family-selected' : '';
     };
 
     $scope.familySelect = function (newFamily) {

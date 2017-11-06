@@ -34,6 +34,7 @@ exports['default'] = function (req, res) {
     (0, _validateUUID2['default'])('inbox', inboxId);
 
     var translator = _translatorsTranslatorFactory2['default'].create(req);
+    var vsoGitPullRequestTranslator = _translatorsTranslatorFactory2['default'].createPullRequestTranslator(req);
 
     if (translator) {
         var events = translator.translatePush(req.body, instanceId, digestId, inboxId);
@@ -51,6 +52,14 @@ exports['default'] = function (req, res) {
             var hypermedia = (0, _commitsAddedFormatAsHal2['default'])(req.href, instanceId, inboxData);
             res.hal(hypermedia, 201);
         });
+    } else if (vsoGitPullRequestTranslator) {
+        var events = vsoGitPullRequestTranslator.translatePush(req.body, instanceId, digestId, inboxId);
+        var pullRequestPostArgs = {
+            name: 'inboxPullRequests-' + inboxId,
+            events: events
+        };
+
+        _helpersEventStoreClient2['default'].postToStream(pullRequestPostArgs);
     } else {
         throw new _middlewareMalformedPushEventError2['default'](req);
     }

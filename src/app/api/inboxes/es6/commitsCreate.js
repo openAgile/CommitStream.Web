@@ -12,6 +12,7 @@ export default (req, res) => {
     validateUUID('inbox', inboxId);
 
     const translator = translatorFactory.create(req);
+    const vsoGitPullRequestTranslator = translatorFactory.createPullRequestTranslator(req);
 
     if (translator) {
         const events = translator.translatePush(req.body, instanceId, digestId, inboxId);
@@ -30,7 +31,15 @@ export default (req, res) => {
                 const hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
                 res.hal(hypermedia, 201);
             });
+    } else if(vsoGitPullRequestTranslator) {
+        let events = vsoGitPullRequestTranslator.translatePush(req.body, instanceId, digestId, inboxId);
+        let pullRequestPostArgs = {
+            name: `inboxPullRequests-${inboxId}`,
+            events
+        };
+
+        eventStore.postToStream(pullRequestPostArgs)
     } else {
-        throw new MalformedPushEventError(req);
+      throw new MalformedPushEventError(req);
     }
 };
