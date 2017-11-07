@@ -69,8 +69,7 @@
     "jenkins-smoke-happy-path": "mocha -u exports -R tap smoke-test/happy-path-end-to-end.tests.js"
   },
   "engines": {
-    "node": "4.5.0",
-
+    "node": "4.5.0"
   },
   "author": "VersionOne, Inc.",
   "license": "MIT"
