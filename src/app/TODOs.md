@@ -28,3 +28,4 @@
 * JG: in digestInboxesGet, catch a specific error when reading a projection, not all errors to return empty result
 * MH: in commitsGet.js, validate inputs or assert on them
 * MK: See if we can just replace the code in instanceGet with `res.hal(instanceFormatAsHal(req.instance))` instead of all that extra code.
+
