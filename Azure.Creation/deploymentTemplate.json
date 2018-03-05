@@ -1,0 +1,1882 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_sinject_name": {
+            "defaultValue": "sinject",
+            "type": "String"
+        },
+        "config_web_name": {
+            "defaultValue": "web",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_1_name": {
+            "defaultValue": "cs-test-1",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_2_name": {
+            "defaultValue": "cs-test-2",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_3_name": {
+            "defaultValue": "cs-test-3",
+            "type": "String"
+        },
+        "publicIPAddresses_node_1_name": {
+            "defaultValue": "node-1",
+            "type": "String"
+        },
+        "virtualNetworks_cs-testNet_name": {
+            "defaultValue": "cs-testNet",
+            "type": "String"
+        },
+        "availabilitySets_cs-test_as_name": {
+            "defaultValue": "cs-test-as",
+            "type": "String"
+        },
+        "loadBalancers_cs-test_1_lb2_name": {
+            "defaultValue": "cs-test-1-lb2",
+            "type": "String"
+        },
+        "networkInterfaces_cs-test_1935_name": {
+            "defaultValue": "cs-test-1935",
+            "type": "String"
+        },
+        "networkInterfaces_cs-test_2574_name": {
+            "defaultValue": "cs-test-2574",
+            "type": "String"
+        },
+        "networkInterfaces_cs-test_3674_name": {
+            "defaultValue": "cs-test-3674",
+            "type": "String"
+        },
+        "publicIPAddresses_cs-test_1_ip_name": {
+            "defaultValue": "cs-test-1-ip",
+            "type": "String"
+        },
+        "publicIPAddresses_cs-test_3_ip_name": {
+            "defaultValue": "cs-test-3-ip",
+            "type": "String"
+        },
+        "publicIPAddresses_cs-test_1_pub_name": {
+            "defaultValue": "cs-test-1-pub",
+            "type": "String"
+        },
+        "publicIPAddresses_cs-test2ip571_name": {
+            "defaultValue": "cs-test2ip571",
+            "type": "String"
+        },
+        "networkSecurityGroups_cs-testTFS_name": {
+            "defaultValue": "cs-testTFS",
+            "type": "String"
+        },
+        "storageAccounts_cs-testdiagstore_name": {
+            "defaultValue": "cs-testdiagstore",
+            "type": "String"
+        },
+        "networkSecurityGroups_cs-test_1_nsg_name": {
+            "defaultValue": "cs-test-1-nsg",
+            "type": "String"
+        },
+        "networkInterfaces_cs-test_1_tester528_name": {
+            "defaultValue": "cs-test-1-tester528",
+            "type": "String"
+        },
+        "publicIPAddresses_cs-test_1_tester_ip_name": {
+            "defaultValue": "cs-test-1-tester-ip",
+            "type": "String"
+        },
+        "subnets_default_name": {
+            "defaultValue": "default",
+            "type": "String"
+        },
+        "hostNameBindings_sinject.azurewebsites.net_name": {
+            "defaultValue": "sinject.azurewebsites.net",
+            "type": "String"
+        },
+        "deployments_947cc6e05a9645c8b8efe2ff80490413_name": {
+            "defaultValue": "947cc6e05a9645c8b8efe2ff80490413",
+            "type": "String"
+        },
+        "deployments_11d4bef4be78403490ccdea68dbd34b7_name": {
+            "defaultValue": "11d4bef4be78403490ccdea68dbd34b7",
+            "type": "String"
+        },
+        "deployments_72617c83d6c049418f2dc6760b25f466_name": {
+            "defaultValue": "72617c83d6c049418f2dc6760b25f466",
+            "type": "String"
+        },
+        "deployments_5d594f31a64e44ac9ee23ce0182443c1_name": {
+            "defaultValue": "5d594f31a64e44ac9ee23ce0182443c1",
+            "type": "String"
+        },
+        "securityRules_Port_8080_name": {
+            "defaultValue": "Port_8080",
+            "type": "String"
+        },
+        "securityRules_Port_2113_name": {
+            "defaultValue": "Port_2113",
+            "type": "String"
+        },
+        "securityRules_PoserShell_name": {
+            "defaultValue": "PoserShell",
+            "type": "String"
+        },
+        "securityRules_Gossip_30778_name": {
+            "defaultValue": "Gossip-30778",
+            "type": "String"
+        },
+        "deployments_53ac16af63750230308a9dfc8e5257f97484d867_name": {
+            "defaultValue": "53ac16af63750230308a9dfc8e5257f97484d867",
+            "type": "String"
+        },
+        "deployments_06fceb2290e2340a9b483616bf24a46e61566495_name": {
+            "defaultValue": "06fceb2290e2340a9b483616bf24a46e61566495",
+            "type": "String"
+        },
+        "deployments_f4a77025be692e9314ef022502d5109e2b681851_name": {
+            "defaultValue": "f4a77025be692e9314ef022502d5109e2b681851",
+            "type": "String"
+        },
+        "deployments_63e5c26b428ca4c4cc7304fd327188d3f9e41555_name": {
+            "defaultValue": "63e5c26b428ca4c4cc7304fd327188d3f9e41555",
+            "type": "String"
+        },
+        "deployments_7bd764d0a903107348388871160c20278586c322_name": {
+            "defaultValue": "7bd764d0a903107348388871160c20278586c322",
+            "type": "String"
+        },
+        "deployments_6ee196d2f4a391eada38fe395d8bfb13b71b0e8d_name": {
+            "defaultValue": "6ee196d2f4a391eada38fe395d8bfb13b71b0e8d",
+            "type": "String"
+        },
+        "disks_cs-test_1_tester_OsDisk_1_7c1f5cecdbaa4ef79d57da8423253abd_name": {
+            "defaultValue": "cs-test-1-tester_OsDisk_1_7c1f5cecdbaa4ef79d57da8423253abd",
+            "type": "String"
+        },
+        "securityRules_default_allow_rdp_name": {
+            "defaultValue": "default-allow-rdp",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_1_id": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGROUP/providers/Microsoft.Compute/disks/cs-test-1_OsDisk_1_eb91858e77de4681ae09e5fecb6306bf",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_1_id_1": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGROUP/providers/Microsoft.Compute/disks/cs-test-1-data",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_2_id": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGROUP/providers/Microsoft.Compute/disks/cs-test-2_OsDisk_1_a7624e33cb8c4e32b5e72d9f454e9ed1",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_2_id_1": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGROUP/providers/Microsoft.Compute/disks/cs-test-2-data",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_3_id": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGROUP/providers/Microsoft.Compute/disks/cs-test-3_OsDisk_1_5d98a3912d1743098990ea2d4488b045",
+            "type": "String"
+        },
+        "virtualMachines_cs-test_3_id_1": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGROUP/providers/Microsoft.Compute/disks/cs-test-3-data",
+            "type": "String"
+        },
+        "loadBalancers_cs-test_1_lb2_id": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/loadBalancers/cs-test-1-lb2/frontendIPConfigurations/LoadBalancerFrontEnd",
+            "type": "String"
+        },
+        "loadBalancers_cs-test_1_lb2_id_1": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/loadBalancers/cs-test-1-lb2/backendAddressPools/cs-test-pool2",
+            "type": "String"
+        },
+        "loadBalancers_cs-test_1_lb2_id_2": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/loadBalancers/cs-test-1-lb2/probes/cs-test-1-probe",
+            "type": "String"
+        },
+        "sites_sinject_serverFarmId": {
+            "defaultValue": "/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/Default-Web-EastUS/providers/Microsoft.Web/serverfarms/Default1",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Compute/availabilitySets/cs-test-as'.",
+            "type": "Microsoft.Compute/availabilitySets",
+            "sku": {
+                "name": "Aligned"
+            },
+            "name": "[parameters('availabilitySets_cs-test_as_name')]",
+            "apiVersion": "2017-03-30",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "platformUpdateDomainCount": 3,
+                "platformFaultDomainCount": 3,
+                "virtualMachines": [
+                    {
+                        "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_1_name'))]"
+                    },
+                    {
+                        "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_2_name'))]"
+                    },
+                    {
+                        "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_3_name'))]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_1_name'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_2_name'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_3_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Compute/disks/cs-test-1-tester_OsDisk_1_7c1f5cecdbaa4ef79d57da8423253abd'.",
+            "type": "Microsoft.Compute/disks",
+            "sku": {
+                "name": "Premium_LRS",
+                "tier": "Premium"
+            },
+            "name": "[parameters('disks_cs-test_1_tester_OsDisk_1_7c1f5cecdbaa4ef79d57da8423253abd_name')]",
+            "apiVersion": "2017-03-30",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "osType": "Windows",
+                "creationData": {
+                    "createOption": "FromImage",
+                    "imageReference": {
+                        "id": "/Subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/Providers/Microsoft.Compute/Locations/eastus/Publishers/MicrosoftWindowsServer/ArtifactTypes/VMImage/Offers/WindowsServer/Skus/2016-Datacenter/Versions/latest"
+                    }
+                },
+                "diskSizeGB": 128
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Compute/virtualMachines/cs-test-1'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_cs-test_1_name')]",
+            "apiVersion": "2017-03-30",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_cs-test_as_name'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2ms"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_cs-test_1_name'),'_OsDisk_1_eb91858e77de4681ae09e5fecb6306bf')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('virtualMachines_cs-test_1_id')]"
+                        },
+                        "diskSizeGB": 128
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "[concat(parameters('virtualMachines_cs-test_1_name'),'-data')]",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS",
+                                "id": "[parameters('virtualMachines_cs-test_1_id_1')]"
+                            },
+                            "diskSizeGB": 1023
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_cs-test_1_name')]",
+                    "adminUsername": "v1deploy",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_cs-test_1935_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_cs-testdiagstore_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_cs-test_as_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_cs-test_1935_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_cs-testdiagstore_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Compute/virtualMachines/cs-test-2'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_cs-test_2_name')]",
+            "apiVersion": "2017-03-30",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_cs-test_as_name'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2ms"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_cs-test_2_name'),'_OsDisk_1_a7624e33cb8c4e32b5e72d9f454e9ed1')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('virtualMachines_cs-test_2_id')]"
+                        },
+                        "diskSizeGB": 128
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "[concat(parameters('virtualMachines_cs-test_2_name'),'-data')]",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS",
+                                "id": "[parameters('virtualMachines_cs-test_2_id_1')]"
+                            },
+                            "diskSizeGB": 1023
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_cs-test_2_name')]",
+                    "adminUsername": "v1deploy",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_cs-test_2574_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_cs-testdiagstore_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_cs-test_as_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_cs-test_2574_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_cs-testdiagstore_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Compute/virtualMachines/cs-test-3'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_cs-test_3_name')]",
+            "apiVersion": "2017-03-30",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_cs-test_as_name'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_B2ms"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_cs-test_3_name'),'_OsDisk_1_5d98a3912d1743098990ea2d4488b045')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "id": "[parameters('virtualMachines_cs-test_3_id')]"
+                        }
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "[concat(parameters('virtualMachines_cs-test_3_name'),'-data')]",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "id": "[parameters('virtualMachines_cs-test_3_id_1')]"
+                            }
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_cs-test_3_name')]",
+                    "adminUsername": "v1deploy",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_cs-test_3674_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_cs-testdiagstore_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_cs-test_as_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_cs-test_3674_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_cs-testdiagstore_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/loadBalancers/cs-test-1-lb2'.",
+            "type": "Microsoft.Network/loadBalancers",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "[parameters('loadBalancers_cs-test_1_lb2_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "70377a0d-6eae-4b79-bb60-0a27cc62a76c",
+                "frontendIPConfigurations": [
+                    {
+                        "name": "LoadBalancerFrontEnd",
+                        "etag": "W/\"0349244c-236b-4e9a-be74-0d0f641a2baa\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_1_pub_name'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "node-1-ip",
+                        "etag": "W/\"0349244c-236b-4e9a-be74-0d0f641a2baa\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_node_1_name'))]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "cs-test-pool2",
+                        "etag": "W/\"0349244c-236b-4e9a-be74-0d0f641a2baa\"",
+                        "properties": {
+                            "provisioningState": "Succeeded"
+                        }
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "cs-test-lbrule-checkvm2",
+                        "etag": "W/\"0349244c-236b-4e9a-be74-0d0f641a2baa\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "frontendIPConfiguration": {
+                                "id": "[parameters('loadBalancers_cs-test_1_lb2_id')]"
+                            },
+                            "frontendPort": 2113,
+                            "backendPort": 2113,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 4,
+                            "protocol": "Tcp",
+                            "loadDistribution": "Default",
+                            "backendAddressPool": {
+                                "id": "[parameters('loadBalancers_cs-test_1_lb2_id_1')]"
+                            },
+                            "probe": {
+                                "id": "[parameters('loadBalancers_cs-test_1_lb2_id_2')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "cs-test-1-probe",
+                        "etag": "W/\"0349244c-236b-4e9a-be74-0d0f641a2baa\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "Tcp",
+                            "port": 2113,
+                            "intervalInSeconds": 15,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ],
+                "inboundNatRules": [],
+                "outboundNatRules": [],
+                "inboundNatPools": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_1_pub_name'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_node_1_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkInterfaces/cs-test-1-tester528'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_cs-test_1_tester528_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "dc724295-cbe0-47fa-bc61-4db3a21fd362",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"d9bee56c-9f86-496c-a18a-852a3035d241\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.11.0.8",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_1_tester_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_1_tester_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkInterfaces/cs-test-1935'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_cs-test_1935_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "2a7b71b2-81fb-4612-8247-609823921a54",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"1a829065-1d72-414a-b4ac-a868d29ed069\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.11.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_1_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4",
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_cs-test_1_lb2_name')), '/backendAddressPools/cs-test-pool2')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "5nwst0mtmppetauxpsarwxzcnc.bx.internal.cloudapp.net"
+                },
+                "macAddress": "00-0D-3A-17-59-BC",
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "primary": true,
+                "virtualMachine": {
+                    "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_1_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_1_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]",
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_cs-test_1_lb2_name'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_1_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkInterfaces/cs-test-2574'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_cs-test_2574_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "769dd255-a49a-4de1-a88c-f55028b00319",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"3394983a-80a2-42cd-a17d-22a9865f4461\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.11.0.5",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test2ip571_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4",
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_cs-test_1_lb2_name')), '/backendAddressPools/cs-test-pool2')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "5nwst0mtmppetauxpsarwxzcnc.bx.internal.cloudapp.net"
+                },
+                "macAddress": "00-0D-3A-1C-0D-93",
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "primary": true,
+                "virtualMachine": {
+                    "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_2_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test2ip571_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]",
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_cs-test_1_lb2_name'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_2_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkInterfaces/cs-test-3674'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_cs-test_3674_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "9041b68c-08a2-4dfc-9d4e-061a55dbdd79",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"84cd57c8-0179-4185-adc9-01901d6c97d3\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.11.0.6",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_3_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4",
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_cs-test_1_lb2_name')), '/backendAddressPools/cs-test-pool2')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "primary": true,
+                "virtualMachine": {
+                    "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_3_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_cs-test_3_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_cs-testNet_name'), parameters('subnets_default_name'))]",
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_cs-test_1_lb2_name'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_cs-test_3_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkSecurityGroups/cs-test-1-nsg'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_cs-test_1_nsg_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "88becd9a-9058-4af5-ba53-17ad60658921",
+                "securityRules": [
+                    {
+                        "name": "default-allow-rdp",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Gossip-30778",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "30778",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 200,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "PoserShell",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "63760",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1010,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Port_8080",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "8080",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Port_2113",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Only traffic coming from this IP is allowed.  The AppService v1-cs-test (for now ;)",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "2113",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1030,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [
+                                "191.236.19.222",
+                                "191.236.19.242",
+                                "191.236.21.165",
+                                "191.236.18.160"
+                            ],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "etag": "W/\"8eac385b-262f-4d0d-8f85-adcc1b43e301\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkSecurityGroups/cs-testTFS'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_cs-testTFS_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "southcentralus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "37ca8394-638b-4751-a11d-6dc0d29e88d1",
+                "securityRules": [],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "etag": "W/\"9e0e70e7-e4cf-413c-9ef2-092a5c000d87\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "etag": "W/\"9e0e70e7-e4cf-413c-9ef2-092a5c000d87\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "etag": "W/\"9e0e70e7-e4cf-413c-9ef2-092a5c000d87\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "etag": "W/\"9e0e70e7-e4cf-413c-9ef2-092a5c000d87\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "etag": "W/\"9e0e70e7-e4cf-413c-9ef2-092a5c000d87\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "etag": "W/\"9e0e70e7-e4cf-413c-9ef2-092a5c000d87\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/publicIPAddresses/cs-test-1-ip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "[parameters('publicIPAddresses_cs-test_1_ip_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "794843a2-3b12-4b72-a4a3-db965cea5b12",
+                "ipAddress": "13.92.230.26",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/publicIPAddresses/cs-test-1-pub'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "[parameters('publicIPAddresses_cs-test_1_pub_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "3f808e51-e143-4433-afab-c8982f106f1a",
+                "ipAddress": "13.92.224.208",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/publicIPAddresses/cs-test-1-tester-ip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "[parameters('publicIPAddresses_cs-test_1_tester_ip_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "d61b24a8-b375-438e-b869-432b8ee3b0bc",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/publicIPAddresses/cs-test-3-ip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "[parameters('publicIPAddresses_cs-test_3_ip_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "fca93371-23c3-4a73-9e95-fd8c4f3dc3ab",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/publicIPAddresses/cs-test2ip571'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "[parameters('publicIPAddresses_cs-test2ip571_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "67c23e63-ba39-426a-8d0e-d890fb3192aa",
+                "ipAddress": "52.224.70.179",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/publicIPAddresses/node-1'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic"
+            },
+            "name": "[parameters('publicIPAddresses_node_1_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "e422fbd8-dcb9-4a35-b00f-15bb33abf158",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "es-admin",
+                    "fqdn": "es-admin.eastus.cloudapp.azure.com"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/virtualNetworks/cs-testNet'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_cs-testNet_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "e9296dfb-6393-49de-8297-7c811b5f226a",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.11.0.0/24"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "etag": "W/\"eea1aaaa-25f6-4910-8d46-03b054a1ff2e\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.11.0.0/24",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+                            },
+                            "serviceEndpoints": []
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testgroup/providers/Microsoft.Storage/storageAccounts/cs-testdiagstore'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_cs-testdiagstore_name')]",
+            "apiVersion": "2017-10-01",
+            "location": "eastus",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Web/sites/sinject'.",
+            "type": "Microsoft.Web/sites",
+            "kind": "app",
+            "name": "[parameters('sites_sinject_name')]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "tags": {
+                "hidden-related:/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/Default-Web-EastUS/providers/Microsoft.Web/serverfarms/Default1": "empty"
+            },
+            "scale": null,
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_sinject_name'),'.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "virtualIP": null,
+                        "thumbprint": null,
+                        "toUpdate": null,
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_sinject_name'),'.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "virtualIP": null,
+                        "thumbprint": null,
+                        "toUpdate": null,
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('sites_sinject_serverFarmId')]",
+                "reserved": false,
+                "siteConfig": null,
+                "scmSiteAlsoStopped": false,
+                "hostingEnvironmentProfile": null,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "cloningInfo": null
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkSecurityGroups/cs-test-1-nsg/securityRules/default-allow-rdp'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_cs-test_1_nsg_name'), '/', parameters('securityRules_default_allow_rdp_name'))]",
+            "apiVersion": "2017-10-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "3389",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 1000,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkSecurityGroups/cs-test-1-nsg/securityRules/Gossip-30778'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_cs-test_1_nsg_name'), '/', parameters('securityRules_Gossip_30778_name'))]",
+            "apiVersion": "2017-10-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "30778",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 200,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkSecurityGroups/cs-test-1-nsg/securityRules/PoserShell'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_cs-test_1_nsg_name'), '/', parameters('securityRules_PoserShell_name'))]",
+            "apiVersion": "2017-10-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "63760",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 1010,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkSecurityGroups/cs-test-1-nsg/securityRules/Port_8080'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_cs-test_1_nsg_name'), '/', parameters('securityRules_Port_8080_name'))]",
+            "apiVersion": "2017-10-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "8080",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/networkSecurityGroups/cs-test-1-nsg/securityRules/Port_2113'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_cs-test_1_nsg_name'), '/', parameters('securityRules_Port_2113_name'))]",
+            "apiVersion": "2017-10-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "description": "Only traffic coming from this IP is allowed.  The AppService v1-cs-test (for now ;)",
+                "protocol": "*",
+                "sourcePortRange": "*",
+                "destinationPortRange": "2113",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 1030,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [
+                    "191.236.19.222",
+                    "191.236.19.242",
+                    "191.236.21.165",
+                    "191.236.18.160"
+                ],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Network/virtualNetworks/cs-testNet/subnets/default'.",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_cs-testNet_name'), '/', parameters('subnets_default_name'))]",
+            "apiVersion": "2017-10-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.11.0.0/24",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+                },
+                "serviceEndpoints": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_cs-testNet_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_cs-test_1_nsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/config/web'.",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('config_web_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "tags": {
+                "hidden-related:/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/Default-Web-EastUS/providers/Microsoft.Web/serverfarms/Default1": "empty"
+            },
+            "scale": null,
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html",
+                    "injector.js"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "phpVersion": "5.6",
+                "pythonVersion": "",
+                "nodeVersion": "",
+                "linuxFxVersion": "",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": null,
+                "httpLoggingEnabled": true,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": true,
+                "publishingUsername": "$sinject",
+                "publishingPassword": null,
+                "appSettings": null,
+                "metadata": null,
+                "connectionStrings": null,
+                "machineKey": null,
+                "handlerMappings": null,
+                "documentRoot": null,
+                "scmType": "LocalGit",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "javaVersion": null,
+                "javaContainer": null,
+                "javaContainerVersion": null,
+                "appCommandLine": "",
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false,
+                        "virtualDirectories": null
+                    }
+                ],
+                "winAuthAdminState": 0,
+                "winAuthTenantState": 0,
+                "customAppPoolIdentityAdminState": true,
+                "customAppPoolIdentityTenantState": false,
+                "runtimeADUser": null,
+                "runtimeADUserPassword": null,
+                "loadBalancing": "LeastRequests",
+                "routingRules": [],
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "limits": null,
+                "autoHealEnabled": false,
+                "autoHealRules": null,
+                "tracingOptions": null,
+                "vnetName": "",
+                "siteAuthEnabled": false,
+                "siteAuthSettings": {
+                    "enabled": null,
+                    "unauthenticatedClientAction": null,
+                    "tokenStoreEnabled": null,
+                    "allowedExternalRedirectUrls": null,
+                    "defaultProvider": null,
+                    "clientId": null,
+                    "clientSecret": null,
+                    "issuer": null,
+                    "allowedAudiences": null,
+                    "additionalLoginParams": null,
+                    "isAadAutoProvisioned": false,
+                    "googleClientId": null,
+                    "googleClientSecret": null,
+                    "googleOAuthScopes": null,
+                    "facebookAppId": null,
+                    "facebookAppSecret": null,
+                    "facebookOAuthScopes": null,
+                    "twitterConsumerKey": null,
+                    "twitterConsumerSecret": null,
+                    "microsoftAccountClientId": null,
+                    "microsoftAccountClientSecret": null,
+                    "microsoftAccountOAuthScopes": null
+                },
+                "cors": null,
+                "push": null,
+                "apiDefinition": null,
+                "autoSwapSlotName": null,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": null,
+                "ipSecurityRestrictions": null
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/53ac16af63750230308a9dfc8e5257f97484d867'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_53ac16af63750230308a9dfc8e5257f97484d867_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_53ac16af63750230308a9dfc8e5257f97484d867_name')]",
+                "status": 4,
+                "author_email": "mark.irvin@versionone.com",
+                "author": "Mark Irvin",
+                "deployer": "cs-test",
+                "message": "trying hero\n",
+                "start_time": "2018-02-07T01:21:29.850135Z",
+                "end_time": "2018-02-07T01:21:36.6458196Z",
+                "active": true
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/06fceb2290e2340a9b483616bf24a46e61566495'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_06fceb2290e2340a9b483616bf24a46e61566495_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_06fceb2290e2340a9b483616bf24a46e61566495_name')]",
+                "status": 4,
+                "author_email": "markirvin@marks-imac.attlocal.net",
+                "author": "Mark Irvin",
+                "deployer": "cs-test",
+                "message": "changed slash route\n",
+                "start_time": "2018-02-06T22:02:32.5024501Z",
+                "end_time": "2018-02-06T22:02:52.7383838Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/f4a77025be692e9314ef022502d5109e2b681851'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_f4a77025be692e9314ef022502d5109e2b681851_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_f4a77025be692e9314ef022502d5109e2b681851_name')]",
+                "status": 4,
+                "author_email": "markirvin@marks-imac.attlocal.net",
+                "author": "Mark Irvin",
+                "deployer": "cs-test",
+                "message": "added engines\n",
+                "start_time": "2018-02-06T21:55:08.4433144Z",
+                "end_time": "2018-02-06T21:55:14.6681024Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/63e5c26b428ca4c4cc7304fd327188d3f9e41555'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_63e5c26b428ca4c4cc7304fd327188d3f9e41555_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_63e5c26b428ca4c4cc7304fd327188d3f9e41555_name')]",
+                "status": 4,
+                "author_email": "markirvin@marks-imac.attlocal.net",
+                "author": "Mark Irvin",
+                "deployer": "cs-test",
+                "message": "added script ref index\n",
+                "start_time": "2018-02-06T21:50:17.5127458Z",
+                "end_time": "2018-02-06T21:50:46.4775664Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/7bd764d0a903107348388871160c20278586c322'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_7bd764d0a903107348388871160c20278586c322_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_7bd764d0a903107348388871160c20278586c322_name')]",
+                "status": 4,
+                "author_email": "markirvin@marks-imac.attlocal.net",
+                "author": "Mark Irvin",
+                "deployer": "cs-test",
+                "message": "added slash route\n",
+                "start_time": "2018-02-06T21:00:21.6854842Z",
+                "end_time": "2018-02-06T21:00:44.8884534Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/6ee196d2f4a391eada38fe395d8bfb13b71b0e8d'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_6ee196d2f4a391eada38fe395d8bfb13b71b0e8d_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_6ee196d2f4a391eada38fe395d8bfb13b71b0e8d_name')]",
+                "status": 4,
+                "author_email": "markirvin@marks-imac.attlocal.net",
+                "author": "Mark Irvin",
+                "deployer": "cs-test",
+                "message": "initial commit\n",
+                "start_time": "2018-02-06T19:46:58.7966649Z",
+                "end_time": "2018-02-06T19:47:29.8460681Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/947cc6e05a9645c8b8efe2ff80490413'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_947cc6e05a9645c8b8efe2ff80490413_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_947cc6e05a9645c8b8efe2ff80490413_name')]",
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "Push-Deployer",
+                "message": "Created via a push deployment",
+                "start_time": "2018-02-06T18:21:46.8922441Z",
+                "end_time": "2018-02-06T18:21:52.834107Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/11d4bef4be78403490ccdea68dbd34b7'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_11d4bef4be78403490ccdea68dbd34b7_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_11d4bef4be78403490ccdea68dbd34b7_name')]",
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "Push-Deployer",
+                "message": "Created via a push deployment",
+                "start_time": "2018-02-06T18:19:56.1341187Z",
+                "end_time": "2018-02-06T18:20:01.7123319Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/72617c83d6c049418f2dc6760b25f466'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_72617c83d6c049418f2dc6760b25f466_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_72617c83d6c049418f2dc6760b25f466_name')]",
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "Push-Deployer",
+                "message": "Created via a push deployment",
+                "start_time": "2018-02-06T18:16:36.1629871Z",
+                "end_time": "2018-02-06T18:16:38.2967292Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourcegroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/deployments/5d594f31a64e44ac9ee23ce0182443c1'.",
+            "type": "Microsoft.Web/sites/deployments",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('deployments_5d594f31a64e44ac9ee23ce0182443c1_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "id": "[parameters('deployments_5d594f31a64e44ac9ee23ce0182443c1_name')]",
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "Push-Deployer",
+                "message": "Created via a push deployment",
+                "start_time": "2018-02-06T18:02:07.7005682Z",
+                "end_time": "2018-02-06T18:02:13.9347154Z",
+                "active": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/add96084-d72b-497c-acf5-7569a0f6703b/resourceGroups/cs-testGroup/providers/Microsoft.Web/sites/sinject/hostNameBindings/sinject.azurewebsites.net'.",
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "name": "[concat(parameters('sites_sinject_name'), '/', parameters('hostNameBindings_sinject.azurewebsites.net_name'))]",
+            "apiVersion": "2016-08-01",
+            "location": "East US",
+            "scale": null,
+            "properties": {
+                "siteName": "sinject",
+                "domainId": null,
+                "hostNameType": "Verified"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_sinject_name'))]"
+            ]
+        }
+    ]
+}
