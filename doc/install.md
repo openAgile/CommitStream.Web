@@ -5,7 +5,9 @@ This is a work in progress. As this evolves, we update this narrative.
 # Required software
 * Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * First, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web
-* Download and install [EventStore](http://eventstore.org/).
+* You need [Chocolatey](http://chocolatey.org/) installed to run the Eventstore installation scripts.
+* Follow the [Install and Run section](https://eventstore.org/docs/introduction/)
+* *Note: The  Eventstore executables live in the path of `C:\ProgramData\chocolatey\bin`
 * NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
 	* There are two special snowflake packages that need to be installed globally
 		* bower - `npm install -g bower`
