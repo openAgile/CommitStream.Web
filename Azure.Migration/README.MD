@@ -11,6 +11,7 @@ Perform the steps of the scripts in this folder as follows:
   * This should copy all files from production **except** for the currently active chunk file because it only copies read-only chunks
 * Now, run the `https://github.com/openAgile/CommitStream.Web/blob/develop/Azure.Migration/create_checksums.bat` to produce a checksum XML file
   * Copy this file back to the current master into the `C:\Data` folder
+    * **NOTE**: It's important that we produce the checksums on the target machine, but then run the verification on the source. We cannot produce the verification on the source because some files will still be in use and it will lead to unreliable results.
   * Open a Powershell prompt and go to `C:\Data`
   * Run the script `split-checksums.ps1` in that folder, which will produce two distinct files, `checksums-chunks.xml` and `checksums-others.xml`.
   * Run `verify_checksums_chunks.bat` to verify only the chunks that were copied (minus the current active one)
