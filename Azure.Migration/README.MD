@@ -3,7 +3,7 @@
 # TODOs
 
 * Probably need to add IP rules for the existing `commitstream` App Service into the config for the new load balancer and TEST this connectivity prior to the cutover!
- * Way to test non-destructively: We could do this first with IPs from the `commitstream-staging` system since that is closer to `commitstream` than the `v1-cs-test` instance that we've been using. If the configuration works with BOTH sets of IPs, then we should also add in the IPs from `commitstream`. This will be necessary anway to allow `commitstream-staging` to function as it always has in our staging deployments.
+  * Way to test non-destructively: We could do this first with IPs from the `commitstream-staging` system since that is closer to `commitstream` than the `v1-cs-test` instance that we've been using. If the configuration works with BOTH sets of IPs, then we should also add in the IPs from `commitstream`. This will be necessary anway to allow `commitstream-staging` to function as it always has in our staging deployments.
 
 ## Pre-Cutover Window
 
