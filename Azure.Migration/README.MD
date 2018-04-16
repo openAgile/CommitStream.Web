@@ -1,5 +1,9 @@
 # CommitStream Production Cutover
 
+# TODOs
+
+* Probably need to add IP rules for the existing `commitstream` App Service into the config for the new load balancer and TEST this connectivity prior to the cutover!
+
 ## Pre-Cutover Window
 
 Perform the steps of the scripts in this folder as follows:
