@@ -11,11 +11,11 @@ $names = $xml.SelectNodes('//name')
 
 foreach($name in $names) {
     $name.InnerText = $name.InnerText -replace 'data_from_production', 'eventstore'
-    if ($name.InnerText -match '.chk') {
+    if ($name.InnerText -match '.chk' -Or $name.InnerText -match 'index') {
         $fcivChk.AppendChild($fcivChk.OwnerDocument.ImportNode($name.ParentNode.Clone(), $true))
         $fciv.RemoveChild($name.ParentNode)
     }
 }
 
 $xml.Save("F:\checksums-chunks.xml")
-$chkXml.Save("F:\checksums-chks.xml")
+$chkXml.Save("F:\checksums-others.xml")
