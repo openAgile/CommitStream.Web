@@ -37,8 +37,8 @@ Perform the steps of the scripts in this folder as follows:
 * Run the commands you just prepared on all the production nodes
 * With the services off, check which of the chunk files exist there that have not yet been copied to the new nodes. It's probably just one file. Check to see if they are **NOT** read-only. If they are not read-only, manually change them to be, but keep note of which ones you changed because you will need to clear the read-only flag when we bring the nodes up again
   * This is important because the script that we're about to rerun only copies read-only chunks
-* From `CS-PRODUCTION-1` run the same `copy_prod_data.bat` script as above
-  * This time it should copy a much smaller number of files, including the current active chunk if you remembered to set the read-only flag on it
+* From the current master run the same `copy_prod_data.bat` script as above
+  * This time it should copy a much smaller number of files over to `CS-PRODUCTION-1`, including the current active chunk if you remembered to set the read-only flag on it
   * Then, from new nodes 2 and 3, re-run the `copy_new_to_new.bat` script
   * This time, it should copy only the files that have changed or were added since the first time we ran it
 * Now is where it gets fun:
