@@ -62,3 +62,53 @@ Perform the steps of the scripts in this folder as follows:
 * Check that `https://commitstream.v1host.com/health/projections` is working
 * Also check that we can load our openAgile Team Room digests for Core and OA
 * If all this passes, then it's a success, and if it doesn't then repoint the App Service to the current cluster and go back to the drawing board!
+
+
+## Example test checklist output
+
+This was done without turning off production, so it's not going to be quite the same thing in practice, but I think we should be able to just copy the chunk files that do not ALREADY exist in the checksums XML file that's already on the new nodes and the newer .chk and index folder files. I'm suspecting those files will change after the production nodes get turned off.
+
+```
+OK: Current master is eventstore-02
+OK: Remoted to cs-production-1
+OK: From there, remoted to eventstore-02
+OK: Run copy_prod_data.bat  
+    OK: 4 *.chk files copied
+    OK: 6 index\** files copied
+    OK: 103 chunk* files out of 104 (expected)
+    Duration: 0:31:51
+OK: Run create-checksums-chunks.bat from F:\Data\data_from_production
+OK: Run verify-checksum-chunks-count.ps1 from a Powershell
+    Details: 103 chunk files and 103 FILE_ENTRY items in the XML
+OK: Copy checksums-chunks.xml to eventstore-02 C:\Data\eventstore
+OK: Run verify_checksums_chunks.bat from C:\Data\eventstore
+    Details: All files verified successfully
+OK: From cs-production-1 remote into cs-production-2
+OK: From cs-production-1 remote into cs-production-3
+OK: Run copy_new_to_new.bat on cs-production-2
+    Details: 
+        Dirs copied: 2
+        Files copied: 115
+        Duration: 0:21:31
+OK: Run copy_new_to_new.bat on cs-production-3
+    Details:
+        Dirs copied: 2
+        Files copied: 115
+        Duration: 0:23:51
+OK: On cs-production-2 run verify_checksums_chunks.bat from F:\Data\data_from_production
+    Details: All files verified successfully (about 18 minutes)
+OK: On cs-production-3 run verify_checksums_chunks.bat from F:\Data\data_from_production
+    Details: All files verified successfully (about 15 minutes)
+OK: Run original copy_prod_data.bat on eventstore-2
+    Details: copied to cs-production-1 one new finalized chunk that was closed during the previous run (as expected), and did not touch the new active one
+OK: Run copy_new_to_new.bat on both cs-production-2 and cs-production-3
+    Details: copied over the same chunk from above
+OK: On new nodes rename `eventstore` data folder to `eventstore.old`
+OK: On new nodes rename `data_from_production` to `eventstore`
+OK: On new nodes replace truncate.chk with copy of chaser.chk
+OK: Start the eventstore service on the new nodes
+OK: Time the chunk verification process
+    Details: Verifying 104 chunks took about 13 minutes, a vast improvement over current production
+OK: Login to a node and verify all projections running
+OK: Load the OA digest details view via commitstream-staging and v1-cs-test
+```
