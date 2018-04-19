@@ -1,7 +1,5 @@
 # CommitStream Production Cutover
 
-# TODOs
-
 ## Pre-Cutover Window
 
 Perform the steps of the scripts in this folder as follows:
