@@ -48,9 +48,19 @@ Perform the steps of the scripts in this folder as follows:
   * From each node, run `C:\CommitStream\dependencies\bin\fciv -v -sha1 -xml checksums_new.xml
   * Back on the current master, run the `verify_checksums_others.bat`. This may indeed produce failures because of changed files during the time we were copying files before. If it does, then generate new checksums for each of the failed files one by one.
     * If it did fail, then copy those new checksums over to nodes 1, 2, and 3 because we will want to run them there to make sure that our newly copied files match the current versions
-  
-TODO
-
-* Restarting that services on all nodes
-* Repointing the production `commitstream` app service to the new gateway IP address for the new production EventStore cluster
-* Smoke tests with our own instance
+* On new 1, 2, and 3 nodes from `F:\Data`, run this command: `rename eventstore eventstore.old` to relocate the current data
+* On those nodes, now run `rename data_from_production eventstore`
+* For each of the respective nodes, type out these commands and get them ready in each node, and then run them in close succession:
+  * `cs-production-1`: `net start cs-production-1`
+  * `cs-production-2`: `net start cs-production-2` 
+  * `cs-production-3`: `net start cs-production-3`
+* Also, restart them on the old nodes just in case we need to flip back in the case of failure:
+  * `eventstore-01`: `net start es-cluster1`
+  * `eventstore-02`: `net start es-cluster2`
+  * `eventstore-03`: `net start es-cluster3`
+* Monitor the amount of time it takes the chunk verification to take place on the new nodes by opening the database log file. It should take between 10 and 20 minutes.
+* Once that finishes you should be able to login with the PROD credentials to the EventStore console. If projections are all 100%, then you are good to continue
+* Once it's up and running, repoint the `commitstream` App Service's `eventStoreBaseUrl` to `http://52.170.34.8:2113` and flip it on!
+* Check that `https://commitstream.v1host.com/health/projections` is working
+* Also check that we can load our openAgile Team Room digests for Core and OA
+* If all this passes, then it's a success, and if it doesn't then repoint the App Service to the current cluster and go back to the drawing board!
