@@ -18,7 +18,7 @@ Perform the steps of the scripts in this folder as follows:
 * If everything verifies, then from `CS-PRODUCTION-1` remote into both `CS-PRODUCTION-2` and `CS-PRODUCTION-3`, again enabling local drive access
 * From each of these run `copy_new_to_new.bat`
   * This should copy all the files from `CS-PRODUCTION-1` into 2 and 3 so that all new nodes are on par
-* Run the `verify_checksums_chunks.bat` file from that folder which will verify the chunks  will verify all chunks (the xml file will have already been copied from the previous command)
+* Run the `verify_checksums_chunks.bat` file from that folder which will verify all chunks (the xml file will have already been copied from the previous command)
 * If everything verifies well, then it's time to **CUTOVER!**
 
 ## Cutover Window
