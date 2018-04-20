@@ -5,7 +5,7 @@
 Perform the steps of the scripts in this folder as follows:
 
 * Determine the current master of production eventstore in the UI (see https://github.com/versionone/CommitStream/blob/master/environments.md for link and creds)
-* RDP into `CS-PRODUCTION-1` and then from there, RDP into the current Master determined in the previous step. Make sure to enable accessing local drives in the RDP settings
+* RDP into `cs-production-1` and then from there, RDP into the current Master determined in the previous step. Make sure to enable accessing local drives in the RDP settings
   * This should make `\\tsclient\F\` accessible from the current master
 * Open a `cmd` prompt and run the `copy_prod_data.bat` script from `C:\`
   * This should copy all files from production **except** for the currently active chunk file because it only copies read-only chunks
@@ -15,9 +15,9 @@ Perform the steps of the scripts in this folder as follows:
   * Copy `checksums-chunks.xml` back to the current master into the `C:\Data\eventstore` folder
   * Run `verify_checksums_chunks.bat` to verify only the chunks that were copied (minus the current active one)
     * If for some reason, more than just the current active chunk has been modified since the copy, then you may need to adjust the script
-* If everything verifies, then from `CS-PRODUCTION-1` remote into both `CS-PRODUCTION-2` and `CS-PRODUCTION-3`, again enabling local drive access
+* If everything verifies, then from `cs-production-1` remote into both `cs-production-2` and `cs-production-3`, again enabling local drive access
 * From each of these run `copy_new_to_new.bat`
-  * This should copy all the files from `CS-PRODUCTION-1` into 2 and 3 so that all new nodes are on par
+  * This should copy all the files from `cs-production-1` into 2 and 3 so that all new nodes are on par
 * Run the `verify_checksums_chunks.bat` file from that folder which will verify all chunks (the xml file will have already been copied from the previous command)
 * If everything verifies well, then it's time to **CUTOVER!**
 
@@ -36,7 +36,7 @@ Perform the steps of the scripts in this folder as follows:
 * With the services off, check which of the chunk files exist there that have not yet been copied to the new nodes. It's probably just one file. Check to see if they are **NOT** read-only. If they are not read-only, manually change them to be, but keep note of which ones you changed because you will need to clear the read-only flag when we bring the nodes up again
   * This is important because the script that we're about to rerun only copies read-only chunks
 * From the current master run the same `copy_prod_data.bat` script as above
-  * This time it should copy a much smaller number of files over to `CS-PRODUCTION-1`, including the current active chunk if you remembered to set the read-only flag on it
+  * This time it should copy a much smaller number of files over to `cs-production-1`, including the current active chunk if you remembered to set the read-only flag on it
   * Then, from new nodes 2 and 3, re-run the `copy_new_to_new.bat` script
   * This time, it should copy only the files that have changed or were added since the first time we ran it
 * Now is where it gets fun:
