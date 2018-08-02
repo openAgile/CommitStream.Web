@@ -26,12 +26,15 @@ CHANGES=`svnlook changed -r $REVISION $SVNPATH`
 
 mapfile -t array <<< "$CHANGES"
 
-for element in "${array[@]}"
-do
-  CHANGESFORJSON+=\""${element}\","
+CHANGESFORJSON=""
+for index in ${!array[@]}; do
+    i=$(($index + 1))
+    if [ "$i" -eq ${#array[@]} ];then
+        CHANGESFORJSON+="${array[index]}"
+    else
+        CHANGESFORJSON+="${array[index]},"
+    fi
 done
-
-CHANGESFORJSON="${CHANGESFORJSON::-1}"
 
 PAYLOAD='{"pretext":"Commit completed: rev. '"$REVISION"'","committer":{"name":"'"$WHO"'","date":"'"$WHEN"'"},"author":"'"$WHO"'","revision":"'"$REVISION"'","message":"'"$LOG"'","changes":['"$CHANGESFORJSON"'], "repository":"'"$REPOSITORY"'", "html_url":"'"$HTML_URL$REVISION"'"}'
 
