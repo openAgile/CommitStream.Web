@@ -19,7 +19,7 @@ APPJSONHEADER="Content-Type:application/json"
 svnlook="/usr/bin/svnlook"
 svn="/usr/bin/svn"
 
-LOG=`$svnlook log -r $REVISION $SVNPATH`
+LOG=`$svnlook log -r $REVISION $SVNPATH | sed ':a;N;$!ba;s/\n/\\\\n /g'`
 WHO=`svnlook author -r $REVISION $SVNPATH`
 WHEN=`svnlook date -r $REVISION $SVNPATH`
 CHANGES=`svnlook changed -r $REVISION $SVNPATH`
