@@ -30,9 +30,9 @@ CHANGESFORJSON=""
 for index in ${!array[@]}; do
     i=$(($index + 1))
     if [ "$i" -eq ${#array[@]} ];then
-        CHANGESFORJSON+="${array[index]}"
+        CHANGESFORJSON+="\"${array[index]}\""
     else
-        CHANGESFORJSON+="${array[index]},"
+        CHANGESFORJSON+="\"${array[index]}\","
     fi
 done
 
