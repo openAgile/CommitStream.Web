@@ -1,10 +1,10 @@
 import uuid from 'uuid-v4';
 import VcsFamilies from '../helpers/vcsFamilies';
-import VsoTfvcCommitMalformedError from'../../middleware/vsoTfvcCommitMalformedError';
+//import VsoTfvcCommitMalformedError from'../../middleware/vsoTfvcCommitMalformedError';
 import _ from 'underscore';
 
-const vsoTfvcTranslator = {
-    family: VcsFamilies.VsoTfvc,
+const tfsGitTranslator = {
+    family: VcsFamilies.TfsGit,
     canTranslate(request) {
       return (_.isString(request.body.eventType) && request.body.eventType === 'git.push')
         && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs')

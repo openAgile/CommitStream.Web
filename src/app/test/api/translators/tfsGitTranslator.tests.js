@@ -94,6 +94,35 @@ describe('tfsGitTranslator', function() {
         });
     });
 
+describe('tfsGitTranslator', function() {
+    describe('with appropriate missing commits:[]', function() {
+        it('canTranslate should return false when valid body information is present.', function() {
+            var request = {
+                body: {
+                    'eventType': 'git.push',
+                    'publisherId': 'tfs',
+                    'resource': {
+                        "commits": [{
+                            "commitId": "cf383dd370a74a8a5062385f6c1723fcc7cc66eb",
+                            "author": {
+                            "name": "Josh Gough",
+                            "email": "jsgough@gmail.com",
+                            "date": "2015-11-11T20:13:49Z"
+                            },
+                            "committer": {
+                                "name": "Josh Gough",
+                                "email": "jsgough@gmail.com",
+                                "date": "2015-11-11T20:13:49Z"
+                            },
+                            "comment": "changed code",
+                            "url": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/commits/cf383dd370a74a8a5062385f6c1723fcc7cc66eb"
+                        }], 
+                    }//shipit
+                }
+            };
+            tfsGitTranslator.canTranslate(request).should.equal(true);
+        });
+    });
     describe('with incorrect body', function() {
 
         it('canTranslate should return false when invalid body information is present', function() {
@@ -188,5 +217,4 @@ describe('tfsGitTranslator', function() {
             invokeTranslatePush.should.throw(TfsGitCommitMalformedError);
         });
     });
-
 });
