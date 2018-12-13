@@ -33,7 +33,7 @@ const vsoTfvcTranslator = {
 
             return [{
                 eventId: uuid(),
-                eventType: vsoTfvcTranslator.family + 'CommitReceived',
+                eventType: tfsGitTranslator.family + 'CommitReceived',
                 data: commit,
                 metadata: {
                     instanceId,
