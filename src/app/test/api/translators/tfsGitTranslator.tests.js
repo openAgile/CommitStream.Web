@@ -93,7 +93,7 @@ describe('tfsGitTranslator', function() {
             tfsGitTranslator.canTranslate(request).should.equal(true);
         });
     });
-
+});
 describe('tfsGitTranslator', function() {
     describe('with appropriate missing commits:[]', function() {
         it('canTranslate should return false when valid body information is present.', function() {
