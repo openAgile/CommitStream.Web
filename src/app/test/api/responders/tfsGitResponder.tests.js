@@ -1,10 +1,10 @@
+
 var chai = require('chai'),
     should = chai.should(),
     proxyquire = require('proxyquire'),
     sinon = require('sinon'),
     uuidStub = sinon.stub(),
-    TfsGitCommitMalformedError = require('../../../middleware/tfsGitCommitMalformedError'),
-    tfsGitTranslator = proxyquire('../../../api/translators/tfsGitTranslator', {
+    tfsGitResponder = proxyquire('../../../api/responders/tfsGitResponder', {
         'uuid-v4': uuidStub
     });
 require('../../helpers')(global);
@@ -78,10 +78,10 @@ var pushEventWithNoCommits = {
     "createdDate": "2015-11-11T20:13:52.4966577Z"
 };
 //
-describe('tfsGitTranslator', function() {
+describe('tfsGitResponder', function() {
     describe('with appropriate body', function() {
 
-        it('canTranslate should return true when valid body information is present', function() {
+        it('canRespond should return true when a valid TFS message but missing commits', function() {
             var request = {
                 body: {
                     'eventType': 'git.push',
@@ -90,13 +90,13 @@ describe('tfsGitTranslator', function() {
                     }
                 }
             };
-            tfsGitTranslator.canTranslate(request).should.equal(true);
+            tfsGitResponder.canRespond(request).should.equal(true);
         });
     });
 });
-describe('tfsGitTranslator', function() {
+describe('tfsGitResponder', function() {
     describe('with appropriate missing commits:[]', function() {
-        it('canTranslate should return false when valid body information is present.', function() {
+        it('canRespond should return false when valid body information is present and a commit list is present.', function() {
             var request = {
                 body: {
                     'eventType': 'git.push',
@@ -117,29 +117,29 @@ describe('tfsGitTranslator', function() {
                             "comment": "changed code",
                             "url": "https://v1platformtest.visualstudio.com/DefaultCollection/_apis/git/repositories/d29767bb-8f5f-4c43-872f-6c73635a1256/commits/cf383dd370a74a8a5062385f6c1723fcc7cc66eb"
                         }], 
-                    }//shipit
+                    }
                 }
             };
-            tfsGitTranslator.canTranslate(request).should.equal(true);
+            tfsGitResponder.canRespond(request).should.equal(false);
         });
     });
     describe('with incorrect body', function() {
 
-        it('canTranslate should return false when invalid body information is present', function() {
+        it('canRespond should return false when invalid body information is present', function() {
             var request = {
                 body: {
                     'eventType': 'git.pushrr',
                     'publisherId': 'tfs44'
                 }
             };
-            tfsGitTranslator.canTranslate(request).should.equal(false);
+            tfsGitResponder.canRespond(request).should.equal(false);
         });
 
-        it('canTranslate should return false when body information isn\'t available', function() {
+        it('canRespond should return false when body information isn\'t available', function() {
             var request = {
                 body: {}
             };
-            tfsGitTranslator.canTranslate(request).should.equal(false);
+            tfsGitResponder.canRespond(request).should.equal(false);
         });
     });
 
@@ -191,30 +191,30 @@ describe('tfsGitTranslator', function() {
             }
         }];
 
-        it('returns the expected object', function() {
-            var actual = tfsGitTranslator.translatePush(pushEventWithNoCommits, '111', '222', '333');
-            actual.should.deep.equal(expected);
-        });
+        // it('returns the expected object', function() {
+        //     var actual = tfsGitTranslator.respondPush(pushEventWithNoCommits, '111', '222', '333');
+        //     actual.should.deep.equal(expected);
+        // });
 
 
     });
 
-    describe('when translating a malformed push event', function() {
-        var invokeTranslatePush;
+    // describe('when translating a malformed push event', function() {
+    //     var invokeTranslatePush;
 
-        beforeEach(function() {
-            invokeTranslatePush = function() {
-                var malformedPushEvent = {};
-                var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
-                    digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
-                    inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
+    //     beforeEach(function() {
+    //         invokeTranslatePush = function() {
+    //             var malformedPushEvent = {};
+    //             var instanceId = '73b40eab-bbb9-4478-9031-601b9e701d17',
+    //                 digestId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2',
+    //                 inboxId = '9c369aef-b041-4a38-a76c-d3cf59dec0d2';
 
-                tfsGitTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId)
-            }
-        });
+    //             tfsGitTranslator.translatePush(malformedPushEvent, instanceId, digestId, inboxId)
+    //         }
+    //     });
 
-        it('should throw TfsGitCommitMalformedError', function() {
-            invokeTranslatePush.should.throw(TfsGitCommitMalformedError);
-        });
-    });
+    //     it('should throw TfsGitCommitMalformedError', function() {
+    //         invokeTranslatePush.should.throw(TfsGitCommitMalformedError);
+    //     });
+    // });
 });

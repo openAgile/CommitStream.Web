@@ -1,6 +1,8 @@
 import validateUUID from  '../validateUUID';
 import eventStore from '../helpers/eventStoreClient';
 import translatorFactory from '../translators/translatorFactory';
+import responderFactory from '../responders/responderFactory';
+
 import commitsAddedFormatAsHal from './commitsAddedFormatAsHal';
 import MalformedPushEventError from '../../middleware/malformedPushEventError';
 
@@ -30,7 +32,16 @@ export default (req, res) => {
                 const hypermedia = commitsAddedFormatAsHal(req.href, instanceId, inboxData);
                 res.hal(hypermedia, 201);
             });
-    } else {
-        throw new MalformedPushEventError(req);
-    }
+    } 
+    else { 
+        const responder = responderFactory.create(req);    
+        if (responder) {
+         //   res.hal(hypermedia, 202);
+            res.status(202);
+            res.send("WE HAVE INTERCEPTED");
+        }
+        else {
+            throw new MalformedPushEventError(req);
+        }
+    } 
 };

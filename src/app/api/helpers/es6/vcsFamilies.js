@@ -4,7 +4,6 @@ const vcsFamilies = {
 	'Svn': "Svn",
 	'Bitbucket': "Bitbucket",
 	'GitLab': "GitLab",
-	'TfsGit': "TfsGit",
 	'VsoGit': "VsoGit",
 	'VsoTfvc': "VsoTfvc",
 	'GitSwarm': "GitSwarm",

@@ -16,19 +16,19 @@ var _csError = require('./csError');
 
 var _csError2 = _interopRequireDefault(_csError);
 
-var TfsGitCommitMalformedError = (function (_CSError) {
-    _inherits(TfsGitCommitMalformedError, _CSError);
+var tfsGitCommitMalformedError = (function (_CSError) {
+    _inherits(tfsGitCommitMalformedError, _CSError);
 
-    function TfsGitCommitMalformedError(error, pushEvent) {
-        _classCallCheck(this, TfsGitCommitMalformedError);
+    function tfsGitCommitMalformedError(error, pushEvent) {
+        _classCallCheck(this, tfsGitCommitMalformedError);
 
-        _get(Object.getPrototypeOf(TfsGitCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your TfsGit push event.']);
+        _get(Object.getPrototypeOf(tfsGitCommitMalformedError.prototype), 'constructor', this).call(this, ['There was an unexpected error when processing your tfsGit push event.']);
         this.originalError = error;
         this.pushEvent = pushEvent;
     }
 
-    return TfsGitCommitMalformedError;
+    return tfsGitCommitMalformedError;
 })(_csError2['default']);
 
-exports['default'] = TfsGitCommitMalformedError;
+exports['default'] = tfsGitCommitMalformedError;
 module.exports = exports['default'];
