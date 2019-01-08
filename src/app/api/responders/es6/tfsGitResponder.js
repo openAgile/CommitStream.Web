@@ -6,12 +6,15 @@ const isTfsRequest = request =>
     (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
 
 const butIsMissingCommits = request =>
-    request.body.resource === null
-    ||
-    (_.isObject(request.body.resource) && !_.isArray(request.body.resource.commits));
+    _.isObject(request.body.resource) && !_.isArray(request.body.resource.commits);
 
 const tfsGitResponder = {
-    canRespond(request) { return isTfsRequest(request) && butIsMissingCommits(request); }
+    canRespond(request) { return isTfsRequest(request) && butIsMissingCommits(request); },
+    respond(res) {
+       // return res.status(202).send({responderMessage : 'We only translate messages with commits', status : '202'});
+       return res.status(202);
+      }
 }
+
 
 export default tfsGitResponder;

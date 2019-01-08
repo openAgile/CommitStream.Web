@@ -15,12 +15,16 @@ var isTfsRequest = function isTfsRequest(request) {
 };
 
 var butIsMissingCommits = function butIsMissingCommits(request) {
-    return request.body.resource === null || _underscore2['default'].isObject(request.body.resource) && !_underscore2['default'].isArray(request.body.resource.commits);
+    return _underscore2['default'].isObject(request.body.resource) && !_underscore2['default'].isArray(request.body.resource.commits);
 };
 
 var tfsGitResponder = {
     canRespond: function canRespond(request) {
         return isTfsRequest(request) && butIsMissingCommits(request);
+    },
+    respond: function respond(res) {
+        // return res.status(202).send({responderMessage : 'We only translate messages with commits', status : '202'});
+        return res.status(202);
     }
 };
 

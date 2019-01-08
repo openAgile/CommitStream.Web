@@ -56,11 +56,13 @@ exports['default'] = function (req, res) {
             res.hal(hypermedia, 201);
         });
     } else {
+        console.log("here in the commitsCreate before I call responderFactory()");
         var responder = _respondersResponderFactory2['default'].create(req);
+        console.log("here in the commitsCreate");
         if (responder) {
-            //   res.hal(hypermedia, 202);
-            res.status(202);
-            res.send("WE HAVE INTERCEPTED");
+            console.log("here in the commitsCreate checking if (responder)");
+
+            responder.respond(res);
         } else {
             throw new _middlewareMalformedPushEventError2['default'](req);
         }

@@ -28,6 +28,7 @@ var ResponderFactory = (function () {
       var _iteratorError = undefined;
 
       try {
+
         for (var _iterator = _getIterator(responders), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var responder = _step.value;
 

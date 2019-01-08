@@ -34,13 +34,13 @@ export default (req, res) => {
             });
     } 
     else { 
+        console.log("here in the commitsCreate before I call responderFactory()");
         const responder = responderFactory.create(req);    
+        console.log("here in the commitsCreate");
         if (responder) {
-         //   res.hal(hypermedia, 202);
-            
-            //res.status(202);
-            //res.send("WE HAVE INTERCEPTED");
-            res.status(202).send({responderMessage : 'We only translate messages with commits'});
+        console.log("here in the commitsCreate checking if (responder)");
+
+            responder.respond(res);
         }
         else {
             throw new MalformedPushEventError(req);
