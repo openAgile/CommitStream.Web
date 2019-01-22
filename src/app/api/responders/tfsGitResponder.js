@@ -1,5 +1,7 @@
 'use strict';
 
+var _Promise = require('babel-runtime/core-js/promise')['default'];
+
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
 
 Object.defineProperty(exports, '__esModule', {
@@ -22,9 +24,15 @@ var tfsGitResponder = {
     canRespond: function canRespond(request) {
         return isTfsRequest(request) && butIsMissingCommits(request);
     },
+
     respond: function respond(res) {
-        // return res.status(202).send({responderMessage : 'We only translate messages with commits', status : '202'});
-        return res.status(202);
+        return new _Promise(function (resolve, reject) {
+            res.status(202).send('The CommitStream accepted your push but no action will be taken since it is likely a push after a merge ').done(function () {
+                resolve(res);
+            }).fail(function () {
+                reject(null);
+            });
+        });
     }
 };
 

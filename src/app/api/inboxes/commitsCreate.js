@@ -56,16 +56,17 @@ exports['default'] = function (req, res) {
             res.hal(hypermedia, 201);
         });
     } else {
-        console.log("here in the commitsCreate before I call responderFactory()");
         var responder = _respondersResponderFactory2['default'].create(req);
-        console.log("here in the commitsCreate");
-        if (responder) {
-            console.log("here in the commitsCreate checking if (responder)");
+        return responder.respond(res);
 
-            responder.respond(res);
-        } else {
-            throw new _middlewareMalformedPushEventError2['default'](req);
+        /*
+        const responder = responderFactory.create(req);
+        if (responder) {
+            return responder.respond(res);
         }
+        else {
+            throw new MalformedPushEventError(req);
+        }*/
     }
 };
 
