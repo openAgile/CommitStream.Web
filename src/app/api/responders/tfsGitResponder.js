@@ -27,11 +27,12 @@ var tfsGitResponder = {
 
     respond: function respond(res) {
         return new _Promise(function (resolve, reject) {
-            res.status(202).send('The CommitStream accepted your push but no action will be taken since it is likely a push after a merge ').done(function () {
-                resolve(res);
-            }).fail(function () {
-                reject(null);
-            });
+            try {
+                res.status(202).json({ message: 'The CommitStream accepted your push but no action will be taken since it is likely a push after a merge ' });
+                resolve();
+            } catch (err) {
+                reject(err);
+            }
         });
     }
 };
