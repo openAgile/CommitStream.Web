@@ -57,16 +57,11 @@ exports['default'] = function (req, res) {
         });
     } else {
         var responder = _respondersResponderFactory2['default'].create(req);
-        return responder.respond(res);
-
-        /*
-        const responder = responderFactory.create(req);
         if (responder) {
             return responder.respond(res);
+        } else {
+            throw new _middlewareMalformedPushEventError2['default'](req);
         }
-        else {
-            throw new MalformedPushEventError(req);
-        }*/
     }
 };
 

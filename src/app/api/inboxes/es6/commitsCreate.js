@@ -35,15 +35,11 @@ export default (req, res) => {
     } 
     else {
         const responder = responderFactory.create(req);
-        return responder.respond(res);
-
-        /*
-        const responder = responderFactory.create(req);
         if (responder) {
             return responder.respond(res);
         }
         else {
             throw new MalformedPushEventError(req);
-        }*/
+        }
     }
 };

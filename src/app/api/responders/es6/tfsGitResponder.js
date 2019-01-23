@@ -15,13 +15,13 @@ const tfsGitResponder = {
 
     respond(res) {
         return new Promise((resolve, reject) => {
-            res.status(202).send('The CommitStream accepted your push but no action will be taken since it is likely a push after a merge ')
-            .done(() => {
-                resolve(res);
-            })
-            .fail(() => {
-                reject(null);
-            });
+            try {
+                res.status(202).json({message:'The CommitStream accepted your push but no action will be taken since it is likely a push after a merge '});
+                resolve();
+            }
+            catch (err) {
+                reject(err);
+            }
         });
     }
 }
