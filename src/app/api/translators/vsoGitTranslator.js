@@ -26,10 +26,18 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
+var isVsoRequest = function isVsoRequest(request) {
+  return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
+};
+
+var hasCommits = function hasCommits(request) {
+  return _underscore2['default'].isObject(request.body.resource) && _underscore2['default'].isArray(request.body.resource.commits);
+};
+
 var vsoGitTranslator = {
   family: _helpersVcsFamilies2['default'].VsoGit,
   canTranslate: function canTranslate(request) {
-    return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && (_underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs') && request.body.resource.commits != undefined;
+    return isVsoRequest(request) && hasCommits(request);
   },
   translatePush: function translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {

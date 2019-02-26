@@ -18,6 +18,10 @@ var _translatorsTranslatorFactory = require('../translators/translatorFactory');
 
 var _translatorsTranslatorFactory2 = _interopRequireDefault(_translatorsTranslatorFactory);
 
+var _respondersResponderFactory = require('../responders/responderFactory');
+
+var _respondersResponderFactory2 = _interopRequireDefault(_respondersResponderFactory);
+
 var _commitsAddedFormatAsHal = require('./commitsAddedFormatAsHal');
 
 var _commitsAddedFormatAsHal2 = _interopRequireDefault(_commitsAddedFormatAsHal);
@@ -52,7 +56,12 @@ exports['default'] = function (req, res) {
             res.hal(hypermedia, 201);
         });
     } else {
-        throw new _middlewareMalformedPushEventError2['default'](req);
+        var responder = _respondersResponderFactory2['default'].create(req);
+        if (responder) {
+            return responder.respond(res);
+        } else {
+            throw new _middlewareMalformedPushEventError2['default'](req);
+        }
     }
 };
 
