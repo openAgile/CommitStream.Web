@@ -4,12 +4,18 @@ import _ from 'underscore';
 import VsoGitCommitMalformedError from '../../middleware/vsoGitCommitMalformedError';
 import VcsFamilies from '../helpers/vcsFamilies';
 
+const isVsoRequest = request =>
+    (_.isString(request.body.eventType) && request.body.eventType === 'git.push')
+    && 
+    (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs');
+
+const hasCommits = request =>
+  _.isObject(request.body.resource) && _.isArray(request.body.resource.commits);
+
 const vsoGitTranslator = {
   family: VcsFamilies.VsoGit,
   canTranslate(request) {
-    return (_.isString(request.body.eventType) && request.body.eventType === 'git.push')
-    && (_.isString(request.body.publisherId) && request.body.publisherId === 'tfs')
-    && (request.body.resource.commits != undefined);
+    return isVsoRequest(request) && hasCommits(request);
   },
   translatePush(pushEvent, instanceId, digestId, inboxId) {
     try {

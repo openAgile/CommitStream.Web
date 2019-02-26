@@ -14,18 +14,16 @@ var _helpersVcsFamilies = require('../helpers/vcsFamilies');
 
 var _helpersVcsFamilies2 = _interopRequireDefault(_helpersVcsFamilies);
 
-var _middlewareVsoTfvcCommitMalformedError = require('../../middleware/vsoTfvcCommitMalformedError');
-
-var _middlewareVsoTfvcCommitMalformedError2 = _interopRequireDefault(_middlewareVsoTfvcCommitMalformedError);
+//import VsoTfvcCommitMalformedError from'../../middleware/vsoTfvcCommitMalformedError';
 
 var _underscore = require('underscore');
 
 var _underscore2 = _interopRequireDefault(_underscore);
 
-var vsoTfvcTranslator = {
-    family: _helpersVcsFamilies2['default'].VsoTfvc,
+var tfsGitTranslator = {
+    family: _helpersVcsFamilies2['default'].TfsGit,
     canTranslate: function canTranslate(request) {
-        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'tfvc.checkin' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs';
+        return _underscore2['default'].isString(request.body.eventType) && request.body.eventType === 'git.push' && _underscore2['default'].isString(request.body.publisherId) && request.body.publisherId === 'tfs' && request.body.resource.commits == undefined;
     },
     translatePush: function translatePush(event, instanceId, digestId, inboxId) {
         try {
@@ -60,7 +58,7 @@ var vsoTfvcTranslator = {
                 }
             }];
         } catch (ex) {
-            throw new _middlewareVsoTfvcCommitMalformedError2['default'](ex, event);
+            throw new VsoTfvcCommitMalformedError(ex, event);
         }
     },
     getProperties: function getProperties(commitEvent) {
@@ -110,5 +108,5 @@ var getRepositoryUrlsPerProject = function getRepositoryUrlsPerProject(event) {
     return repositoryUrls;
 };
 
-exports['default'] = vsoTfvcTranslator;
+exports['default'] = tfsGitTranslator;
 module.exports = exports['default'];
