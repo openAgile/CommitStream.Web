@@ -67,15 +67,6 @@
     console.error(exception);
   };
 
-  var prependXdomain = function prependXdomain(commitStreamRoot) {
-    setTimeout(function () {
-      if (window.xdomain) {
-        return;
-      }
-      commitStreamRoot.prepend($('<scr' + ('ipt src="' + serviceUrl + '/bower_components/xdomain/dist/xdomain.min.js" slave="' + serviceUrl + '/proxy.html"></scr') + 'ipt>"'));
-    }, 1000);
-  };
-
   try {
     (function () {
       var scriptEl = $($('script[data-commitstream-root]')[0]);
@@ -96,9 +87,6 @@
       // TODO: enable after new styles are released in V1 Prod
       prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
       prependStyleSheet(commitStreamRoot, serviceUrl + '/css/glyphicon.css');
-
-      // XDomain support for IE9 especially
-      prependXdomain(commitStreamRoot);
 
       //only load angular and friends once
       if (window.CommitStreamAdminBoot) {

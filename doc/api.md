@@ -144,17 +144,17 @@ Teams in VersionOne can have their own collections of repositories. When you con
 
 The API domain term for groups of repositories is `digest`. You can fetch the list of all the `digest` objects that your CommitStream instance contains by fetching the `/digests` route
 
-* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/digests&apiKey=`**apiKey**
+* The structure of the URL is: `https://commitstream.v1host.com/api/`**instanceId**`/digests?apiKey=`**apiKey**
 * Exmaple to query for digests within an instance:
 
-> https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f
+> https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests?apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f
 
 ## Sample Query for Digests within an Instance
 
 As just mentioned, you first need to know the address for the `digest` you wanto query. The following request fetches **all** the digests within my sample instance. Just plugin the values for your own `instanceId` and `apiKey` to get the list for your own CommitStream instance:
 
 ```bash
-$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests&apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
+$ curl https://commitstream.v1host.com/api/48bf06cb-9b84-4700-9325-2df87b93e227/digests?apiKey=db479bc8-bb3b-48de-ac05-fd5c8c0a089f | python -mjson.tool
 ```
 
 ### Response
