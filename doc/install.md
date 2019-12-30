@@ -20,18 +20,24 @@ This is a work in progress. As this evolves, we update this narrative.
 * Grunt and Babel: These two are being used in order to transpile our ES2015 files to the appropriate locations within the project. In order for this to work appropriately though, you must first execute from your command line
   * `npm install -g grunt-cli`
   * Note that installing grunt-cli does not install the Grunt task runner! The job of the Grunt CLI is simple: run the version of Grunt which has been installed next to a Gruntfile. This allows multiple versions of Grunt to be installed on the same machine simultaneously.
+* Install EventStore OSS version
+  * **NOTE: This instruction is for LOCAL dev only. For production server installs, see the private repository which details the HA commercial download instructions**
+  * Download and install the last 4.x series of EventStore from https://eventstore.org/downloads/, since 4.x is the only version of EventStore CommitStream is known to work with.
+    * But, update this doc after you have tests with version 5 :-D
+  * Run the process with this command line: `EventStore.ClusterNode.exe --db ./db --log ./logs --run-projections=all` -- this ensures that the projection support runs all projections which are needed by the current design of CommitStream
+* Run the system  
   * If you would like to run the watcher for ES2015 files while you make code changes run:
     * `grunt watch --verbose`
   * In the Gruntfile there are a couple of tasks created for developers
     * `grunt dev`
-      * Assuming EventStore is running as a Windows Service
-      * This wil run the following tasks:
-      * Compile your .less files 
-      * Compile your ES2015 files
-      * Start the node server
-      * Watch for .less file changes and compile them. 
-      * Watch for ES2015 files changes and compile them
-      * Watch for changes in the js files on the server side (api, middleware and server.js), if so it will restart the server.
+      * Assuming EventStore is running as a Windows Service or running manually as described above:
+        * This wil run the following tasks:
+        * Compile your .less files 
+        * Compile your ES2015 files
+        * Start the node server
+        * Watch for .less file changes and compile them. 
+        * Watch for ES2015 files changes and compile them
+        * Watch for changes in the js files on the server side (api, middleware and server.js), if so it will restart the server.
     * `grunt devm`
       * Use this if you prefer to run EventStore in memory
       * Does everything else from `grunt dev` above, minus EventStore running as a Windows Service (cause it's in memory here ;) )
