@@ -3,6 +3,7 @@
 This is a work in progress. As this evolves, we update this narrative.
 
 ## Installation process
+* Install Git for Windows if you don't already have it from https://git-scm.com/download/win
 * Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * First, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
