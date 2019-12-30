@@ -14,7 +14,7 @@ This is a work in progress. As this evolves, we update this narrative.
     * grunt-cli - `npm install -g grunt-cli`
       * **NOTE: Installing grunt-cli does not install the Grunt task runner, but running `npm install` in the next step will do this for us.**
 * Install NPM dependencies
-  * Navigate to `CommitStream.Web/src/app` on the command line.
+  * Type `cd CommitStream.Web/src/app` from Bash to get to the source code folder for the app.
   * Run: `npm install`		
 * Bower components need to be installed for client side code to get served correctly.
   * Navigate to `CommitStream.Web/src/app/client` on the command line.
