@@ -5,7 +5,8 @@ This is a work in progress. As this evolves, we update this narrative.
 ## Installation process
 * Install Git for Windows if you don't already have it from https://git-scm.com/download/win
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
-* Install Node.js LTS version if don't already have it from https://nodejs.org/en/download/
+* Install Node.js 10.x version if don't already have it from https://nodejs.org/download/release/v10.18.0/
+  * **NOTE: Update this if tested fine with a later version of Node.js**
 * Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * Now, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web -- `git clone https://github.com/openAgile/CommitStream.Web.git`
   * There are three special snowflake packages that need to be installed globally
@@ -24,7 +25,7 @@ This is a work in progress. As this evolves, we update this narrative.
   * **NOTE: This instruction is for LOCAL dev only. For production server installs, see the private repository which details the HA commercial download instructions**
   * Download and unzip the latest 4.x series of EventStore from https://eventstore.org/downloads into somewhere like `C:\Program Files\EventStore`
     * 4.x is the only version of EventStore CommitStream is known to work with.
-      * But, update this doc after you have tested it with version 5 and verified that it works :-D
+      * **NOTE: Update this doc after you have tested it with version 5 and verified that it works :-D**
   * Run the process with this command line: `EventStore.ClusterNode.exe --db ./db --log ./logs --run-projections=all` -- this ensures that the projection support runs all projections which are needed by the current design of CommitStream
 * Run the system  
   * If you would like to run the watcher for ES2015 files while you make code changes run:
