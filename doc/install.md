@@ -4,13 +4,13 @@ This is a work in progress. As this evolves, we update this narrative.
 
 ## Installation process
 * Install Git for Windows if you don't already have it from https://git-scm.com/download/win
-* Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * First, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
-* NodeJS. If you don't have it, type `cinst nodejs` from a prompt to get it.
-	* There are two special snowflake packages that need to be installed globally
-		* bower - `npm install -g bower`
-		* babel - `npm install -g babel`
+* Install Node JS if don't already have it from https://nodejs.org/en/download/
+* Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
+  * There are two special snowflake packages that need to be installed globally
+    * bower - `npm install -g bower`
+    * babel - `npm install -g babel`
 * Install NPM dependencies
   * Navigate to `CommitStream.Web/src/app` on the command line.
   * Run: `npm install`		
