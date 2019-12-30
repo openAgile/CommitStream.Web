@@ -22,8 +22,9 @@ This is a work in progress. As this evolves, we update this narrative.
   * You should have seen all of the bower components defined in `CommitStream.Web/src/app/client/bower.json` get installed.  .
 * Install EventStore OSS version
   * **NOTE: This instruction is for LOCAL dev only. For production server installs, see the private repository which details the HA commercial download instructions**
-  * Download and install the last 4.x series of EventStore from https://eventstore.org/downloads/, since 4.x is the only version of EventStore CommitStream is known to work with.
-    * But, update this doc after you have tests with version 5 :-D
+  * Download and unzip the latest 4.x series of EventStore from https://eventstore.org/downloads into somewhere like `C:\Program Files\EventStore`
+    * 4.x is the only version of EventStore CommitStream is known to work with.
+      * But, update this doc after you have tested it with version 5 and verified that it works :-D
   * Run the process with this command line: `EventStore.ClusterNode.exe --db ./db --log ./logs --run-projections=all` -- this ensures that the projection support runs all projections which are needed by the current design of CommitStream
 * Run the system  
   * If you would like to run the watcher for ES2015 files while you make code changes run:
