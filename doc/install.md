@@ -1,4 +1,4 @@
-# How to run CommitStream locally (from scratch)
+# How to run CommitStream locally from scratch
 
 This is a work in progress. As this evolves, we update this narrative.
 
