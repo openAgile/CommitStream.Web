@@ -45,7 +45,14 @@ This is a work in progress. As this evolves, we update this narrative.
 
 ### Verify installation
 
-* Navigate to [http://localhost:6565/](http://localhost:6565/) to see the example page and commits you just imported!
+* Navigate to [http://localhost:6565/](http://localhost:6565/) to see the default message, which should be `Must specify API key in the form of apiKey=<apikey> as a query string parameter`. This is expected.
+* Now, if you'd like you can run the automated test suite against your new install by typing the following into a new Bash prompt:
+  * `cd /c/projects`
+  * `git clone https://github.com/openAgile/CommitStream.Web.Tests.git`
+  * `cd CommitStream.Web.Tests`
+  * `npm install`
+  * `CS_ROOT_URL=http://localhost:6565 npm run ca`
+  * For more info, see http://github.com/openAgile/CommitStream.Web.Tests directly
 * To directly connect to EventStore, go to [http://localhost:2113](http://localhost:2113) and login with **admin** and **changeit**
 
 ## How to configure an On-Premise build of VersionOne to point to your CommitStream instance
