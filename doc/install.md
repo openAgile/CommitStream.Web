@@ -8,19 +8,18 @@ This is a work in progress. As this evolves, we update this narrative.
 * Install Node.js LTS version if don't already have it from https://nodejs.org/en/download/
 * Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * Now, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web -- `git clone https://github.com/openAgile/CommitStream.Web.git`
-  * There are two special snowflake packages that need to be installed globally
+  * There are three special snowflake packages that need to be installed globally
     * bower - `npm install -g bower`
     * babel - `npm install -g babel`
+    * grunt-cli - `npm install -g grunt-cli`
+      * **NOTE: Installing grunt-cli does not install the Grunt task runner, but running `npm install` in the next step will do this for us.**
 * Install NPM dependencies
   * Navigate to `CommitStream.Web/src/app` on the command line.
   * Run: `npm install`		
 * Bower components need to be installed for client side code to get served correctly.
   * Navigate to `CommitStream.Web/src/app/client` on the command line.
   * Run: `bower install`
-  * You should have seen all of the bower components defined in `CommitStream.Web/src/app/client/bower.json` get installed.
-* Grunt and Babel: These two are being used in order to transpile our ES2015 files to the appropriate locations within the project. In order for this to work appropriately though, you must first execute from your command line
-  * `npm install -g grunt-cli`
-  * Note that installing grunt-cli does not install the Grunt task runner! The job of the Grunt CLI is simple: run the version of Grunt which has been installed next to a Gruntfile. This allows multiple versions of Grunt to be installed on the same machine simultaneously.
+  * You should have seen all of the bower components defined in `CommitStream.Web/src/app/client/bower.json` get installed.  .
 * Install EventStore OSS version
   * **NOTE: This instruction is for LOCAL dev only. For production server installs, see the private repository which details the HA commercial download instructions**
   * Download and install the last 4.x series of EventStore from https://eventstore.org/downloads/, since 4.x is the only version of EventStore CommitStream is known to work with.
