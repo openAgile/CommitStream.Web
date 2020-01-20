@@ -79,7 +79,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    // Goal: git push origin ${current-branch}:v1-cs-demo -f
+    // Goal: git push origin ${current-branch}:v1-cs-test -f
     gitpush: {
       'deploy-test': {
         options: {
@@ -87,21 +87,7 @@ module.exports = function(grunt) {
           branch: sourceBranch + ':v1-cs-test',
           force: true
         }
-      },
-      'deploy-demo': {
-        options: {
-          // Note: this gets replaced by the event below...
-          branch: sourceBranch + ':v1cs-demo',
-          force: true
-        }
-      },
-      'deploy-dev': {
-        options: {
-          // Note: this gets replaced by the event below...
-          branch: sourceBranch + ':v1cs-dev',
-          force: true
-        }
-      }    
+      }
     },
     shell: {
       devm: {
@@ -120,8 +106,6 @@ module.exports = function(grunt) {
 
   grunt.event.on('gitpush', function(action) {
     grunt.config('gitpush.deploy-test.branch', sourceBranch + ':v1-cs-test');
-    grunt.config('gitpush.deploy-demo.branch', sourceBranch + ':v1cs-demo');
-    grunt.config('gitpush.deploy-dev.branch', sourceBranch + ':v1cs-dev');
   });
 
   grunt.registerTask('devs', ['newer:less', 'newer:babel', 'express', 'watch']);
