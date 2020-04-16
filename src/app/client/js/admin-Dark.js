@@ -50,7 +50,7 @@
       function(serviceUrlProvider, $routeProvider) {
         var serviceUrl = serviceUrlProvider.$get();
         $routeProvider.when('/', {
-          templateUrl: serviceUrl + '/partials/commitStreamAdmin-Light.html',
+          templateUrl: serviceUrl + '/partials/commitStreamAdmin-Dark.html',
           controller: 'CommitStreamAdminController'
         });
 

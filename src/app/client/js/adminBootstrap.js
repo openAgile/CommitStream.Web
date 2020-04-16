@@ -81,8 +81,17 @@
       var bowerUrl = serviceUrl + '/bower_components/';
 
       var loadOnceScripts = [bowerUrl + 'angular/angular.min.js', bowerUrl + 'angular-route/angular-route.min.js', bowerUrl + 'angular-bootstrap/ui-bootstrap.min.js', bowerUrl + 'angular-bootstrap/ui-bootstrap-tpls.min.js', bowerUrl + 'angular-prompt/dist/angular-prompt.min.js', bowerUrl + 'angular-hal/angular-hal.js', bowerUrl + 'rfc6570/rfc6570.js', bowerUrl + 'bootstrap/dist/js/bootstrap.min.js', bowerUrl + 'bootstrap-toggle/js/bootstrap-toggle.min.js'];
-
       var scripts = [serviceUrl + '/js/admin.js', serviceUrl + '/js/controllers.js', serviceUrl + '/js/directives.js'];
+      var isDarkMode = function isDarkMode() {
+        if (document.body.getAttribute('data-theme') == 'light') {
+          return false;
+        } else return true;
+      };
+
+      if (isDarkMode()) {
+        scripts.shift();
+        scripts.unshift(serviceUrl + '/js/admin-Dark.js');
+      }
 
       // TODO: enable after new styles are released in V1 Prod
       prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
@@ -90,6 +99,7 @@
 
       //only load angular and friends once
       if (window.CommitStreamAdminBoot) {
+
         loadScripts(scripts, callAngular);
       } else {
         loadScripts(loadOnceScripts, function () {
