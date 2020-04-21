@@ -10,7 +10,10 @@
 .modal-backdrop.fade{opacity:0;filter:alpha(opacity=0)}
 .modal-backdrop.in{opacity:.5;filter:alpha(opacity=50)}
 .modal-header{padding:15px;border-bottom:1px solid #e5e5e5;min-height:16.42857143px}
-.modal-header .close{margin-top:-7px; float: right;}
+.modal-header .close
+{
+  visibility: hidden;
+} 
 .modal-title {margin:0; float: left; font-weight: 300; font-size: 1.714em; letter-spacing: -0.025em;}
 .modal-body{position:relative;padding:15px}
 .modal-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}

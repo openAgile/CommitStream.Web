@@ -16,7 +16,11 @@
   min-height:16.42857143px;
   background-color: #244451;
 }
-.modal-header .close{margin-top:-7px; float: right;}
+ /*.modal-header .close{margin-top:-7px; float: right;} */
+ .modal-header .close
+ {
+    visibility: hidden;
+ }
 .modal-title {margin:0; float: left; font-weight: 300; font-size: 1.714em; letter-spacing: -0.025em;}
 .modal-body{
   position:relative;
