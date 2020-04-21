@@ -24,7 +24,11 @@
   background-color: #244451;
 }
 .modal-footer{padding:15px;text-align:right;border-top:1px solid #e5e5e5}
-.modal-footer button {padding: 0 12px !important;color: black !important}
+.modal-footer button 
+{
+  padding: 0 12px !important;
+  background-color: #244451;
+}
 .modal-footer .btn+.btn{margin-left:5px;margin-bottom:0}
 .modal-footer .btn-group .btn+.btn{margin-left:-1px}
 .modal-footer .btn-block+.btn-block{margin-left:0}
@@ -193,7 +197,7 @@ text-shadow: 0 0 0 transparent !important;
 box-shadow: none !important;
 }
 .action-cancel {
-background-image: linear-gradient(to bottom, #fff 0, #fff 100%) !important;
+background-image: linear-gradient(to bottom, #244451 0, #244451 100%) !important;
 font-weight: bolder !important;
 text-transform: uppercase;
 text-shadow: 0 0 0 transparent !important;
