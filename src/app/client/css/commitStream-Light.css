@@ -1116,7 +1116,7 @@ h6 {
   white-space: nowrap;
 }
 .commitStream-panel h3 .reload {
-  background: url('../refresh-Light.svg') no-repeat scroll left top;
+  background: url('images/refresh-Light.svg') no-repeat scroll left top;
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -1131,7 +1131,7 @@ h6 {
   opacity: .7;
 }
 .commitStream-panel h3 .requesting {
-  background-image: url('../refresh-Light.svg');
+  background-image: url('images/refresh-Light.svg');
 }
 .commitStream-panel div.window .remaining,
 .commitStream-panel div.window .remaining {
