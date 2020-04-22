@@ -112,10 +112,14 @@
     try {
       var modelCopy = clone(model);
       if (!commitsContainerTmpl) {
+        var containerThemeType = 'commitsContainer-Light.html';
         getCompiledTemplate('commitsList.html', function(tmpl) {
           commitsListTmpl = tmpl;
           registerPartial('commitsList', tmpl, function() {
-            getCompiledTemplate('commitsContainer.html', function(tmpl) {
+            if (document.body.getAttribute('data-theme') == 'dark'){
+              containerThemeType = 'commitsContainer-Dark.html';
+            }
+            getCompiledTemplate(containerThemeType, function(tmpl) {
               commitsContainerTmpl = tmpl;
               escapeUnsafeContent(modelCopy);
               processCommitsListPreprocessorPlugins(modelCopy);

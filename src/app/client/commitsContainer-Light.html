@@ -1,0 +1,43 @@
+<style>
+.commitStream-panel {
+  display: none;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="{{resourcePath}}css/commitStream-Light.css">
+
+<div class="commitStream-panel">
+  <div class="stream-title-area">
+    <div class="titlebar">
+      <div class="title-container">
+        <h3><span class="commitStream-title">CommitStream&trade; Commits</span> <span class="reload cs-refresh"></span></h3>
+        {{#if showChildrenCheckbox}}
+          <label class="toggle-cs-childrenasset-label">
+            <input type="checkbox" class="toggle-cs-childrenasset"
+              {{#if showChildrenChecked}}checked{{/if}}>             
+              Show children
+          </label>
+        {{/if}}
+        {{#if showAutoRefreshCheckbox}}
+            <label class="toggle-cs-autorefresh-label">
+              <input type="checkbox" class="toggle-cs-autorefresh">
+              Auto-Refresh (every 30 sec.)
+            </label>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  <div class="window side-panel-scrollable">
+    {{#if noCommits}}
+    <div class="remaining">
+        <div class="finished">No Commits available...</div>
+    </div>
+    {{else}}
+    {{> commitsList}}
+    {{/if}}    
+  </div>
+  <div class="overlay">
+    <div class="loader">
+    </div>
+  </div> 
+</div>
