@@ -623,7 +623,9 @@ h6 {
   color: #454545;
   margin: 0 !important;
 }
-.commitStream-panel h1,
+.commitStream-panel h1 {
+  color: #244451;
+}
 .commitStream-panel h2 {
   font-size: 1.429em;
   font-weight: 300;
