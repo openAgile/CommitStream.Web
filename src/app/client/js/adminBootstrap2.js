@@ -14,7 +14,7 @@
   var getServiceUrl = function getServiceUrl(scriptEl) {
     var src = scriptEl.attr('src');
     if (src.indexOf('/') !== 0) {
-      return src.substr(0, src.indexOf('/js/adminBootstrap.js'));
+      return src.substr(0, src.indexOf('/js/adminBootstrap2.js'));
     }
     return '';
   };
@@ -81,8 +81,17 @@
       var bowerUrl = serviceUrl + '/bower_components/';
 
       var loadOnceScripts = [bowerUrl + 'angular/angular.min.js', bowerUrl + 'angular-route/angular-route.min.js', bowerUrl + 'angular-bootstrap/ui-bootstrap.min.js', bowerUrl + 'angular-bootstrap/ui-bootstrap-tpls.min.js', bowerUrl + 'angular-prompt/dist/angular-prompt.min.js', bowerUrl + 'angular-hal/angular-hal.js', bowerUrl + 'rfc6570/rfc6570.js', bowerUrl + 'bootstrap/dist/js/bootstrap.min.js', bowerUrl + 'bootstrap-toggle/js/bootstrap-toggle.min.js'];
+      var scripts = [serviceUrl + '/js/admin2.js', serviceUrl + '/js/controllers.js', serviceUrl + '/js/directives.js'];
+      var isDarkMode = function isDarkMode() {
+        if (document.body.getAttribute('data-theme') == 'light') {
+          return false;
+        } else return true;
+      };
 
-      var scripts = [serviceUrl + '/js/admin.js', serviceUrl + '/js/controllers.js', serviceUrl + '/js/directives.js'];
+      if (isDarkMode()) {
+        scripts.shift();
+        scripts.unshift(serviceUrl + '/js/admin-Dark.js');
+      }
 
       // TODO: enable after new styles are released in V1 Prod
       prependStyleSheet(commitStreamRoot, serviceUrl + '/css/bootstrap-toggle.min.css');
@@ -90,6 +99,7 @@
 
       //only load angular and friends once
       if (window.CommitStreamAdminBoot) {
+
         loadScripts(scripts, callAngular);
       } else {
         loadScripts(loadOnceScripts, function () {
@@ -98,7 +108,7 @@
       }
     })();
   } catch (ex) {
-    console.error('CommitStream adminBootstrap error:');
+    console.error('CommitStream adminBootstrap2 error:');
     console.error(ex);
   }
 })();
