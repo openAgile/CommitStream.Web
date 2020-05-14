@@ -180,16 +180,19 @@ var getHostSettings = function getHostSettings(req) {
 app.get('/app', function (req, res) {
   res.setHeader('Content-Type', 'application/javascript');
   var settings = getHostSettings(req);
+  var appToRender = 'app';
+  var themeMode = settings.newStyling;
 
-  //console.log('settings.newStyling', settings.newStyling);
-  //console.log('req.query.newStyling', req.query.newStyling);
-  res.render('app', {
+  if (themeMode === 'true') {
+    appToRender = 'app2';
+  }
+
+  res.render(appToRender, {
     apiUrl: settings.protocol + '://' + settings.host + '/api/',
     protocol: settings.protocol,
     resourcePath: settings.protocol + '://' + settings.host + '/',
     showChildrenFeatureToggle: _config2['default'].showChildrenFeatureToggle.toString()
-    // newStyling: settings.newStyling.toString()
-    // settings.newStyling === null ? null : settings.newStyling.toString()
+    //newStyling: settings.newStyling.toString()
   });
 });
 
