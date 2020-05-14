@@ -113,18 +113,23 @@ app.use(csErrorHandler);
 const getHostSettings = req => ({
   protocol: config.protocol || req.protocol,
   host: req.get('host'),
-  key: req.query.key
+  key: req.query.key,
+  newStyling: req.query.newStyling
 });
 
 app.get('/app', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   const settings = getHostSettings(req);
 
+  //console.log('settings.newStyling', settings.newStyling);
+  //console.log('req.query.newStyling', req.query.newStyling);
   res.render('app', {
     apiUrl: `${settings.protocol}://${settings.host}/api/`,
     protocol: settings.protocol,
     resourcePath: `${settings.protocol}://${settings.host}/`,
     showChildrenFeatureToggle: config.showChildrenFeatureToggle.toString()
+   // newStyling: settings.newStyling.toString()
+  // settings.newStyling === null ? null : settings.newStyling.toString()
   });
 });
 

@@ -112,13 +112,20 @@
     try {
       var modelCopy = clone(model);
       if (!commitsContainerTmpl) {
-        var containerThemeType = 'commitsContainer-Light.html';
+        var containerThemeType = 'commitsContainer.html';
         getCompiledTemplate('commitsList.html', function(tmpl) {
           commitsListTmpl = tmpl;
           registerPartial('commitsList', tmpl, function() {
-            if (document.body.getAttribute('data-theme') == 'dark'){
-              containerThemeType = 'commitsContainer-Dark.html';
+            if ('{{{newStyling}}}' !== '' ) {
+            
+              if (document.body.getAttribute('data-theme') == 'dark'){
+                containerThemeType = 'commitsContainer-Dark.html';
+              }
+              else if (document.body.getAttribute('data-theme') == 'light'){
+                containerThemeType = 'commitsContainer-Light.html';
+              }
             }
+
             getCompiledTemplate(containerThemeType, function(tmpl) {
               commitsContainerTmpl = tmpl;
               escapeUnsafeContent(modelCopy);

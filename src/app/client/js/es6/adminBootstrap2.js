@@ -91,7 +91,7 @@
       bowerUrl + 'bootstrap-toggle/js/bootstrap-toggle.min.js',
     ];
     let scripts = [
-      serviceUrl + '/js/admin.js',
+      serviceUrl + '/js/admin2.js',
       serviceUrl + '/js/controllers.js',
       serviceUrl + '/js/directives.js'
     ];
