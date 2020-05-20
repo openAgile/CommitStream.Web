@@ -223,7 +223,7 @@
   };
 
   var isEndOfScrollbar = function(el) {
-    return (el.scrollTop() + el.innerHeight() >= el[0].scrollHeight);
+    return Math.abs(el.scrollTop() + el.innerHeight() - el[0].scrollHeight) <= 10;
   };
 
   var bindScrollEvent = function() {
