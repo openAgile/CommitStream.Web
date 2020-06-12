@@ -1,0 +1,119 @@
+<!-- <link rel="stylesheet" type="text/css" href="css/commitStreamAdmin-Light.css"/>
+-->
+<img ng-show='loading()' ng-src='{{loaderUrl}}' class='initialLoader' />
+
+<div ng-if="messageActive()" class='message prompt'>
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{message.value}}</strong>
+  </div>
+</div>
+
+<div ng-if="errorActive()" class='error prompt'>
+  <div class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>{{error.value}}</strong>
+  </div>
+</div>
+
+<div ng-if='isAdminPanelVisible()'>
+  <p ng-if='isInstanceMode()'>
+    <input
+      data-on='Enabled'
+      data-off='Disabled'
+      data-style='slow'
+      class='form-control enabled'
+      type='checkbox'
+      ng-model='enabledState.enabled'
+      ng-change='enabledChanged()'
+      toggle-checkbox
+    />
+    <span class="loader" ng-show='applying()'>&nbsp;<img ng-src='{{serviceUrl}}/ajax-loader.gif' /> <em>Applying changes...</em></span>
+  </p>
+
+  <div ng-if='isDigestMode()'>
+    <h3>CommitStream Panel Options</h3>
+    <div aria-label="Large button group" role="group" class="btn-group-vertical btn-group">
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'disabled'}" type="button" ng-click="onOptionChange('disabled')"><span ng-class="radioButtonDisabled()"></span><strong>None:</strong> The panel will not display for your TeamRoom.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useGlobalDigest'}" type="button" ng-click="onOptionChange('useGlobalDigest')"><span ng-class="radioButtonGlobal()"></span><strong>Global:</strong> The panel will display commit data from the global repository list created by the VersionOne administrator.</button>
+      <button class="btn btn-default" ng-class="{selected: digestConfig.selection == 'useCustomDigest'}" type="button" ng-click="onOptionChange('useCustomDigest')"><span ng-class="radioButtonCustom()"></span><strong>Custom:</strong> The panel will display commit data from the repositories you configure.</button>
+    </div>
+  </div>
+
+  <div class='repos-section' ng-if='overlayVisible()'><img class="overlay" resizable-overlay ng-src='{{serviceUrl}}/disable-overlay.gif' width='100%' /></div>
+
+  <div class='repos-list' ng-if='areRepositoriesVisible()'>
+    <h1>{{getHeading()}}</h1>
+    <div class='well well-sm' ng-if='editAllowed()'>
+      <div class='vcs-families'>
+        <div class='vcs-family' ng-repeat="familyInfo in getFamiliesArr() | orderBy:'displayOrder'">
+          <button type='button' ng-click='setSelectedButton(familyInfo.name)' ng-mouseenter='familyHover(familyInfo.name)' ng-mouseleave='familyHover("")' class='{{getClass(familyInfo.name)}}'>{{familyInfo.label}}&nbsp;&nbsp;
+            <img ng-src='{{serviceUrl}}/{{getIsSelectedFamilyIcon(familyInfo.name)}}' style="height:32px;" />
+          </button>&nbsp;
+          <div ng-if="familyInfo.families">
+            <div class='vcs-subfamily-options' ng-if='showSubFamilyChoices(familyInfo.name)'>
+                <div ng-repeat="subFamily in getSubFamiliesArr(familyInfo.name) | orderBy:'displayOrder'">
+                <label>
+                  <input type="radio" name="{{familyInfo.name}}Family" ng-checked="$index==0?true:false" ng-model="selectedSubFamily" value="{{subFamily.name}}" ng-change='subFamilySelection(selectedSubFamily)'/>
+                    <img ng-src='{{getSubFamilyIcon(familyInfo.name, subFamily.name)}}' style="height:24px; margin-left:6px;" />&nbsp{{subFamily.label}}
+                </label>
+                </br>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <br />
+      <form ng-submit='inboxCreate()' name='inboxesForm' ng-show='familyHasBeenSelected()' class='inboxes-form'>
+        <div class='input-group'>
+          <input type='text' name='inboxUrl' class='inbox-url form-control' ng-disabled='inboxCreating' ng-model='newInbox.url' size='100' ng-pattern='urlPattern' required ng-trim='true' placeholder='Enter repository URL or Path'>
+          <span class='input-group-btn'>
+            <button class='repo-add' type='button' ng-disabled='inboxCreating' ng-click='inboxCreate()' ng-hide='inboxesForm.$invalid'>Add</button>
+            <button class='repo-add-disabled' type='button' ng-show='inboxesForm.$invalid'>Add</button>
+          </span>
+        </div>
+        <div class='repo-instruction'>URL Example: http://versioncontrol.com/acme/repo-name <br>Path Example: //acme/repo-name</div>
+      </form>
+    </div>
+    <div ng-if='inboxes.length > 0'>
+      <h1 ng-if='editAllowed()'>Active Repositories</h1>
+      <table ng-if='editAllowed()' class='table table-striped table-bordered'>
+        <tr>
+          <th>Repository Name</th>
+          <th>Webhook URL</th>
+          <th ng-if='hasResourceToDownload(["Svn","P4V"])' style="width: 6.1em;position: relative;">Download <img ng-click='clickTooltip()' class="helpIcon" ng-src='{{getHelpIconSrc()}}'/>
+            <div ng-if='showTooltip' class="popover-content-v1 legend-wrapper"><h6>Script file must be placed in the relevant folder that handles post-commit actions. Find out more <a class='helpSvnLink' href="http://community.versionone.com/?cid=CommitStreamScriptBased" target="_blank">here</a>.</h6></div>
+          </th>   
+          <th ng-if='!hasResourceToDownload(["Svn","P4V"])' style="width: 6em;position: relative;">&nbsp;</th>       
+        </tr>
+        <tr ng-repeat-start='inbox in inboxes'>
+          <td class='inbox-link' style='width:25%'>
+            <img ng-src='{{familyIcon(inbox.family)}}' style="height:24px; width:24px; " />
+            <img ng-if='isSubFamily(inbox.family)' ng-src='{{getSubFamilyIcon(null, inbox.family)}}' style="height:16px; width:16px; " />&nbsp;
+            <a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a>
+          </td>
+          <td>
+            <input style='font-size:75%' type='text' value='{{inbox.addCommit}}' class='form-control inbox activeList' ng-click='inboxHighlight($event)' ng-readonly='true'>          
+            <div ng-if='editAllowed()'  ng-click='inboxRemove(inbox)' title='Remove' class="buttonRemove">
+               <span class="iconRemove"></span>
+            </div>
+          </td>
+          <td ng-if='!hasResourceToDownload(["Svn","P4V"])'>&nbsp;</td>
+          <td ng-if='hasResourceToDownload(["Svn","P4V"])'>
+            <a class='scriptDownloadIcon' ng-repeat='script in inbox.scripts' href="{{script.href}}" title="{{script.platform}}" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"><img ng-src='{{svnScriptPlatformIcon(script.platform, mouseHover)}}' style="{height:24px}" /></a>
+          </td>
+        </tr>
+        <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
+      </table>
+      <table ng-if='!editAllowed()' class='table table-striped table-bordered'>
+        <tr>
+          <th>Repository Name</th>
+        </tr>
+        <tr ng-repeat-start='inbox in inboxes'>
+          <td class='inbox-link'><img ng-src='{{familyIcon(inbox.family)}}' style="height:32px" />&nbsp;<a target='_blank' href='{{inbox.url}}'>{{inbox.name}}</a></td>
+        </tr>
+        <tr ng-repeat-end ng-init='adjustOverlay()'></tr>
+      </table>
+    </div>
+  </div>
+</div>

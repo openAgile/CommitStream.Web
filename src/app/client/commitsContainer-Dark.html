@@ -1,15 +1,15 @@
-<style>
-.commitStream-panel {
-  display: none;
-}
-</style>
-<link type="text/css" rel="stylesheet" href="{{resourcePath}}css/commitStream.css">
-
 <div class="commitStream-panel">
   <div class="stream-title-area">
     <div class="titlebar">
       <div class="title-container">
-        <h3><span class="commitStream-title">CommitStream&trade; Commits</span> <span class="reload cs-refresh"></span></h3>
+        <h3><span class="commitStream-title">CommitStream&trade; Commits</span> <span class="reload cs-refresh">
+          <svg>
+            <title>refresh</title>
+          <use xlink:href="#refresh">
+               <title>refresh</title>
+          </use>
+        </svg>
+        </span></h3>
         {{#if showChildrenCheckbox}}
           <label class="toggle-cs-childrenasset-label">
             <input type="checkbox" class="toggle-cs-childrenasset"

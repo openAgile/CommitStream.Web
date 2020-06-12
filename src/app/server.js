@@ -172,19 +172,27 @@ var getHostSettings = function getHostSettings(req) {
   return {
     protocol: _config2['default'].protocol || req.protocol,
     host: req.get('host'),
-    key: req.query.key
+    key: req.query.key,
+    newStyling: req.query.newStyling
   };
 };
 
 app.get('/app', function (req, res) {
   res.setHeader('Content-Type', 'application/javascript');
   var settings = getHostSettings(req);
+  var appToRender = 'app';
+  var themeMode = settings.newStyling;
 
-  res.render('app', {
+  if (themeMode === 'true') {
+    appToRender = 'app2';
+  }
+
+  res.render(appToRender, {
     apiUrl: settings.protocol + '://' + settings.host + '/api/',
     protocol: settings.protocol,
     resourcePath: settings.protocol + '://' + settings.host + '/',
     showChildrenFeatureToggle: _config2['default'].showChildrenFeatureToggle.toString()
+    //newStyling: settings.newStyling.toString()
   });
 });
 
