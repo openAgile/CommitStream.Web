@@ -314,8 +314,7 @@
     $('.overlay').show();    
     $.getJSON(apiUrl).done(function(model) {
       cb(model);        
-      }).fail(function(errorHandler) {        
-    });
+      }).fail(errorHandler);
   };
 
   var queryCallback = function(model) {
