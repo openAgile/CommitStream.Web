@@ -35,7 +35,7 @@
     "request": "^2.44.0",
     "request-json": "^0.4.13",
     "request-promise": "^0.4.2",
-    "sanitize-html": "^1.4.3",
+    "sanitize-html": "^2.3.2",
     "sinon": "^1.11.1",
     "sinon-as-promised": "^3.0.0",
     "sinon-chai": "^2.6.0",
