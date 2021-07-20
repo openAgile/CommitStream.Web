@@ -1,3 +1,6 @@
+# This file is old. Please use the new instructions in the doc/install.md file.
+# event store is now 4+
+
 # Install EventStore from custom Chocolatey package on MyGet
 choco install eventstore -source https://www.myget.org/F/versionone/ -force
 choco install nssm -force
@@ -11,5 +14,7 @@ nssm start eventstore
 
 # Start your engines
 cd src/app
-npm install --no-optional
+# $env:VCTargetsPath = "C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\v140"
+# npm install --no-optional --python=python2.7 --msvs_version=2015
+npm install
 start npm start

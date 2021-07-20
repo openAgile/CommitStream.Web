@@ -74,5 +74,8 @@
     "npm": "2.15.11"
   },
   "author": "VersionOne, Inc.",
-  "license": "MIT"
+  "license": "MIT",
+  "volta": {
+    "node": "10.24.1"
+  }
 }

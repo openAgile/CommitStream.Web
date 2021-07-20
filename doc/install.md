@@ -5,7 +5,7 @@ This is a work in progress. As this evolves, we update this narrative.
 ## Installation process
 * Install Git for Windows if you don't already have it from https://git-scm.com/download/win
 * You need [Chocolatey](http://chocolatey.org/) installed to run our installation scripts.
-* Install Node.js 10.x version if don't already have it from https://nodejs.org/download/release/v10.18.0/
+* Install Node.js 10.x version if don't already have it from https://nodejs.org/download/release/v10.24.1/. http://volta.sh is great for managing multiple node versions.
   * **NOTE: Update this if tested fine with a later version of Node.js**
 * Open Git Bash and create a directory with: `mkdir /c/projects` then `cd /c/projects`
 * Now, use Git to clone this repo: https://github.com/openAgile/CommitStream.Web -- `git clone https://github.com/openAgile/CommitStream.Web.git`
@@ -19,7 +19,7 @@ This is a work in progress. As this evolves, we update this narrative.
   * Run: `npm install`		
 * Bower components need to be installed for client side code to get served correctly.
   * Navigate to `CommitStream.Web/src/app/client` on the command line.
-  * Run: `bower install`
+  * Run: `npx bower install`
   * You should have seen all of the bower components defined in `CommitStream.Web/src/app/client/bower.json` get installed.  .
 * Install EventStore OSS version
   * **NOTE: This instruction is for LOCAL dev only. For production server installs, see the private repository which details the HA commercial download instructions**
@@ -29,9 +29,9 @@ This is a work in progress. As this evolves, we update this narrative.
   * Run the process with this command line: `EventStore.ClusterNode.exe --db ./db --log ./logs --run-projections=all` -- this ensures that the projection support runs all projections which are needed by the current design of CommitStream
 * Run the system  
   * If you would like to run the watcher for ES2015 files while you make code changes run:
-    * `grunt watch --verbose`
+    * `npx grunt watch --verbose`
   * In the Gruntfile there are a couple of tasks created for developers
-    * `grunt dev`
+    * `npx grunt dev`
       * Assuming EventStore is running as a Windows Service or running manually as described above:
         * This wil run the following tasks:
         * Compile your .less files 
@@ -40,9 +40,9 @@ This is a work in progress. As this evolves, we update this narrative.
         * Watch for .less file changes and compile them. 
         * Watch for ES2015 files changes and compile them
         * Watch for changes in the js files on the server side (api, middleware and server.js), if so it will restart the server.
-    * `grunt devm`
+    * `npx grunt devm`
       * Use this if you prefer to run EventStore in memory
-      * Does everything else from `grunt dev` above, minus EventStore running as a Windows Service (cause it's in memory here ;) )
+      * Does everything else from `npx grunt dev` above, minus EventStore running as a Windows Service (cause it's in memory here ;) )
 
 ### Verify installation
 
