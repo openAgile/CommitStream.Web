@@ -26,7 +26,7 @@
     "mocha": "^1.21.5",
     "mocha-tap-reporter": "^0.1.2",
     "moment": "^2.8.3",
-    "nconf": "^0.6.9",
+    "nconf": "^0.11.4",
     "nock": "^0.48.0",
     "node-json-db": "^0.3.2",
     "node-mocks-http": "^1.4.1",
