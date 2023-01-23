@@ -39,7 +39,7 @@
     "sinon": "^1.11.1",
     "sinon-as-promised": "^3.0.0",
     "sinon-chai": "^2.6.0",
-    "supertest": "^0.15.0",
+    "supertest": "^6.3.3",
     "ttl-cache": "^1.0.2",
     "underscore": "^1.7.0",
     "uuid-v4": "^0.1.0",
