@@ -65,4 +65,4 @@ This assumes that you have already done the previous steps to get CommitStream i
 * Change the `value` property to point to your local network address of where CommitStream is running.
   * Typically this will be something like `http://theservernameOrIpAddress:6565`
 * You should now be able to configure CommitStream by opening VersionOne and navigating to the **Admin / DevOps / CommitStream** page.
-  * Refer to the VersionOne Community site for configuration documentation: https://community.versionone.com/Help-Center/Administration/CommitStream
+  * Refer to the digital.ai Agility (formerly VersionOne) documentation for configuration documentation: [Commit Stream Administration](https://docs.digital.ai/bundle/agility-onlinehelp/page/Content/Digital.ai_Agility/01Enabling_CommitStream.htm)
